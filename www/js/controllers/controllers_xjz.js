@@ -183,7 +183,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
           }];
 }])
 //我的团队
-.controller('groupsCtrl', ['$scope', '$http', '$state', '$ionicPopover', 'Doctor', 'Storage', 'Patient','arrTool','$q', function($scope, $http, $state, $ionicPopover, Doctor, Storage, Patient,arrTool,$q) {
+.controller('groupsCtrl', ['$scope', '$http', '$state', '$ionicPopover', 'Doctor', 'Storage', 'Patient','arrTool','$q','wechat','$location', function($scope, $http, $state, $ionicPopover, Doctor, Storage, Patient,arrTool,$q,wechat,$location) {
     // $scope.teams=[];
     // $scope.doctors=[];
     $scope.query = {
@@ -308,6 +308,49 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
     });
     $scope.$on('$ionicView.enter', function() {
         $scope.load(true);
+        wechat.settingConfig({ url: $location.absUrl() }).then(function(data) {
+            // alert(data.results.timestamp)
+            config = data.results;
+            config.jsApiList = ['chooseImage', 'uploadImage']
+                // alert(config.jsApiList)
+                // alert(config.debug)
+            wx.config({
+                debug: true,
+                appId: config.appId,
+                timestamp: config.timestamp,
+                nonceStr: config.nonceStr,
+                signature: config.signature,
+                jsApiList: config.jsApiList
+            })
+            // wx.ready(function() {
+            //     wx.checkJsApi({
+            //         jsApiList: ['chooseImage', 'uploadImage'],
+            //         success: function(res) {
+            //             wx.chooseImage({
+            //                 count: 1,
+            //                 sizeType: ['original', 'compressed'],
+            //                 sourceType: ['album'],
+            //                 success: function(res) {
+            //                     var localIds = res.localIds;
+            //                     wx.uploadImage({
+            //                         localId: localIds[0],
+            //                         isShowProgressTips: 1, // 默认为1，显示进度提示
+            //                         success: function(res) {
+            //                             var serverId = res.serverId; // 返回图片的服务器端ID
+            //                             wechat.
+            //                         }
+            //                     })
+            //                 }
+            //             })
+            //         }
+            //     });
+            // })
+            wx.error(function(res) {
+                console.error(res);
+                alert(res.errMsg)
+            })
+        });
+
     })
     $scope.showTeams = function() {
         $scope.params.isTeam = true;
