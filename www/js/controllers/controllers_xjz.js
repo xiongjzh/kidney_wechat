@@ -1285,6 +1285,48 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         }
     })
     $scope.$on('$ionicView.enter', function() {
+            wechat.settingConfig({ url: $location.absUrl() }).then(function(data) {
+                // alert(data.results.timestamp)
+                config = data.results;
+                config.jsApiList = ['startRecord','stopRecord','playVoice','chooseImage','uploadVoice', 'uploadImage']
+                    // alert(config.jsApiList)
+                    // alert(config.debug)
+                wx.config({
+                    debug: true,
+                    appId: config.appId,
+                    timestamp: config.timestamp,
+                    nonceStr: config.nonceStr,
+                    signature: config.signature,
+                    jsApiList: config.jsApiList
+                })
+                // wx.ready(function() {
+                //     wx.checkJsApi({
+                //         jsApiList: ['chooseImage', 'uploadImage'],
+                //         success: function(res) {
+                //             wx.chooseImage({
+                //                 count: 1,
+                //                 sizeType: ['original', 'compressed'],
+                //                 sourceType: ['album'],
+                //                 success: function(res) {
+                //                     var localIds = res.localIds;
+                //                     wx.uploadImage({
+                //                         localId: localIds[0],
+                //                         isShowProgressTips: 1, // 默认为1，显示进度提示
+                //                         success: function(res) {
+                //                             var serverId = res.serverId; // 返回图片的服务器端ID
+                //                             wechat.
+                //                         }
+                //                     })
+                //                 }
+                //             })
+                //         }
+                //     });
+                // })
+                wx.error(function(res) {
+                    console.error(res);
+                    alert(res.errMsg)
+                })
+            });        
             $rootScope.conversation.type = 'group';
             $rootScope.conversation.id = $scope.params.groupId;
             if (window.JMessage) {
@@ -1579,25 +1621,35 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         }
         //get voice
     $scope.getVoice = function() {
+        wx.startRecord();
         //voice.record() does 2 things: record --- file manipulation 
-        voice.record()
-            .then(function(fileUrl) {
-                window.JMessage.sendGroupVoiceMessageWithExtras($scope.params.groupId, fileUrl, $scope.msgExtra,
-                    function(res) {
-                        console.log(res);
-                        viewUpdate(5, true);
-                    },
-                    function(err) {
-                        console.log(err);
-                    });
-                viewUpdate(5, true);
-            }, function(err) {
-                console.log(err);
-            });
+        // voice.record()
+        //     .then(function(fileUrl) {
+        //         window.JMessage.sendGroupVoiceMessageWithExtras($scope.params.groupId, fileUrl, $scope.msgExtra,
+        //             function(res) {
+        //                 console.log(res);
+        //                 viewUpdate(5, true);
+        //             },
+        //             function(err) {
+        //                 console.log(err);
+        //             });
+        //         viewUpdate(5, true);
+        //     }, function(err) {
+        //         console.log(err);
+        //     });
 
     }
     $scope.stopAndSend = function() {
-        voice.stopRec();
+        wx.stopRecord({
+            success: function (res) {
+                console.log(res);
+                alert(res);
+                alert(JSON.stringify(res));
+                // var localId = res.localId;
+            }
+        });
+        // wx.startRecord();
+        // voice.stopRec();
     }
     $scope.goChats = function() {
         console.log($ionicHistory);
