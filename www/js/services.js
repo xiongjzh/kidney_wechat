@@ -257,6 +257,37 @@ angular.module('kidney.services', ['ionic','ngResource'])
 .factory('JM', ['Storage','$q','Doctor', function(Storage,$q,Doctor) {
     var ConversationList = [];
     var messageLIsts = {};
+    
+    // custom{
+    //     contentStringMap:
+    // }
+    // text{
+    //     text:
+
+    // }
+    // image{
+    //     localThumbnailPath:
+
+    // }
+    // voice{
+    //     duration:
+    //     local_path:
+    // }
+    // var msgSample={
+    //     contentType:'',
+    //     fromName:'',
+    //     fromUser:{
+
+    //     },
+    //     targetName:'',
+    //     targetType:'',
+    //     direct:'',
+    //     status:'',
+    //     diff:true,
+    //     createTimeInMillis:'',
+    //     _id:'',
+    //     content:{}
+    // }
     function pGen(u){
         return md5(u,"kidney").substr(4,10);
     }

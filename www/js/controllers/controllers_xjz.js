@@ -596,6 +596,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         if ($scope.params.type == '2') $scope.params.title = "医生交流";
         else if ($scope.params.type == '1') $scope.params.title = "咨询-进行中";
         else $scope.params.title = "咨询详情";
+        
         if (window.JMessage) {
             window.JMessage.enterSingleConversation($state.params.chatId, $scope.params.key);
             getMsg(15);
@@ -867,6 +868,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         viewUpdate(10);
     }
     $scope.submitMsg = function() {
+
             window.JMessage.sendSingleTextMessage($state.params.chatId, $scope.input.text, $scope.params.key, onSendSuccess, onSendErr);
             $scope.input.text = '';
             viewUpdate(5, true);
@@ -1535,15 +1537,10 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
     $scope.$on('voice', function(event, args) {
         console.log(args)
         event.stopPropagation();
-        $scope.sound = new Media(args[1],
-            function() {
-                // resolve(audio.media)
-            },
-            function(err) {
-                console.log(err);
-                // reject(err);
-            })
-        $scope.sound.play();
+        wx.playVoice({
+            localId:args[1]
+        });
+
     })
    
     $scope.$on('image', function(event, args) {
@@ -1599,45 +1596,93 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         viewUpdate(20);
     }
     $scope.submitMsg = function() {
-            window.JMessage.sendGroupTextMessageWithExtras($scope.params.groupId, $scope.input.text, $scope.msgExtra, onSendSuccess, onSendErr);
-            $scope.input.text = '';
-            viewUpdate(5, true);
-            // window.JMessage.getHistoryMessages("single",$state.params.chatId,"",0,3,addNewSend,null);
 
+        window.JMessage.sendGroupTextMessageWithExtras($scope.params.groupId, $scope.input.text, $scope.msgExtra, onSendSuccess, onSendErr);
+        $scope.input.text = '';
+        viewUpdate(5, true);
+        // window.JMessage.getHistoryMessages("single",$state.params.chatId,"",0,3,addNewSend,null);
+
+    }
+
+    // var msgJson={
+    //         contentType:'',
+    //         fromName:'',
+    //         fromUser:{
+    //             avatarPath:''
+    //         },
+    //         targetID:,
+    //         targetName:'',
+    //         targetType:'',
+    //         direct:'',
+    //         status:'',
+    //         diff:true,
+    //         createTimeInMillis:'',
+    //         _id:'',
+    //         content:{}
+    //     }
+    function sendmsg(res,type){
+        var data={};
+        if(type=='image'){
+            data={
+
+            }
         }
-        //get image
+        var msgJson={
+            contentType:type,
+            fromName:Storage.get('UID'),
+            fromUser:{
+                avatarPath:''
+            },
+            targetID:$scope.params.groupId,
+            targetName:'',
+            targetType:'group',
+            status:'',
+            createTimeInMillis: Date.now(),
+            // _id:'',
+            content:{}
+        }
+    }
+    //get image
     $scope.getImage = function(type) {
-            Camera.getPicture(type)
-                .then(function(url) {
-                    console.log(url);
+        if(type=='cam') var st=['camera'];
+        else var st = ['album'];
+        wx.chooseImage({
+            count: 1, // 默认9
+            sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+            sourceType: st, // 可以指定来源是相册还是相机，默认二者都有
+            success: function (res) {
+                alert(res);
+                console.log(res);
+                wx.uploadImage({
+                    localId: res.localIds[0], // 需要上传的图片的本地ID，由chooseImage接口获得
+                    isShowProgressTips: 1, // 默认为1，显示进度提示
+                    success: function (res) {
+                        alert(res);
+                        console.log(res);
+                        var serverId = res.serverId; // 返回图片的服务器端ID
+                        sendmsg(serverId,'image');
+                    }
+                });
+                // var localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+            }
+        });
+        // Camera.getPicture(type)
+        //     .then(function(url) {
+        //         console.log(url);
 
-                    window.JMessage.sendGroupImageMessageWithExtras($scope.params.groupId, url, $scope.msgExtra, onSendSuccess, onSendErr);
-                    viewUpdate(5, true);
-                    // window.JMessage.getHistoryMessages("single",$state.params.chatId,"",0,3,addNewSend,null);
+        //         window.JMessage.sendGroupImageMessageWithExtras($scope.params.groupId, url, $scope.msgExtra, onSendSuccess, onSendErr);
+        //         viewUpdate(5, true);
+        //         // window.JMessage.getHistoryMessages("single",$state.params.chatId,"",0,3,addNewSend,null);
 
-                }, function(err) {
-                    console.log(err)
-                })
-        }
-        //get voice
+        //     }, function(err) {
+        //         console.log(err)
+        //     })
+    }
+
+    //get voice
+
     $scope.getVoice = function() {
         wx.startRecord();
-        //voice.record() does 2 things: record --- file manipulation 
-        // voice.record()
-        //     .then(function(fileUrl) {
-        //         window.JMessage.sendGroupVoiceMessageWithExtras($scope.params.groupId, fileUrl, $scope.msgExtra,
-        //             function(res) {
-        //                 console.log(res);
-        //                 viewUpdate(5, true);
-        //             },
-        //             function(err) {
-        //                 console.log(err);
-        //             });
-        //         viewUpdate(5, true);
-        //     }, function(err) {
-        //         console.log(err);
-        //     });
-
     }
     $scope.stopAndSend = function() {
         wx.stopRecord({
@@ -1648,8 +1693,6 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                 // var localId = res.localId;
             }
         });
-        // wx.startRecord();
-        // voice.stopRec();
     }
     $scope.goChats = function() {
         console.log($ionicHistory);
