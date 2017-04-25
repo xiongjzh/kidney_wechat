@@ -1737,7 +1737,13 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                 var msgdata = $state.params.msg;
                 msgdata.fromId = Storage.get('UID');
                 msgdata.targetId = doc.userId;
-
+                // window.JMessage.sendGroupTextMessageWithExtras(doc.userId,'[咨询转发]',msgdata,'',
+                //     function(m){
+                //         console.log(m);
+                //         setTimeout(function() { $state.go('tab.detail', { type: '2', chatId: doc.userId }); }, 200);
+                //     },function(err){
+                //         console.error(err);
+                //     });
                 JM.sendCustom('single', doc.userId, '', msgdata)
                     .then(function(data) {
                         console.log(data)
@@ -1791,9 +1797,8 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                             var u = [];
                             for (var i = 1; i < res.length; i++) u.push(res[i].userName);
                             u = u.join(',');
-                            var gn = md5($state.params.msg.counsel.counselId + team.teamId, "kidney").substr(4, 8) 
-                            //$state.params.msg.patientName+'-'+team.name
-                            window.JMessage.createGroup(gn, 'consultatioin_open', u,
+                            // var gn = md5($state.params.msg.counsel.counselId + team.teamId, "kidney").substr(4, 8) $state.params.msg.patientName+'-'+team.name
+                            window.JMessage.createGroup($state.params.msg.patientName+'-'+team.name, 'consultatioin_open', u,
                                 function(gid) {
                                     console.log(gid);
                                     var d = {
@@ -1815,6 +1820,15 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                                     }
                                     Communication.newConsultation(d)
                                         .then(function(con) {
+                                            // window.JMessage.sendGroupTextMessageWithExtras(d.consultationId,'[团队咨询]',msgdata,
+                                            //     function(m){
+                                            //         console.log(m);
+                                            //         setTimeout(function(){
+                                            //             $state.go('tab.group-chat', { type: '1', groupId: gid, teamId: team.teamId });
+                                            //         },200);
+                                            //     },function(err){
+                                            //         console.error(err);
+                                            //     });
                                             window.JMessage.sendGroupCustomMessage(d.consultationId, msgdata,
                                                 function(m) {
                                                     console.log(m);

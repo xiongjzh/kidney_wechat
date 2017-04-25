@@ -1,7 +1,7 @@
-angular.module('tdy.controllers', ['ionic','kidney.services'])
+angular.module('tdy.controllers', ['ionic','kidney.services','ionic-datepicker'])
 
 /////////////////////////tongdanyang/////////////////
-.controller('DoctorDiagnoseCtrl', ['$scope', 'Storage','ionicDatePicker','Patient', function ($scope, Storage,ionicDatePicker,Patient) {
+.controller('DoctorDiagnoseCtrl', ['$scope', 'Storage','ionicDatePicker','Patient','$state', function ($scope, Storage,ionicDatePicker,Patient,$state) {
   $scope.Hypers =
   [
     {Name:"是",Type:1},
@@ -41,15 +41,16 @@ angular.module('tdy.controllers', ['ionic','kidney.services'])
       title="开始日期"
     return title
   }
-
+  var latestDiagnose=angular.fromJson(Storage.get("latestDiagnose"))
+  console.log(latestDiagnose)
   $scope.Diagnose = 
   {
-    "diagname": null,
-    "diagtime": null,
-    "operationTime": null,
-    "hypertension": null,
-    "diagprogress": '稳定期',
-    "diagcontent":""
+    "diagname": latestDiagnose.name,
+    "diagtime": latestDiagnose.time,
+    "operationTime": latestDiagnose.operationTime,
+    "hypertension": latestDiagnose.hypertension,
+    "diagprogress": latestDiagnose.progress,
+    "diagcontent":latestDiagnose.content
   }
   var datepickerD = {
         callback: function (val) {  //Mandatory
@@ -943,6 +944,627 @@ VitalSign.getVitalSigns({userId:'U201702071766',type:'心率'}).then(
     };
 
 }])
+
+//健康信息--PXY
+.controller('HealthInfoCtrl', ['$scope','$timeout','$state','$ionicHistory','$ionicPopup','Storage','Health','Dict',function($scope, $timeout,$state,$ionicHistory,$ionicPopup,Storage,Health,Dict) {
+  $scope.barwidth="width:0%";
+  //var patientId = Storage.get('UID')
+  var patientId = 'p01'
+
+  $scope.Goback = function(){
+    $state.go('tab.patientDetail')
+  }
+
+  //从字典中搜索选中的对象。
+  // var searchObj = function(code,array){
+  //     for (var i = 0; i < array.length; i++) {
+  //       if(array[i].Type == code || array[i].type == code || array[i].code == code) return array[i];
+  //     };
+  //     return "未填写";
+  // }
+  //console.log(HealthInfo.getall());
+
+  $scope.items = []//HealthInfo.getall();
+  
+
+  Health.getAllHealths({userId:patientId}).then(
+    function(data)
+    {
+      if (data.results != "" && data.results!= null)
+      {
+        $scope.items = data.results
+        for (var i = 0; i < $scope.items.length; i++){
+          $scope.items[i].acture = $scope.items[i].insertTime
+          $scope.items[i].time = $scope.items[i].time.substr(0,10)
+          // if ($scope.items[i].url != ""&&$scope.items[i].url!=null)
+          // {
+          //   $scope.items[i].url = [$scope.items[i].url]
+          // }
+        }
+      };
+    },
+    function(err)
+    {
+      console.log(err);
+    }
+  )
+
+
+  $scope.gotoHealthDetail=function(ele,editId){
+    console.log(ele)
+    console.log(ele.target)
+    if(ele.target.nodeName=="I"){
+      var confirmPopup = $ionicPopup.confirm({
+      title: '删除提示',
+      template: '记录删除后将无法恢复，确认删除？',
+      cancelText:'取消',
+      okText:'删除'
+      });
+
+      confirmPopup.then(function(res) {
+        if(res) 
+          {
+            Health.deleteHealth({userId:patientId,insertTime:item.acture}).then(
+              function(data)
+              {
+                if (data.results == 0)
+                {
+                  for (var i = 0; i < $scope.items.length; i++){
+                    if (item.acture == $scope.items[i].acture)
+                    {
+                      $scope.items.splice(i,1)
+                      break;
+                    }
+                  }
+                }
+                
+                console.log($scope.items)
+              },
+              function(err)
+              {
+                console.log(err);
+              }
+            )
+            //20140421 zxf
+            var healthinfotimes=angular.fromJson(Storage.get('consulthealthinfo'))
+            for(var i=0;i<healthinfotimes.length;i++){
+              if(healthinfotimes[i].time==item.acture){
+                healthinfotimes.splice(i, 1)
+                break;
+              }
+            }
+            Storage.set('consulthealthinfo',angular.toJson(healthinfotimes))
+            // HealthInfo.remove(number);
+            // $scope.items = HealthInfo.getall();
+          } 
+        });
+    }else{
+      $state.go('tab.HealthInfoDetail',{id:editId});
+    }
+    
+  }
+
+
+  $scope.newHealth = function(){
+    $state.go('tab.HealthInfoDetail',{id:null});
+  }
+
+  // $scope.EditHealth = function(editId){
+  //   console.log("健康信息");
+  //   console.log(editId);
+  //   $state.go('tab.myHealthInfoDetail',{id:editId});
+  // }
+
+
+  
+}])
+
+
+//健康信息--PXY
+.controller('HealthInfoCtrl', ['$scope','$timeout','$state','$ionicHistory','$ionicPopup','Storage','Health','Dict',function($scope, $timeout,$state,$ionicHistory,$ionicPopup,Storage,Health,Dict) {
+  $scope.barwidth="width:0%";
+  //var patientId = Storage.get('getpatientId')
+  //console.log(Storage.get('getpatientId'))
+  var patientId = 'U201702071766'  //测试ID
+
+  $scope.Goback = function(){
+    $state.go('tab.patientDetail')
+  }
+
+  //从字典中搜索选中的对象。
+  // var searchObj = function(code,array){
+  //     for (var i = 0; i < array.length; i++) {
+  //       if(array[i].Type == code || array[i].type == code || array[i].code == code) return array[i];
+  //     };
+  //     return "未填写";
+  // }
+
+  $scope.items = []
+  
+
+  Health.getAllHealths({userId:patientId}).then(
+    function(data)
+    {
+      if (data.results != "" && data.results!= null)
+      {
+        $scope.items = data.results
+        for (var i = 0; i < $scope.items.length; i++){
+          $scope.items[i].acture = $scope.items[i].insertTime
+          $scope.items[i].time = $scope.items[i].time.substr(0,10)
+          // if ($scope.items[i].url != ""&&$scope.items[i].url!=null)
+          // {
+          //   $scope.items[i].url = [$scope.items[i].url]
+          // }
+        }
+      };
+    },
+    function(err)
+    {
+      console.log(err);
+    }
+  )
+
+
+  $scope.gotoHealthDetail=function(ele,editId){
+    console.log(ele)
+    console.log(ele.target)
+    if(ele.target.nodeName=="I"){
+      var confirmPopup = $ionicPopup.confirm({
+      title: '删除提示',
+      template: '记录删除后将无法恢复，确认删除？',
+      cancelText:'取消',
+      okText:'删除'
+      });
+
+      confirmPopup.then(function(res) {
+        if(res) 
+          {
+            Health.deleteHealth({userId:patientId,insertTime:item.acture}).then(
+              function(data)
+              {
+                if (data.results == 0)
+                {
+                  for (var i = 0; i < $scope.items.length; i++){
+                    if (item.acture == $scope.items[i].acture)
+                    {
+                      $scope.items.splice(i,1)
+                      break;
+                    }
+                  }
+                }
+                
+                console.log($scope.items)
+              },
+              function(err)
+              {
+                console.log(err);
+              }
+            )
+            //20140421 zxf
+            var healthinfotimes=angular.fromJson(Storage.get('consulthealthinfo'))
+            for(var i=0;i<healthinfotimes.length;i++){
+              if(healthinfotimes[i].time==item.acture){
+                healthinfotimes.splice(i, 1)
+                break;
+              }
+            }
+            Storage.set('consulthealthinfo',angular.toJson(healthinfotimes))
+            // HealthInfo.remove(number);
+            // $scope.items = HealthInfo.getall();
+          } 
+        });
+    }else{
+      $state.go('tab.HealthInfoDetail',{id:editId});
+    }
+    
+  }
+
+
+  $scope.newHealth = function(){
+    $state.go('tab.HealthInfoDetail',{id:null});
+
+  }
+
+  // $scope.EditHealth = function(editId){
+  //   console.log("健康信息");
+  //   console.log(editId);
+  //   $state.go('tab.myHealthInfoDetail',{id:editId});
+  // }
+
+
+  
+}])
+
+
+//健康详情--PXY
+.controller('HealthDetailCtrl', ['ionicDatePicker','$scope','$state','$ionicHistory','$ionicPopup','$stateParams','$ionicPopover','$ionicModal','$ionicScrollDelegate','$ionicLoading','$timeout','Dict','Health','Storage','Camera',function(ionicDatePicker,$scope, $state,$ionicHistory,$ionicPopup,$stateParams,$ionicPopover,$ionicModal,$ionicScrollDelegate,$ionicLoading,$timeout,Dict,Health,Storage,Camera) {
+  $scope.barwidth="width:0%";
+  //var patientId = Storage.get('getpatientId')
+  var patientId = 'U201702071766'   //测试ID
+
+  // $scope.test = function(){
+  //   console.log($scope.datepickerObject4);
+  // }
+
+  $scope.Goback = function(){
+        if($scope.canEdit==true){
+            $scope.canEdit = false;
+        }else{
+            if($ionicHistory.backTitle()==null){
+                $state.go('tab.HealthInfo');
+            }else{
+                $ionicHistory.goBack();
+            }
+            console.log(123);
+            console.log($ionicHistory.backTitle());
+            
+        }
+        
+    }
+
+    $scope.edit = function(){
+        $scope.canEdit = true;
+  }
+  $scope.$on('$ionicView.enter', function() {
+    $scope.healthinfoimgurl = '';
+    $ionicModal.fromTemplateUrl('partials/patient/healthinfoimag.html', {
+        scope: $scope,
+        animation: 'slide-in-up'
+      }).then(function(modal) {
+        $scope.modal = modal;
+      });
+  })
+
+    //从字典中搜索选中的对象。
+  var searchObj = function(code,array){
+    for (var i = 0; i < array.length; i++) {
+      if(array[i].name == code) return array[i];
+    };
+    return "未填写";
+  }
+
+  // 获取标签类别
+  $scope.labels = {}; // 初始化
+    $scope.health={
+    label:null,
+    date:null,
+    text:null,
+    imgurl:null
+  }
+  $scope.health.imgurl=[]
+  Dict.getHeathLabelInfo({category:"healthInfoType"}).then(
+    function(data)
+    {
+      $scope.labels = data.results.details
+      //判断是修改还是新增
+      if($stateParams.id!=null && $stateParams!=""){
+        //修改
+        $scope.canEdit = false;
+        var info = $stateParams.id;
+        console.log(info)
+        Health.getHealthDetail({userId:patientId,insertTime:info.acture}).then(
+          function(data)
+          {
+            if (data.results != "" && data.results != null)
+            {
+              $scope.health.label = data.results.label
+              if ($scope.health.label != null && $scope.health.label != "")
+              {
+                $scope.health.label = searchObj($scope.health.label,$scope.labels);
+                console.log( $scope.health.label);
+              }
+              $scope.health.date = data.results.time.substr(0,10)
+              $scope.health.text = data.results.description
+              if (data.results.url != ""&&data.results.url!=null)
+              {
+                console.log(data.results.url)
+                $scope.health.imgurl = data.results.url
+                // $scope.showflag=true;
+              }
+            }
+            console.log($scope.health);
+          },
+          function(err)
+          {
+            console.log(err);
+          }
+        )
+      }else{
+        $scope.canEdit = true;
+      }
+      console.log($scope.labels);
+    },
+    function(err)
+    {
+      console.log(err);
+    }
+  )
+  //angular.toJson fromJson()
+  //2017419 zxf
+  // var testtt=[];
+  // testtt.push("http://121.43.107.106:8052/uploads/photos/")
+  // testtt.push("http://121.43.107.10da6:8052/uploads/photos/")
+  // Storage.set('test',angular.toJson(testtt))
+  // console.log(testtt)
+  // console.log(Storage.get('test'))
+  // console.log(angular.fromJson(Storage.get('test')))
+  // testtt=angular.fromJson(Storage.get('test'))
+
+// Storage.set('localhealthinfoimg',angular.toJson(testtt))
+//进入之后local有数据但是不显示
+  // $scope.health.imgurl=[];
+  // var tmpimgurl=Storage.get('localhealthinfoimg');
+  // console.log(tmpimgurl)
+  // if(tmpimgurl!=""&&tmpimgurl!=null){
+  //   console.log(tmpimgurl)
+  //   $scope.health.imgurl=angular.fromJson(tmpimgurl);
+  //   console.log($scope.health.imgurl)
+  //   $scope.showflag=true;
+  // }
+
+  
+  console.log($ionicHistory.backView())
+  $scope.HealthInfoSetup = function(){
+    if($scope.health.label!=""&&$scope.health.text!=""&&$scope.health.date!=""){
+      console.log($stateParams.id)
+        if($stateParams.id==null||$stateParams==""){
+            Health.createHealth({userId:patientId,type:$scope.health.label.code,time:$scope.health.date,url:$scope.health.imgurl,label:$scope.health.label.name,description:$scope.health.text,comments:""}).then(
+              function(data)
+              {
+                console.log(data.results);
+                console.log(data.results.insertTime);
+                $scope.canEdit= false;
+                var healthinfoToconsult=[]
+                //从咨询过来的需要返回对应的健康信息
+                if($ionicHistory.backView()!=null&&$ionicHistory.backView().stateName=='tab.consultquestion2'){
+                  if(Storage.get('consulthealthinfo')==''||Storage.get('consulthealthinfo')==null||Storage.get('consulthealthinfo')=='undefined'){
+                    healthinfoToconsult.push({'time':data.results.insertTime})
+                  }else{
+                    healthinfoToconsult=angular.fromJson(Storage.get('consulthealthinfo'))
+                    healthinfoToconsult.push({'time':data.results.insertTime})
+                  }
+                  Storage.set('consulthealthinfo',angular.toJson(healthinfoToconsult))
+                  console.log(Storage.get('consulthealthinfo'))
+                }
+
+
+                $ionicHistory.goBack()
+              },
+              function(err)
+              {
+                console.log(err);
+              }
+            )
+        }
+        else{
+            var curdate=new Date();
+            Health.modifyHealth({userId:patientId,type:$scope.health.label.code,time:$scope.health.date,url:$scope.health.imgurl,label:$scope.health.label.name,description:$scope.health.text,comments:"",insertTime:$stateParams.id.insertTime}).then(
+              function(data)
+              {
+                console.log(data.results);
+                $scope.canEdit= false;
+                // $ionicHistory.goBack()
+              },
+              function(err)
+              {
+                console.log(err);
+              }
+            )
+        }
+    }
+    else{
+        $ionicLoading.show({
+            template:'信息填写不完整',
+            duration:1000
+        });
+    }
+
+}
+
+  var datepickerD = {
+        callback: function (val) {  //Mandatory
+            console.log('Return value from the datepicker popup is : ' + val, new Date(val));
+            $scope.health.date=new Date(val);
+        },
+        titleLabel: '添加日期',
+        inputDate: new Date(),
+        mondayFirst: true,
+        closeOnSelect: false,
+        templateType: 'popup',
+        setLabel: '确定',
+        todayLabel: '今天',
+        closeLabel: '取消',
+        showTodayButton: true,
+        dateFormat: 'yyyy MMMM dd',
+        weeksList: ["周日","周一","周二","周三","周四","周五","周六"],
+        monthsList:["一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"]
+    };
+    $scope.openDatePicker = function(){
+        ionicDatePicker.openDatePicker(datepickerD);
+    };
+
+
+
+  // --------datepicker设置----------------
+  // var  monthList=["一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"];
+  // var weekDaysList=["日","一","二","三","四","五","六"];
+  // var datePickerCallback = function (val) {
+  //   if (typeof(val) === 'undefined') {
+  //     console.log('No date selected');
+  //   } else {
+  //     $scope.datepickerObject4.inputDate=val;
+  //     var dd=val.getDate();
+  //     var mm=val.getMonth()+1;
+  //     var yyyy=val.getFullYear();
+  //     var d=dd<10?('0'+String(dd)):String(dd);
+  //     var m=mm<10?('0'+String(mm)):String(mm);
+  //     //日期的存储格式和显示格式不一致
+  //     $scope.health.date=yyyy+'-'+m+'-'+d;
+  //   }
+  // };
+
+  // $scope.datepickerObject4 = {
+  //   titleLabel: '时间日期',  //Optional
+  //   todayLabel: '今天',  //Optional
+  //   closeLabel: '取消',  //Optional
+  //   setLabel: '设置',  //Optional
+  //   setButtonType : 'button-assertive',  //Optional
+  //   todayButtonType : 'button-assertive',  //Optional
+  //   closeButtonType : 'button-assertive',  //Optional
+  //   mondayFirst: false,    //Optional
+  //   //disabledDates: disabledDates, //Optional
+  //   weekDaysList: weekDaysList,   //Optional
+  //   monthList: monthList, //Optional
+  //   templateType: 'popup', //Optional
+  //   showTodayButton: 'false', //Optional
+  //   modalHeaderColor: 'bar-positive', //Optional
+  //   modalFooterColor: 'bar-positive', //Optional
+  //   from: new Date(1900, 1, 1),   //Optional
+  //   to: new Date(),    //Optional
+  //   callback: function (val) {    //Mandatory
+  //     datePickerCallback(val);
+  //   }
+  // };  
+//--------------copy from minectrl
+  // 上传头像的点击事件----------------------------
+  $scope.onClickCamera = function($event){
+    $scope.openPopover($event);
+  };
+ 
+ // 上传照片并将照片读入页面-------------------------
+  var photo_upload_display = function(imgURI){
+   // 给照片的名字加上时间戳
+    var temp_photoaddress = Storage.get("UID") + "_" + new Date().getTime() + "healthinfo.jpg";
+    console.log(temp_photoaddress)
+    Camera.uploadPicture(imgURI, temp_photoaddress)
+    .then(function(res){
+      var data=angular.fromJson(res)
+      //图片路径
+      $scope.health.imgurl.push("http://121.43.107.106:8052/"+String(data.path_resized))
+      // $state.reload("tab.mine")
+      // Storage.set('localhealthinfoimg',angular.toJson($scope.health.imgurl));
+      console.log($scope.health.imgurl)
+      // $scope.showflag=true;
+    },function(err){
+      console.log(err);
+      reject(err);
+    })
+  };
+//-----------------------上传头像---------------------
+      // ionicPopover functions 弹出框的预定义
+        //--------------------------------------------
+        // .fromTemplateUrl() method
+  $ionicPopover.fromTemplateUrl('my-popover.html', {
+    scope: $scope,
+    animation: 'slide-in-up'
+  }).then(function(popover) {
+    $scope.popover = popover;
+  });
+  $scope.openPopover = function($event) {
+    $scope.popover.show($event);
+  };
+  $scope.closePopover = function() {
+    $scope.popover.hide();
+  };
+  //Cleanup the popover when we're done with it!
+  $scope.$on('$destroy', function() {
+    $scope.popover.remove();
+  });
+  // Execute action on hide popover
+  $scope.$on('popover.hidden', function() {
+    // Execute action
+  });
+  // Execute action on remove popover
+  $scope.$on('popover.removed', function() {
+    // Execute action
+  });
+
+  // 相册键的点击事件---------------------------------
+  $scope.onClickCameraPhotos = function(){        
+   // console.log("选个照片"); 
+   $scope.choosePhotos();
+   $scope.closePopover();
+  };      
+  $scope.choosePhotos = function() {
+  Camera.getPictureFromPhotos('gallery').then(function(data) {
+      // data里存的是图像的地址
+      // console.log(data);
+      var imgURI = data; 
+      photo_upload_display(imgURI);
+    }, function(err) {
+      // console.err(err);
+      var imgURI = undefined;
+    });// 从相册获取照片结束
+  }; // function结束
+
+
+  // 照相机的点击事件----------------------------------
+  $scope.getPhoto = function() {
+    // console.log("要拍照了！");
+    $scope.takePicture();
+    $scope.closePopover();
+  };
+  $scope.isShow=true;
+  $scope.takePicture = function() {
+   Camera.getPicture('cam').then(function(data) {
+      var imgURI = data;
+      photo_upload_display(imgURI);
+    }, function(err) {
+        // console.err(err);
+        var imgURI = undefined;
+    })// 照相结束
+  }; // function结束
+
+
+
+    $scope.openModal = function() {
+      $scope.modal.show();
+    };
+    $scope.closeModal = function() {
+      $scope.modal.hide();
+    };
+    //Cleanup the modal when we're done with it!
+    $scope.$on('$destroy', function() {
+      $scope.modal.remove();
+    });
+    // Execute action on hide modal
+    $scope.$on('modal.hidden', function() {
+      // Execute action
+    });
+    // Execute action on remove modal
+    $scope.$on('modal.removed', function() {
+      // Execute action
+    });
+
+  //点击图片返回
+  $scope.imggoback = function(){
+    $scope.modal.hide();
+  };
+  $scope.showoriginal=function(resizedpath){
+    $scope.openModal();
+    console.log(resizedpath)
+    var originalfilepath="http://121.43.107.106:8052/uploads/photos/"+resizedpath.slice(resizedpath.lastIndexOf('/')+1).substr(7)
+    console.log(originalfilepath)
+    $scope.healthinfoimgurl=originalfilepath;
+  }
+  $scope.deleteimg=function(index){
+    //somearray.removeByValue("tue");
+    console.log($scope.health.imgurl)
+    $scope.health.imgurl.splice(index, 1)
+    // Storage.set('tempimgrul',angular.toJson($scope.images));
+  }
+
+  $scope.$on('$ionicView.leave', function() {
+    $scope.modal.remove();
+  })
+
+
+
+  
+}])
+
+
+
 //消息类型--PXY
 .controller('VaryMessageCtrl', ['$scope','$state','$ionicHistory','Storage',function($scope, $state,$ionicHistory,Storage) {
 

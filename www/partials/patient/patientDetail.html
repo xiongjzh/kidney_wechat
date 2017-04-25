@@ -28,7 +28,7 @@
 				<img ng-src={{patient.photoUrl|imgUrl:'patient'}}>
 				
 				<div class="row">
-					<div class="col">
+					<div class="col-90">
 						<span>{{patient.name}}</span><span>&nbsp;&nbsp;&nbsp;{{patient.gender | filterGender}}</span>&nbsp;&nbsp;&nbsp;<span>{{patient.birthday | filterAge}}岁</span>
 						<p>身份证号：{{patient.IDNo}}</p>
 						<p>地区：{{patient.address.province}} {{patient.address.city}}</p>
@@ -36,7 +36,7 @@
 						<p>是否有高血压：{{patient.hypertension | filterhypertension}}</p>
 						<p>保险推送次数：{{Ins.count}}</p>
 					</div>
-					<div class="col">
+					<div class="col-10">
 						<button class="button button-small button-positive" ng-click="SendInsMsg()">推送保险</button>
 					</div>
 				</div>

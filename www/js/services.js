@@ -686,6 +686,7 @@ angular.module('kidney.services', ['ionic','ngResource'])
             getDiseaseType:{method:'GET', params:{route: 'typeTWO'}, timeout: 100000},
             getDistrict:{method:'GET', params:{route: 'district'}, timeout: 100000},
             getHospital:{method:'GET', params:{route: 'hospital'}, timeout: 100000},
+            getHeathLabelInfo:{method:'GET', params:{route: 'typeOne'}, timeout: 100000},
             typeOne:{method:'GET', params:{route: 'typeOne'}, timeout: 100000}
         });
     };
@@ -820,9 +821,11 @@ angular.module('kidney.services', ['ionic','ngResource'])
     var wechat = function(){
         return $resource(CONFIG.baseUrl + ':path/:route',{path:'wechat'},{
             settingConfig:{method:'GET', params:{route: 'settingConfig'}, timeout: 100000},
-            getUserInfo:{method:'GET', params:{route: 'getUserInfo'}, timeout: 100000}
+            getUserInfo:{method:'GET', params:{route: 'getUserInfo'}, timeout: 100000},
+            download:{method:'GET', params:{route: 'download'}, timeout: 100000}
         })
     }
+
     serve.abort = function ($scope) {
         abort.resolve();
         $interval(function () {
@@ -859,15 +862,15 @@ angular.module('kidney.services', ['ionic','ngResource'])
     serve.Message = Message();
     serve.Communication = Communication();
     serve.User = User();
-    serve.Insurance = Insurance();    
-    serve.wechat = wechat();
+    serve.Insurance = Insurance();   
+    serve.wechat = wechat(); 
     return serve;
 }])
 .factory('Dict', ['$q', 'Data', function($q, Data){
     var self = this;
     //params->{
             //  category:'patient_class'
-           // }
+            // }   
     self.getDiseaseType = function(params){
         var deferred = $q.defer();
         Data.Dict.getDiseaseType(
@@ -885,7 +888,7 @@ angular.module('kidney.services', ['ionic','ngResource'])
             //  province:"33", //定位到某个具体省份时需要输入
             //  city:'01',  //定位到某个具体城市时需要输入
             //  district:'02' //定位到某个具体区县时需要输入
-           // }
+            // }
     self.getDistrict = function(params){
         var deferred = $q.defer();
         Data.Dict.getDistrict(
@@ -915,6 +918,21 @@ angular.module('kidney.services', ['ionic','ngResource'])
         return deferred.promise;
     };
     //params->{
+            //  category:'healthInfoType'
+           // }
+    self.getHeathLabelInfo = function(params){
+        var deferred = $q.defer();
+        Data.Dict.getHeathLabelInfo(
+            params,
+            function(data, headers){
+                deferred.resolve(data);
+            },
+            function(err){
+                deferred.reject(err);
+        });
+        return deferred.promise;
+    };
+    //params->{
     //    category:'MessageType'
     //}
     self.typeOne = function(params){
@@ -929,9 +947,9 @@ angular.module('kidney.services', ['ionic','ngResource'])
         });
         return deferred.promise;
     };
-
     return self;
 }])
+
 .factory('Task', ['$q', 'Data', function($q, Data){
     var self = this;
     //params->{
@@ -2035,6 +2053,22 @@ angular.module('kidney.services', ['ionic','ngResource'])
     self.getUserInfo = function(params){
         var deferred = $q.defer();
         Data.wechat.getUserInfo(
+            params,
+            function(data, headers){
+                deferred.resolve(data);
+            },
+            function(err){
+                deferred.reject(err);
+        });
+        return deferred.promise;
+    };
+    //params->{
+            //  serverId:
+            //  name:
+            // }
+    self.download = function(params){
+        var deferred = $q.defer();
+        Data.wechat.download(
             params,
             function(data, headers){
                 deferred.resolve(data);

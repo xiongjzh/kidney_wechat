@@ -20,7 +20,7 @@
     <ion-content class="gray-back has-subheader content-item-list">
         <div ng-if="!params.showSearch && params.isTeam">
             <!-- 团队 -->
-            <div  ng-repeat="team in teams |filter:query | orderBy:team.lastMsgDate" collection-item-height="94px" class="item item-avatar" type="item-text-wrap" ng-click="itemClick($event,team)">
+            <div  ng-repeat="team in teams |filter:query | orderBy:'-lastMsgDate'" collection-item-height="94px" class="item item-avatar" type="item-text-wrap" ng-click="itemClick($event,team)">
                 <img ng-src="{{team.photoUrl|imgUrl:'group'}}">
                 <div style="display:inline-block;width:70%;">
 
@@ -38,7 +38,7 @@
         </div>
         <!-- 医生 -->
         <div ng-if="!params.showSearch && !params.isTeam">
-            <div class="item item-avatar" ng-repeat="d in doctors | orderBy:d.lastMsgDate" ng-click="doctorClick($event,d.doctorId)">
+            <div class="item item-avatar" ng-repeat="d in doctors | orderBy:'-lastMsgDate'" ng-click="doctorClick($event,d.doctorId)">
                 <img src="{{d.doctorId.photoUrl|imgUrl:'doctor'}}">
 
                 <div style="display:inline-block;width:70%;">

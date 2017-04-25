@@ -456,16 +456,28 @@ angular.module('kidney',[
         }
     })
 
-    // .state('tab.HealthInfo', {
-    //     // cache: false,
-    //     url: '/HealthInfo',
-    //     views: {
-    //         'tab-patient':{
-    //             controller: 'HealthInfoCtrl',
-    //             templateUrl: 'partials/patient/HealthInfo.html'
-    //         }
-    //     }
-    // })    
+    .state('tab.HealthInfo', {
+        // cache: false,
+        url: '/HealthInfo',
+        views: {
+            'tab-patient':{
+                controller: 'HealthInfoCtrl',
+                templateUrl: 'partials/patient/HealthInfo.html'
+            }
+        }
+    })
+
+    .state('tab.HealthInfoDetail', {
+        // cache: false,
+        url: '/HealthInfoDetail',
+        params: {id:null},
+        views: {
+            'tab-patient':{
+                controller: 'HealthDetailCtrl',
+                templateUrl: 'partials/patient/editHealthInfo.html'
+            }
+        }
+    })        
 
     // views-tab-groups
     .state('tab.new-group', {
