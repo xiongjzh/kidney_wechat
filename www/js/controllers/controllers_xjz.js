@@ -301,12 +301,9 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         $scope.params.isTeam = $state.params.type == '0';
         $scope.params.showSearch = false;
     })
-    $scope.$on('receiveMessage',function(event, msg) {
-        $scope.load();
-        // if (msg.targetType == 'single' && msg.fromName == $state.params.chatId) {
-        //     viewUpdate(5);
-        // }
-    });
+    // $scope.$on('receiveMessage',function(event, msg) {
+        // $scope.load();
+    // });
     $scope.$on('$ionicView.enter', function() {
         $scope.load(true);
         // wechat.settingConfig({ url: $location.absUrl() }).then(function(data) {
@@ -687,6 +684,14 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             pushMsg(msg);
             // viewUpdate(5);
         }
+    });
+    $scope.$on('iii111', function(event, msg) {
+        console.log(msg);
+        // if (msg.targetType == 'single' && msg.fromName == $state.params.chatId) {
+
+            // pushMsg(msg);
+            // viewUpdate(5);
+        // }
     });
     $scope.$on('messageRes',function(event,msg){
         if (msg.targetType == 'single' && msg.fromName == $state.params.chatId) {
