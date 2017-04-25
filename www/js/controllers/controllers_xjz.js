@@ -603,7 +603,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         //     window.JMessage.enterSingleConversation($state.params.chatId, $scope.params.key);
         //     getMsg(15);
         // }
-        getMsg(15);
+        $scope.getMsg(15);
     });
 
     $scope.$on('$ionicView.enter', function() {
@@ -743,7 +743,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         //         first++;
         //     }
         // }
-    function getMsg(num) {
+    $scope.getMsg = function(num) {
         var q={
             messageType:'1',
             id1:Storage.get('UID'),
@@ -768,7 +768,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                     $scope.msgs.unshift(res[i]);
                     $scope.msgs[0].diff = true;
                 // });
-                $scope.$apply();
+                // $scope.$apply();
             }
 
         },function(err){
@@ -778,7 +778,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
 
 
     $scope.DisplayMore = function() {
-        getMsg(15);
+        $scope.getMsg(15);
     }
     $scope.scrollBottom = function() {
         $scope.scrollHandle.scrollBottom(true);
