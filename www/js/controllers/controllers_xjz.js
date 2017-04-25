@@ -894,9 +894,9 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         var pos=arrTool.indexOf($scope.msgs,'createTimeInMillis',msg.createTimeInMillis);
         if(pos!=-1){
             msg.diff=$scope.msgs[pos].diff;
-            $scope.$apply(function(){
+            // $scope.$apply(function(){
                 $scope.msgs[pos]=msg;
-            });
+            // });
         }
     }
     function pushMsg(msg){
@@ -905,9 +905,9 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         }else{
             msg.diff=(msg.createTimeInMillis - $scope.msgs[$scope.msgs.length-1].createTimeInMillis) > 300000 ? true : false;
         }
-        $scope.$apply(function(){
+        // $scope.$apply(function(){
             $scope.msgs.push(msg);
-        });
+        // });
     }
     // send message--------------------------------------------------------------------------------
     //
