@@ -874,9 +874,6 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
         {
             // console.log(data)
             $scope.doctor=data.results;
-            if($scope.doctor.photoUrl==undefined||$scope.doctor.photoUrl==""){
-              $scope.doctor.photoUrl="img/DefaultAvatar.jpg"
-            }
         },
         function(err)
         {
@@ -890,7 +887,95 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
         userId:Storage.get('UID')
     }
 
-    // 上传头像的点击事件----------------------------
+}])
+
+//"我”二维码页
+.controller('QRcodeCtrl', ['Doctor','$scope','$state','$interval','$rootScope', 'Storage',  function(Doctor,$scope, $state,$interval,$rootScope,Storage) {
+    //$scope.hideTabs = true;
+    //$scope.userid=Storage.get('userid');
+    // $scope.doctor=meFactory.GetDoctorInfo($scope.userid);
+  
+
+    //  $scope.qrscan= function(){
+    //   QRScan.getCode({
+    //   userId:'doc01'
+    // })
+    //   .then(function(data){
+    //     console.log(data);
+    //   },function(err){
+    //     console.log(err);
+    //   })
+    // };
+
+    $scope.params = {
+        // groupId:$state.params.groupId
+        userId:Storage.get('UID')
+    }
+
+    Doctor.getDoctorInfo({
+        userId:Storage.get('UID')
+    })
+    .then(
+        function(data)
+        {
+            // console.log(data)
+            $scope.doctor=data.results;
+        },
+        function(err)
+        {
+            console.log(err)
+        }
+    );
+
+}])
+
+
+//"我”个人资料页
+.controller('myinfoCtrl', ['Doctor','$scope','Storage', function(Doctor,$scope, Storage) {
+    $scope.hideTabs = true;
+    //$scope.userid=Storage.get('userid');
+    //$scope.doctor=meFactory.GetDoctorInfo($scope.userid);
+    $scope.updateDiv=false;
+    $scope.myDiv=true;
+
+    Doctor.getDoctorInfo({
+        userId:Storage.get('UID')
+    })
+    .then(
+        function(data)
+        {
+          // console.log(data)
+            $scope.doctor=data.results;
+        },
+        function(err)
+        {
+            console.log(err)
+        }
+    )
+
+    $scope.editinfo = function() {
+        Doctor.editDoctorDetail($scope.doctor)
+        .then(
+            function(data)
+            {
+                console.log(data)
+            },
+            function(err)
+            {
+                console.log(err)
+            }
+        );
+        $scope.myDiv = !$scope.myDiv;
+        $scope.updateDiv = !$scope.updateDiv;
+    };
+  
+
+    $scope.toggle = function() {
+        $scope.myDiv = !$scope.myDiv;
+        $scope.updateDiv = !$scope.updateDiv;   
+    };
+    
+      // 上传头像的点击事件----------------------------
   $scope.onClickCamera = function($event){
     $scope.openPopover($event);
   };
@@ -1062,94 +1147,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
 
       })
     }; // function结束
-}])
 
-//"我”二维码页
-.controller('QRcodeCtrl', ['Doctor','$scope','$state','$interval','$rootScope', 'Storage',  function(Doctor,$scope, $state,$interval,$rootScope,Storage) {
-    //$scope.hideTabs = true;
-    //$scope.userid=Storage.get('userid');
-    // $scope.doctor=meFactory.GetDoctorInfo($scope.userid);
-  
-
-    //  $scope.qrscan= function(){
-    //   QRScan.getCode({
-    //   userId:'doc01'
-    // })
-    //   .then(function(data){
-    //     console.log(data);
-    //   },function(err){
-    //     console.log(err);
-    //   })
-    // };
-
-    $scope.params = {
-        // groupId:$state.params.groupId
-        userId:Storage.get('UID')
-    }
-
-    Doctor.getDoctorInfo({
-        userId:Storage.get('UID')
-    })
-    .then(
-        function(data)
-        {
-            // console.log(data)
-            $scope.doctor=data.results;
-        },
-        function(err)
-        {
-            console.log(err)
-        }
-    );
-
-}])
-
-
-//"我”个人资料页
-.controller('myinfoCtrl', ['Doctor','$scope','Storage', function(Doctor,$scope, Storage) {
-    $scope.hideTabs = true;
-    //$scope.userid=Storage.get('userid');
-    //$scope.doctor=meFactory.GetDoctorInfo($scope.userid);
-    $scope.updateDiv=false;
-    $scope.myDiv=true;
-
-    Doctor.getDoctorInfo({
-        userId:Storage.get('UID')
-    })
-    .then(
-        function(data)
-        {
-          // console.log(data)
-            $scope.doctor=data.results;
-        },
-        function(err)
-        {
-            console.log(err)
-        }
-    )
-
-    $scope.editinfo = function() {
-        Doctor.editDoctorDetail($scope.doctor)
-        .then(
-            function(data)
-            {
-                console.log(data)
-            },
-            function(err)
-            {
-                console.log(err)
-            }
-        );
-        $scope.myDiv = !$scope.myDiv;
-        $scope.updateDiv = !$scope.updateDiv;
-    };
-  
-
-    $scope.toggle = function() {
-        $scope.myDiv = !$scope.myDiv;
-        $scope.updateDiv = !$scope.updateDiv;   
-    };
-  
 }])
 
 //"我”个人收费页

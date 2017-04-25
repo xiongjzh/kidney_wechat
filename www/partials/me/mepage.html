@@ -7,35 +7,13 @@
     <ion-content has-bouncing="true" overflow-scroll="false" class="has-header has-tabs">
         <ion-list>
             <ion-item class="item-avatar item-icon-right item-button-right" type="item-text-wrap" href="#/tab/qrcode">
-                <img ng-src={{doctor.photoUrl|imgUrl:'doctor'}}  name="Photo" ng-click="onClickCamera($event)" >
+                <img ng-src={{doctor.photoUrl|imgUrl:'doctor'}}>
                 <h2>{{doctor.name}}&nbsp;&nbsp;&nbsp;&nbsp;{{doctor.title}}</h2>
                 <p>{{doctor.workUnit}}&nbsp;&nbsp;{{doctor.department}}</p>
                 <qrcode  version=3 error-correction-level="M" size="50" data="{{params.userId}}" style="width:60px;height:60px;position: absolute;right: 30px;top:10px;"></qrcode>
                 <i class="icon ion-chevron-right icon-accessory"></i>
             </ion-item>
-            <!-- 上传照片的弹出框 -->
-        <script id="my-popover.html" type="text/ng-template">
-        <ion-popover-view>
-            <ion-header-bar class="bar-calm">
-                <h1 class="title">上传头像</h1>
-            </ion-header-bar>
-        <ion-content>
-          <ion-list> 
-            <div class = "padding">
-              <button class="button button-block button-primary " ng-click="getPhoto()"><i class="icon ion-camera"></i>
-                  拍照
-              </button>
-            
-              <button class="button button-block button-primary " ng-click="onClickCameraPhotos()"><i class="icon ion-image"></i>
-                  相册
-              </button>
-             
-            </div>
-          </ion-list>
-        </ion-content>
-      </ion-popover-view>
-    </script>
-    <!-- 上传照片的弹出框 -->
+           
             <a class="item item-icon-left" href="#/tab/schedual">
                 <i class="icon ion-ios-list-outline"></i>
                 排班
