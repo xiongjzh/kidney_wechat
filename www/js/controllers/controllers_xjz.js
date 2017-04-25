@@ -577,7 +577,8 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             msgCount: 0,
             helpDivHeight: 60,
             moreMsgs: true,
-            audio:'http://121.43.107.106:8088/PersonalPhoto/Emotions.mp3'
+            audio:'http://121.43.107.106:8088/PersonalPhoto/Emotions.mp3',
+            UID:Storage.get('UID')
         }
         // var audio = new Audio('http://121.43.107.106:8088/PersonalPhoto/Emotions.mp3');
         // audio.play();
@@ -610,10 +611,10 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             $rootScope.conversation.type = 'single';
             $rootScope.conversation.id = $state.params.chatId;
         }
-        Doctor.getDoctorInfo({userId:Storage.get('UID')})
+        Doctor.getDoctorInfo({userId:$scope.params.UID})
         .then(function(response){
             socket = io.connect('ws://121.43.107.106:4050/chat');
-            socket.emit('newUser',{user_name:response.results.name,user_id:Storage.get('UID')});
+            socket.emit('newUser',{user_name:response.results.name,user_id:$scope.params.UID});
             socket.on('err',function(data){
                 console.log(data)
                 // $rootScope.$broadcast('receiveMessage',data);
