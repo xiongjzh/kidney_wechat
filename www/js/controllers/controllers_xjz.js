@@ -801,7 +801,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             $scope.imageHandle.zoomTo(5, true);
         }
     }
-    var track=document.getElementsById('voiceplay');
+    var track=window.document.getElementsById('voiceplay');
     $scope.$on('voice', function(event, args) {
         console.log(args)
         event.stopPropagation();
