@@ -2,7 +2,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
 
 /////////////////////////////zhangying///////////////////////
 //登录
-.controller('SignInCtrl', ['User','$scope','$timeout','$state','Storage','loginFactory','$ionicHistory','JM',  '$location','wechat','$window','$rootScope',function(User,$scope, $timeout,$state,Storage,loginFactory,$ionicHistory,JM,JM,$location,wechat,$window,$rootScope) {
+.controller('SignInCtrl', ['User','$scope','$timeout','$state','Storage','loginFactory','$ionicHistory','JM',  '$location','wechat','$window','$rootScope',function(User,$scope, $timeout,$state,Storage,loginFactory,$ionicHistory,JM,$location,wechat,$window,$rootScope) {
     $scope.barwidth="width:0%";
 
     var temp = $location.absUrl().split('=')
