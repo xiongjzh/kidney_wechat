@@ -565,7 +565,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
 
 }])
 //"咨询”问题详情
-.controller('detailCtrl', ['$scope', '$state', '$rootScope', '$ionicModal', '$ionicScrollDelegate', '$ionicHistory', '$ionicPopover', '$ionicPopup', 'Camera', 'voice', '$http', 'CONFIG', 'arrTool', 'Communication','Storage', 'wechat','$location','Doctor',function($scope, $state, $rootScope, $ionicModal, $ionicScrollDelegate, $ionicHistory, $ionicPopover, $ionicPopup, Camera, voice, $http, CONFIG, arrTool, Communication,Storage,wechat,$location,Doctor) {
+.controller('detailCtrl', ['$scope', '$state', '$rootScope', '$ionicModal', '$ionicScrollDelegate', '$ionicHistory', '$ionicPopover', '$ionicPopup', 'Camera', 'voice', '$http', 'CONFIG', 'arrTool', 'Communication','Storage', 'wechat','$location','Doctor','$q',function($scope, $state, $rootScope, $ionicModal, $ionicScrollDelegate, $ionicHistory, $ionicPopover, $ionicPopup, Camera, voice, $http, CONFIG, arrTool, Communication,Storage,wechat,$location,Doctor,$q) {
     $scope.input = {
         text: ''
     }
@@ -603,7 +603,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         //     window.JMessage.enterSingleConversation($state.params.chatId, $scope.params.key);
         //     getMsg(15);
         // }
-        $scope.getMsg(15);
+        $scope.getMsg(15).then(function(data){$scope.msgs=data;});
     });
 
     $scope.$on('$ionicView.enter', function() {
@@ -744,41 +744,46 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         //     }
         // }
     $scope.getMsg = function(num) {
-        var q={
-            messageType:'1',
-            id1:Storage.get('UID'),
-            id2:$scope.params.chatId,
-            skip:$scope.params.chatId,
-            limit:num
-        }
-        Communication.getCommunication(q)
-        .then(function(data){
-            console.log(data);
-            $scope.$broadcast('scroll.refreshComplete');
-            var res=data.results;
-            if(res.length==0) $scope.params.moreMsgs = false;
-            else{
-                $scope.params.msgCount += res.length;
-                // $scope.$apply(function() {
-                    if ($scope.msgs.length!=0) $scope.msgs[0].diff = ($scope.msgs[0].createTimeInMillis - res[0].createTimeInMillis) > 300000 ? true : false;
-                    for (var i = 0; i < res.length - 1; ++i) {
-                        res[i].diff = (res[i].createTimeInMillis - res[i + 1].createTimeInMillis) > 300000 ? true : false;
-                        $scope.msgs.unshift(res[i]);
-                    }
-                    $scope.msgs.unshift(res[i]);
-                    $scope.msgs[0].diff = true;
-                // });
-                // $scope.$apply();
+        return $q(function(resolve,reject){
+            var q={
+                messageType:'1',
+                id1:Storage.get('UID'),
+                id2:$scope.params.chatId,
+                skip:$scope.params.chatId,
+                limit:num
             }
-
-        },function(err){
-            $scope.$broadcast('scroll.refreshComplete');
-        });
+            Communication.getCommunication(q)
+            .then(function(data){
+                console.log(data);
+                $scope.$broadcast('scroll.refreshComplete');
+                var res=data.results;
+                if(res.length==0) $scope.params.moreMsgs = false;
+                else{
+                    $scope.params.msgCount += res.length;
+                    // $scope.$apply(function() {
+                        if ($scope.msgs.length!=0) $scope.msgs[0].diff = ($scope.msgs[0].createTimeInMillis - res[0].createTimeInMillis) > 300000 ? true : false;
+                        for (var i = 0; i < res.length - 1; ++i) {
+                            res[i].diff = (res[i].createTimeInMillis - res[i + 1].createTimeInMillis) > 300000 ? true : false;
+                            $scope.msgs.unshift(res[i]);
+                        }
+                        $scope.msgs.unshift(res[i]);
+                        $scope.msgs[0].diff = true;
+                    // });
+                }
+                resolve($scope.msgs);
+            },function(err){
+                $scope.$broadcast('scroll.refreshComplete');
+                resolve($scope.msgs);
+            }); 
+        })
+        
     }
 
 
     $scope.DisplayMore = function() {
-        $scope.getMsg(15);
+        $scope.getMsg(15).then(function(data){
+            $scope.msgs=data;
+        });
     }
     $scope.scrollBottom = function() {
         $scope.scrollHandle.scrollBottom(true);
@@ -921,6 +926,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                 $scope.msgs[pos]=msg;
             // });
         }
+        $scope.msgs=$scope.msgs;
     }
     $scope.pushMsg = function(msg){
         if($scope.msgs.length==0){
@@ -931,6 +937,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         // $scope.$apply(function(){
             $scope.msgs.push(msg);
         // });
+        $scope.msgs=$scope.msgs;
     }
     // send message--------------------------------------------------------------------------------
     //
