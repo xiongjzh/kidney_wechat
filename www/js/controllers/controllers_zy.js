@@ -931,7 +931,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
 
 
 //"我”个人资料页
-.controller('myinfoCtrl', ['Doctor','$scope','Storage', function(Doctor,$scope, Storage) {
+.controller('myinfoCtrl', ['Doctor','$scope','Storage', 'wechat','$location','$ionicPopup','$ionicPopover',function(Doctor,$scope, Storage,wechat,$location,$ionicPopup,$ionicPopover) {
     $scope.hideTabs = true;
     //$scope.userid=Storage.get('userid');
     //$scope.doctor=meFactory.GetDoctorInfo($scope.userid);
