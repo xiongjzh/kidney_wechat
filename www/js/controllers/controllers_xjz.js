@@ -628,8 +628,9 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                 console.info('getMsg');
                 console.log(data);
                 if (data.msg.targetType == 'single' && data.msg.fromName == $state.params.chatId) {
-
-                    $scope.pushMsg(data.msg);
+                    $scope.$apply(function(){
+                        $scope.pushMsg(data.msg);
+                    });
                 }
                                 // $rootScope.$broadcast('receiveMessage',data);
             });
