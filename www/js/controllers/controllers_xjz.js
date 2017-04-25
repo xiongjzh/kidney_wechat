@@ -194,6 +194,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         showSearch: false,
         updateTime: 0
     }
+
     function msgNoteGen(msg){
         var fromName='',note='';
         if(msg.targetType=='group') fromName=msg.fromName+ ':';
@@ -308,20 +309,20 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
     });
     $scope.$on('$ionicView.enter', function() {
         $scope.load(true);
-        wechat.settingConfig({ url: $location.absUrl() }).then(function(data) {
-            // alert(data.results.timestamp)
-            config = data.results;
-            config.jsApiList = ['chooseImage', 'uploadImage']
-                // alert(config.jsApiList)
-                // alert(config.debug)
-            wx.config({
-                debug: true,
-                appId: config.appId,
-                timestamp: config.timestamp,
-                nonceStr: config.nonceStr,
-                signature: config.signature,
-                jsApiList: config.jsApiList
-            })
+        // wechat.settingConfig({ url: $location.absUrl() }).then(function(data) {
+        //     // alert(data.results.timestamp)
+        //     config = data.results;
+        //     config.jsApiList = ['chooseImage', 'uploadImage']
+        //         // alert(config.jsApiList)
+        //         // alert(config.debug)
+        //     wx.config({
+        //         debug: true,
+        //         appId: config.appId,
+        //         timestamp: config.timestamp,
+        //         nonceStr: config.nonceStr,
+        //         signature: config.signature,
+        //         jsApiList: config.jsApiList
+        //     })
             // wx.ready(function() {
             //     wx.checkJsApi({
             //         jsApiList: ['chooseImage', 'uploadImage'],
@@ -345,11 +346,11 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             //         }
             //     });
             // })
-            wx.error(function(res) {
-                console.error(res);
-                alert(res.errMsg)
-            })
-        });
+        //     wx.error(function(res) {
+        //         console.error(res);
+        //         alert(res.errMsg)
+        //     })
+        // });
 
     })
     $scope.showTeams = function() {
@@ -582,6 +583,8 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             moreMsgs: true,
             audio:'http://121.43.107.106:8088/PersonalPhoto/Emotions.mp3'
         }
+        var audio = new Audio('http://121.43.107.106:8088/PersonalPhoto/Emotions.mp3');
+        audio.play();
         // $scope.msgs = [];
     $scope.scrollHandle = $ionicScrollDelegate.$getByHandle('myContentScroll');
     //render msgs 
