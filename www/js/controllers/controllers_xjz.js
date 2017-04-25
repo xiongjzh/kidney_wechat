@@ -610,6 +610,42 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             $rootScope.conversation.type = 'single';
             $rootScope.conversation.id = $state.params.chatId;
         }
+        Doctor.getDoctorInfo({userId:Storage.get('UID')})
+        .then(function(response){
+            socket = io.connect('ws://121.43.107.106:4050/chat');
+            socket.emit('newUser',{user_name:response.results.name,user_id:Storage.get('UID')});
+            socket.on('err',function(data){
+                console.log(data)
+                // $rootScope.$broadcast('receiveMessage',data);
+            });
+            socket.on('onlineCount',function(data){
+                console.info('onlineCount');
+                console.log(data);
+                // $rootScope.$broadcast('receiveMessage',data);
+            });
+            socket.on('getMsg',function(data){
+                console.info('getMsg');
+                console.log(data);
+                if (msg.targetType == 'single' && msg.fromName == $state.params.chatId) {
+
+                    pushMsg(msg);
+                    // viewUpdate(5);
+                }
+                                // $rootScope.$broadcast('receiveMessage',data);
+            });
+            socket.on('messageRes',function(data){
+                console.info('messageRes');
+                console.log(data);
+                if (msg.targetType == 'single' && msg.fromName == $state.params.chatId) {
+
+                    updateMsg(msg);
+                    // viewUpdate(5);
+                }
+                // $rootScope.$broadcast('messageResponse',data);
+            });
+        },function(err){
+            reject(err);
+        })
         wechat.settingConfig({ url: $location.absUrl() }).then(function(data) {
             // alert(data.results.timestamp)
             config = data.results;
@@ -677,29 +713,29 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         $rootScope.conversation.id = '';
     })
     //receiving new massage
-    $scope.$on('receiveMessage', function(event, msg) {
-        // console.log(msg);
-        if (msg.targetType == 'single' && msg.fromName == $state.params.chatId) {
+    // $scope.$on('receiveMessage', function(event, msg) {
+    //     // console.log(msg);
+    //     if (msg.targetType == 'single' && msg.fromName == $state.params.chatId) {
 
-            pushMsg(msg);
-            // viewUpdate(5);
-        }
-    });
-    $scope.$on('iii111', function(event, msg) {
-        console.log(msg);
-        // if (msg.targetType == 'single' && msg.fromName == $state.params.chatId) {
+    //         pushMsg(msg);
+    //         // viewUpdate(5);
+    //     }
+    // });
+    // $scope.$on('iii111', function(event, msg) {
+    //     console.log(msg);
+    //     // if (msg.targetType == 'single' && msg.fromName == $state.params.chatId) {
 
-            // pushMsg(msg);
-            // viewUpdate(5);
-        // }
-    });
-    $scope.$on('messageRes',function(event,msg){
-        if (msg.targetType == 'single' && msg.fromName == $state.params.chatId) {
+    //         // pushMsg(msg);
+    //         // viewUpdate(5);
+    //     // }
+    // });
+    // $scope.$on('messageRes',function(event,msg){
+    //     if (msg.targetType == 'single' && msg.fromName == $state.params.chatId) {
 
-            updateMsg(msg);
-            // viewUpdate(5);
-        }
-    });
+    //         updateMsg(msg);
+    //         // viewUpdate(5);
+    //     }
+    // });
         // function msgsRender(first,last){
         //     while(first!=last){
         //         $scope.msgs[first+1].diff=($scope.msgs[first+1].createTimeInMillis-$scope.msgs[first].createTimeInMillis)>300000?true:false;
