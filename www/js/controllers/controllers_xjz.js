@@ -755,10 +755,11 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             Communication.getCommunication(q)
             .then(function(data){
                 console.log(data);
+                var d=data.results;
                 $scope.$broadcast('scroll.refreshComplete');
                 var res=[];
-                for(var i in data){
-                    res.push(data[i].content);
+                for(var i in d){
+                    res.push(d[i].content);
                 }
                 if(res.length==0) $scope.params.moreMsgs = false;
                 else{
