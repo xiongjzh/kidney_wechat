@@ -630,7 +630,6 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                 if (data.msg.targetType == 'single' && data.msg.fromName == $state.params.chatId) {
 
                     $scope.pushMsg(data.msg);
-                    // viewUpdate(5);
                 }
                                 // $rootScope.$broadcast('receiveMessage',data);
             });
@@ -638,9 +637,9 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                 console.info('messageRes');
                 console.log(data);
                 if (data.msg.targetType == 'single' && data.msg.targetID == $state.params.chatId) {
-
-                    $scope.updateMsg(data.msg);
-                    // viewUpdate(5);
+                    $scope.$apply(function(){
+                        $scope.updateMsg(data.msg);
+                    })
                 }
                 // $rootScope.$broadcast('messageResponse',data);
             });
@@ -648,11 +647,8 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             reject(err);
         })
         wechat.settingConfig({ url: $location.absUrl() }).then(function(data) {
-            // alert(data.results.timestamp)
             config = data.results;
             config.jsApiList = ['startRecord','stopRecord','playVoice','chooseImage','uploadVoice', 'uploadImage']
-                // alert(config.jsApiList)
-                // alert(config.debug)
             wx.config({
                 debug: true,
                 appId: config.appId,
@@ -661,29 +657,6 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                 signature: config.signature,
                 jsApiList: config.jsApiList
             })
-            // wx.ready(function() {
-            //     wx.checkJsApi({
-            //         jsApiList: ['chooseImage', 'uploadImage'],
-            //         success: function(res) {
-            //             wx.chooseImage({
-            //                 count: 1,
-            //                 sizeType: ['original', 'compressed'],
-            //                 sourceType: ['album'],
-            //                 success: function(res) {
-            //                     var localIds = res.localIds;
-            //                     wx.uploadImage({
-            //                         localId: localIds[0],
-            //                         isShowProgressTips: 1, // 默认为1，显示进度提示
-            //                         success: function(res) {
-            //                             var serverId = res.serverId; // 返回图片的服务器端ID
-            //                             wechat.
-            //                         }
-            //                     })
-            //                 }
-            //             })
-            //         }
-            //     });
-            // })
             wx.error(function(res) {
                 console.error(res);
                 alert(res.errMsg)
@@ -744,6 +717,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         //     }
         // }
     $scope.getMsg = function(num) {
+        console.info('getMsg');
         return $q(function(resolve,reject){
             var q={
                 messageType:'1',
@@ -774,6 +748,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                         $scope.msgs[0].diff = true;
                     // });
                 }
+                console.log($scope.msgs);
                 resolve($scope.msgs);
             },function(err){
                 $scope.$broadcast('scroll.refreshComplete');
@@ -923,6 +898,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         });
     }
     $scope.updateMsg = function(msg){
+        console.info('updateMsg');
         var pos=arrTool.indexOf($scope.msgs,'createTimeInMillis',msg.createTimeInMillis);
         if(pos!=-1){
             msg.diff=$scope.msgs[pos].diff;
@@ -933,6 +909,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         // $scope.msgs=$scope.msgs;
     }
     $scope.pushMsg = function(msg){
+        console.info('pushMsg');
         if($scope.msgs.length==0){
             msg.diff=true;
         }else{
