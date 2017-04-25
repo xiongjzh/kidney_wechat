@@ -2,7 +2,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
 
 /////////////////////////////zhangying///////////////////////
 //登录
-.controller('SignInCtrl', ['User','$scope','$timeout','$state','Storage','loginFactory','$ionicHistory','JM',  '$location','wechat','$window',function(User,$scope, $timeout,$state,Storage,loginFactory,$ionicHistory,JM,JM,$location,wechat,$window) {
+.controller('SignInCtrl', ['User','$scope','$timeout','$state','Storage','loginFactory','$ionicHistory','JM',  '$location','wechat','$window','$rootScope',function(User,$scope, $timeout,$state,Storage,loginFactory,$ionicHistory,JM,JM,$location,wechat,$window,$rootScope) {
     $scope.barwidth="width:0%";
 
     var temp = $location.absUrl().split('=')
@@ -980,11 +980,11 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
     $scope.openPopover($event);
   };
   $scope.reload=function(){
-    var t=$scope.myAvatar; 
-    $scope.myAvatar=''
+    var t=$scope.doctor.photoUrl; 
+    $scope.doctor.photoUrl=''
 
     $scope.$apply(function(){
-      $scope.myAvatar=t;
+      $scope.doctor.photoUrl=t;
     })
 
   }
@@ -999,10 +999,10 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
     .then(function(res){
       //res.path_resized
       //图片路径
-      $scope.myAvatar="http://121.43.107.106:8052/uploads/photos/"+temp_name+'?'+new Date().getTime();
-      console.log($scope.myAvatar)
+      $scope.doctor.photoUrl="http://121.43.107.106:8052/uploads/photos/"+temp_name+'?'+new Date().getTime();
+      console.log($scope.doctor.photoUrl)
       // $state.reload("tab.mine")
-      Patient.editPatientDetail({userId:Storage.get("UID"),photoUrl:$scope.myAvatar}).then(function(r){
+      Doctor.editDoctorDetail({userId:Storage.get("UID"),photoUrl:$scope.doctor.photoUrl}).then(function(r){
         console.log(r);
       })
     },function(err){
