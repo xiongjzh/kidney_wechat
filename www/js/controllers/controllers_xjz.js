@@ -637,7 +637,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             socket.on('messageRes',function(data){
                 console.info('messageRes');
                 console.log(data);
-                if (data.msg.targetType == 'single' && data.msg.fromName == $state.params.chatId) {
+                if (data.msg.targetType == 'single' && data.msg.targetID == $state.params.chatId) {
 
                     $scope.updateMsg(data.msg);
                     // viewUpdate(5);
@@ -926,9 +926,9 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         var pos=arrTool.indexOf($scope.msgs,'createTimeInMillis',msg.createTimeInMillis);
         if(pos!=-1){
             msg.diff=$scope.msgs[pos].diff;
-            $scope.$apply(function(){
+            // $scope.$apply(function(){
                 $scope.msgs[pos]=msg;
-            });
+            // });
         }
         // $scope.msgs=$scope.msgs;
     }
@@ -938,9 +938,9 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         }else{
             msg.diff=(msg.createTimeInMillis - $scope.msgs[$scope.msgs.length-1].createTimeInMillis) > 300000 ? true : false;
         }
-        $scope.$apply(function(){
+        // $scope.$apply(function(){
             $scope.msgs.push(msg);
-        });
+        // });
         // $scope.msgs=$scope.msgs;
     }
     // send message--------------------------------------------------------------------------------
