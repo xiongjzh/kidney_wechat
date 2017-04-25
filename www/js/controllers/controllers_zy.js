@@ -2,7 +2,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
 
 /////////////////////////////zhangying////////////////////////
 //登录
-.controller('SignInCtrl', ['User','$scope','$timeout','$state','Storage','loginFactory','$ionicHistory','JM', '$location','wechat','$window','$rootScope',function(User,$scope, $timeout,$state,Storage,loginFactory,$ionicHistory,JM,$location,wechat,$window,$rootScope) {
+.controller('SignInCtrl', ['User','$scope','$timeout','$state','Storage','loginFactory','$ionicHistory','JM', '$location','wechat','$window','$rootScope','Doctor',function(User,$scope, $timeout,$state,Storage,loginFactory,$ionicHistory,JM,$location,wechat,$window,$rootScope,Doctor) {
     $scope.barwidth="width:0%";
 
     var temp = $location.absUrl().split('=')
@@ -76,22 +76,43 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
                         Storage.set('isSignIn',true);
                         Storage.set('UID',data.results.userId);
 
-                        socket = io.connect('ws://121.43.107.106:4050/chat');
-                        socket.emit('newUser',{user_name:Storage.get('UID'),user_id:Storage.get('UID')});
-                        socket.on('err',function(data){
-                            console.log(data)
-                            // $rootScope.$broadcast('receiveMessage',data);
-                        });
-                        socket.on('onlineCount',function(data){
-                            console.info('onlineCount');
-                            console.log(data);
-                            // $rootScope.$broadcast('receiveMessage',data);
-                        });
-                        socket.on('getMsg',function(data){
-                            console.info('getMsg');
-                            console.log(data);
-                            $rootScope.$broadcast('receiveMessage',data);
-                        });
+                        Doctor.getDoctorInfo({userId:data.results.userId})
+                        .then(function(response){
+                            socket = io.connect('ws://121.43.107.106:4050/chat');
+                            socket.emit('newUser',{user_name:response.results.name,user_id:data.results.userId});
+                            socket.on('err',function(data){
+                                console.log(data)
+                                // $rootScope.$broadcast('receiveMessage',data);
+                            });
+                            socket.on('onlineCount',function(data){
+                                console.info('onlineCount');
+                                console.log(data);
+                                // $rootScope.$broadcast('receiveMessage',data);
+                            });
+                            socket.on('getMsg',function(data){
+                                console.info('getMsg');
+                                console.log(data);
+                                $rootScope.$broadcast('receiveMessage',data);
+                            });
+                        },function(err){
+                            reject(err);
+                        }) 
+                        // socket = io.connect('ws://121.43.107.106:4050/chat');
+                        // socket.emit('newUser',{user_name:response.results.name,user_id:data.results.userId});
+                        // socket.on('err',function(data){
+                        //     console.log(data)
+                        //     // $rootScope.$broadcast('receiveMessage',data);
+                        // });
+                        // socket.on('onlineCount',function(data){
+                        //     console.info('onlineCount');
+                        //     console.log(data);
+                        //     // $rootScope.$broadcast('receiveMessage',data);
+                        // });
+                        // socket.on('getMsg',function(data){
+                        //     console.info('getMsg');
+                        //     console.log(data);
+                        //     $rootScope.$broadcast('receiveMessage',data);
+                        // });
 
                         User.getAgree({userId:data.results.userId}).then(function(res){
                             if(res.results.agreement=="0"){

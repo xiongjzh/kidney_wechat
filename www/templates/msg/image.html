@@ -4,10 +4,10 @@
 	<!-- avatar -->
 	<img class="avatar" ng-src="{{msg.fromUser.avatarPath || 'img/max.png'}}" ng-click="emitEvent('profile',msg.fromName)"/>
 	<!-- chat bubble -->
-	<div my-spin="msg.status" class="msg-body media-image" ng-click="emitEvent('image','img',msg.content.localThumbnailPath,msg.serverMessageId)"  on-hold="emitEvent('holdmsg',msg._id,$event)">
+	<div my-spin="msg.status" class="msg-body media-image" ng-click="emitEvent('image','img',msg.content)" on-hold="emitEvent('holdmsg',msg.createTimeInMillis,$event,'image')">
 		<!-- text content -->
 		<!-- <div class="media-image"> -->
-			<img  ng-src="{{msg.content.localThumbnailPath}}"/>
+			<img  ng-src="{{msg.content.src_thumb || msg.content.localId_thumb}}"/>
 		<!-- </div> -->
 		
 	</div>
