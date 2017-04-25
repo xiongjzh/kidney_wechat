@@ -904,6 +904,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         if(pos!=-1){
             msg.diff=$scope.msgs[pos].diff;
             // $scope.$apply(function(){
+                msg.direct = msg.fromName==$scope.params.UID?'send':'receive';
                 $scope.msgs[pos]=msg;
             // });
         }
@@ -916,6 +917,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         }else{
             msg.diff=(msg.createTimeInMillis - $scope.msgs[$scope.msgs.length-1].createTimeInMillis) > 300000 ? true : false;
         }
+        msg.direct = msg.fromName==$scope.params.UID?'send':'receive';
         // $scope.$apply(function(){
             $scope.msgs.push(msg);
         // });
