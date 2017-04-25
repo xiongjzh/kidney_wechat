@@ -629,7 +629,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                 console.log(data);
                 if (data.msg.targetType == 'single' && data.msg.fromName == $state.params.chatId) {
 
-                    pushMsg(data.msg);
+                    $scope.pushMsg(data.msg);
                     // viewUpdate(5);
                 }
                                 // $rootScope.$broadcast('receiveMessage',data);
@@ -639,7 +639,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                 console.log(data);
                 if (data.msg.targetType == 'single' && data.msg.fromName == $state.params.chatId) {
 
-                    updateMsg(data.msg);
+                    $scope.updateMsg(data.msg);
                     // viewUpdate(5);
                 }
                 // $rootScope.$broadcast('messageResponse',data);
@@ -768,39 +768,12 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                     $scope.msgs.unshift(res[i]);
                     $scope.msgs[0].diff = true;
                 // });
+                $scope.$apply();
             }
 
         },function(err){
             $scope.$broadcast('scroll.refreshComplete');
         });
-        // console.log('getMsg:' + num);
-        // window.JMessage.getHistoryMessages("single", $state.params.chatId, $scope.params.key, $scope.params.msgCount, num,
-        //     function(response) {
-        //         // console.log(response);
-        //         $scope.$broadcast('scroll.refreshComplete');
-        //         if (!response) $scope.params.moreMsgs = false;
-        //         else {
-        //             var res = JSON.parse(response);
-        //             console.log(res);
-        //             $scope.$apply(function() {
-        //                 if ($scope.msgs[0]) $scope.msgs[0].diff = ($scope.msgs[0].createTimeInMillis - res[0].createTimeInMillis) > 300000 ? true : false;
-        //                 for (var i = 0; i < res.length - 1; ++i) {
-        //                     res[i].diff = (res[i].createTimeInMillis - res[i + 1].createTimeInMillis) > 300000 ? true : false;
-        //                     $scope.msgs.unshift(res[i]);
-        //                 }
-        //                 $scope.msgs.unshift(res[i]);
-        //                 $scope.msgs[0].diff = true;
-        //             });
-        //             setTimeout(function() {
-        //                 $scope.scrollHandle.scrollBottom(true);
-        //             }, 100);
-        //             $scope.params.msgCount += res.length;
-        //         }
-
-        //     },
-        //     function(err) {
-        //         $scope.$broadcast('scroll.refreshComplete');
-        //     });
     }
 
 
@@ -940,7 +913,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             }
         });
     }
-    function updateMsg(msg){
+    $scope.updateMsg = function(msg){
         var pos=arrTool.indexOf($scope.msgs,'createTimeInMillis',msg.createTimeInMillis);
         if(pos!=-1){
             msg.diff=$scope.msgs[pos].diff;
@@ -949,7 +922,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             // });
         }
     }
-    function pushMsg(msg){
+    $scope.pushMsg = function(msg){
         if($scope.msgs.length==0){
             msg.diff=true;
         }else{
@@ -1011,7 +984,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         }else if(type=='voice'){
             msgJson.content.localId=content[1];
         }
-        pushMsg(msgJson);
+        $scope.pushMsg(msgJson);
     }
     $scope.submitMsg = function() {
         sendmsg($scope.input.text,'text');
