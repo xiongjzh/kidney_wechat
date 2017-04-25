@@ -583,8 +583,8 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             moreMsgs: true,
             audio:'http://121.43.107.106:8088/PersonalPhoto/Emotions.mp3'
         }
-        var audio = new Audio('http://121.43.107.106:8088/PersonalPhoto/Emotions.mp3');
-        audio.play();
+        // var audio = new Audio('http://121.43.107.106:8088/PersonalPhoto/Emotions.mp3');
+        // audio.play();
         // $scope.msgs = [];
     $scope.scrollHandle = $ionicScrollDelegate.$getByHandle('myContentScroll');
     //render msgs 
