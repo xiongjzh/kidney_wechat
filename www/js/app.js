@@ -199,6 +199,8 @@ angular.module('kidney',[
 
             }, false);
         }
+        
+        
 
         //聊天用，防止消息被keyboard遮挡
         window.addEventListener('native.keyboardshow', function(e) {

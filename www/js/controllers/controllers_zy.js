@@ -2,7 +2,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
 
 /////////////////////////////zhangying////////////////////////
 //登录
-.controller('SignInCtrl', ['User','$scope','$timeout','$state','Storage','loginFactory','$ionicHistory','JM', '$location','wechat','$window',function(User,$scope, $timeout,$state,Storage,loginFactory,$ionicHistory,JM,$location,wechat,$window) {
+.controller('SignInCtrl', ['User','$scope','$timeout','$state','Storage','loginFactory','$ionicHistory','JM', '$location','wechat','$window','$rootScope',function(User,$scope, $timeout,$state,Storage,loginFactory,$ionicHistory,JM,$location,wechat,$window,$rootScope) {
     $scope.barwidth="width:0%";
 
     var temp = $location.absUrl().split('=')
@@ -67,13 +67,6 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
                         }
                     }
                     else if(data.results.mesg=="login success!"){
-                        //jmessage
-                        JM.login(data.results.userId)
-                        .then(function(data){ 
-                          console.log(data+" is login");
-                        },function(err){
-                          console.log('login fail');
-                        })
 
                         $scope.logStatus = "登录成功！";
                         $ionicHistory.clearCache();
@@ -82,6 +75,13 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
                         Storage.set('TOKEN',data.results.token);//token作用目前还不明确
                         Storage.set('isSignIn',true);
                         Storage.set('UID',data.results.userId);
+
+                        socket = io.connect('ws://121.43.107.106:4050/chat');
+                        socket.emit('newUser',{user_name:Storage.get('UID'),user_id:Storage.get('UID')});
+                        socket.on('getMsg',function(data){
+                            $rootScope.$broadcast('receiveMessage',data);
+                        });
+
                         User.getAgree({userId:data.results.userId}).then(function(res){
                             if(res.results.agreement=="0"){
                                 $timeout(function(){$state.go('tab.home');},500);
