@@ -629,7 +629,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                 console.log(data);
                 if (data.msg.targetType == 'single' && data.msg.fromName == $state.params.chatId) {
 
-                    pushMsg(msg);
+                    pushMsg(data.msg);
                     // viewUpdate(5);
                 }
                                 // $rootScope.$broadcast('receiveMessage',data);
@@ -639,7 +639,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                 console.log(data);
                 if (data.msg.targetType == 'single' && data.msg.fromName == $state.params.chatId) {
 
-                    updateMsg(msg);
+                    updateMsg(data.msg);
                     // viewUpdate(5);
                 }
                 // $rootScope.$broadcast('messageResponse',data);
