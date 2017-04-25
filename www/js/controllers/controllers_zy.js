@@ -94,6 +94,11 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
                                 console.log(data);
                                 $rootScope.$broadcast('receiveMessage',data);
                             });
+                            socket.on('messageRes',function(data){
+                                console.info('messageRes');
+                                console.log(data);
+                                $rootScope.$broadcast('messageResponse',data);
+                            });
                         },function(err){
                             reject(err);
                         }) 

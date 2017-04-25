@@ -601,10 +601,11 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         else if ($scope.params.type == '1') $scope.params.title = "咨询-进行中";
         else $scope.params.title = "咨询详情";
         
-        if (window.JMessage) {
-            window.JMessage.enterSingleConversation($state.params.chatId, $scope.params.key);
-            getMsg(15);
-        }
+        // if (window.JMessage) {
+        //     window.JMessage.enterSingleConversation($state.params.chatId, $scope.params.key);
+        //     getMsg(15);
+        // }
+        getMsg(15);
     });
 
     $scope.$on('$ionicView.enter', function() {
@@ -612,6 +613,48 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             $rootScope.conversation.type = 'single';
             $rootScope.conversation.id = $state.params.chatId;
         }
+        wechat.settingConfig({ url: $location.absUrl() }).then(function(data) {
+            // alert(data.results.timestamp)
+            config = data.results;
+            config.jsApiList = ['startRecord','stopRecord','playVoice','chooseImage','uploadVoice', 'uploadImage']
+                // alert(config.jsApiList)
+                // alert(config.debug)
+            wx.config({
+                debug: true,
+                appId: config.appId,
+                timestamp: config.timestamp,
+                nonceStr: config.nonceStr,
+                signature: config.signature,
+                jsApiList: config.jsApiList
+            })
+            // wx.ready(function() {
+            //     wx.checkJsApi({
+            //         jsApiList: ['chooseImage', 'uploadImage'],
+            //         success: function(res) {
+            //             wx.chooseImage({
+            //                 count: 1,
+            //                 sizeType: ['original', 'compressed'],
+            //                 sourceType: ['album'],
+            //                 success: function(res) {
+            //                     var localIds = res.localIds;
+            //                     wx.uploadImage({
+            //                         localId: localIds[0],
+            //                         isShowProgressTips: 1, // 默认为1，显示进度提示
+            //                         success: function(res) {
+            //                             var serverId = res.serverId; // 返回图片的服务器端ID
+            //                             wechat.
+            //                         }
+            //                     })
+            //                 }
+            //             })
+            //         }
+            //     });
+            // })
+            wx.error(function(res) {
+                console.error(res);
+                alert(res.errMsg)
+            })
+        }); 
         imgModalInit();
     })
 
@@ -638,10 +681,17 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
     })
     //receiving new massage
     $scope.$on('receiveMessage', function(event, msg) {
-        console.log(msg);
+        // console.log(msg);
         if (msg.targetType == 'single' && msg.fromName == $state.params.chatId) {
 
             pushMsg(msg);
+            // viewUpdate(5);
+        }
+    });
+    $scope.$on('messageRes',function(event,msg){
+        if (msg.targetType == 'single' && msg.fromName == $state.params.chatId) {
+
+            updateMsg(msg);
             // viewUpdate(5);
         }
     });
@@ -711,54 +761,6 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         //     });
     }
 
-    // function viewUpdate(length, scroll) {
-    //     console.log('viewUpdate:' + length);
-    //     if ($scope.params.msgCount == 0) return getMsg(1);
-    //     var num = $scope.params.msgCount < length ? $scope.params.msgCount : length;
-    //     if (num == 0) return;
-    //     window.JMessage.getHistoryMessages("single", $state.params.chatId, $scope.params.key, 0, num,
-    //         function(response) {
-
-    //             var res = JSON.parse(response);
-    //             console.log(res);
-    //             $scope.$apply(function() {
-    //                 for (var i = res.length - 1, j = $scope.params.msgCount - res.length; i >= 0;) {
-    //                     if (j == $scope.params.msgCount) {
-    //                         $scope.params.msgCount += i + 1;
-    //                         while (i > -1) {
-    //                             if (i != res.length - 1) {
-    //                                 res[i].diff = (res[i].createTimeInMillis - res[i + 1].createTimeInMillis) > 300000 ? true : false;
-    //                             } else if ($scope.msgs.length) {
-    //                                 res[i].diff = (res[i].createTimeInMillis - $scope.msgs[$scope.msgs.length - 1].createTimeInMillis) > 300000 ? true : false;
-    //                             } else {
-    //                                 res[i].diff = true;
-    //                             }
-    //                             $scope.msgs.push(res[i]);
-    //                             i--;
-    //                         }
-    //                         console.log(i);
-    //                         break;
-    //                     } else if (j < $scope.params.msgCount && $scope.msgs[j]['_id'] == res[i]['_id']) {
-    //                         res[i].diff = $scope.msgs[j].diff;
-    //                         $scope.msgs[j] = res[i];
-    //                         ++j;
-    //                         --i;
-    //                     } else {
-    //                         ++j;
-    //                     }
-
-    //                 }
-    //             });
-    //             // if(scroll){
-    //             setTimeout(function() {
-    //                 $scope.scrollHandle.scrollBottom();
-    //             }, 100);
-    //             // }
-    //         },
-    //         function() {
-
-    //         });
-    // }
 
     $scope.DisplayMore = function() {
         getMsg(15);
