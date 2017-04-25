@@ -565,7 +565,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
 
 }])
 //"咨询”问题详情
-.controller('detailCtrl', ['$scope', '$state', '$rootScope', '$ionicModal', '$ionicScrollDelegate', '$ionicHistory', '$ionicPopover', '$ionicPopup', 'Camera', 'voice', '$http', 'CONFIG', 'arrTool', 'Communication','Storage', 'wechat','$location',function($scope, $state, $rootScope, $ionicModal, $ionicScrollDelegate, $ionicHistory, $ionicPopover, $ionicPopup, Camera, voice, $http, CONFIG, arrTool, Communication,Storage,wechat,$location) {
+.controller('detailCtrl', ['$scope', '$state', '$rootScope', '$ionicModal', '$ionicScrollDelegate', '$ionicHistory', '$ionicPopover', '$ionicPopup', 'Camera', 'voice', '$http', 'CONFIG', 'arrTool', 'Communication','Storage', 'wechat','$location','Doctor',function($scope, $state, $rootScope, $ionicModal, $ionicScrollDelegate, $ionicHistory, $ionicPopover, $ionicPopup, Camera, voice, $http, CONFIG, arrTool, Communication,Storage,wechat,$location,Doctor) {
     $scope.input = {
         text: ''
     }
@@ -758,7 +758,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             if(res.length==0) $scope.params.moreMsgs = false;
             else{
                 $scope.params.msgCount += res.length;
-                $scope.$apply(function() {
+                // $scope.$apply(function() {
                     if ($scope.msgs.length!=0) $scope.msgs[0].diff = ($scope.msgs[0].createTimeInMillis - res[0].createTimeInMillis) > 300000 ? true : false;
                     for (var i = 0; i < res.length - 1; ++i) {
                         res[i].diff = (res[i].createTimeInMillis - res[i + 1].createTimeInMillis) > 300000 ? true : false;
@@ -766,7 +766,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                     }
                     $scope.msgs.unshift(res[i]);
                     $scope.msgs[0].diff = true;
-                });
+                // });
             }
 
         },function(err){
