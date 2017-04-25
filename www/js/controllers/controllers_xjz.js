@@ -756,7 +756,10 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             .then(function(data){
                 console.log(data);
                 $scope.$broadcast('scroll.refreshComplete');
-                var res=data.results;
+                var res=[];
+                for(var i in data){
+                    res.push(data[i].content);
+                }
                 if(res.length==0) $scope.params.moreMsgs = false;
                 else{
                     $scope.params.msgCount += res.length;
