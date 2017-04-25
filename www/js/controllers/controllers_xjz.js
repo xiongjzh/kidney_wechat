@@ -572,7 +572,6 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
     $scope.input = {
         text: ''
     }
-    var socket={};
     $scope.params = {
             //[type]:0=已结束;1=进行中;2=医生
             type: '',

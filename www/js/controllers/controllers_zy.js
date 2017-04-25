@@ -78,7 +78,18 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
 
                         socket = io.connect('ws://121.43.107.106:4050/chat');
                         socket.emit('newUser',{user_name:Storage.get('UID'),user_id:Storage.get('UID')});
+                        socket.on('err',function(data){
+                            console.log(data)
+                            // $rootScope.$broadcast('receiveMessage',data);
+                        });
+                        socket.on('onlineCount',function(data){
+                            console.info('onlineCount');
+                            console.log(data);
+                            // $rootScope.$broadcast('receiveMessage',data);
+                        });
                         socket.on('getMsg',function(data){
+                            console.info('getMsg');
+                            console.log(data);
                             $rootScope.$broadcast('receiveMessage',data);
                         });
 
