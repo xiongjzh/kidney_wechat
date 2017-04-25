@@ -809,10 +809,10 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         console.log(args)
         event.stopPropagation();
         $scope.imageHandle.zoomTo(1, true);
-        $scope.imageUrl = args[2];
+        $scope.imageUrl = args[2].src_thumb || args[2].localId_thumb;
         $scope.modal.show();
         // if (args[1] == 'img') {
-        window.JMessage.getOriginImageInSingleConversation($state.params.chatId, args[3], onImageLoad, onImageLoadFail);
+        // window.JMessage.getOriginImageInSingleConversation($state.params.chatId, args[3], onImageLoad, onImageLoadFail);
         // } else {
         // getImage(url,onImageLoad,onImageLoadFail)
         // $scope.imageUrl = args[3];
@@ -839,10 +839,16 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         console.log(args)
         event.stopPropagation();
         $scope.params.audio=args[1];
-
-        // wx.playVoice({
-        //     localId:args[1]
-        // });
+        wx.downloadVoice({
+            serverId: args[1].mediaId, // 需要下载的音频的服务器端ID，由uploadVoice接口获得
+            isShowProgressTips: 0, // 默认为1，显示进度提示
+            success: function (res) {
+                // var localId = res.localId; // 返回音频的本地ID
+                wx.playVoice({
+                    localId: res.localId// 需要播放的音频的本地ID，由stopRecord接口获得
+                });
+            }
+        });
     })
 
     $scope.$on('holdmsg', function(event, args) {
@@ -866,7 +872,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
     })
     $scope.toolChoose = function(data) {
         // console.log(data);
-        
+
         var content = $scope.msgs[arrTool.indexOf($scope.msgs, 'createTimeInMillis', $scope.holdId)].content.contentStringMap;
         if (data == 0) $state.go('tab.selectDoc', { msg: content });
         if (data == 1) $state.go('tab.selectTeam', { msg: content });

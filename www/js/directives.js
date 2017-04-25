@@ -16,6 +16,7 @@ angular.module('kidney.directives', ['kidney.services'])
         restrict:'AE',
         controller:function($scope){
             var type='';
+            $scope.msg.direct = $scope.msg.fromName==Storage.get('UID')?'send':'receive';
             $scope.getTemplateUrl = function(){
                 if($scope.msg.contentType=='custom'){
                     type=$scope.msg.content.contentStringMap.type;
@@ -53,7 +54,7 @@ angular.module('kidney.directives', ['kidney.services'])
             //         $scope.$emit('viewImage',type,thumb,url);
             //     }
             // };
-            $scope.picurl=picArr;
+            // $scope.picurl=picArr;
             // $scope.playVoice = function(){
 
             // }
