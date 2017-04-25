@@ -626,7 +626,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             socket.on('getMsg',function(data){
                 console.info('getMsg');
                 console.log(data);
-                if (msg.targetType == 'single' && msg.fromName == $state.params.chatId) {
+                if (data.msg.targetType == 'single' && data.msg.fromName == $state.params.chatId) {
 
                     pushMsg(msg);
                     // viewUpdate(5);
@@ -636,7 +636,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             socket.on('messageRes',function(data){
                 console.info('messageRes');
                 console.log(data);
-                if (msg.targetType == 'single' && msg.fromName == $state.params.chatId) {
+                if (data.msg.targetType == 'single' && data.msg.fromName == $state.params.chatId) {
 
                     updateMsg(msg);
                     // viewUpdate(5);
