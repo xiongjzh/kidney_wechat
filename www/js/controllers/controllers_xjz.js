@@ -1565,7 +1565,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                     console.log(data);
                     if (data.msg.targetType == 'group' && data.msg.targetID == $state.params.groupId) {
                         $scope.$apply(function(){
-                            $scope.updateMsg(data.msg);
+                            $scope.pushMsg(data.msg);
                         })
                     }
                     // $rootScope.$broadcast('messageResponse',data);
