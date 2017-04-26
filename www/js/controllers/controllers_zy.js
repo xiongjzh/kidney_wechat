@@ -195,39 +195,66 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
             .then(function(succ)
             {
                 console.log(succ)
-                if(validMode==0&&succ.mesg=="User password isn't correct!")
-                {
-                    if($stateParams.phonevalidType=='wechat'){
-                        $scope.logStatus = "该手机号码已经注册,请验证手机号绑定微信";
-                        isregisted = true
-                        User.sendSMS({
-                            mobile:Verify.Phone,
-                            smsType:1
-                        })
-                        .then(function(validCode)
+                if($stateParams.phonevalidType=='wechat'){
+                        if (succ.mesg=="User password isn't correct!")
                         {
-                            console.log(validCode)
-                            if(validCode.results==0)
+                            $scope.logStatus = "该手机号码已经注册,请验证手机号绑定微信";
+                            isregisted = true
+                            User.sendSMS({
+                                mobile:Verify.Phone,
+                                smsType:1
+                            })
+                            .then(function(validCode)
                             {
-                                unablebutton()
-                                if(validCode.mesg.match("您的邀请码")=="您的邀请码")
+                                console.log(validCode)
+                                if(validCode.results==0)
                                 {
-                                    $scope.logStatus="请稍后获取验证码";
+                                    unablebutton()
+                                    if(validCode.mesg.match("您的邀请码")=="您的邀请码")
+                                    {
+                                        $scope.logStatus="请稍后获取验证码";
+                                    }
                                 }
-                            }
-                            else
+                                else
+                                {
+                                    $scope.logStatus="验证码发送失败！";
+                                }
+                            },function(err)
                             {
                                 $scope.logStatus="验证码发送失败！";
-                            }
-                        },function(err)
+                            })
+                        }
+                        else
                         {
-                            $scope.logStatus="验证码发送失败！";
-                        })
-                    }
-                    else
-                    {
-                        $scope.logStatus="您已经注册过了";
-                    }
+                            Storage.set('validMode',0)
+                            User.sendSMS({
+                                mobile:Verify.Phone,
+                                smsType:1
+                            })
+                            .then(function(validCode)
+                            {
+                                console.log(validCode)
+                                if(validCode.results==0)
+                                {
+                                    unablebutton()
+                                    if(validCode.mesg.match("您的邀请码")=="您的邀请码")
+                                    {
+                                        $scope.logStatus="请稍后获取验证码";
+                                    }
+                                }
+                                else
+                                {
+                                    $scope.logStatus="验证码发送失败！";
+                                }
+                            },function(err)
+                            {
+                                $scope.logStatus="验证码发送失败！";
+                            })
+                        }
+                }
+                else if(validMode==0&&succ.mesg=="User password isn't correct!")
+                {
+                    $scope.logStatus="您已经注册过了";
                 }
                 else if(validMode==1&&succ.mesg!="User password isn't correct!")
                 {
@@ -313,7 +340,6 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
                           })
                         }
                         if(validMode == 0){
-                            Storage.set('validMode',0);
                             $timeout(function(){$state.go('agreement',{last:'register'});},500);
                         }else{
                             $timeout(function(){$state.go('setpassword')}); 
