@@ -1177,7 +1177,7 @@ VitalSign.getVitalSigns({userId:'U201702071766',type:'心率'}).then(
 
 
 //健康详情--PXY
-.controller('HealthDetailCtrl', ['ionicDatePicker','$scope','$state','$ionicHistory','$ionicPopup','$stateParams','$ionicPopover','$ionicModal','$ionicScrollDelegate','$ionicLoading','$timeout','Dict','Health','Storage','Camera',function(ionicDatePicker,$scope, $state,$ionicHistory,$ionicPopup,$stateParams,$ionicPopover,$ionicModal,$ionicScrollDelegate,$ionicLoading,$timeout,Dict,Health,Storage,Camera) {
+.controller('HealthDetailCtrl', ['ionicDatePicker','$scope','$state','$ionicHistory','$ionicPopup','$stateParams','$ionicPopover','$ionicModal','$ionicScrollDelegate','$ionicLoading','$timeout','Dict','Health','Storage','Camera','wechat','$location',function(ionicDatePicker,$scope, $state,$ionicHistory,$ionicPopup,$stateParams,$ionicPopover,$ionicModal,$ionicScrollDelegate,$ionicLoading,$timeout,Dict,Health,Storage,Camera,wechat,$location) {
   $scope.barwidth="width:0%";
   //var patientId = Storage.get('getpatientId')
   var patientId = 'U201702071766'   //测试ID
@@ -1432,15 +1432,15 @@ VitalSign.getVitalSigns({userId:'U201702071766',type:'心率'}).then(
   };
  
  // 上传照片并将照片读入页面-------------------------
-  var photo_upload_display = function(imgURI){
+  var photo_upload_display = function(serverId){
    // 给照片的名字加上时间戳
     var temp_photoaddress = Storage.get("UID") + "_" + new Date().getTime() + "healthinfo.jpg";
     console.log(temp_photoaddress)
-    Camera.uploadPicture(imgURI, temp_photoaddress)
+    wechat.download({serverId:serverId, name:temp_name})
     .then(function(res){
-      var data=angular.fromJson(res)
+      // var data=angular.fromJson(res)
       //图片路径
-      $scope.health.imgurl.push("http://121.43.107.106:8052/"+String(data.path_resized))
+      $scope.health.imgurl.push("http://121.43.107.106:8052/"+temp_photoaddress
       // $state.reload("tab.mine")
       // Storage.set('localhealthinfoimg',angular.toJson($scope.health.imgurl));
       console.log($scope.health.imgurl)
@@ -1486,15 +1486,51 @@ VitalSign.getVitalSigns({userId:'U201702071766',type:'心率'}).then(
    $scope.closePopover();
   };      
   $scope.choosePhotos = function() {
-  Camera.getPictureFromPhotos('gallery').then(function(data) {
-      // data里存的是图像的地址
-      // console.log(data);
-      var imgURI = data; 
-      photo_upload_display(imgURI);
-    }, function(err) {
-      // console.err(err);
-      var imgURI = undefined;
-    });// 从相册获取照片结束
+    var config = "";
+    wechat.settingConfig({url:$location.absUrl()}).then(function(data){
+      // alert(data.results.timestamp)
+      config = data.results;
+      config.jsApiList = ['chooseImage','uploadImage']
+      // alert(config.jsApiList)
+      // alert(config.debug)
+      wx.config({
+        debug:true,
+        appId:config.appId,
+        timestamp:config.timestamp,
+        nonceStr:config.nonceStr,
+        signature:config.signature,
+        jsApiList:config.jsApiList
+      })
+      wx.ready(function(){
+        wx.checkJsApi({
+            jsApiList: ['chooseImage','uploadImage'],
+            success: function(res) {
+                wx.chooseImage({
+                  count:1,
+                  sizeType: ['original','compressed'],
+                  sourceType: ['album'],
+                  success: function(res) {
+                    var localIds = res.localIds;
+                    wx.uploadImage({
+                       localId: localIds[0],
+                       isShowProgressTips: 1, // 默认为1，显示进度提示
+                        success: function (res) {
+                            var serverId = res.serverId; // 返回图片的服务器端ID
+                            photo_upload_display(serverId);
+                        }
+                    })
+                  }
+                })
+            }
+        });
+      })
+      wx.error(function(res){
+        alert(res.errMsg)
+      })
+
+    },function(err){
+
+    })
   }; // function结束
 
 
@@ -1506,14 +1542,52 @@ VitalSign.getVitalSigns({userId:'U201702071766',type:'心率'}).then(
   };
   $scope.isShow=true;
   $scope.takePicture = function() {
-   Camera.getPicture('cam').then(function(data) {
-      var imgURI = data;
-      photo_upload_display(imgURI);
-    }, function(err) {
-        // console.err(err);
-        var imgURI = undefined;
-    })// 照相结束
-  }; // function结束
+      var config = "";
+      wechat.settingConfig({url:$location.absUrl()}).then(function(data){
+        // alert(data.results.timestamp)
+        config = data.results;
+        config.jsApiList = ['chooseImage','uploadImage']
+        // alert(config.jsApiList)
+        // alert(config.debug)
+        wx.config({
+          debug:true,
+          appId:config.appId,
+          timestamp:config.timestamp,
+          nonceStr:config.nonceStr,
+          signature:config.signature,
+          jsApiList:config.jsApiList
+        })
+        wx.ready(function(){
+          wx.checkJsApi({
+          jsApiList: ['chooseImage','uploadImage'],
+          success: function(res) {
+              wx.chooseImage({
+                count:1,
+                sizeType: ['original','compressed'],
+                sourceType: ['camera'],
+                success: function(res) {
+                    var localIds = res.localIds;
+                    wx.uploadImage({
+                       localId: localIds[0],
+                       isShowProgressTips: 1, // 默认为1，显示进度提示
+                        success: function (res) {
+                            var serverId = res.serverId; // 返回图片的服务器端ID
+                            photo_upload_display(serverId);
+                        }
+                    })
+                }
+              })
+          }
+          });
+        })
+      wx.error(function(res){
+        alert(res.errMsg)
+      })
+
+      },function(err){
+
+      })
+    }; // function结束
 
 
 

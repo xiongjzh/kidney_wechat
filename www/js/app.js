@@ -44,17 +44,58 @@ angular.module('kidney',[
         else
         {
             wechat.getUserInfo({code:code}).then(function(data){ 
-              // alert(1)
-              wechatData = data.results
-              console.log(wechatData)
-              alert(wechatData.openid)
-              alert(wechatData.nickname)
-              User.getUserIDbyOpenId({openId:wechatData.openid}).then(function(data){ 
-                
-              },function(err){
-                console.log(err)
-                // alert(2);
-              })
+                // alert(1)
+                wechatData = data.results
+                console.log(wechatData)
+                alert(wechatData.openid)
+                alert(wechatData.nickname)
+                Storage.set('openid',wechatData.openid)
+                var logPromise = User.logIn({username:wechatData.nickname,password:wechatData.nickname,role:"doctor"});
+                logPromise.then(function(data){
+                    if(data.results==1){
+                        $state.go('phonevalid',{phonevalidType:"wechat"})
+                    }
+                    else if(data.results.mesg=="login success!"){
+
+                        // $scope.logStatus = "登录成功！";
+                        $ionicHistory.clearCache();
+                        $ionicHistory.clearHistory();
+                        User.getUserIDbyOpenId({}).then(function(data)
+                        {
+                            if (angular.isDefined(data.phoneNo) = true)
+                            {
+                                Storage.set('USERNAME',data.phoneNo);
+                            }
+                        },function(err)
+                        {
+                            console.log(err)
+                        }
+                        Storage.set('TOKEN',data.results.token);//token作用目前还不明确
+                        Storage.set('isSignIn',true);
+                        Storage.set('UID',data.results.userId);
+
+                        User.getAgree({userId:data.results.userId}).then(function(res){
+                            if(res.results.agreement=="0"){
+                                $timeout(function(){$state.go('tab.home');},500);
+                            }else{
+                                $timeout(function(){$state.go('agreement',{last:'signin'});},500);
+                            }
+                        },function(err){
+                            console.log(err);
+                        })
+
+                    }
+                },
+                function(data){
+                    if(data.results==null && data.status==0){
+                        $scope.logStatus = "网络错误！";
+                        return;
+                    }
+                    if(data.status==404){
+                        $scope.logStatus = "连接服务器失败！";
+                        return;
+                    }
+                });
             },function(err){
               console.log(err)
               // alert(2);
@@ -280,6 +321,7 @@ angular.module('kidney',[
     .state('phonevalid', {
         url: '/phonevalid',
         cache: false,
+        params:{phonevalidType:null},
         templateUrl: 'partials/others/phonevalid.html',
         controller: 'phonevalidCtrl'
     })
