@@ -1032,10 +1032,10 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         //     content:data
         // }
         var msgJson=msgGen(content,type);
-        if(type=='text'){
-            $scope.pushMsg(msgJson);
+        // if(type=='text'){
+            // $scope.pushMsg(msgJson);
             // toBottom(true);
-        }
+        // }
         socket.emit('message',{msg:msgJson,to:$scope.params.chatId});
         // if(type=='image'){
         //     msgJson.content.localId=content[2];
