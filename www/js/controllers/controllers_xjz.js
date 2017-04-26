@@ -942,7 +942,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
     //     alert('[send msg]:err');
     //     viewUpdate(10);
     // }
-    function sendmsg(content,type){
+    function msgGen(content,type,local){
         var data={};
         if(type=='text'){
             data={
@@ -975,15 +975,59 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             // _id:'',
             content:data
         }
-        socket.emit('message',{msg:msgJson,to:$scope.params.chatId});
-        if(type=='image'){
-            msgJson.content.localId=content[2];
-            msgJson.content.localId_thumb=content[3];
-        }else if(type=='voice'){
-            msgJson.content.localId=content[1];
+        if(local){
+            if(type=='image'){
+                msgJson.content.localId=content[2];
+                msgJson.content.localId_thumb=content[3];
+            }else if(type=='voice'){
+                msgJson.content.localId=content[1];
+            }
         }
-        $scope.pushMsg(msgJson);
-        toBottom(true);
+        return msgJson;
+    }
+    function sendmsg(content,type){
+        // var data={};
+        // if(type=='text'){
+        //     data={
+        //         text:content
+        //     };
+        // }else if(type=='image'){
+        //     data={
+        //         mediaId:content[0],
+        //         mediaId_thumb:content[1],
+        //         src:'',
+        //         src_thumb:''
+        //     };
+        // }else if(type=='voice'){
+        //     data={
+        //         mediaId:content,
+        //         src:''
+        //     };
+        // }
+        // var msgJson={
+        //     contentType:type,
+        //     fromName:$scope.params.UID,
+        //     fromUser:{
+        //         avatarPath:''
+        //     },
+        //     targetID:$scope.params.chatId,
+        //     targetName:'',
+        //     targetType:'single',
+        //     status:'send_going',
+        //     createTimeInMillis: Date.now(),
+        //     // _id:'',
+        //     content:data
+        // }
+        var msgJson=msgGen(content,type);
+        socket.emit('message',{msg:msgJson,to:$scope.params.chatId});
+        // if(type=='image'){
+        //     msgJson.content.localId=content[2];
+        //     msgJson.content.localId_thumb=content[3];
+        // }else if(type=='voice'){
+        //     msgJson.content.localId=content[1];
+        // }
+        // $scope.pushMsg(msgJson);
+        // toBottom(true);
     }
     $scope.submitMsg = function() {
         sendmsg($scope.input.text,'text');
@@ -1015,6 +1059,8 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                 // },function(errArr){
                 //     console.log(errArr);
                 // })
+                $scope.pushMsg(msgGen(ids,'image',true));
+                toBottom(true);
                 wx.uploadImage({
                     localId: response.localIds[0], // 需要上传的图片的本地ID，由chooseImage接口获得
                     isShowProgressTips: 0, // 默认为1，显示进度提示
@@ -1062,12 +1108,15 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
     $scope.stopAndSend = function() {
         wx.stopRecord({
             success: function (res) {
+                var ids=['',res.localId];
+                $scope.pushMsg(msgGen(ids,'voice',true));
+                toBottom(true);
                 wx.uploadVoice({
                     localId: res.localId, // 需要上传的图片的本地ID，由chooseImage接口获得
                     isShowProgressTips: 0, // 默认为1，显示进度提示
                     success: function (response) {
                         console.log(response);
-                        var ids=[response.serverId,res.localId];
+                        vids[0]=response.serverId;
                         // var serverId = res.serverId; // 返回图片的服务器端ID
                         sendmsg(ids,'voice');
                     }
