@@ -1002,7 +1002,11 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             success: function (response) {
                 console.log(response);
                 ids=ids.concat(response.localIds);
-                $q.all([wxUploadImage(response.localIds[0]),wxUploadImage(response.localIds[1])])
+                var promises=[];
+                promises.push(wxUploadImage(response.localIds[0]));
+                promises.push(wxUploadImage(response.localIds[1]));
+                console.log(promises);
+                $q.all(promises)
                 .then(function(dataArr){
                     console.log(dataArr);
                     ids[0]=dataArr[0];
