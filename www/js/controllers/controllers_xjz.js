@@ -1371,7 +1371,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         isDiscuss: false,
         isOver: false,
         moreMsgs: true,
-        UID:Storage.get('UID');
+        UID:Storage.get('UID')
     }
     $rootScope.patient = {}
         // $rootScope.goConclusion =function(){
@@ -1783,7 +1783,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                 avatarPath:''
             },
             targetID:$scope.params.groupId,
-            teamID:$scope.params.teamId
+            teamID:$scope.params.teamId,
             targetName:'',
             targetType:'group',
             status:'send_going',
