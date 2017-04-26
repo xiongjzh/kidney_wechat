@@ -16,8 +16,15 @@ angular.module('kidney',[
     'ionic-datepicker'
 ])
 
-.run(['$ionicPlatform', '$state', 'Storage', 'JM','$rootScope','CONFIG','Communication', '$location','wechat','$window',function($ionicPlatform, $state, Storage, JM,$rootScope,CONFIG,Communication,$location,wechat,$window) {
+.run(['$ionicPlatform', '$state', 'Storage', 'JM','$rootScope','CONFIG','Communication', '$location','wechat','$window','User',function($ionicPlatform, $state, Storage, JM,$rootScope,CONFIG,Communication,$location,wechat,$window,User) {
     $ionicPlatform.ready(function() {
+        
+        //是否登陆
+        var isSignIN = Storage.get("isSignIN");
+        if (isSignIN == 'YES') {
+            $state.go('tab.home');
+        }
+
         var temp = $location.absUrl().split('=')
         // alert(temp)
         if (angular.isDefined(temp[1]) == true)
@@ -42,15 +49,16 @@ angular.module('kidney',[
               console.log(wechatData)
               alert(wechatData.openid)
               alert(wechatData.nickname)
+              User.getUserIDbyOpenId({openId:wechatData.openid}).then(function(data){ 
+                
+              },function(err){
+                console.log(err)
+                // alert(2);
+              })
             },function(err){
               console.log(err)
               // alert(2);
             })
-        }
-        //是否登陆
-        var isSignIN = Storage.get("isSignIN");
-        if (isSignIN == 'YES') {
-            $state.go('tab.home');
         }
 
         //用户ID
