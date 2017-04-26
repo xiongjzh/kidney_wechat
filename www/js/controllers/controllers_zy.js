@@ -227,6 +227,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
                         else
                         {
                             Storage.set('validMode',0)
+                            validMode = 0
                             User.sendSMS({
                                 mobile:Verify.Phone,
                                 smsType:1
