@@ -1070,7 +1070,8 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                 // },function(errArr){
                 //     console.log(errArr);
                 // })
-                $scope.pushMsg(msgGen(ids,'image',true));
+                var m=msgGen(ids,'image',true)
+                $scope.pushMsg(m);
                 toBottom(true);
                 wx.uploadImage({
                     localId: response.localIds[0], // 需要上传的图片的本地ID，由chooseImage接口获得
@@ -1120,7 +1121,8 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         wx.stopRecord({
             success: function (res) {
                 var ids=['',res.localId];
-                $scope.pushMsg(msgGen(ids,'voice',true));
+                var m=msgGen(ids,'voice',true);
+                $scope.pushMsg(m);
                 toBottom(true);
                 wx.uploadVoice({
                     localId: res.localId, // 需要上传的图片的本地ID，由chooseImage接口获得
