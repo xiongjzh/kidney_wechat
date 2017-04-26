@@ -1619,7 +1619,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             $scope.scrollHandle.scrollBottom(animate);
         },100)
     }
-    $scope.getMsg(num) {
+    $scope.getMsg = function(num) {
         console.log('getMsg:' + num);
         return $q(function(resolve,reject){
             var q={
