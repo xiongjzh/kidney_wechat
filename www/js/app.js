@@ -50,8 +50,9 @@ angular.module('kidney',[
                 alert(wechatData.openid)
                 alert(wechatData.nickname)
                 Storage.set('openid',wechatData.openid)
-                var logPromise = User.logIn({username:wechatData.nickname,password:wechatData.nickname,role:"doctor"});
+                var logPromise = User.logIn({username:wechatData.openid,password:wechatData.openid,role:"doctor"});
                 logPromise.then(function(data){
+                    console.log(data);
                     if(data.results==1){
                         Storage.set('validMode',0)
                         $state.go('phonevalid',{phonevalidType:"wechat"})
