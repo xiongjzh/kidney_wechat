@@ -1021,23 +1021,23 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                     success: function (res) {
                         console.log(res);
                         ids[0]=res.serverId; // 返回图片的服务器端ID
-                        if(cnt) 
+                        // if(cnt) 
                             sendmsg(ids,'image');
-                        else cnt++;
+                        // else cnt++;
                     }
                 });
-                wx.uploadImage({
-                    localId: response.localIds[1], // 需要上传的图片的本地ID，由chooseImage接口获得
-                    isShowProgressTips: 0, // 默认为1，显示进度提示
-                    success: function (res) {
-                        console.log(res);
-                        ids[1]=res.serverId; // 返回图片的服务器端ID
-                        if(cnt) 
-                            sendmsg(ids,'image');
-                        else cnt++;
-                        // sendmsg(serverId,'image');
-                    }
-                });
+                // wx.uploadImage({
+                //     localId: response.localIds[1], // 需要上传的图片的本地ID，由chooseImage接口获得
+                //     isShowProgressTips: 0, // 默认为1，显示进度提示
+                //     success: function (res) {
+                //         console.log(res);
+                //         ids[1]=res.serverId; // 返回图片的服务器端ID
+                //         if(cnt) 
+                //             sendmsg(ids,'image');
+                //         else cnt++;
+                //         // sendmsg(serverId,'image');
+                //     }
+                // });
             }
         });
     }
