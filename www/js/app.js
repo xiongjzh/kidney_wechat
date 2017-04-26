@@ -16,12 +16,49 @@ angular.module('kidney',[
     'ionic-datepicker'
 ])
 
-.run(['$ionicPlatform', '$state', 'Storage', 'JM','$rootScope','CONFIG','Communication', function($ionicPlatform, $state, Storage, JM,$rootScope,CONFIG,Communication) {
+.run(['$ionicPlatform', '$state', 'Storage', 'JM','$rootScope','CONFIG','Communication', '$location','wechat','$window','User',function($ionicPlatform, $state, Storage, JM,$rootScope,CONFIG,Communication,$location,wechat,$window,User) {
     $ionicPlatform.ready(function() {
+        
         //是否登陆
         var isSignIN = Storage.get("isSignIN");
         if (isSignIN == 'YES') {
             $state.go('tab.home');
+        }
+
+        var temp = $location.absUrl().split('=')
+        // alert(temp)
+        if (angular.isDefined(temp[1]) == true)
+        {
+            var code = temp[1].split('&')[0]
+        }
+        if (angular.isDefined(temp[2]) == true)
+        {
+            var state = temp[2].split('#')[0]
+        }
+        var wechatData = ""
+        if (state == 'patient')
+        {
+            path = 'http://t.go5le.net/?code=' + code
+            $window.location.href = path
+        }
+        else
+        {
+            wechat.getUserInfo({code:code}).then(function(data){ 
+              // alert(1)
+              wechatData = data.results
+              console.log(wechatData)
+              alert(wechatData.openid)
+              alert(wechatData.nickname)
+              User.getUserIDbyOpenId({openId:wechatData.openid}).then(function(data){ 
+                
+              },function(err){
+                console.log(err)
+                // alert(2);
+              })
+            },function(err){
+              console.log(err)
+              // alert(2);
+            })
         }
 
         //用户ID
@@ -458,16 +495,28 @@ angular.module('kidney',[
         }
     })
 
-    // .state('tab.HealthInfo', {
-    //     // cache: false,
-    //     url: '/HealthInfo',
-    //     views: {
-    //         'tab-patient':{
-    //             controller: 'HealthInfoCtrl',
-    //             templateUrl: 'partials/patient/HealthInfo.html'
-    //         }
-    //     }
-    // })    
+    .state('tab.HealthInfo', {
+        // cache: false,
+        url: '/HealthInfo',
+        views: {
+            'tab-patient':{
+                controller: 'HealthInfoCtrl',
+                templateUrl: 'partials/patient/HealthInfo.html'
+            }
+        }
+    })
+
+    .state('tab.HealthInfoDetail', {
+        // cache: false,
+        url: '/HealthInfoDetail',
+        params: {id:null},
+        views: {
+            'tab-patient':{
+                controller: 'HealthDetailCtrl',
+                templateUrl: 'partials/patient/editHealthInfo.html'
+            }
+        }
+    })        
 
     // views-tab-groups
     .state('tab.new-group', {

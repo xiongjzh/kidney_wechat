@@ -7,12 +7,13 @@
     <ion-content has-bouncing="true" overflow-scroll="false" class="has-header has-tabs">
         <ion-list>
             <ion-item class="item-avatar item-icon-right item-button-right" type="item-text-wrap" href="#/tab/qrcode">
-                <img ng-src={{doctor.photoUrl|imgUrl:'doctor'}}>
+                <img ng-src="{{doctor.photoUrl || 'img/doctor.png'}}">
                 <h2>{{doctor.name}}&nbsp;&nbsp;&nbsp;&nbsp;{{doctor.title}}</h2>
                 <p>{{doctor.workUnit}}&nbsp;&nbsp;{{doctor.department}}</p>
                 <qrcode  version=3 error-correction-level="M" size="50" data="{{params.userId}}" style="width:60px;height:60px;position: absolute;right: 30px;top:10px;"></qrcode>
                 <i class="icon ion-chevron-right icon-accessory"></i>
             </ion-item>
+           
             <a class="item item-icon-left" href="#/tab/schedual">
                 <i class="icon ion-ios-list-outline"></i>
                 排班

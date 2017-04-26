@@ -51,7 +51,6 @@
         <div class="input-label"><i class="icon ion-asterisk" style="color:red;font-size:6px">
           </i>是否高血压</div>
         <select ng-model="Diagnose.hypertension">
-          <option  value=''>请选择</option>
           <option ng-repeat="x in Hypers" value="{{x.Type}}">{{x.Name}}</option> 
         </select>
       </label>

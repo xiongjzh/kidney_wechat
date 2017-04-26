@@ -1,34 +1,11 @@
 angular.module('zy.controllers', ['ionic','kidney.services'])
 
-/////////////////////////////zhangying////////////////////////
+/////////////////////////////zhangying///////////////////////
 //登录
 .controller('SignInCtrl', ['User','$scope','$timeout','$state','Storage','loginFactory','$ionicHistory','JM', '$location','wechat','$window','$rootScope','Doctor',function(User,$scope, $timeout,$state,Storage,loginFactory,$ionicHistory,JM,$location,wechat,$window,$rootScope,Doctor) {
-    $rootScope.$broadcast('iii111',111);
+
     $scope.barwidth="width:0%";
 
-    var temp = $location.absUrl().split('=')
-    // alert(temp)
-    var code = temp[1].split('&')[0]
-    var state = temp[2].split('#')[0]
-    var wechatData = ""
-    if (state == 'patient')
-    {
-        path = 'http://t.go5le.net/?code=' + code
-        $window.location.href = path
-    }
-    else
-    {
-        wechat.getUserInfo({code:code}).then(function(data){ 
-          // alert(1)
-          wechatData = data.results
-          console.log(wechatData)
-          alert(wechatData.openid)
-          alert(wechatData.nickname)
-        },function(err){
-          console.log(err)
-          // alert(2);
-        })
-    }
     if(Storage.get('USERNAME')!=null){
         $scope.logOn={username:Storage.get('USERNAME'),password:""};
     }
@@ -396,9 +373,6 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
     }
 }])
 
-
-
-
 //注册时填写医生个人信息
 .controller('userdetailCtrl',['Doctor','$scope','$state','$ionicHistory','$timeout' ,'Storage', '$ionicPopup','$ionicLoading','$ionicPopover','User','$http',function(Doctor,$scope,$state,$ionicHistory,$timeout,Storage, $ionicPopup,$ionicLoading, $ionicPopover,User,$http){
     $scope.barwidth="width:0%";
@@ -461,8 +435,8 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
                     'regsubmit':'yes',
                     'formhash':'',
                     'D2T9s9':phoneNumber,
-                    'O9Wi2H':password.newPass,
-                    'hWhtcM':password.newPass,
+                    'O9Wi2H':phoneNumber,
+                    'hWhtcM':phoneNumber,
                     'qSMA7S':phoneNumber+'@qq.com'
                 },  // pass in data as strings
                 headers : {
@@ -478,13 +452,9 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
         },function(err)
         {
             console.log(err)       
-        })
-       
+        })      
     };
-
 }])
-
-
 
 //首页
 .controller('homeCtrl', ['Communication','$scope','$state','$interval','$rootScope', 'Storage','$http','$sce',function(Communication,$scope, $state,$interval,$rootScope,Storage,$http,$sce) {
@@ -495,7 +465,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
         $http({
             method  : 'POST',
             url     : 'http://121.43.107.106/member.php?mod=logging&action=login&loginsubmit=yes&loginhash=$loginhash&mobile=2',
-            params    : {'username':'admin','password':"bme319"},  // pass in data as strings
+            params    : {'username':Storage.get('phoneNumber'),'password':Storage.get('phoneNumber')},  // pass in data as strings
             headers : { 'Content-Type': 'application/x-www-form-urlencoded' }  // set the headers so angular passing info as form data (not request payload)
             }).success(function(data) {
                 //console.log(data);
@@ -546,7 +516,6 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
     $scope.barwidth="width:0%";
     //变量a 等待患者数量 变量b 已完成咨询患者数量
     $scope.doctor={a:0,b:0};
-
     var now=new Date();
     var year=now.getYear();
     var month=now.getMonth()+1;
@@ -591,22 +560,10 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
             console.log(err)
         }
     )
-
 }])
 
 //"咨询”进行中
 .controller('doingCtrl', ['$scope','$state','$interval','$rootScope', 'Storage','$ionicPopover','Counsel','$ionicHistory',  function($scope, $state,$interval,$rootScope,Storage,$ionicPopover,Counsel,$ionicHistory) {
-  // $scope.patients=[
-  //   {
-  //     head:"default_user.png",
-  //     name:"赵大头",
-  //     id:18868800011,
-  //     gender:"男",
-  //     age:"32",
-  //     time:"2017/3/27 9:32",
-  //     qs:"问题1" 
-  //   }
-  // ];
     $scope.patients=angular.fromJson(Storage.get("consulting"));
     console.log($scope.patients)
     $ionicPopover.fromTemplateUrl('partials/others/sort_popover_consult.html', {
@@ -646,22 +603,10 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
         }
     }
     //$scope.isChecked1=true;
-
 }])
 
 //"咨询”已完成
 .controller('didCtrl', ['$scope','$state','$interval','$rootScope', 'Storage','$ionicPopover','$ionicHistory',  function($scope, $state,$interval,$rootScope,Storage,$ionicPopover,$ionicHistory) {
-  // $scope.patients=[
-  //   {
-  //     head:"default_user.png",
-  //     name:"王大头",
-  //     id:18868800001,
-  //     gender:"男",
-  //     age:"32",
-  //     time:"2017/3/27 9:32",
-  //     qs:"问题1" 
-  //   }
-  // ];
     $scope.patients=angular.fromJson(Storage.get("consulted"));
   
     $ionicPopover.fromTemplateUrl('partials/others/sort_popover_consult.html', {
@@ -770,7 +715,6 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
         );
     }
 
-
     // $scope.$on('$ionicView.beforeEnter', function() {
     //     $scope.params.isPatients = '1';
     // })
@@ -855,7 +799,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
     $scope.goback=function(){
         $ionicHistory.goBack();
     }
-    
+
     console.log(Storage.get('getpatientId'))
     Patient.getPatientDetail({
          userId:Storage.get('getpatientId')
@@ -863,7 +807,9 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
     .then(
         function(data)
         {
-            //console.log(data)
+            console.log(data)
+            if(data.results.diagnosisInfo.length>0)
+                Storage.set("latestDiagnose",angular.toJson(data.results.diagnosisInfo[data.results.diagnosisInfo.length-1]));
             $scope.patient=data.results;
             $scope.diagnosisInfo = data.results.diagnosisInfo;           
         },
@@ -911,7 +857,6 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
         );
     }
 
-
     $scope.goToDiagnose=function()
     {
         $state.go("tab.DoctorDiagnose");
@@ -928,10 +873,10 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
 }])
 
 //"我”页
-.controller('meCtrl', ['Doctor','$scope','$state','$interval','$rootScope', 'Storage', function(Doctor,$scope, $state,$interval,$rootScope,Storage) {
+.controller('meCtrl', ['Doctor','$scope','$state','$interval','$rootScope', 'Storage', 'wechat','$location','$ionicPopup','$ionicPopover',function(Doctor,$scope, $state,$interval,$rootScope,Storage,wechat,$location,$ionicPopup,$ionicPopover) {
   $scope.barwidth="width:0%";
    
-   //$scope.userid=Storage.get('userid');
+    //$scope.userid=Storage.get('userid');
     // $scope.$on('$ionicView.beforeEnter', function() {
     //     $scope.doRefresh();
     // });
@@ -956,6 +901,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
         // groupId:$state.params.groupId
         userId:Storage.get('UID')
     }
+
 }])
 
 //"我”二维码页
@@ -1000,7 +946,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
 
 
 //"我”个人资料页
-.controller('myinfoCtrl', ['Doctor','$scope','Storage', function(Doctor,$scope, Storage) {
+.controller('myinfoCtrl', ['Doctor','$scope','Storage', 'wechat','$location','$ionicPopup','$ionicPopover',function(Doctor,$scope, Storage,wechat,$location,$ionicPopup,$ionicPopover) {
     $scope.hideTabs = true;
     //$scope.userid=Storage.get('userid');
     //$scope.doctor=meFactory.GetDoctorInfo($scope.userid);
@@ -1043,7 +989,180 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
         $scope.myDiv = !$scope.myDiv;
         $scope.updateDiv = !$scope.updateDiv;   
     };
-  
+    
+      // 上传头像的点击事件----------------------------
+  $scope.onClickCamera = function($event){
+    $scope.openPopover($event);
+  };
+  $scope.reload=function(){
+    var t=$scope.doctor.photoUrl; 
+    $scope.doctor.photoUrl=''
+
+    $scope.$apply(function(){
+      $scope.doctor.photoUrl=t;
+    })
+
+  }
+ 
+ // 上传照片并将照片读入页面-------------------------
+  var photo_upload_display = function(serverId){
+   // 给照片的名字加上时间戳
+    var temp_photoaddress = Storage.get("UID") + "_" +  "myAvatar.jpg";
+    console.log(temp_photoaddress)
+    var temp_name = 'resized' + Storage.get("UID") + "_" +  "myAvatar.jpg";
+    wechat.download({serverId:serverId, name:temp_name})
+    .then(function(res){
+      //res.path_resized
+      //图片路径
+      $scope.doctor.photoUrl="http://121.43.107.106:8052/uploads/photos/"+temp_name+'?'+new Date().getTime();
+      console.log($scope.doctor.photoUrl)
+      // $state.reload("tab.mine")
+      Doctor.editDoctorDetail({userId:Storage.get("UID"),photoUrl:$scope.doctor.photoUrl}).then(function(r){
+        console.log(r);
+      })
+    },function(err){
+      console.log(err);
+      reject(err);
+    })
+  };
+  //-----------------------上传头像---------------------
+      // ionicPopover functions 弹出框的预定义
+        //--------------------------------------------
+        // .fromTemplateUrl() method
+  $ionicPopover.fromTemplateUrl('my-popover.html', {
+    scope: $scope,
+    animation: 'slide-in-up'
+  }).then(function(popover) {
+    $scope.popover = popover;
+  });
+  $scope.openPopover = function($event) {
+    $scope.popover.show($event);
+  };
+  $scope.closePopover = function() {
+    $scope.popover.hide();
+  };
+  //Cleanup the popover when we're done with it!
+  $scope.$on('$destroy', function() {
+    $scope.popover.remove();
+  });
+  // Execute action on hide popover
+  $scope.$on('popover.hidden', function() {
+    // Execute action
+  });
+  // Execute action on remove popover
+  $scope.$on('popover.removed', function() {
+    // Execute action
+  });
+
+// 相册键的点击事件---------------------------------
+  $scope.onClickCameraPhotos = function(){        
+   // console.log("选个照片"); 
+   $scope.choosePhotos();
+   $scope.closePopover();
+  };      
+  $scope.choosePhotos = function() {
+    var config = "";
+    wechat.settingConfig({url:$location.absUrl()}).then(function(data){
+      // alert(data.results.timestamp)
+      config = data.results;
+      config.jsApiList = ['chooseImage','uploadImage']
+      // alert(config.jsApiList)
+      // alert(config.debug)
+      wx.config({
+        debug:true,
+        appId:config.appId,
+        timestamp:config.timestamp,
+        nonceStr:config.nonceStr,
+        signature:config.signature,
+        jsApiList:config.jsApiList
+      })
+      wx.ready(function(){
+        wx.checkJsApi({
+            jsApiList: ['chooseImage','uploadImage'],
+            success: function(res) {
+                wx.chooseImage({
+                  count:1,
+                  sizeType: ['original','compressed'],
+                  sourceType: ['album'],
+                  success: function(res) {
+                    var localIds = res.localIds;
+                    wx.uploadImage({
+                       localId: localIds[0],
+                       isShowProgressTips: 1, // 默认为1，显示进度提示
+                        success: function (res) {
+                            var serverId = res.serverId; // 返回图片的服务器端ID
+                            photo_upload_display(serverId);
+                        }
+                    })
+                  }
+                })
+            }
+        });
+      })
+      wx.error(function(res){
+        alert(res.errMsg)
+      })
+
+    },function(err){
+
+    })
+  }; // function结束
+
+    // 照相机的点击事件----------------------------------
+    $scope.getPhoto = function() {
+      // console.log("要拍照了！");
+      $scope.takePicture();
+      $scope.closePopover();
+    };
+    $scope.isShow=true;
+    $scope.takePicture = function() {
+      var config = "";
+      wechat.settingConfig({url:$location.absUrl()}).then(function(data){
+        // alert(data.results.timestamp)
+        config = data.results;
+        config.jsApiList = ['chooseImage','uploadImage']
+        // alert(config.jsApiList)
+        // alert(config.debug)
+        wx.config({
+          debug:true,
+          appId:config.appId,
+          timestamp:config.timestamp,
+          nonceStr:config.nonceStr,
+          signature:config.signature,
+          jsApiList:config.jsApiList
+        })
+        wx.ready(function(){
+          wx.checkJsApi({
+          jsApiList: ['chooseImage','uploadImage'],
+          success: function(res) {
+              wx.chooseImage({
+                count:1,
+                sizeType: ['original','compressed'],
+                sourceType: ['camera'],
+                success: function(res) {
+                    var localIds = res.localIds;
+                    wx.uploadImage({
+                       localId: localIds[0],
+                       isShowProgressTips: 1, // 默认为1，显示进度提示
+                        success: function (res) {
+                            var serverId = res.serverId; // 返回图片的服务器端ID
+                            photo_upload_display(serverId);
+                        }
+                    })
+                }
+              })
+          }
+          });
+        })
+      wx.error(function(res){
+        alert(res.errMsg)
+      })
+
+      },function(err){
+
+      })
+    }; // function结束
+
 }])
 
 //"我”个人收费页
@@ -1435,3 +1554,5 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
     }
 
 }])
+
+
