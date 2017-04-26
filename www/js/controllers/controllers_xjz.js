@@ -777,9 +777,6 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             $scope.msgs=data;
         });
     }
-    $scope.scrollBottom = function() {
-        $scope.scrollHandle.scrollBottom(true);
-    }
     //长按工具条
     var options = [{
         name: '转发医生',
@@ -935,10 +932,10 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         if(msg.contentType=='image') {
             msg.content.thumb=CONFIG.mediaUrl+msg.content['src_thumb'];
             $http.get(msg.content.thumb).then(function(data){
-                $scope.$apply(function(){
                     $scope.msgs.push(msg);
-                });
             })
+        }else{
+            $scope.msgs.push(msg);
         }
         // $scope.$apply(function(){
             // $scope.msgs.push(msg);
@@ -1055,7 +1052,6 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
     }
     //get image
     $scope.getImage = function(type) {
-         var cnt=0;
         var ids=['',''];
         if(type=='cam') var st=['camera'];
         else var st = ['album'];
@@ -1138,7 +1134,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                     isShowProgressTips: 0, // 默认为1，显示进度提示
                     success: function (response) {
                         console.log(response);
-                        vids[0]=response.serverId;
+                        ids[0]=response.serverId;
                         // var serverId = res.serverId; // 返回图片的服务器端ID
                         sendmsg(ids,'voice');
                     }
@@ -1455,7 +1451,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
 
 
 //团队聊天
-.controller('GroupChatCtrl', ['$scope', '$state', '$rootScope', '$ionicHistory', '$ionicModal', '$ionicScrollDelegate', '$rootScope', '$ionicPopover', '$ionicPopup', 'Camera', 'voice', 'Communication','wechat','$location','Doctor','Storage', function($scope, $state, $rootScope, $ionicHistory, $ionicModal, $ionicScrollDelegate, $rootScope, $ionicPopover, $ionicPopup, Camera, voice, Communication,wechat,$location,Doctor,Storage) {
+.controller('GroupChatCtrl', ['$scope', '$state', '$rootScope', '$ionicHistory', '$ionicModal', '$ionicScrollDelegate', '$rootScope', '$ionicPopover', '$ionicPopup', 'Camera', 'voice', 'Communication','wechat','$location','Doctor','Storage', '$q',function($scope, $state, $rootScope, $ionicHistory, $ionicModal, $ionicScrollDelegate, $rootScope, $ionicPopover, $ionicPopup, Camera, voice, Communication,wechat,$location,Doctor,Storage,$q) {
     $scope.input = {
         text: ''
     }
@@ -1524,11 +1520,9 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
     })
     $scope.$on('$ionicView.enter', function() {
             wechat.settingConfig({ url: $location.absUrl() }).then(function(data) {
-                // alert(data.results.timestamp)
                 config = data.results;
                 config.jsApiList = ['startRecord','stopRecord','playVoice','chooseImage','uploadVoice', 'uploadImage']
-                    // alert(config.jsApiList)
-                    // alert(config.debug)
+
                 wx.config({
                     debug: false,
                     appId: config.appId,
@@ -1537,29 +1531,6 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                     signature: config.signature,
                     jsApiList: config.jsApiList
                 })
-                // wx.ready(function() {
-                //     wx.checkJsApi({
-                //         jsApiList: ['chooseImage', 'uploadImage'],
-                //         success: function(res) {
-                //             wx.chooseImage({
-                //                 count: 1,
-                //                 sizeType: ['original', 'compressed'],
-                //                 sourceType: ['album'],
-                //                 success: function(res) {
-                //                     var localIds = res.localIds;
-                //                     wx.uploadImage({
-                //                         localId: localIds[0],
-                //                         isShowProgressTips: 1, // 默认为1，显示进度提示
-                //                         success: function(res) {
-                //                             var serverId = res.serverId; // 返回图片的服务器端ID
-                //                             wechat.
-                //                         }
-                //                     })
-                //                 }
-                //             })
-                //         }
-                //     });
-                // })
                 wx.error(function(res) {
                     console.error(res);
                     alert(res.errMsg)
@@ -1625,10 +1596,10 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         // $ionicScrollDelegate.scrollBottom();
     })
     $scope.$on('$ionicView.beforeLeave', function() {
+        socket.close();
         if ($scope.popover) $scope.popover.hide();
     })
     $scope.$on('$ionicView.leave', function() {
-        socket.close();
         $scope.msgs = [];
         if ($scope.modal) $scope.modal.remove();
         $rootScope.conversation.type = null;
@@ -1672,6 +1643,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                     // $scope.$apply(function() {
                         if ($scope.msgs.length!=0) $scope.msgs[0].diff = ($scope.msgs[0].createTimeInMillis - res[0].createTimeInMillis) > 300000 ? true : false;
                         for (var i = 0; i < res.length - 1; ++i) {
+                            if(res[i].contentType=='image') res[i].content.thumb=CONFIG.mediaUrl+res[i].content['src_thumb'];
                             res[i].direct = res[i].fromName==$scope.params.UID?'send':'receive';
                             res[i].diff = (res[i].createTimeInMillis - res[i + 1].createTimeInMillis) > 300000 ? true : false;
                             $scope.msgs.unshift(res[i]);
@@ -1835,6 +1807,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         console.info('updateMsg');
         var pos=arrTool.indexOf($scope.msgs,'createTimeInMillis',msg.createTimeInMillis);
         if(pos!=-1){
+            if(msg.contentType=='image') msg.content.thumb=CONFIG.mediaUrl+msg.content['src_thumb'];
             msg.diff=$scope.msgs[pos].diff;
             // $scope.$apply(function(){
                 msg.direct = msg.fromName==$scope.params.UID?'send':'receive';
@@ -1851,8 +1824,16 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             msg.diff=(msg.createTimeInMillis - $scope.msgs[$scope.msgs.length-1].createTimeInMillis) > 300000 ? true : false;
         }
         msg.direct = msg.fromName==$scope.params.UID?'send':'receive';
-        // $scope.$apply(function(){
+        if(msg.contentType=='image') {
+            msg.content.thumb=CONFIG.mediaUrl+msg.content['src_thumb'];
+            $http.get(msg.content.thumb).then(function(data){
+                $scope.msgs.push(msg);
+            })
+        }else{
             $scope.msgs.push(msg);
+        }
+        // $scope.$apply(function(){
+            // $scope.msgs.push(msg);
 
         // });
         // $scope.msgs=$scope.msgs;
@@ -1892,14 +1873,14 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             content:data
         }
         socket.emit('message',{msg:msgJson,to:$scope.params.groupId});
-        if(type=='image'){
-            msgJson.content.localId=content[2];
-            msgJson.content.localId_thumb=content[3];
-        }else if(type=='voice'){
-            msgJson.content.localId=content[1];
-        }
-        $scope.pushMsg(msgJson);
-        toBottom(true);
+        // if(type=='image'){
+        //     msgJson.content.localId=content[2];
+        //     msgJson.content.localId_thumb=content[3];
+        // }else if(type=='voice'){
+        //     msgJson.content.localId=content[1];
+        // }
+        // $scope.pushMsg(msgJson);
+        // toBottom(true);
     }
     function onSendSuccess(res) {
         console.log(res);
@@ -1918,7 +1899,6 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
 
     //get image
     $scope.getImage = function(type) {
-        var count=0;
         var ids=['',''];
         if(type=='cam') var st=['camera'];
         else var st = ['album'];
@@ -1935,37 +1915,21 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                     success: function (res) {
                         console.log(res);
                         ids[0]=res.serverId; // 返回图片的服务器端ID
-                        if(count) sendmsg(ids,'image');
-                        else count++;
+                        sendmsg(ids,'image');
                     }
                 });
-                wx.uploadImage({
-                    localId: response.localIds[1], // 需要上传的图片的本地ID，由chooseImage接口获得
-                    isShowProgressTips: 0, // 默认为1，显示进度提示
-                    success: function (res) {
-                        console.log(res);
-                        ids[1]=res.serverId; // 返回图片的服务器端ID
-                        if(count) sendmsg(ids,'image');
-                        else count++;
-                        // sendmsg(serverId,'image');
-                    }
-                });
+                // wx.uploadImage({
+                //     localId: response.localIds[1], // 需要上传的图片的本地ID，由chooseImage接口获得
+                //     isShowProgressTips: 0, // 默认为1，显示进度提示
+                //     success: function (res) {
+                //         console.log(res);
+                //         ids[1]=res.serverId; // 返回图片的服务器端ID
+                //         if(count) sendmsg(ids,'image');
+                //         else count++;
+                //         // sendmsg(serverId,'image');
+                //     }
+                // });
             }
-            // success: function (res) {
-            //     alert(res);
-            //     console.log(res);
-            //     wx.uploadImage({
-            //         localId: res.localIds[0], // 需要上传的图片的本地ID，由chooseImage接口获得
-            //         isShowProgressTips: 1, // 默认为1，显示进度提示
-            //         success: function (res) {
-            //             alert(res);
-            //             console.log(res);
-            //             var serverId = res.serverId; // 返回图片的服务器端ID
-            //             sendmsg(serverId,'image');
-            //         }
-            //     });
-            //     // var localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
-            // }
         });
     }
 
@@ -1977,12 +1941,16 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
     $scope.stopAndSend = function() {
         wx.stopRecord({
             success: function (res) {
+                var ids=['',res.localId];
+                var m=msgGen(ids,'voice',true);
+                $scope.pushMsg(m);
+                toBottom(true);
                 wx.uploadVoice({
                     localId: res.localId, // 需要上传的图片的本地ID，由chooseImage接口获得
                     isShowProgressTips: 0, // 默认为1，显示进度提示
                     success: function (response) {
                         console.log(response);
-                        var ids=[response.serverId,res.localId];
+                        ids[0]=response.serverId;
                         // var serverId = res.serverId; // 返回图片的服务器端ID
                         sendmsg(ids,'voice');
                     }
