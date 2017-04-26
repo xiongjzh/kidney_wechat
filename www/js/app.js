@@ -53,6 +53,7 @@ angular.module('kidney',[
                 var logPromise = User.logIn({username:wechatData.nickname,password:wechatData.nickname,role:"doctor"});
                 logPromise.then(function(data){
                     if(data.results==1){
+                        Storage.set('validMode',0)
                         $state.go('phonevalid',{phonevalidType:"wechat"})
                     }
                     else if(data.results.mesg=="login success!"){
