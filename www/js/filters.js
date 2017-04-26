@@ -8,6 +8,12 @@ angular.module('kidney.filters', [])
         return $filter('date')(msgTime, 'M/d/yy h:mm a');
     }
 }])
+//解决 Blocked loading resource from url not allowed by $sceDelegate policy
+.filter('trusted', ['$sce', function ($sce) {
+    return function(url) {
+        return $sce.trustAsResourceUrl(url);
+    };
+}])
 .filter('filterGender',[function(){
     return function(gender){
         var g="未知";

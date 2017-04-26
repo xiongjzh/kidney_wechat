@@ -1,4 +1,9 @@
 angular.module('kidney.services', ['ionic','ngResource'])
+//配置图片白名单
+.config(['$compileProvider', function($compileProvider) {
+    $compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|weixin|wxlocalresource):/);
+    //其中 weixin 是微信安卓版的 localId 的形式，wxlocalresource 是 iOS 版本的 localId 形式
+}])
 
 // 本地存储函数
 .factory('Storage', ['$window', function ($window) {
@@ -21,6 +26,7 @@ angular.module('kidney.services', ['ionic','ngResource'])
     crossKey:'fe7b9ba069b80316653274e4',
     appKey: 'cf32b94444c4eaacef86903e',
     baseUrl: 'http://121.43.107.106:4050/',
+    mediaUrl: 'http://121.43.107.106:8052/',
     cameraOptions: {
         cam: {
             quality: 60,
@@ -257,6 +263,37 @@ angular.module('kidney.services', ['ionic','ngResource'])
 .factory('JM', ['Storage','$q','Doctor', function(Storage,$q,Doctor) {
     var ConversationList = [];
     var messageLIsts = {};
+    
+    // custom{
+    //     contentStringMap:
+    // }
+    // text{
+    //     text:
+
+    // }
+    // image{
+    //     localThumbnailPath:
+
+    // }
+    // voice{
+    //     duration:
+    //     local_path:
+    // }
+    // var msgSample={
+    //     contentType:'',
+    //     fromName:'',
+    //     fromUser:{
+
+    //     },
+    //     targetName:'',
+    //     targetType:'',
+    //     direct:'',
+    //     status:'',
+    //     diff:true,
+    //     createTimeInMillis:'',
+    //     _id:'',
+    //     content:{}
+    // }
     function pGen(u){
         return md5(u,"kidney").substr(4,10);
     }
@@ -801,6 +838,7 @@ angular.module('kidney.services', ['ionic','ngResource'])
 
     var Communication =function(){
         return $resource(CONFIG.baseUrl + ':path/:route',{path:'communication'},{
+            getCommunication:{method:'GET', params:{route: 'getCommunication'}, timeout: 100000},
             getCounselReport:{method:'GET', params:{route: 'getCounselReport'}, timeout: 100000},
             getTeam:{method:'GET', params:{route: 'getTeam'}, timeout: 100000},
             insertMember:{method:'POST', params:{route: 'insertMember'}, timeout: 100000},
@@ -1075,6 +1113,21 @@ angular.module('kidney.services', ['ionic','ngResource'])
     self.getCounselReport = function(params){
         var deferred = $q.defer();
         Data.Communication.getCounselReport(
+            params,
+            function(data, headers){
+                deferred.resolve(data);
+            },
+            function(err){
+                deferred.reject(err);
+        });
+        return deferred.promise;
+    };
+
+    //params-> messageType=2&id2=teamOrConsultation&limit=1&skip=0
+    //         messageType=1&id1=doc&id2=pat&limit=1&skip=0
+    self.getCommunication = function(params){
+        var deferred = $q.defer();
+        Data.Communication.getCommunication(
             params,
             function(data, headers){
                 deferred.resolve(data);
