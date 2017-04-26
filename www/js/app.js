@@ -69,7 +69,7 @@ angular.module('kidney',[
                         },function(err)
                         {
                             console.log(err)
-                        }
+                        })
                         Storage.set('TOKEN',data.results.token);//token作用目前还不明确
                         Storage.set('isSignIn',true);
                         Storage.set('UID',data.results.userId);

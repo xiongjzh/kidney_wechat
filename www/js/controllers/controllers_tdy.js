@@ -1440,7 +1440,7 @@ VitalSign.getVitalSigns({userId:'U201702071766',type:'心率'}).then(
     .then(function(res){
       // var data=angular.fromJson(res)
       //图片路径
-      $scope.health.imgurl.push("http://121.43.107.106:8052/"+temp_photoaddress
+      $scope.health.imgurl.push("http://121.43.107.106:8052/"+temp_photoaddress)
       // $state.reload("tab.mine")
       // Storage.set('localhealthinfoimg',angular.toJson($scope.health.imgurl));
       console.log($scope.health.imgurl)
