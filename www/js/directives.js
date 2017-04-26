@@ -16,7 +16,7 @@ angular.module('kidney.directives', ['kidney.services'])
         restrict:'AE',
         controller:function($scope){
             var type='';
-            $scope.base=CONFIG.baseUrl;
+            $scope.base=CONFIG.mediaUrl;
             $scope.msg.direct = $scope.msg.fromName==Storage.get('UID')?'send':'receive';
             $scope.getTemplateUrl = function(){
                 type=$scope.msg.contentType;
