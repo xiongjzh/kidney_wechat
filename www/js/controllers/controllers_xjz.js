@@ -645,7 +645,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                 if (data.msg.targetType == 'single' && data.msg.targetID == $state.params.chatId) {
                     setTimeout(function(){
                         $scope.$apply(function(){
-                            $scope.updateMsg(data.msg);
+                            $scope.pushMsg(data.msg);
                         });
                     },200)
                 }
@@ -931,8 +931,11 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         }
         msg.direct = msg.fromName==$scope.params.UID?'send':'receive';
         if(msg.contentType=='image') msg.content.thumb=CONFIG.mediaUrl+msg.content['src_thumb'];
-        // $scope.$apply(function(){
+        $http.get(msg.content.thumb).then(function(data){
             $scope.msgs.push(msg);
+        })
+        // $scope.$apply(function(){
+            // $scope.msgs.push(msg);
 
         // });
         // $scope.msgs=$scope.msgs;
@@ -1028,7 +1031,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         var msgJson=msgGen(content,type);
         if(type=='text'){
             $scope.pushMsg(msgJson);
-            toBottom(true);
+            // toBottom(true);
         }
         socket.emit('message',{msg:msgJson,to:$scope.params.chatId});
         // if(type=='image'){
@@ -1038,7 +1041,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         //     msgJson.content.localId=content[1];
         // }
         // $scope.pushMsg(msgJson);
-        // toBottom(true);
+        toBottom(true);
     }
     $scope.submitMsg = function() {
         sendmsg($scope.input.text,'text');
@@ -1070,9 +1073,9 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                 // },function(errArr){
                 //     console.log(errArr);
                 // })
-                var m=msgGen(ids,'image',true)
-                $scope.pushMsg(m);
-                toBottom(true);
+                // var m=msgGen(ids,'image',true)
+                // $scope.pushMsg(m);
+                // toBottom(true);
                 wx.uploadImage({
                     localId: response.localIds[0], // 需要上传的图片的本地ID，由chooseImage接口获得
                     isShowProgressTips: 0, // 默认为1，显示进度提示
