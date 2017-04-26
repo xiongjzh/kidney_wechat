@@ -991,7 +991,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
     }
     //get image
     $scope.getImage = function(type) {
-        // var count=0;
+         var cnt=0;
         var ids=['',''];
         if(type=='cam') var st=['camera'];
         else var st = ['album'];
@@ -1002,59 +1002,59 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             success: function (response) {
                 console.log(response);
                 ids=ids.concat(response.localIds);
-                var promises=[];
-                promises.push(wxUploadImage(response.localIds[0]));
-                promises.push(wxUploadImage(response.localIds[1]));
-                console.log(promises);
-                $q.all(promises)
-                .then(function(dataArr){
-                    console.log(dataArr);
-                    ids[0]=dataArr[0];
-                    ids[1]=dataArr[1];
-                    sendmsg(ids,'image');
-                },function(errArr){
-                    console.log(errArr);
-                })
-                // wx.uploadImage({
-                //     localId: response.localIds[0], // 需要上传的图片的本地ID，由chooseImage接口获得
-                //     isShowProgressTips: 0, // 默认为1，显示进度提示
-                //     success: function (res) {
-                //         console.log(res);
-                //         ids[0]=res.serverId; // 返回图片的服务器端ID
-                //         if(count) 
-                //             sendmsg(ids,'image');
-                //         else count++;
-                //     }
-                // });
-                // wx.uploadImage({
-                //     localId: response.localIds[1], // 需要上传的图片的本地ID，由chooseImage接口获得
-                //     isShowProgressTips: 0, // 默认为1，显示进度提示
-                //     success: function (res) {
-                //         console.log(res);
-                //         ids[1]=res.serverId; // 返回图片的服务器端ID
-                //         if(count) 
-                //             sendmsg(ids,'image');
-                //         else count++;
-                //         // sendmsg(serverId,'image');
-                //     }
-                // });
+                // var promises=[];
+                // promises.push(wxUploadImage(response.localIds[0]));
+                // promises.push(wxUploadImage(response.localIds[1]));
+                // console.log(promises);
+                // $q.all(promises)
+                // .then(function(dataArr){
+                //     console.log(dataArr);
+                //     ids[0]=dataArr[0];
+                //     ids[1]=dataArr[1];
+                //     sendmsg(ids,'image');
+                // },function(errArr){
+                //     console.log(errArr);
+                // })
+                wx.uploadImage({
+                    localId: response.localIds[0], // 需要上传的图片的本地ID，由chooseImage接口获得
+                    isShowProgressTips: 0, // 默认为1，显示进度提示
+                    success: function (res) {
+                        console.log(res);
+                        ids[0]=res.serverId; // 返回图片的服务器端ID
+                        if(cnt) 
+                            sendmsg(ids,'image');
+                        else cnt++;
+                    }
+                });
+                wx.uploadImage({
+                    localId: response.localIds[1], // 需要上传的图片的本地ID，由chooseImage接口获得
+                    isShowProgressTips: 0, // 默认为1，显示进度提示
+                    success: function (res) {
+                        console.log(res);
+                        ids[1]=res.serverId; // 返回图片的服务器端ID
+                        if(cnt) 
+                            sendmsg(ids,'image');
+                        else cnt++;
+                        // sendmsg(serverId,'image');
+                    }
+                });
             }
         });
     }
-    function wxUploadImage(localId){
-        return $q(function(resolve,reject){
-            wx.uploadImage({
-                localId: localId, // 需要上传的图片的本地ID，由chooseImage接口获得
-                isShowProgressTips: 0, // 默认为1，显示进度提示
-                success: function (res) {
-                    if(res.errMsg=="uploadImage:ok")
-                        resolve(res.serverId);
-                    else
-                        reject(res);
-                }
-            });
-        });
-    }
+    // function wxUploadImage(localId){
+    //     return $q(function(resolve,reject){
+    //         wx.uploadImage({
+    //             localId: localId, // 需要上传的图片的本地ID，由chooseImage接口获得
+    //             isShowProgressTips: 0, // 默认为1，显示进度提示
+    //             success: function (res) {
+    //                 if(res.errMsg=="uploadImage:ok")
+    //                     resolve(res.serverId);
+    //                 else
+    //                     reject(res);
+    //             }
+    //         });
+    //     });
+    // }
     //get voice
     $scope.getVoice = function() {
         wx.startRecord();
