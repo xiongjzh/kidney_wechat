@@ -1451,7 +1451,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
 
 
 //团队聊天
-.controller('GroupChatCtrl', ['$scope', '$state', '$rootScope', '$ionicHistory', '$ionicModal', '$ionicScrollDelegate', '$rootScope', '$ionicPopover', '$ionicPopup', 'Camera', 'voice', 'Communication','wechat','$location','Doctor','Storage', '$q',function($scope, $state, $rootScope, $ionicHistory, $ionicModal, $ionicScrollDelegate, $rootScope, $ionicPopover, $ionicPopup, Camera, voice, Communication,wechat,$location,Doctor,Storage,$q) {
+.controller('GroupChatCtrl', ['$scope', '$state', '$rootScope', '$ionicHistory', '$ionicModal', '$ionicScrollDelegate', '$rootScope', '$ionicPopover', '$ionicPopup', 'Camera', 'voice', 'Communication','wechat','$location','Doctor','Storage', '$q','CONFIG','arrTool',function($scope, $state, $rootScope, $ionicHistory, $ionicModal, $ionicScrollDelegate, $rootScope, $ionicPopover, $ionicPopup, Camera, voice, Communication,wechat,$location,Doctor,Storage,$q,CONFIG,arrTool) {
     $scope.input = {
         text: ''
     }
@@ -1872,15 +1872,8 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             // _id:'',
             content:data
         }
+        console.log(msgJson);
         socket.emit('message',{msg:msgJson,to:$scope.params.groupId});
-        // if(type=='image'){
-        //     msgJson.content.localId=content[2];
-        //     msgJson.content.localId_thumb=content[3];
-        // }else if(type=='voice'){
-        //     msgJson.content.localId=content[1];
-        // }
-        // $scope.pushMsg(msgJson);
-        // toBottom(true);
     }
     function onSendSuccess(res) {
         console.log(res);
