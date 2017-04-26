@@ -916,6 +916,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                 msg.direct = msg.fromName==$scope.params.UID?'send':'receive';
                 $scope.msgs[pos]=msg;
             // });
+            alert(JSON.stringify(msg));
         }
         // $scope.msgs=$scope.msgs;
     }
