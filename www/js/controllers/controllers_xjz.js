@@ -817,7 +817,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         console.log(args)
         event.stopPropagation();
         $scope.imageHandle.zoomTo(1, true);
-        $scope.imageUrl = args[2].src_thumb || args[2].localId_thumb;
+        $scope.imageUrl = CONFIG.mediaUrl + (args[2].src_thumb || args[2].localId_thumb);
         $scope.modal.show();
         // if (args[1] == 'img') {
         // window.JMessage.getOriginImageInSingleConversation($state.params.chatId, args[3], onImageLoad, onImageLoadFail);
@@ -1019,6 +1019,10 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         //     content:data
         // }
         var msgJson=msgGen(content,type);
+        if(type=='text'){
+            $scope.pushMsg(msgJson);
+            toBottom(true);
+        }
         socket.emit('message',{msg:msgJson,to:$scope.params.chatId});
         // if(type=='image'){
         //     msgJson.content.localId=content[2];
