@@ -21,7 +21,8 @@ angular.module('kidney.directives', ['kidney.services'])
             $scope.getTemplateUrl = function(){
                 type=$scope.msg.contentType;
                 if(type=='image'){
-                    $scope.msg.content.thumb = $scope.base+$scope.msg.content['src_thumb'];
+                    if($scope.msg.content['src_thumb']!='')
+                        $scope.msg.content.thumb = $scope.base+$scope.msg.content['src_thumb'];
                 }else if(type=='custom'){
                     type=$scope.msg.content.contentStringMap.type;
                     if(type=='card'){
