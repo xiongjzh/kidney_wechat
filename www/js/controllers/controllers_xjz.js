@@ -748,6 +748,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                     // $scope.$apply(function() {
                         if ($scope.msgs.length!=0) $scope.msgs[0].diff = ($scope.msgs[0].createTimeInMillis - res[0].createTimeInMillis) > 300000 ? true : false;
                         for (var i = 0; i < res.length - 1; ++i) {
+                            if(res[i].contentType=='image') res[i].content.thumb=CONFIG.mediaUrl+res[i].content['src_thumb'];
                             res[i].direct = res[i].fromName==$scope.params.UID?'send':'receive';
                             res[i].diff = (res[i].createTimeInMillis - res[i + 1].createTimeInMillis) > 300000 ? true : false;
                             $scope.msgs.unshift(res[i]);
@@ -909,6 +910,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         console.info('updateMsg');
         var pos=arrTool.indexOf($scope.msgs,'createTimeInMillis',msg.createTimeInMillis);
         if(pos!=-1){
+            if(msg.contentType=='image') msg.content.thumb=CONFIG.mediaUrl+msg.content['src_thumb'];
             msg.diff=$scope.msgs[pos].diff;
             // $scope.$apply(function(){
                 msg.direct = msg.fromName==$scope.params.UID?'send':'receive';
@@ -925,6 +927,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             msg.diff=(msg.createTimeInMillis - $scope.msgs[$scope.msgs.length-1].createTimeInMillis) > 300000 ? true : false;
         }
         msg.direct = msg.fromName==$scope.params.UID?'send':'receive';
+        if(msg.contentType=='image') msg.content.thumb=CONFIG.mediaUrl+msg.content['src_thumb'];
         // $scope.$apply(function(){
             $scope.msgs.push(msg);
 
