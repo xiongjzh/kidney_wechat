@@ -7,7 +7,7 @@
 	<div my-spin="msg.status" class="msg-body media-image" ng-click="emitEvent('image','img',msg.content)" on-hold="emitEvent('holdmsg',msg.createTimeInMillis,$event,'image')">
 		<!-- text content -->
 		<!-- <div class="media-image"> -->
-			<img  src="{{msg.content.thumb || msg.content.localId_thumb}}"/>
+			<img  ng-src="{{msg.content.thumb || msg.content.localId_thumb}}"/>
 		<!-- </div> -->
 		
 	</div>

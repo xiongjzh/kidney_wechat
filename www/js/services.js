@@ -1,4 +1,9 @@
 angular.module('kidney.services', ['ionic','ngResource'])
+//配置图片白名单
+.config(['$compileProvider', function($compileProvider) {
+    $compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|weixin|wxlocalresource):/);
+    //其中 weixin 是微信安卓版的 localId 的形式，wxlocalresource 是 iOS 版本的 localId 形式
+}])
 
 // 本地存储函数
 .factory('Storage', ['$window', function ($window) {
