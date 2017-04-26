@@ -685,10 +685,11 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         $scope.params.helpDivHeight = 60;
     })
     $scope.$on('$ionicView.beforeLeave', function() {
+        socket.emit('disconnect');
+        socket.close();
         if ($scope.popover) $scope.popover.hide();
     })
     $scope.$on('$ionicView.leave', function() {
-        socket.close();
         if ($scope.params.type == '2' && $scope.msgs.length)
             Communication.updateLastTalkTime($scope.params.chatId, $scope.msgs[$scope.msgs.length - 1].createTimeInMillis);
         if (window.JMessage) window.JMessage.exitConversation();
@@ -1596,6 +1597,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         // $ionicScrollDelegate.scrollBottom();
     })
     $scope.$on('$ionicView.beforeLeave', function() {
+        socket.emit('disconnect');
         socket.close();
         if ($scope.popover) $scope.popover.hide();
     })
