@@ -16,8 +16,37 @@ angular.module('kidney',[
     'ionic-datepicker'
 ])
 
-.run(['$ionicPlatform', '$state', 'Storage', 'JM','$rootScope','CONFIG','Communication', function($ionicPlatform, $state, Storage, JM,$rootScope,CONFIG,Communication) {
+.run(['$ionicPlatform', '$state', 'Storage', 'JM','$rootScope','CONFIG','Communication', '$location','wechat','$window',function($ionicPlatform, $state, Storage, JM,$rootScope,CONFIG,Communication,$location,wechat,$window) {
     $ionicPlatform.ready(function() {
+        var temp = $location.absUrl().split('=')
+        // alert(temp)
+        if (angular.isDefined(temp[1]) == true)
+        {
+            var code = temp[1].split('&')[0]
+        }
+        if (angular.isDefined(temp[2]) == true)
+        {
+            var state = temp[2].split('#')[0]
+        }
+        var wechatData = ""
+        if (state == 'patient')
+        {
+            path = 'http://t.go5le.net/?code=' + code
+            $window.location.href = path
+        }
+        else
+        {
+            wechat.getUserInfo({code:code}).then(function(data){ 
+              // alert(1)
+              wechatData = data.results
+              console.log(wechatData)
+              alert(wechatData.openid)
+              alert(wechatData.nickname)
+            },function(err){
+              console.log(err)
+              // alert(2);
+            })
+        }
         //是否登陆
         var isSignIN = Storage.get("isSignIN");
         if (isSignIN == 'YES') {

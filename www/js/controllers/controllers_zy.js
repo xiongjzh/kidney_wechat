@@ -2,32 +2,9 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
 
 /////////////////////////////zhangying///////////////////////
 //登录
-.controller('SignInCtrl', ['User','$scope','$timeout','$state','Storage','loginFactory','$ionicHistory','JM',  '$location','wechat','$window','$rootScope',function(User,$scope, $timeout,$state,Storage,loginFactory,$ionicHistory,JM,$location,wechat,$window,$rootScope) {
+.controller('SignInCtrl', ['User','$scope','$timeout','$state','Storage','loginFactory','$ionicHistory','JM','$rootScope',function(User,$scope, $timeout,$state,Storage,loginFactory,$ionicHistory,JM,$rootScope) {
     $scope.barwidth="width:0%";
 
-    var temp = $location.absUrl().split('=')
-    // alert(temp)
-    var code = temp[1].split('&')[0]
-    var state = temp[2].split('#')[0]
-    var wechatData = ""
-    if (state == 'patient')
-    {
-        path = 'http://t.go5le.net/?code=' + code
-        $window.location.href = path
-    }
-    else
-    {
-        wechat.getUserInfo({code:code}).then(function(data){ 
-          // alert(1)
-          wechatData = data.results
-          console.log(wechatData)
-          alert(wechatData.openid)
-          alert(wechatData.nickname)
-        },function(err){
-          console.log(err)
-          // alert(2);
-        })
-    }
     if(Storage.get('USERNAME')!=null){
         $scope.logOn={username:Storage.get('USERNAME'),password:""};
     }
