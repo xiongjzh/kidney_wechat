@@ -1,7 +1,7 @@
 angular.module('kidney.directives', ['kidney.services'])
 //消息模版，用于所有消息类型
 //XJZ
-.directive('myMessage',['Storage',function(Storage){
+.directive('myMessage',['Storage','CONFIG',function(Storage,CONFIG){
     var picArr=[
                 {"src":"img/default_user.png","hiRes":"img/avatar.png"},
                 {"src":"img/ionic.png","hiRes":"img/avatar.jpg"},
@@ -16,48 +16,30 @@ angular.module('kidney.directives', ['kidney.services'])
         restrict:'AE',
         controller:function($scope){
             var type='';
+            $scope.base=CONFIG.baseUrl;
             $scope.msg.direct = $scope.msg.fromName==Storage.get('UID')?'send':'receive';
             $scope.getTemplateUrl = function(){
-                if($scope.msg.contentType=='custom'){
+                type=$scope.msg.contentType;
+                if(type=='image'){
+                    $scope.msg.content['src_thumb'] = $scope.base+$scope.msg.content['src_thumb'];
+                }else if(type=='custom'){
                     type=$scope.msg.content.contentStringMap.type;
                     if(type=='card'){
                         try{
-                            // console.log($scope.msg.content.contentStringMap);
-                            // console.log(JSON.parse($scope.msg.content.contentStringMap.counsel));
                             $scope.counsel=JSON.parse($scope.msg.content.contentStringMap.counsel);
                             $scope.picurl=picArr;
                         }catch(e){
                             
                         }
                     }
-                    return 'templates/msg/'+ type+'.html';
+                    // return 'templates/msg/'+ type+'.html';
                 }
-                // type=$scope.msg.contentType=='custom'?$scope.msg.content.contentStringMap.type:$scope.msg.contentType;
-                type=$scope.msg.contentType;
                 return 'templates/msg/'+type+'.html';
             }
             
             $scope.emitEvent = function(code){
               $scope.$emit(code,arguments);
-            }
-            // $scope.direct = $scope.msg.fromID==window.JMessage.username?'right':'left';
-            
-            // $scope.showProfile = function(){
-            //     console.log($scope.msg.fromID);
-            // }
-            // $scope.viewImage= function(thumb,url){
-            //     if(type=='image'){
-            //         //image massage
-            //         $scope.$emit('viewImage',type,thumb,$scope.msg.serverMessageId);
-            //     }else{
-            //         //image in card
-            //         $scope.$emit('viewImage',type,thumb,url);
-            //     }
-            // };
-            // $scope.picurl=picArr;
-            // $scope.playVoice = function(){
-
-            // }
+            }         
         }
     }
 }])

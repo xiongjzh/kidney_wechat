@@ -1008,7 +1008,8 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                     success: function (res) {
                         console.log(res);
                         ids[0]=res.serverId; // 返回图片的服务器端ID
-                        if(count) sendmsg(ids,'image');
+                        if(count) 
+                            sendmsg(ids,'image');
                         else count++;
                     }
                 });
@@ -1018,7 +1019,8 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                     success: function (res) {
                         console.log(res);
                         ids[1]=res.serverId; // 返回图片的服务器端ID
-                        if(count) sendmsg(ids,'image');
+                        if(count) 
+                            sendmsg(ids,'image');
                         else count++;
                         // sendmsg(serverId,'image');
                     }
