@@ -584,10 +584,11 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         // audio.play();
         // $scope.msgs = [];
     $scope.scrollHandle = $ionicScrollDelegate.$getByHandle('myContentScroll');
-    function toBottom(animate){
+    function toBottom(animate,delay){
+        if(!delay) delay=100;
         setTimeout(function(){
             $scope.scrollHandle.scrollBottom(animate);
-        },100)
+        },delay)
     }
     //render msgs 
     $scope.$on('$ionicView.beforeEnter', function() {
@@ -609,6 +610,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         //     getMsg(15);
         // }
         $scope.getMsg(15).then(function(data){$scope.msgs=data;});
+        toBottom(true,2000);
     });
 
     $scope.$on('$ionicView.enter', function() {
@@ -930,10 +932,14 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             msg.diff=(msg.createTimeInMillis - $scope.msgs[$scope.msgs.length-1].createTimeInMillis) > 300000 ? true : false;
         }
         msg.direct = msg.fromName==$scope.params.UID?'send':'receive';
-        if(msg.contentType=='image') msg.content.thumb=CONFIG.mediaUrl+msg.content['src_thumb'];
-        $http.get(msg.content.thumb).then(function(data){
-            $scope.msgs.push(msg);
-        })
+        if(msg.contentType=='image') {
+            msg.content.thumb=CONFIG.mediaUrl+msg.content['src_thumb'];
+            $http.get(msg.content.thumb).then(function(data){
+                $scope.$apply(function(){
+                    $scope.msgs.push(msg);
+                });
+            })
+        }
         // $scope.$apply(function(){
             // $scope.msgs.push(msg);
 
