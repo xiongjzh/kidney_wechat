@@ -1037,6 +1037,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             // $scope.pushMsg(msgJson);
             // toBottom(true);
         // }
+        console.info('socket.connected'+socket.connected);
         socket.emit('message',{msg:msgJson,to:$scope.params.chatId});
         // if(type=='image'){
         //     msgJson.content.localId=content[2];
@@ -1874,6 +1875,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             // _id:'',
             content:data
         }
+        console.info('socket.connected'+socket.connected);
         console.log(msgJson);
         socket.emit('message',{msg:msgJson,to:$scope.params.groupId});
     }
