@@ -948,124 +948,9 @@ VitalSign.getVitalSigns({userId:'U201702071766',type:'心率'}).then(
 //健康信息--PXY
 .controller('HealthInfoCtrl', ['$scope','$timeout','$state','$ionicHistory','$ionicPopup','Storage','Health','Dict',function($scope, $timeout,$state,$ionicHistory,$ionicPopup,Storage,Health,Dict) {
   $scope.barwidth="width:0%";
-  //var patientId = Storage.get('UID')
-  var patientId = 'p01'
-
-  $scope.Goback = function(){
-    $state.go('tab.patientDetail')
-  }
-
-  //从字典中搜索选中的对象。
-  // var searchObj = function(code,array){
-  //     for (var i = 0; i < array.length; i++) {
-  //       if(array[i].Type == code || array[i].type == code || array[i].code == code) return array[i];
-  //     };
-  //     return "未填写";
-  // }
-  //console.log(HealthInfo.getall());
-
-  $scope.items = []//HealthInfo.getall();
-  
-
-  Health.getAllHealths({userId:patientId}).then(
-    function(data)
-    {
-      if (data.results != "" && data.results!= null)
-      {
-        $scope.items = data.results
-        for (var i = 0; i < $scope.items.length; i++){
-          $scope.items[i].acture = $scope.items[i].insertTime
-          $scope.items[i].time = $scope.items[i].time.substr(0,10)
-          // if ($scope.items[i].url != ""&&$scope.items[i].url!=null)
-          // {
-          //   $scope.items[i].url = [$scope.items[i].url]
-          // }
-        }
-      };
-    },
-    function(err)
-    {
-      console.log(err);
-    }
-  )
-
-
-  $scope.gotoHealthDetail=function(ele,editId){
-    console.log(ele)
-    console.log(ele.target)
-    if(ele.target.nodeName=="I"){
-      var confirmPopup = $ionicPopup.confirm({
-      title: '删除提示',
-      template: '记录删除后将无法恢复，确认删除？',
-      cancelText:'取消',
-      okText:'删除'
-      });
-
-      confirmPopup.then(function(res) {
-        if(res) 
-          {
-            Health.deleteHealth({userId:patientId,insertTime:item.acture}).then(
-              function(data)
-              {
-                if (data.results == 0)
-                {
-                  for (var i = 0; i < $scope.items.length; i++){
-                    if (item.acture == $scope.items[i].acture)
-                    {
-                      $scope.items.splice(i,1)
-                      break;
-                    }
-                  }
-                }
-                
-                console.log($scope.items)
-              },
-              function(err)
-              {
-                console.log(err);
-              }
-            )
-            //20140421 zxf
-            var healthinfotimes=angular.fromJson(Storage.get('consulthealthinfo'))
-            for(var i=0;i<healthinfotimes.length;i++){
-              if(healthinfotimes[i].time==item.acture){
-                healthinfotimes.splice(i, 1)
-                break;
-              }
-            }
-            Storage.set('consulthealthinfo',angular.toJson(healthinfotimes))
-            // HealthInfo.remove(number);
-            // $scope.items = HealthInfo.getall();
-          } 
-        });
-    }else{
-      $state.go('tab.HealthInfoDetail',{id:editId});
-    }
-    
-  }
-
-
-  $scope.newHealth = function(){
-    $state.go('tab.HealthInfoDetail',{id:null});
-  }
-
-  // $scope.EditHealth = function(editId){
-  //   console.log("健康信息");
-  //   console.log(editId);
-  //   $state.go('tab.myHealthInfoDetail',{id:editId});
-  // }
-
-
-  
-}])
-
-
-//健康信息--PXY
-.controller('HealthInfoCtrl', ['$scope','$timeout','$state','$ionicHistory','$ionicPopup','Storage','Health','Dict',function($scope, $timeout,$state,$ionicHistory,$ionicPopup,Storage,Health,Dict) {
-  $scope.barwidth="width:0%";
-  //var patientId = Storage.get('getpatientId')
+  var patientId = Storage.get('getpatientId')
   //console.log(Storage.get('getpatientId'))
-  var patientId = 'U201702071766'  //测试ID
+  // var patientId = 'U201702071766'  //测试ID
 
   $scope.Goback = function(){
     $state.go('tab.patientDetail')
@@ -1088,9 +973,12 @@ VitalSign.getVitalSigns({userId:'U201702071766',type:'心率'}).then(
       if (data.results != "" && data.results!= null)
       {
         $scope.items = data.results
+        console.log($scope.items)
+        var testtime=$scope.items[0]
+        console.log(testtime)
         for (var i = 0; i < $scope.items.length; i++){
           $scope.items[i].acture = $scope.items[i].insertTime
-          $scope.items[i].time = $scope.items[i].time.substr(0,10)
+          //$scope.items[i].time = $scope.items[i].time.substr(0,10)
           // if ($scope.items[i].url != ""&&$scope.items[i].url!=null)
           // {
           //   $scope.items[i].url = [$scope.items[i].url]
@@ -1177,10 +1065,10 @@ VitalSign.getVitalSigns({userId:'U201702071766',type:'心率'}).then(
 
 
 //健康详情--PXY
-.controller('HealthDetailCtrl', ['ionicDatePicker','$scope','$state','$ionicHistory','$ionicPopup','$stateParams','$ionicPopover','$ionicModal','$ionicScrollDelegate','$ionicLoading','$timeout','Dict','Health','Storage','Camera','wechat','$location',function(ionicDatePicker,$scope, $state,$ionicHistory,$ionicPopup,$stateParams,$ionicPopover,$ionicModal,$ionicScrollDelegate,$ionicLoading,$timeout,Dict,Health,Storage,Camera,wechat,$location) {
+.controller('HealthDetailCtrl', ['ionicDatePicker','$scope','$state','$ionicHistory','$ionicPopup','$stateParams','$ionicPopover','$ionicModal','$ionicScrollDelegate','$ionicLoading','$timeout','Dict','Health','Storage','Camera',function(ionicDatePicker,$scope, $state,$ionicHistory,$ionicPopup,$stateParams,$ionicPopover,$ionicModal,$ionicScrollDelegate,$ionicLoading,$timeout,Dict,Health,Storage,Camera) {
   $scope.barwidth="width:0%";
-  //var patientId = Storage.get('getpatientId')
-  var patientId = 'U201702071766'   //测试ID
+  var patientId = Storage.get('getpatientId')
+  // var patientId = 'U201702071766'   //测试ID
 
   // $scope.test = function(){
   //   console.log($scope.datepickerObject4);
