@@ -1382,7 +1382,7 @@ VitalSign.getVitalSigns({userId:'U201702071766',type:'心率'}).then(
       // alert(config.jsApiList)
       // alert(config.debug)
       wx.config({
-        debug:true,
+        debug:false,
         appId:config.appId,
         timestamp:config.timestamp,
         nonceStr:config.nonceStr,
@@ -1438,7 +1438,7 @@ VitalSign.getVitalSigns({userId:'U201702071766',type:'心率'}).then(
         // alert(config.jsApiList)
         // alert(config.debug)
         wx.config({
-          debug:true,
+          debug:false,
           appId:config.appId,
           timestamp:config.timestamp,
           nonceStr:config.nonceStr,

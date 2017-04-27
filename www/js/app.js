@@ -1,4 +1,4 @@
-// Ionic Starter App
+﻿// Ionic Starter App
 
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
@@ -18,12 +18,8 @@ angular.module('kidney',[
 
 .run(['$ionicPlatform', '$state', 'Storage', 'JM','$ionicHistory','$rootScope','CONFIG','Communication', '$location','wechat','$window','User',function($ionicPlatform, $state, Storage, JM,$ionicHistory,$rootScope,CONFIG,Communication,$location,wechat,$window,User) {
     $ionicPlatform.ready(function() {
+        socket = io.connect('ws://121.43.107.106:4050/chat');
         
-        //是否登陆
-        var isSignIN = Storage.get("isSignIN");
-        if (isSignIN == 'YES') {
-            $state.go('tab.home');
-        }
 
         var temp = $location.absUrl().split('=')
         // alert(temp)
@@ -47,8 +43,8 @@ angular.module('kidney',[
                 // alert(1)
                 wechatData = data.results
                 console.log(wechatData)
-                alert(wechatData.openid)
-                alert(wechatData.nickname)
+                // alert(wechatData.openid)
+                // alert(wechatData.nickname)
                 Storage.set('openid',wechatData.openid)
                 var logPromise = User.logIn({username:wechatData.openid,password:wechatData.openid,role:"doctor"});
                 logPromise.then(function(data){
@@ -104,6 +100,12 @@ angular.module('kidney',[
             })
         }
 
+        //是否登陆
+        var isSignIN = Storage.get("isSignIN");
+        if (isSignIN == 'YES') {
+            $state.go('tab.home');
+        }
+        
         //用户ID
         var userid = '';
         //记录jmessage当前会话
