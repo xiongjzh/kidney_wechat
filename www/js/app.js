@@ -78,9 +78,9 @@ angular.module('kidney',[
 
                         User.getAgree({userId:data.results.userId}).then(function(res){
                             if(res.results.agreement=="0"){
-                                $timeout(function(){$state.go('tab.home');},500);
+                                $state.go('tab.home');
                             }else{
-                                $timeout(function(){$state.go('agreement',{last:'signin'});},500);
+                                $state.go('agreement',{last:'signin'});
                             }
                         },function(err){
                             console.log(err);
