@@ -341,9 +341,9 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
                           })
                         }
                         if(validMode == 0){
-                            $timeout(function(){$state.go('agreement',{last:'register'});},500);
+                            $state.go('agreement',{last:'register'});
                         }else{
-                            $timeout(function(){$state.go('setpassword')}); 
+                            $state.go('setpassword'); 
                         }
                     }
                     else //验证码错误
