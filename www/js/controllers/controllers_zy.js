@@ -745,7 +745,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
         if(!force && time-$scope.params.updateTime<21600000) return;
         $scope.params.updateTime=time;
         Doctor.getPatientList({
-            userId:'doc01'
+            userId:Storage.get('UID')
         })
         .then(
             function(data)
@@ -774,7 +774,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
         );
 
         Doctor.getPatientByDate({
-            userId:'doc01'
+            userId:Storage.get('UID')
         })
         .then(
             function(data)
@@ -901,7 +901,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
     );
 
     Insurance.getInsMsg({
-         doctorId:'doc01',
+         doctorId:Storage.get('UID'),
          patientId:Storage.get('getpatientId')
     })
     .then(
@@ -919,7 +919,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
     $scope.SendInsMsg=function()
     {
         Insurance.updateInsuranceMsg({
-            doctorId:'doc01',
+            doctorId:Storage.get('UID'),
             patientId:Storage.get('getpatientId'),
             insuranceId:'ins01'
             //type:5  //保险type=5
