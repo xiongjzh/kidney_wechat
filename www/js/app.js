@@ -1,4 +1,4 @@
-// Ionic Starter App
+﻿// Ionic Starter App
 
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
@@ -16,15 +16,10 @@ angular.module('kidney',[
     'ionic-datepicker'
 ])
 
-.run(['$ionicPlatform', '$state', 'Storage', 'JM','$rootScope','CONFIG','Communication', '$location','wechat','$window','User',function($ionicPlatform, $state, Storage, JM,$rootScope,CONFIG,Communication,$location,wechat,$window,User) {
+.run(['$ionicPlatform', '$state', 'Storage', 'JM','$ionicHistory','$rootScope','CONFIG','Communication', '$location','wechat','$window','User',function($ionicPlatform, $state, Storage, JM,$ionicHistory,$rootScope,CONFIG,Communication,$location,wechat,$window,User) {
     $ionicPlatform.ready(function() {
         socket = io.connect('ws://121.43.107.106:4050/chat');
         
-        //是否登陆
-        var isSignIN = Storage.get("isSignIN");
-        if (isSignIN == 'YES') {
-            $state.go('tab.home');
-        }
 
         var temp = $location.absUrl().split('=')
         // alert(temp)
@@ -45,23 +40,72 @@ angular.module('kidney',[
         else
         {
             wechat.getUserInfo({code:code}).then(function(data){ 
-              // alert(1)
-              wechatData = data.results
-              console.log(wechatData)
-              alert(wechatData.openid)
-              alert(wechatData.nickname)
-              User.getUserIDbyOpenId({openId:wechatData.openid}).then(function(data){ 
-                
-              },function(err){
-                console.log(err)
-                // alert(2);
-              })
+                // alert(1)
+                wechatData = data.results
+                console.log(wechatData)
+                // alert(wechatData.openid)
+                // alert(wechatData.nickname)
+                Storage.set('openid',wechatData.openid)
+                var logPromise = User.logIn({username:wechatData.openid,password:wechatData.openid,role:"doctor"});
+                logPromise.then(function(data){
+                    console.log(data);
+                    if(data.results==1){
+                        Storage.set('validMode',0)
+                        $state.go('phonevalid',{phonevalidType:"wechat"})
+                    }
+                    else if(data.results.mesg=="login success!"){
+
+                        // $scope.logStatus = "登录成功！";
+                        $ionicHistory.clearCache();
+                        $ionicHistory.clearHistory();
+                        User.getUserIDbyOpenId({openId:wechatData.openid}).then(function(data)
+                        {
+                            if (angular.isDefined(data.phoneNo) = true)
+                            {
+                                Storage.set('USERNAME',data.phoneNo);
+                            }
+                        },function(err)
+                        {
+                            console.log(err)
+                        })
+                        Storage.set('TOKEN',data.results.token);//token作用目前还不明确
+                        Storage.set('isSignIn',true);
+                        Storage.set('UID',data.results.userId);
+
+                        User.getAgree({userId:data.results.userId}).then(function(res){
+                            if(res.results.agreement=="0"){
+                                $state.go('tab.home');
+                            }else{
+                                $state.go('agreement',{last:'signin'});
+                            }
+                        },function(err){
+                            console.log(err);
+                        })
+
+                    }
+                },
+                function(data){
+                    if(data.results==null && data.status==0){
+                        $scope.logStatus = "网络错误！";
+                        return;
+                    }
+                    if(data.status==404){
+                        $scope.logStatus = "连接服务器失败！";
+                        return;
+                    }
+                });
             },function(err){
               console.log(err)
               // alert(2);
             })
         }
 
+        //是否登陆
+        var isSignIN = Storage.get("isSignIN");
+        if (isSignIN == 'YES') {
+            $state.go('tab.home');
+        }
+        
         //用户ID
         var userid = '';
         //记录jmessage当前会话
@@ -281,6 +325,7 @@ angular.module('kidney',[
     .state('phonevalid', {
         url: '/phonevalid',
         cache: false,
+        params:{phonevalidType:null},
         templateUrl: 'partials/others/phonevalid.html',
         controller: 'phonevalidCtrl'
     })

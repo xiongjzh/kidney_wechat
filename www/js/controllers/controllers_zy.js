@@ -121,7 +121,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
 
 
 //手机号码验证
-.controller('phonevalidCtrl', ['$scope','$state','$interval', '$stateParams','Storage','User','$timeout',  function($scope, $state,$interval,$stateParams,Storage,User,$timeout) {
+.controller('phonevalidCtrl', ['$scope','$state','$interval', '$stateParams','Storage','User','$timeout', 'Doctor', function($scope, $state,$interval,$stateParams,Storage,User,$timeout,Doctor) {
     $scope.barwidth="width:0%";
     $scope.Verify={Phone:"",Code:""};
     $scope.veritext="获取验证码";
@@ -146,6 +146,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
             }
         },1000);
     }
+    var isregisted = false;
     //点击获取验证码
     $scope.getcode=function(Verify){
         $scope.logStatus='';
@@ -154,67 +155,141 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
       
         $scope.logStatus="手机号码不能为空！";
         return;
-    }
-    var phoneReg=/^(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/;
-    //手机正则表达式验证
-    if(!phoneReg.test(Verify.Phone))
-    {
-        $scope.logStatus="请输入正确的手机号码！";
-          return;
-    }
-    else//通过基本验证-正确的手机号
-    {
-        console.log(Verify.Phone)
-        //验证手机号是否注册，没有注册的手机号不允许重置密码
-        User.logIn({
-            username:Verify.Phone,
-            password:' ',
-            role:'doctor'
-        })
-        .then(function(succ)
+        }
+        var phoneReg=/^(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/;
+        //手机正则表达式验证
+        if(!phoneReg.test(Verify.Phone))
         {
-            console.log(succ)
-            if(validMode==0&&succ.mesg=="User password isn't correct!")
+            $scope.logStatus="请输入正确的手机号码！";
+              return;
+        }
+        else//通过基本验证-正确的手机号
+        {
+            console.log(Verify.Phone)
+            //验证手机号是否注册，没有注册的手机号不允许重置密码
+            User.logIn({
+                username:Verify.Phone,
+                password:' ',
+                role:'doctor'
+            })
+            .then(function(succ)
             {
-                $scope.logStatus="您已经注册过了";
-            }
-            else if(validMode==1&&succ.mesg!="User password isn't correct!")
-            {
-                $scope.logStatus="您还没有注册呢！";
-            }
-            else
-            {
-                User.sendSMS({
-                    mobile:Verify.Phone,
-                    smsType:1
-                })
-                .then(function(validCode)
-                {
-                    console.log(validCode)
-                    if(validCode.results==0)
-                    {
-                        unablebutton()
-                        if(validCode.mesg.match("您的邀请码")=="您的邀请码")
+                console.log(succ)
+                if($stateParams.phonevalidType=='wechat'){
+                        if (succ.mesg=="User password isn't correct!")
                         {
-                            $scope.logStatus="请稍后获取验证码";
+                            User.getUserId({phoneNo:Verify.Phone}).then(function(data){
+                                if(data.results == 0){
+                                    Doctor.getDoctorInfo({userId:data.UserId}).then(function(data){
+                                        if(data.results == "不存在的医生ID！"){
+                                            $scope.logStatus = "该手机号码没有医生权限,请确认手机号码或转移到肾事管家进行操作";
+                                            return;
+                                        }else {
+                                            $scope.logStatus = "该手机号码已经注册,请验证手机号绑定微信";
+                                            isregisted = true
+                                            User.sendSMS({
+                                                mobile:Verify.Phone,
+                                                smsType:1
+                                            })
+                                            .then(function(validCode)
+                                            {
+                                                console.log(validCode)
+                                                if(validCode.results==0)
+                                                {
+                                                    unablebutton()
+                                                    if(validCode.mesg.match("您的邀请码")=="您的邀请码")
+                                                    {
+                                                        $scope.logStatus="请稍后获取验证码";
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    $scope.logStatus="验证码发送失败！";
+                                                }
+                                            },function(err)
+                                            {
+                                                $scope.logStatus="验证码发送失败！";
+                                            })
+                                        }
+                                    },function(){
+                                        $scope.logStatus="连接超时！";
+                                    });
+                                }
+                            },function(){
+                                $scope.logStatus="连接超时！";
+                            });
+                            
                         }
-                    }
-                    else
+                        else
+                        {
+                            Storage.set('validMode',0)
+                            validMode = 0
+                            User.sendSMS({
+                                mobile:Verify.Phone,
+                                smsType:1
+                            })
+                            .then(function(validCode)
+                            {
+                                console.log(validCode)
+                                if(validCode.results==0)
+                                {
+                                    unablebutton()
+                                    if(validCode.mesg.match("您的邀请码")=="您的邀请码")
+                                    {
+                                        $scope.logStatus="请稍后获取验证码";
+                                    }
+                                }
+                                else
+                                {
+                                    $scope.logStatus="验证码发送失败！";
+                                }
+                            },function(err)
+                            {
+                                $scope.logStatus="验证码发送失败！";
+                            })
+                        }
+                }
+                else if(validMode==0&&succ.mesg=="User password isn't correct!")
+                {
+                    $scope.logStatus="您已经注册过了";
+                }
+                else if(validMode==1&&succ.mesg!="User password isn't correct!")
+                {
+                    $scope.logStatus="您还没有注册呢！";
+                }
+                else
+                {
+                    User.sendSMS({
+                        mobile:Verify.Phone,
+                        smsType:1
+                    })
+                    .then(function(validCode)
+                    {
+                        console.log(validCode)
+                        if(validCode.results==0)
+                        {
+                            unablebutton()
+                            if(validCode.mesg.match("您的邀请码")=="您的邀请码")
+                            {
+                                $scope.logStatus="请稍后获取验证码";
+                            }
+                        }
+                        else
+                        {
+                            $scope.logStatus="验证码发送失败！";
+                        }
+                    },function(err)
                     {
                         $scope.logStatus="验证码发送失败！";
-                    }
-                },function(err)
-                {
-                    $scope.logStatus="验证码发送失败！";
-                })
-            }
-        },function(err)
-        {
-            console.log(err)
-            $scope.logStatus="网络错误！";
-        })
-    }
-  }
+                    })
+                }
+            },function(err)
+            {
+                console.log(err)
+                $scope.logStatus="网络错误！";
+            })
+        }
+      }
 
     //判断验证码和手机号是否正确
     $scope.gotoReset = function(Verify){
@@ -250,10 +325,21 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
                     {
                         $scope.logStatus="验证成功！";
                         Storage.set('phoneNumber',Verify.Phone);
+                        if (isregisted == true)
+                        {
+                          User.setOpenId({phoneNo:Verify.Phone,openId:Storage.get('openid')}).then(function(data){
+                              if(data.msg == "success!")
+                              {
+                                $state.go('tab.home');
+                              }
+                          },function(){
+                              $scope.logStatus = "连接超时！";
+                          })
+                        }
                         if(validMode == 0){
-                            $timeout(function(){$state.go('agreement',{last:'register'});},500);
+                            $state.go('agreement',{last:'register'});
                         }else{
-                            $timeout(function(){$state.go('setpassword')}); 
+                            $state.go('setpassword'); 
                         }
                     }
                     else //验证码错误
@@ -398,6 +484,17 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
                 function(data)
                 {
                     console.log(data);
+                    if (angular.isDefined(Storage.get('openid')) == true)
+                    {
+                      User.setOpenId({phoneNo:phoneNumber,openId:Storage.get('openid')}).then(function(data){
+                          if(data.msg == "success!")
+                          {
+                            $state.go('tab.home');
+                          }
+                      },function(){
+                          $scope.logStatus = "连接超时！";
+                      })
+                    }
                     //$scope.doctor = data.newResults;                  
                 },
                 function(err)
@@ -644,7 +741,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
         if(!force && time-$scope.params.updateTime<21600000) return;
         $scope.params.updateTime=time;
         Doctor.getPatientList({
-            userId:'doc01'
+            userId:Storage.get('UID')
         })
         .then(
             function(data)
@@ -673,7 +770,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
         );
 
         Doctor.getPatientByDate({
-            userId:'doc01'
+            userId:Storage.get('UID')
         })
         .then(
             function(data)
@@ -800,7 +897,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
     );
 
     Insurance.getInsMsg({
-         doctorId:'doc01',
+         doctorId:Storage.get('UID'),
          patientId:Storage.get('getpatientId')
     })
     .then(
@@ -818,7 +915,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
     $scope.SendInsMsg=function()
     {
         Insurance.updateInsuranceMsg({
-            doctorId:'doc01',
+            doctorId:Storage.get('UID'),
             patientId:Storage.get('getpatientId'),
             insuranceId:'ins01'
             //type:5  //保险type=5
@@ -893,7 +990,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
 
     //  $scope.qrscan= function(){
     //   QRScan.getCode({
-    //   userId:'doc01'
+    //   userId:Storage.get('UID')
     // })
     //   .then(function(data){
     //     console.log(data);
@@ -1049,7 +1146,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
       // alert(config.jsApiList)
       // alert(config.debug)
       wx.config({
-        debug:true,
+        debug:false,
         appId:config.appId,
         timestamp:config.timestamp,
         nonceStr:config.nonceStr,
@@ -1104,7 +1201,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
         // alert(config.jsApiList)
         // alert(config.debug)
         wx.config({
-          debug:true,
+          debug:false,
           appId:config.appId,
           timestamp:config.timestamp,
           nonceStr:config.nonceStr,

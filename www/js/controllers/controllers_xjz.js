@@ -693,7 +693,6 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
     $scope.$on('$ionicView.leave', function() {
         if ($scope.params.type == '2' && $scope.msgs.length)
             Communication.updateLastTalkTime($scope.params.chatId, $scope.msgs[$scope.msgs.length - 1].createTimeInMillis);
-        if (window.JMessage) window.JMessage.exitConversation();
         $scope.msgs = [];
         if ($scope.modal) $scope.modal.remove();
         $rootScope.conversation.type = null;
@@ -982,7 +981,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             contentType:type,
             fromName:$scope.params.UID,
             fromUser:{
-                avatarPath:''
+                avatarPath: CONFIG.mediaUrl+'uploads/photos/resized'+$scope.params.UID+'_myAvatar.jpg'
             },
             targetID:$scope.params.chatId,
             targetName:'',
@@ -1844,7 +1843,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         }else{
             $scope.msgs.push(msg);
         }
-        toBottom(true,100);
+        toBottom(true,250);
         // $scope.$apply(function(){
             // $scope.msgs.push(msg);
 
@@ -1874,7 +1873,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             contentType:type,
             fromName:$scope.params.UID,
             fromUser:{
-                avatarPath:''
+                avatarPath:CONFIG.mediaUrl+'uploads/photos/resized'+$scope.params.UID+'_myAvatar.jpg'
             },
             targetID:$scope.params.groupId,
             teamID:$scope.params.teamId,
