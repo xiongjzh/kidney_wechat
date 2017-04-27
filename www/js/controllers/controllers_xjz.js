@@ -1,6 +1,6 @@
 angular.module('xjz.controllers', ['ionic', 'kidney.services'])
 //新建团队
-.controller('NewGroupCtrl', ['$scope', '$state', '$ionicLoading', '$rootScope', 'Communication', 'Storage', 'JM', 'Doctor', function($scope, $state, $ionicLoading, $rootScope, Communication, Storage, JM, Doctor) {
+.controller('NewGroupCtrl', ['$scope', '$state', '$ionicLoading', '$rootScope', 'Communication', 'Storage', 'JM', 'Doctor','$filter', function($scope, $state, $ionicLoading, $rootScope, Communication, Storage, JM, Doctor,$filter) {
     $rootScope.newMember = [];
     // $scope.group = {
     //     members: [
@@ -26,41 +26,42 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         }else if(!$scope.members){
             $ionicLoading.show({ template: '请至少添加一个成员', duration: 1500 });
         }else{  
-            var idStr='';
-                    for(i=0;i<$rootScope.newMember.length;i++){
-                         window.JMessage.register($rootScope.newMember[i].userId, JM.pGen($rootScope.newMember[i].userId),function(data){
-                            console.log(data);
-                         },function(err){
-                            console.log(err);
-                         });
-                        if(i==0){
-                        idStr=$rootScope.newMember[i].userId}
-                        else{idStr=idStr+','+$rootScope.newMember[i].userId}
-                    }
+            upload();
+            // var idStr='';
+            //         for(i=0;i<$rootScope.newMember.length;i++){
+            //              window.JMessage.register($rootScope.newMember[i].userId, JM.pGen($rootScope.newMember[i].userId),function(data){
+            //                 console.log(data);
+            //              },function(err){
+            //                 console.log(err);
+            //              });
+            //             if(i==0){
+            //             idStr=$rootScope.newMember[i].userId}
+            //             else{idStr=idStr+','+$rootScope.newMember[i].userId}
+            //         }
                     
        
-                     console.log(idStr);
-            setTimeout(function(){ 
-                 window.JMessage.createGroup($scope.team.name,$scope.team.description,idStr,
-                function(data){
-                    console.log(data);
-                    upload(data);
-                    // members=$rootScope.newMember;
+            //          console.log(idStr);
+            // setTimeout(function(){ 
+            //      window.JMessage.createGroup($scope.team.name,$scope.team.description,idStr,
+            //     function(data){
+            //         console.log(data);
+            //         upload(data);
+            //         // members=$rootScope.newMember;
                     
-                    // window.JMessage.addGroupMembers(groupId,idStr,
-                    // window.JMessage.addGroupMembers('22818577','user004',
-                    //     function(data){
-                    //         console.log(data);
-                    //         upload();
-                    //     },function(err){
-                    //         $ionicLoading.show({ template: '失败addGroupMembers', duration: 1500 });
-                    //         console.log(err);
-                    //     })
-                },function(err){
-                    $ionicLoading.show({ template: '失败createGroup', duration: 1500 });
-                    console.log(err);
-                })
-            },500); 
+            //         // window.JMessage.addGroupMembers(groupId,idStr,
+            //         // window.JMessage.addGroupMembers('22818577','user004',
+            //         //     function(data){
+            //         //         console.log(data);
+            //         //         upload();
+            //         //     },function(err){
+            //         //         $ionicLoading.show({ template: '失败addGroupMembers', duration: 1500 });
+            //         //         console.log(err);
+            //         //     })
+            //     },function(err){
+            //         $ionicLoading.show({ template: '失败createGroup', duration: 1500 });
+            //         console.log(err);
+            //     })
+            // },500); 
             // JM.newGroup($scope.team.name,$scope.team.description,$scope.members)
             // .then(function(data){
             //     console.log(data);
@@ -90,30 +91,32 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         }
     }
 
-    function upload(gid){
-        $scope.team.teamId=gid;
+    function upload(){
+        var time = new Date();
+        $scope.team.teamId='G'+$filter('date')(time, 'MMddHmssss');
         $scope.team.sponsorId=Storage.get('UID');
         Doctor.getDoctorInfo({userId:$scope.team.sponsorId})
-        .then(function(data){$scope.team.sponsorName=data.results.name;
-        Communication.newTeam($scope.team)
         .then(function(data){
-            //add members
-        
-                Communication.insertMember({teamId:$scope.team.teamId,members:$rootScope.newMember})
-                .then(function(data){
-                  console.log(data)
-                },function(err){
-                    console.log(err);
-                })
+            $scope.team.sponsorName=data.results.name;
+            Communication.newTeam($scope.team)
+            .then(function(data){
+                //add members
             
-            $ionicLoading.show({ template: '创建成功', duration: 1500 });
-            setTimeout(function(){
-                $state.go('tab.groups',{type:'0'});
-            },1500);
-        },function(err){
-            $ionicLoading.show({ template: '失败newTeam', duration: 1500 });
-            console.log(err);
-        })
+                    Communication.insertMember({teamId:$scope.team.teamId,members:$rootScope.newMember})
+                    .then(function(data){
+                      console.log(data)
+                    },function(err){
+                        console.log(err);
+                    })
+                
+                $ionicLoading.show({ template: '创建成功', duration: 1500 });
+                setTimeout(function(){
+                    $state.go('tab.groups',{type:'0'});
+                },1500);
+            },function(err){
+                $ionicLoading.show({ template: '失败newTeam', duration: 1500 });
+                console.log(err);
+            })
         })
     }
     // function onCreateOK(data){
@@ -155,32 +158,6 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         $scope.search='';
      }    
 
-
-    $scope.teams=[
-          {
-              photoUrl:"img/avatar.png",
-              groupId:"D201703240001",
-              name:"浙一肾病管理团队",
-              workUnit:"浙江XXX医院",
-              major:"肾上腺分泌失调",
-              num:31
-          },
-          {
-              photoUrl:"img/avatar.png",
-              groupId:"D201703240002",
-              name:"浙一间质性肾炎讨论小组",
-              workUnit:"浙江XXX医院",
-              major:"慢性肾炎、肾小管疾病",
-              num:12
-          },
-           {
-              photoUrl:"img/default_user.png",
-              groupId:"D201703240004",
-              name:"BME319小组",
-              workUnit:"浙江XXX医院",
-              major:"HIT",
-              num:16
-          }];
 }])
 //我的团队
 .controller('groupsCtrl', ['$scope', '$http', '$state', '$ionicPopover', 'Doctor', 'Storage', 'Patient','arrTool','$q','wechat','$location', function($scope, $http, $state, $ionicPopover, Doctor, Storage, Patient,arrTool,$q,wechat,$location) {
@@ -1275,17 +1252,17 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             if (res) {
                 console.log('You are sure');
                 console.log($state.params.teamId);
-             setTimeout(function(){ 
-                  window.JMessage.removeGroupMembersCrossApp($state.params.teamId,CONFIG.appKey,$scope.doctors[id].userId,
-                function(data){
-                    console.log(data);
+             // setTimeout(function(){ 
+             //      window.JMessage.removeGroupMembersCrossApp($state.params.teamId,CONFIG.appKey,$scope.doctors[id].userId,
+             //    function(data){
+             //        console.log(data);
                   
                    
-                },function(err){
+             //    },function(err){
                  
-                    console.log(err);
-                })
-             },500); 
+             //        console.log(err);
+             //    })
+             // },500); 
                 Communication.removeMember({teamId:$state.params.teamId,membersuserId:$scope.doctors[id].userId})
                 .then(function(data){
                   console.log(data)
@@ -1393,31 +1370,8 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             $ionicHistory.goBack();
         } else {
             console.log($state.params.teamId)
-            var idStr = '';
-            for (i = 0; i < $scope.group.members.length; i++) {
-                window.JMessage.register($scope.group.members[i].userId, JM.pGen($scope.group.members[i].userId), function(data) {
-                    console.log(data);
-                }, function(err) {
-                    console.log(err);
-                });
-                if (i == 0) {
-                    idStr = $scope.group.members[i].userId
-                } else { idStr = idStr + ',' + $scope.group.members[i].userId }
-            }
-
-
             console.log(idStr);
-            // setTimeout(function(){ 
-            window.JMessage.addGroupMembersCrossApp($state.params.teamId, CONFIG.appKey, idStr,
-                    function(data) {
 
-                        console.log(data);
-                    },
-                    function(err) {
-                        console.log(err);
-
-                    })
-                // },500); 
             Communication.insertMember({ teamId: $state.params.teamId, members: $scope.group.members })
                 .then(function(data) {
                     console.log(data.result)
@@ -1428,26 +1382,13 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                 })
 
         }
+        // console.log(idStr);
 
-
-        console.log(idStr);
-        setTimeout(function() {
-            window.JMessage.addGroupMembers($state.params.teamId, idStr,
-                function(data) {
-                    console.log(data);
-
-
-                },
-                function(err) {
-
-                    console.log(err);
-                })
-        }, 500);
-        Communication.insertMember({ teamId: $state.params.teamId, members: $scope.group.members })
-            .then(function(data) {
-                $ionicLoading.show({ template: '添加成功', duration: 1500 });
-                setTimeout(function() { $ionicHistory.goBack(); }, 1500);
-            })
+        // Communication.insertMember({ teamId: $state.params.teamId, members: $scope.group.members })
+        //     .then(function(data) {
+        //         $ionicLoading.show({ template: '添加成功', duration: 1500 });
+        //         setTimeout(function() { $ionicHistory.goBack(); }, 1500);
+        //     })
 
     }
 
@@ -2066,7 +2007,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         if ($scope.modal) $scope.modal.remove();
     })
 }])
-.controller('selectDocCtrl', ['$state', '$scope', 'JM', '$ionicPopup','$ionicLoading','$ionicScrollDelegate','Patient', 'Storage', function($state, $scope, JM, $ionicPopup,$ionicLoading,$ionicScrollDelegate,Patient, Storage) {
+.controller('selectDocCtrl', ['$state', '$scope', 'JM', '$ionicPopup','$ionicLoading','$ionicScrollDelegate','Patient', 'Storage','CONFIG', function($state, $scope, JM, $ionicPopup,$ionicLoading,$ionicScrollDelegate,Patient, Storage,CONFIG) {
     $scope.params={
         moredata:true,
         skip:0,
@@ -2156,7 +2097,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                     contentType:'custom',
                     fromName:thisDoctor.userId,
                     fromUser:{
-                        avatarPath:''
+                        avatarPath:CONFIG.mediaUrl+'uploads/photos/resized'+$scope.params.UID+'_myAvatar.jpg'
                     },
                     targetID:doc.userId,
                     targetName:'',
@@ -2186,7 +2127,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         });
     }
 }])
-.controller('selectTeamCtrl', ['$state', '$scope', 'JM', '$ionicPopup', 'Doctor', 'Communication', 'Storage', function($state, $scope, JM, $ionicPopup, Doctor, Communication, Storage) {
+.controller('selectTeamCtrl', ['$state', '$scope', 'JM', '$ionicPopup', 'Doctor', 'Communication', 'Storage','CONFIG','$filter', function($state, $scope, JM, $ionicPopup, Doctor, Communication, Storage,CONFIG,$filter) {
     $scope.params={
         // isSearch:false,
     }
@@ -2217,65 +2158,109 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             });
             confirmPopup.then(function(res) {
                 if (res) {
-                    window.JMessage.getGroupMembers(team.teamId,
-                        function(response) {
-                            var res = JSON.parse(response);
-                            console.log(res);
-                            var u = [];
-                            for (var i = 1; i < res.length; i++) u.push(res[i].userName);
-                            u = u.join(',');
-                            // var gn = md5($state.params.msg.counsel.counselId + team.teamId, "kidney").substr(4, 8) $state.params.msg.patientName+'-'+team.name
-                            window.JMessage.createGroup($state.params.msg.patientName+'-'+team.name, 'consultatioin_open', u,
-                                function(gid) {
-                                    console.log(gid);
-                                    var d = {
-                                        teamId: team.teamId,
-                                        counselId: $state.params.msg.counsel.counselId,
-                                        sponsorId: $state.params.msg.doctorId,
-                                        patientId: $state.params.msg.patientId,
-                                        consultationId: gid,
-                                        status: '1'
-                                    }
-                                    var msgdata = {
-                                        counsel: $state.params.msg.counsel,
-                                        type: 'card',
-                                        patientId: $state.params.msg.patientId,
-                                        doctorId: $state.params.msg.doctorId,
-                                        targetId: team.teamId,
-                                        fromId: Storage.get('UID'),
-                                        consultationId: gid
-                                    }
-                                    Communication.newConsultation(d)
-                                        .then(function(con) {
-                                            // window.JMessage.sendGroupTextMessageWithExtras(d.consultationId,'[团队咨询]',msgdata,
-                                            //     function(m){
-                                            //         console.log(m);
-                                            //         setTimeout(function(){
-                                            //             $state.go('tab.group-chat', { type: '1', groupId: gid, teamId: team.teamId });
-                                            //         },200);
-                                            //     },function(err){
-                                            //         console.error(err);
-                                            //     });
-                                            window.JMessage.sendGroupCustomMessage(d.consultationId, msgdata,
-                                                function(m) {
-                                                    console.log(m);
-                                                    $state.go('tab.group-chat', { type: '1', groupId: gid, teamId: team.teamId });
-                                                },
-                                                function(err) {
-                                                    console.log(err);
-                                                });
-                                        }, function(err) {
-                                            console.log(err);
-                                        })
-
-                                },
-                                function(err) {
-                                    console.log(err);
-                                })
+                    var time = new Date();
+                    var gid='G'+$filter('date')(time, 'MMddHmssss');
+                    // var gid;
+                    var msgdata = state.params.msg;
+                    var d = {
+                        teamId: team.teamId,
+                        counselId: msgdata.counselId,
+                        sponsorId: msgdata.doctorId,
+                        patientId: msgdata.patientId,
+                        consultationId: gid,
+                        status: '1'
+                    }
+                    msgdata.consultationId=gid;
+                    msgdata.targetId=team.teamId;
+                    msgdata.fromId=thisDoctor.userId;
+                    var msgJson={
+                        contentType:'custom',
+                        fromName:thisDoctor.userId,
+                        fromUser:{
+                            avatarPath:CONFIG.mediaUrl+'uploads/photos/resized'+$scope.params.UID+'_myAvatar.jpg'
                         },
-                        function(err) {
-                            console.log(err);
-                        })
+                        targetID:doc.userId,
+                        teamId:team.teamId,
+                        targetName:'',
+                        targetType:'single',
+                        status:'send_going',
+                        createTimeInMillis: Date.now(),
+                        content:msgdata
+                    }
+                    Communication.newConsultation(d)
+                    .then(function(data){
+                        console.log(data);
+                        socket.emit('newUser',{user_name:thisDoctor.name,user_id:thisDoctor.userId});
+                        socket.emit('message',{msg:msgJson,to:gid});
+                        socket.on('messageRes',function(data){
+                            socket.off('messageRes');
+                            socket.emit('disconnect');
+                            $state.go('tab.group-chat', { type: '1', groupId: gid, teamId: team.teamId });
+                        });
+                    },function(er){
+                        console.error(err);
+                    })
+                    
+
+                    // window.JMessage.getGroupMembers(team.teamId,
+                    //     function(response) {
+                    //         var res = JSON.parse(response);
+                    //         console.log(res);
+                    //         var u = [];
+                    //         for (var i = 1; i < res.length; i++) u.push(res[i].userName);
+                    //         u = u.join(',');
+                    //         // var gn = md5($state.params.msg.counsel.counselId + team.teamId, "kidney").substr(4, 8) $state.params.msg.patientName+'-'+team.name
+                    //         window.JMessage.createGroup($state.params.msg.patientName+'-'+team.name, 'consultatioin_open', u,
+                    //             function(gid) {
+                    //                 console.log(gid);
+                    //                 var d = {
+                    //                     teamId: team.teamId,
+                    //                     counselId: $state.params.msg.counsel.counselId,
+                    //                     sponsorId: $state.params.msg.doctorId,
+                    //                     patientId: $state.params.msg.patientId,
+                    //                     consultationId: gid,
+                    //                     status: '1'
+                    //                 }
+                    //                 var msgdata = {
+                    //                     counsel: $state.params.msg.counsel,
+                    //                     type: 'card',
+                    //                     patientId: $state.params.msg.patientId,
+                    //                     doctorId: $state.params.msg.doctorId,
+                    //                     targetId: team.teamId,
+                    //                     fromId: Storage.get('UID'),
+                    //                     consultationId: gid
+                    //                 }
+                    //                 Communication.newConsultation(d)
+                    //                     .then(function(con) {
+                    //                         // window.JMessage.sendGroupTextMessageWithExtras(d.consultationId,'[团队咨询]',msgdata,
+                    //                         //     function(m){
+                    //                         //         console.log(m);
+                    //                         //         setTimeout(function(){
+                    //                         //             $state.go('tab.group-chat', { type: '1', groupId: gid, teamId: team.teamId });
+                    //                         //         },200);
+                    //                         //     },function(err){
+                    //                         //         console.error(err);
+                    //                         //     });
+                    //                         window.JMessage.sendGroupCustomMessage(d.consultationId, msgdata,
+                    //                             function(m) {
+                    //                                 console.log(m);
+                    //                                 $state.go('tab.group-chat', { type: '1', groupId: gid, teamId: team.teamId });
+                    //                             },
+                    //                             function(err) {
+                    //                                 console.log(err);
+                    //                             });
+                    //                     }, function(err) {
+                    //                         console.log(err);
+                    //                     })
+
+                    //             },
+                    //             function(err) {
+                    //                 console.log(err);
+                    //             })
+                    //     },
+                    //     function(err) {
+                    //         console.log(err);
+                    //     })
                     console.log('You are sure');
                 } else {
                     console.log('You are not sure');
