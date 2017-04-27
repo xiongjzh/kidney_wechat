@@ -331,7 +331,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
                         Storage.set('phoneNumber',Verify.Phone);
                         if (isregisted == true)
                         {
-                          User.setOpenId({phoneNo:Verify.Phone,openid:Storage.get('openid')}).then(function(data){
+                          User.setOpenId({phoneNo:Verify.Phone,openId:Storage.get('openid')}).then(function(data){
                               if(data.msg == "success!")
                               {
                                 $state.go('tab.tasklist');
@@ -490,7 +490,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
                     console.log(data);
                     if (angular.isDefined(Storage.get('openid')) == true)
                     {
-                      User.setOpenId({phoneNo:Verify.Phone,openid:Storage.get('openid')}).then(function(data){
+                      User.setOpenId({phoneNo:Verify.Phone,openId:Storage.get('openid')}).then(function(data){
                           if(data.msg == "success!")
                           {
                             $state.go('tab.home');
