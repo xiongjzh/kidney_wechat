@@ -996,7 +996,7 @@ VitalSign.getVitalSigns({userId:'U201702071766',type:'心率'}).then(
   $scope.gotoHealthDetail=function(ele,editId){
     console.log(ele)
     console.log(ele.target)
-    if(ele.target.nodeName=="I"){
+    if(ele.target.nodeName=="BUTTON"){
       var confirmPopup = $ionicPopup.confirm({
       title: '删除提示',
       template: '记录删除后将无法恢复，确认删除？',
