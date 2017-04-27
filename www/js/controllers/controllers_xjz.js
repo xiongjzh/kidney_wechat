@@ -940,6 +940,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         }else{
             $scope.msgs.push(msg);
         }
+        toBottom(true,100);
         // $scope.$apply(function(){
             // $scope.msgs.push(msg);
 
@@ -1843,6 +1844,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         }else{
             $scope.msgs.push(msg);
         }
+        toBottom(true,100);
         // $scope.$apply(function(){
             // $scope.msgs.push(msg);
 
