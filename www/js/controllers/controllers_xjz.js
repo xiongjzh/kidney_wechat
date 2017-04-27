@@ -609,8 +609,10 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         //     window.JMessage.enterSingleConversation($state.params.chatId, $scope.params.key);
         //     getMsg(15);
         // }
-        $scope.getMsg(15).then(function(data){$scope.msgs=data;});
-        toBottom(true,2000);
+        $scope.getMsg(15).then(function(data){
+            $scope.msgs=data;
+            toBottom(true,100);
+        });
     });
 
     $scope.$on('$ionicView.enter', function() {
@@ -623,12 +625,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             
             socket.emit('newUser',{user_name:response.results.name,user_id:$scope.params.UID});
             socket.on('err',function(data){
-                console.log(data)
-                // $rootScope.$broadcast('receiveMessage',data);
-            });
-            socket.on('onlineCount',function(data){
-                console.info('onlineCount');
-                console.log(data);
+                console.error(data)
                 // $rootScope.$broadcast('receiveMessage',data);
             });
             socket.on('getMsg',function(data){
@@ -677,14 +674,18 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
 
     $scope.$on('keyboardshow', function(event, height) {
         $scope.params.helpDivHeight = height + 60;
-        setTimeout(function() {
-            $scope.scrollHandle.scrollBottom(true);
-        }, 100);
+        toBottom(true,100);
+        // setTimeout(function() {
+        //     $scope.scrollHandle.scrollBottom(true);
+        // }, 100);
     })
     $scope.$on('keyboardhide', function(event) {
         $scope.params.helpDivHeight = 60;
     })
     $scope.$on('$ionicView.beforeLeave', function() {
+        socket.off('messageRes');
+        socket.off('getMsg');
+        socket.off('err');
         socket.emit('disconnect');
         // socket.close();
         if ($scope.popover) $scope.popover.hide();
@@ -1477,6 +1478,12 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         //     else $state.go('tab.group-conclusion',{teamId:params.teamId,groupId:params.groupId,type:params.type});
         // }
     $scope.scrollHandle = $ionicScrollDelegate.$getByHandle('myContentScroll');
+    function toBottom(animate,delay){
+        if(!delay) delay=100;
+        setTimeout(function(){
+            $scope.scrollHandle.scrollBottom(animate);
+        },delay)
+    }
     $scope.$on('$ionicView.beforeEnter', function() {
         console.log()
         $rootScope.patient = {
@@ -1549,7 +1556,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                 // socket = io.connect('ws://121.43.107.106:4050/chat');
                 socket.emit('newUser',{user_name:response.results.name,user_id:$scope.params.UID});
                 socket.on('err',function(data){
-                    console.log(data)
+                    console.error(data)
                     // $rootScope.$broadcast('receiveMessage',data);
                 });
                 socket.on('getMsg',function(data){
@@ -1570,12 +1577,14 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                             $scope.pushMsg(data.msg);
                         })
                     }
-                    // $rootScope.$broadcast('messageResponse',data);
                 });
             },function(err){
                 console.log(err);
             })
-            $scope.getMsg(15).then(function(data){$scope.msgs=data;});
+            $scope.getMsg(15).then(function(data){
+                $scope.msgs=data;
+                toBottom(true,100);
+            });
 
             imgModalInit();
         })
@@ -1589,15 +1598,16 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
     // });
     $scope.$on('keyboardshow', function(event, height) {
         $scope.params.helpDivHeight = height + 60;
-        setTimeout(function() {
-            $scope.scrollHandle.scrollBottom();
-        }, 100);
+        toBottom(true,100);
     })
     $scope.$on('keyboardhide', function(event) {
         $scope.params.helpDivHeight = 60;
         // $ionicScrollDelegate.scrollBottom();
     })
     $scope.$on('$ionicView.beforeLeave', function() {
+        socket.off('messageRes');
+        socket.off('getMsg');
+        socket.off('err');
         socket.emit('disconnect');
         // socket.close();
         if ($scope.popover) $scope.popover.hide();
@@ -1617,11 +1627,6 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
     // $scope.scrollBottom = function() {
     //     $scope.scrollHandle.scrollBottom(true);
     // }
-    function toBottom(animate){
-        setTimeout(function(){
-            $scope.scrollHandle.scrollBottom(animate);
-        },100)
-    }
     $scope.getMsg = function(num) {
         console.log('getMsg:' + num);
         return $q(function(resolve,reject){
