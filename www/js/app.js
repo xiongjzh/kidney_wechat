@@ -62,7 +62,7 @@ angular.module('kidney',[
                         // $scope.logStatus = "登录成功！";
                         $ionicHistory.clearCache();
                         $ionicHistory.clearHistory();
-                        User.getUserIDbyOpenId({}).then(function(data)
+                        User.getUserIDbyOpenId({openId:wechatData.openid}).then(function(data)
                         {
                             if (angular.isDefined(data.phoneNo) = true)
                             {
