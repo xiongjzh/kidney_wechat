@@ -334,7 +334,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
                           User.setOpenId({phoneNo:Verify.Phone,openId:Storage.get('openid')}).then(function(data){
                               if(data.msg == "success!")
                               {
-                                $state.go('tab.tasklist');
+                                $state.go('tab.home');
                               }
                           },function(){
                               $scope.logStatus = "连接超时！";
