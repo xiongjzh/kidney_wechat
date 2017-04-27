@@ -54,32 +54,12 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
                         Storage.set('isSignIn',true);
                         Storage.set('UID',data.results.userId);
 
-                        // Doctor.getDoctorInfo({userId:data.results.userId})
-                        // .then(function(response){
-                        //     socket = io.connect('ws://121.43.107.106:4050/chat');
-                        //     socket.emit('newUser',{user_name:response.results.name,user_id:data.results.userId});
-                        //     socket.on('err',function(data){
-                        //         console.log(data)
-                        //         // $rootScope.$broadcast('receiveMessage',data);
-                        //     });
-                        //     socket.on('onlineCount',function(data){
-                        //         console.info('onlineCount');
-                        //         console.log(data);
-                        //         // $rootScope.$broadcast('receiveMessage',data);
-                        //     });
-                        //     socket.on('getMsg',function(data){
-                        //         console.info('getMsg');
-                        //         console.log(data);
-                        //         $rootScope.$broadcast('receiveMessage',data);
-                        //     });
-                        //     socket.on('messageRes',function(data){
-                        //         console.info('messageRes');
-                        //         console.log(data);
-                        //         $rootScope.$broadcast('messageResponse',data);
-                        //     });
-                        // },function(err){
-                        //     reject(err);
-                        // }) 
+                        Doctor.getDoctorInfo({userId:data.results.userId})
+                        .then(function(response){
+                            thisDoctor = response.results;
+                        },function(err){
+                            thisDoctor=null;
+                        }) 
                         // socket = io.connect('ws://121.43.107.106:4050/chat');
                         // socket.emit('newUser',{user_name:response.results.name,user_id:data.results.userId});
                         // socket.on('err',function(data){

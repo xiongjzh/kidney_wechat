@@ -2144,7 +2144,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         confirmPopup.then(function(res) {
             if (res) {
                 var msgdata = $state.params.msg;
-                msgdata.fromId = Storage.get('UID');
+                msgdata.fromId = thisDoctor.userId;
                 msgdata.targetId = doc.userId;
                 // window.JMessage.sendGroupTextMessageWithExtras(doc.userId,'[咨询转发]',msgdata,'',
                 //     function(m){
@@ -2153,17 +2153,36 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                 //     },function(err){
                 //         console.error(err);
                 //     });
-                JM.sendCustom('single', doc.userId, '', msgdata)
-                    .then(function(data) {
-                        console.log(data)
-                        setTimeout(function() { $state.go('tab.detail', { type: '2', chatId: doc.userId }); }, 200);
-                    }, function(err) {
-                        console.info('转发失败');
-                        console.log(err);
-                    })
-                console.log('You are sure');
+                var msgJson={
+                    contentType:'custom',
+                    fromName:thisDoctor.userId,
+                    fromUser:{
+                        avatarPath:''
+                    },
+                    targetID:doc.userId,
+                    targetName:'',
+                    targetType:'single',
+                    status:'send_going',
+                    createTimeInMillis: Date.now(),
+                    content:msgdata
+                }
+                socket.emit('newUser',{user_name:thisDoctor.name,user_id:thisDoctor.userId});
+                socket.emit('message',{msg:msgJson,to:doc.userId});
+                socket.on('messageRes',function(data){
+                    socket.off('messageRes');
+                    socket.emit('disconnect');
+                    $state.go('tab.detail', { type: '2', chatId: doc.userId });
+                })
+                
+                // JM.sendCustom('single', doc.userId, '', msgdata)
+                //     .then(function(data) {
+                //         console.log(data)
+                //         setTimeout(function() { $state.go('tab.detail', { type: '2', chatId: doc.userId }); }, 200);
+                //     }, function(err) {
+                //         console.info('转发失败');
+                //         console.log(err);
+                //     })
             } else {
-                console.log('You are not sure');
             }
         });
     }
