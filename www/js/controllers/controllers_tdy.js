@@ -1436,7 +1436,7 @@ VitalSign.getVitalSigns({userId:'U201702071766',type:'心率'}).then(
    // 给照片的名字加上时间戳
     var temp_photoaddress = Storage.get("UID") + "_" + new Date().getTime() + "healthinfo.jpg";
     console.log(temp_photoaddress)
-    wechat.download({serverId:serverId, name:temp_name})
+    wechat.download({serverId:serverId, name:temp_photoaddress})
     .then(function(res){
       // var data=angular.fromJson(res)
       //图片路径
