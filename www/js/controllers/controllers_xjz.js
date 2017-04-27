@@ -611,7 +611,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         // }
         $scope.getMsg(15).then(function(data){
             $scope.msgs=data;
-            toBottom(true,100);
+            toBottom(true,250);
         });
     });
 
@@ -642,11 +642,11 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                 console.info('messageRes');
                 console.log(data);
                 if (data.msg.targetType == 'single' && data.msg.targetID == $state.params.chatId) {
-                    setTimeout(function(){
+                    // setTimeout(function(){
                         $scope.$apply(function(){
                             $scope.pushMsg(data.msg);
                         });
-                    },200)
+                    // },200)
                 }
                 // $rootScope.$broadcast('messageResponse',data);
             });
@@ -759,8 +759,9 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                             res[i].diff = (res[i].createTimeInMillis - res[i + 1].createTimeInMillis) > 300000 ? true : false;
                             $scope.msgs.unshift(res[i]);
                         }
+                        res[i].direct = res[i].fromName==$scope.params.UID?'send':'receive';
+                        res[i].diff = true;
                         $scope.msgs.unshift(res[i]);
-                        $scope.msgs[0].diff = true;
                     // });
                 }
                 console.log($scope.msgs);
@@ -1583,7 +1584,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             })
             $scope.getMsg(15).then(function(data){
                 $scope.msgs=data;
-                toBottom(true,100);
+                toBottom(true,250);
             });
 
             imgModalInit();
@@ -1656,8 +1657,10 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                             res[i].diff = (res[i].createTimeInMillis - res[i + 1].createTimeInMillis) > 300000 ? true : false;
                             $scope.msgs.unshift(res[i]);
                         }
+                        res[i].direct = res[i].fromName==$scope.params.UID?'send':'receive';
+                        res[i].diff = true;
                         $scope.msgs.unshift(res[i]);
-                        $scope.msgs[0].diff = true;
+                        // $scope.msgs[0].diff = true;
                     // });
                 }
                 console.log($scope.msgs);
