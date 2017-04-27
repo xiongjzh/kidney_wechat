@@ -16,7 +16,7 @@ angular.module('kidney',[
     'ionic-datepicker'
 ])
 
-.run(['$ionicPlatform', '$state', 'Storage', 'JM','$rootScope','CONFIG','Communication', '$location','wechat','$window','User','$ionicHistory',function($ionicPlatform, $state, Storage, JM,$rootScope,CONFIG,Communication,$location,wechat,$window,User,$ionicHistory) {
+.run(['$ionicPlatform', '$state', 'Storage', 'JM','$ionicHistory','$rootScope','CONFIG','Communication', '$location','wechat','$window','User',function($ionicPlatform, $state, Storage, JM,$ionicHistory,$rootScope,CONFIG,Communication,$location,wechat,$window,User) {
     $ionicPlatform.ready(function() {
         
         //是否登陆
