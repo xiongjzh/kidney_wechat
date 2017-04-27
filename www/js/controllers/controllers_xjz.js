@@ -620,7 +620,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         }
         Doctor.getDoctorInfo({userId:$scope.params.UID})
         .then(function(response){
-            socket = io.connect('ws://121.43.107.106:4050/chat');
+            
             socket.emit('newUser',{user_name:response.results.name,user_id:$scope.params.UID});
             socket.on('err',function(data){
                 console.log(data)
@@ -686,7 +686,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
     })
     $scope.$on('$ionicView.beforeLeave', function() {
         socket.emit('disconnect');
-        socket.close();
+        // socket.close();
         if ($scope.popover) $scope.popover.hide();
     })
     $scope.$on('$ionicView.leave', function() {
@@ -1546,7 +1546,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             // }
             Doctor.getDoctorInfo({userId:$scope.params.UID})
             .then(function(response){
-                socket = io.connect('ws://121.43.107.106:4050/chat');
+                // socket = io.connect('ws://121.43.107.106:4050/chat');
                 socket.emit('newUser',{user_name:response.results.name,user_id:$scope.params.UID});
                 socket.on('err',function(data){
                     console.log(data)
@@ -1599,7 +1599,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
     })
     $scope.$on('$ionicView.beforeLeave', function() {
         socket.emit('disconnect');
-        socket.close();
+        // socket.close();
         if ($scope.popover) $scope.popover.hide();
     })
     $scope.$on('$ionicView.leave', function() {

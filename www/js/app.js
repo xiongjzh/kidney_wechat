@@ -18,6 +18,7 @@ angular.module('kidney',[
 
 .run(['$ionicPlatform', '$state', 'Storage', 'JM','$rootScope','CONFIG','Communication', '$location','wechat','$window','User',function($ionicPlatform, $state, Storage, JM,$rootScope,CONFIG,Communication,$location,wechat,$window,User) {
     $ionicPlatform.ready(function() {
+        socket = io.connect('ws://121.43.107.106:4050/chat');
         
         //是否登陆
         var isSignIN = Storage.get("isSignIN");
