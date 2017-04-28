@@ -2096,7 +2096,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                     contentType:'custom',
                     fromName:thisDoctor.userId,
                     fromUser:{
-                        avatarPath:CONFIG.mediaUrl+'uploads/photos/resized'+$scope.params.UID+'_myAvatar.jpg'
+                        avatarPath:CONFIG.mediaUrl+'uploads/photos/resized'+thisDoctor.userId+'_myAvatar.jpg'
                     },
                     targetID:doc.userId,
                     targetName:'',
@@ -2176,7 +2176,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                         contentType:'custom',
                         fromName:thisDoctor.userId,
                         fromUser:{
-                            avatarPath:CONFIG.mediaUrl+'uploads/photos/resized'+$scope.params.UID+'_myAvatar.jpg'
+                            avatarPath:CONFIG.mediaUrl+'uploads/photos/resized'+thisDoctor.userId+'_myAvatar.jpg'
                         },
                         targetID:doc.userId,
                         teamId:team.teamId,
