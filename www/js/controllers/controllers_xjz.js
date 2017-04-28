@@ -552,7 +552,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             key: '',
             title: '',
             msgCount: 0,
-            helpDivHeight: 60,
+            helpDivHeight: 10,
             moreMsgs: true,
             audio:'http://121.43.107.106:8088/PersonalPhoto/Emotions.mp3',
             UID:Storage.get('UID')
@@ -650,14 +650,14 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
     })
 
     $scope.$on('keyboardshow', function(event, height) {
-        $scope.params.helpDivHeight = height + 60;
+        $scope.params.helpDivHeight = height + 10;
         toBottom(true,100);
         // setTimeout(function() {
         //     $scope.scrollHandle.scrollBottom(true);
         // }, 100);
     })
     $scope.$on('keyboardhide', function(event) {
-        $scope.params.helpDivHeight = 60;
+        $scope.params.helpDivHeight = 10;
     })
     $scope.$on('$ionicView.beforeLeave', function() {
         socket.off('messageRes');
@@ -1370,7 +1370,6 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             $ionicHistory.goBack();
         } else {
             console.log($state.params.teamId)
-            console.log(idStr);
 
             Communication.insertMember({ teamId: $state.params.teamId, members: $scope.group.members })
                 .then(function(data) {
@@ -1407,7 +1406,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         team: {},
         msgCount: 0,
         title: '',
-        helpDivHeight: 60,
+        helpDivHeight: 10,
         hidePanel: true,
         isDiscuss: false,
         isOver: false,
@@ -1539,11 +1538,11 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
     //     }
     // });
     $scope.$on('keyboardshow', function(event, height) {
-        $scope.params.helpDivHeight = height + 60;
+        $scope.params.helpDivHeight = height + 10;
         toBottom(true,100);
     })
     $scope.$on('keyboardhide', function(event) {
-        $scope.params.helpDivHeight = 60;
+        $scope.params.helpDivHeight = 10;
         // $ionicScrollDelegate.scrollBottom();
     })
     $scope.$on('$ionicView.beforeLeave', function() {
