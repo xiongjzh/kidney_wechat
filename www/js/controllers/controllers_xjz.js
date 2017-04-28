@@ -542,7 +542,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
 
 }])
 //"咨询”问题详情
-.controller('detailCtrl', ['$scope', '$state', '$rootScope', '$ionicModal', '$ionicScrollDelegate', '$ionicHistory', '$ionicPopover', '$ionicPopup', 'Camera', 'voice', '$http', 'CONFIG', 'arrTool', 'Communication','Storage', 'wechat','$location','Doctor','$q',function($scope, $state, $rootScope, $ionicModal, $ionicScrollDelegate, $ionicHistory, $ionicPopover, $ionicPopup, Camera, voice, $http, CONFIG, arrTool, Communication,Storage,wechat,$location,Doctor,$q) {
+.controller('detailCtrl', ['$scope', '$state', '$rootScope', '$ionicModal', '$ionicScrollDelegate', '$ionicHistory', '$ionicPopover', '$ionicPopup', 'Camera', 'voice', '$http', 'CONFIG', 'arrTool', 'Communication','Storage', 'wechat','$location','Doctor','$q','Counsels','Account',function($scope, $state, $rootScope, $ionicModal, $ionicScrollDelegate, $ionicHistory, $ionicPopover, $ionicPopup, Camera, voice, $http, CONFIG, arrTool, Communication,Storage,wechat,$location,Doctor,$q,Counsels,Account) {
     $scope.input = {
         text: ''
     }
@@ -554,7 +554,6 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             msgCount: 0,
             helpDivHeight: 10,
             moreMsgs: true,
-            audio:'http://121.43.107.106:8088/PersonalPhoto/Emotions.mp3',
             UID:Storage.get('UID')
         }
         // var audio = new Audio('http://121.43.107.106:8088/PersonalPhoto/Emotions.mp3');
@@ -575,6 +574,16 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         $scope.params.type = $state.params.type;
         $scope.params.msgCount = 0;
         console.log($scope.params)
+        //获取counsel信息
+        Communication.getCounselReport({counselId:$state.params.counselId})
+        .then(function(data){
+            console.log(data)
+            $scope.counseltype=data.results.type;
+            $scope.counselstatus=data.results.status;
+        
+        },function(err){
+            console.log(err);
+        })
         if ($scope.params.type != '2') {
             $scope.params.key = CONFIG.crossKey;
         }
@@ -619,11 +628,20 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                 console.info('messageRes');
                 console.log(data);
                 if (data.msg.targetType == 'single' && data.msg.targetID == $state.params.chatId) {
-                    // setTimeout(function(){
                         $scope.$apply(function(){
                             $scope.pushMsg(data.msg);
                         });
-                    // },200)
+                }
+                if($scope.counseltype==1){
+                    Account.modifyCounts({doctorId:Storage.get('UID'),patientId:$scope.params.chatId,modify:'-1'})
+                    .then(function(){
+                        Account.getCounts({doctorId:Storage.get('UID'),patientId:$scope.params.chatId})
+                        .then(function(data){
+                            if(data.result<=0){
+                                endCounsel();
+                            }
+                        })
+                    })
                 }
                 // $rootScope.$broadcast('messageResponse',data);
             });
@@ -675,36 +693,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         $rootScope.conversation.type = null;
         $rootScope.conversation.id = '';
     })
-    //receiving new massage
-    // $scope.$on('receiveMessage', function(event, msg) {
-    //     // console.log(msg);
-    //     if (msg.targetType == 'single' && msg.fromName == $state.params.chatId) {
 
-    //         pushMsg(msg);
-    //         // viewUpdate(5);
-    //     }
-    // });
-    // $scope.$on('iii111', function(event, msg) {
-    //     console.log(msg);
-    //     // if (msg.targetType == 'single' && msg.fromName == $state.params.chatId) {
-
-    //         // pushMsg(msg);
-    //         // viewUpdate(5);
-    //     // }
-    // });
-    // $scope.$on('messageRes',function(event,msg){
-    //     if (msg.targetType == 'single' && msg.fromName == $state.params.chatId) {
-
-    //         updateMsg(msg);
-    //         // viewUpdate(5);
-    //     }
-    // });
-        // function msgsRender(first,last){
-        //     while(first!=last){
-        //         $scope.msgs[first+1].diff=($scope.msgs[first+1].createTimeInMillis-$scope.msgs[first].createTimeInMillis)>300000?true:false;
-        //         first++;
-        //     }
-        // }
     $scope.getMsg = function(num) {
         console.info('getMsg');
         return $q(function(resolve,reject){
@@ -749,7 +738,6 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         })
         
     }
-
 
     $scope.DisplayMore = function() {
         $scope.getMsg(15).then(function(data){
@@ -871,6 +859,33 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         console.log(args)
         event.stopPropagation();
     })
+    function endCounsel(){
+        Counsel.changeStatus({doctorId:Storage.get('UID'),patientId:$scope.params.chatId,type:2,status:0})
+        .then(function(data){
+
+            var endlMsg={
+                type:'endl',
+                info:"问诊已结束",
+                docId:thisDoctor.userId,
+                counseltype:2
+
+            }
+            var msgJson={
+                contentType:'custom',
+                fromName:thisDoctor.userId,
+                fromUser:{
+                    avatarPath:CONFIG.mediaUrl+'uploads/photos/resized'+thisDoctor.userId+'_myAvatar.jpg'
+                },
+                targetID:$scope.params.chatId,
+                targetName:'',
+                targetType:'single',
+                status:'send_going',
+                createTimeInMillis: Date.now(),
+                content:endlMsg
+            }
+            socket.emit('message',{msg:msgJson,to:$scope.params.chatId});
+        })
+    }
     $scope.finishConsult = function() {
         var confirmPopup = $ionicPopup.confirm({
             title: '确定要结束此次咨询吗?',
@@ -880,9 +895,8 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         });
         confirmPopup.then(function(res) {
             if (res) {
-                console.log('You are sure');
+                endCounsel();
             } else {
-                console.log('You are not sure');
             }
         });
     }
