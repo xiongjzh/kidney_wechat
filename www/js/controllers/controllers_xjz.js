@@ -93,7 +93,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
 
     function upload(){
         var time = new Date();
-        $scope.team.teamId='G'+$filter('date')(time, 'MMddHmssss');
+        $scope.team.teamId='G'+$filter('date')(time, 'MMddHmsss');
         $scope.team.sponsorId=Storage.get('UID');
         Doctor.getDoctorInfo({userId:$scope.team.sponsorId})
         .then(function(data){
@@ -2158,9 +2158,9 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             confirmPopup.then(function(res) {
                 if (res) {
                     var time = new Date();
-                    var gid='G'+$filter('date')(time, 'MMddHmssss');
+                    var gid='G'+$filter('date')(time, 'MMddHmsss');
                     // var gid;
-                    var msgdata = state.params.msg;
+                    var msgdata = $state.params.msg;
                     var d = {
                         teamId: team.teamId,
                         counselId: msgdata.counselId,
@@ -2178,10 +2178,10 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                         fromUser:{
                             avatarPath:CONFIG.mediaUrl+'uploads/photos/resized'+thisDoctor.userId+'_myAvatar.jpg'
                         },
-                        targetID:doc.userId,
+                        targetID:gid,
                         teamId:team.teamId,
                         targetName:'',
-                        targetType:'single',
+                        targetType:'group',
                         status:'send_going',
                         createTimeInMillis: Date.now(),
                         content:msgdata
