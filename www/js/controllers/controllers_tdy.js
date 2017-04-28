@@ -109,10 +109,10 @@ angular.module('tdy.controllers', ['ionic','kidney.services','ionic-datepicker']
   }
 }])
 .controller('TestRecordCtrl', ['$scope', '$http','Storage','VitalSign', function ($scope,$http, Storage,VitalSign) {
-  
+  var patientId = Storage.get('getpatientId')
 
 
-      VitalSign.getVitalSigns({userId:'U201702071766',type:'血压'}).then(
+      VitalSign.getVitalSigns({userId:patientId,type:'血压'}).then(
       function(Data){
         $scope.ChartData=[];
         console.log(Data.results[0])
@@ -187,7 +187,7 @@ angular.module('tdy.controllers', ['ionic','kidney.services','ionic-datepicker']
       }, function(e) {  
       });
 
-      VitalSign.getVitalSigns({userId:'U201702071766',type:'血压'}).then(
+      VitalSign.getVitalSigns({userId:patientId,type:'血压'}).then(
       function(Data){
         $scope.ChartData=[];
         console.log(Data.results[0])
@@ -262,7 +262,7 @@ angular.module('tdy.controllers', ['ionic','kidney.services','ionic-datepicker']
       }, function(e) {  
       });
 
-      VitalSign.getVitalSigns({userId:'U201702071766',type:'体温'}).then(
+      VitalSign.getVitalSigns({userId:patientId,type:'体温'}).then(
       function(Data){
         $scope.ChartData=[];
         console.log(Data.results[0])
@@ -336,7 +336,7 @@ angular.module('tdy.controllers', ['ionic','kidney.services','ionic-datepicker']
 
       }, function(e) {  
       });
-VitalSign.getVitalSigns({userId:'U201702071766',type:'体重'}).then(
+VitalSign.getVitalSigns({userId:patientId,type:'体重'}).then(
       function(Data){
         $scope.ChartData=[];
         console.log(Data.results[0])
@@ -410,7 +410,7 @@ VitalSign.getVitalSigns({userId:'U201702071766',type:'体重'}).then(
 
       }, function(e) {  
       });
-VitalSign.getVitalSigns({userId:'U201702071766',type:'尿量'}).then(
+VitalSign.getVitalSigns({userId:patientId,type:'尿量'}).then(
       function(Data){
         $scope.ChartData=[];
         console.log(Data.results[0])
@@ -484,7 +484,7 @@ VitalSign.getVitalSigns({userId:'U201702071766',type:'尿量'}).then(
 
       }, function(e) {  
       });
-VitalSign.getVitalSigns({userId:'U201702071766',type:'心率'}).then(
+VitalSign.getVitalSigns({userId:patientId,type:'心率'}).then(
       function(Data){
         $scope.ChartData=[];
         console.log(Data.results[0])
@@ -1564,7 +1564,7 @@ VitalSign.getVitalSigns({userId:'U201702071766',type:'心率'}).then(
             messages[value.inputCode]={name:value.name,code:value.code,values:[]};
         })
         // console.log(messages)
-        Message.getMessages({userId:'U201704120001',type:""})//Storage.get('UID')
+        Message.getMessages({userId:Storage.get('UID'),type:""})//Storage.get('UID')
         .then(function(data)
         {
             // console.log(data)
