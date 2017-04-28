@@ -863,7 +863,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
     $scope.toolChoose = function(data) {
         // console.log(data);
 
-        var content = $scope.msgs[arrTool.indexOf($scope.msgs, 'createTimeInMillis', $scope.holdId)].content.contentStringMap;
+        var content = $scope.msgs[arrTool.indexOf($scope.msgs, 'createTimeInMillis', $scope.holdId)].content;
         if (data == 0) $state.go('tab.selectDoc', { msg: content });
         if (data == 1) $state.go('tab.selectTeam', { msg: content });
     }

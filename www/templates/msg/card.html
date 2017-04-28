@@ -1,6 +1,6 @@
 <div class="msgbox msgbox-card">
     <div ng-if="msg.diff" class="msg-time"><span>{{msg.createTimeInMillis | msgdate}}</span></div>
-    <div class="media-card" on-hold="emitEvent('holdmsg',msg._id,$event)" ng-click="emitEvent('viewcard',counsel.consultId,$event)">
+    <div class="media-card" on-hold="emitEvent('holdmsg',msg.createTimeInMillis,$event)" ng-click="emitEvent('viewcard',counsel.consultId,$event)">
         <div class="title">患者使用在线咨询服务</div>
         <hr/>
         <div class="info">
