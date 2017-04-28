@@ -556,18 +556,12 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
 //首页
 .controller('homeCtrl', ['Communication','$scope','$state','$interval','$rootScope', 'Storage','$http','$sce',function(Communication,$scope, $state,$interval,$rootScope,Storage,$http,$sce) {
     $scope.barwidth="width:0%";
+    
+    console.log(Storage.get('USERNAME'))
+
+    $scope.navigation_login=$sce.trustAsResourceUrl("http://121.43.107.106/member.php?mod=logging&action=login&loginsubmit=yes&loginhash=$loginhash&mobile=2&username="+Storage.get('USERNAME')+"&password="+Storage.get('USERNAME'));
     $scope.navigation=$sce.trustAsResourceUrl("http://121.43.107.106/");
 
-    ionic.DomUtil.ready(function(){
-        $http({
-            method  : 'POST',
-            url     : 'http://121.43.107.106/member.php?mod=logging&action=login&loginsubmit=yes&loginhash=$loginhash&mobile=2',
-            params    : {'username':Storage.get('phoneNumber'),'password':Storage.get('phoneNumber')},  // pass in data as strings
-            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }  // set the headers so angular passing info as form data (not request payload)
-            }).success(function(data) {
-                //console.log(data);
-        });
-    })
     $scope.options = {
         loop: false,
         effect: 'fade',
@@ -756,14 +750,13 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
         updateTime:0
     }
 
-    function load(force){
-        var time= Date.now();
-        if(!force && time-$scope.params.updateTime<21600000) return;
-        $scope.params.updateTime=time;
+    var load = function()
+    {
         Doctor.getPatientList({
             userId:Storage.get('UID')
         })
         .then(
+
             function(data)
             {
                 
@@ -812,6 +805,11 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
         );
     }
 
+    $scope.doRefresh = function(){
+        load();
+        // Stop the ion-refresher from spinning
+        $scope.$broadcast('scroll.refreshComplete');
+    }    
     // $scope.$on('$ionicView.beforeEnter', function() {
     //     $scope.params.isPatients = '1';
     // })
@@ -896,17 +894,35 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
     $scope.goback=function(){
         $ionicHistory.goBack();
     }
-
-    console.log(Storage.get('getpatientId'))
+    $scope.gototestrecord=function(){
+        $state.go('tab.TestRecord',{PatinetId:Storage.get('getpatientId')});
+    }
+    // console.log(Storage.get('getpatientId'))
     Patient.getPatientDetail({
          userId:Storage.get('getpatientId')
     })
     .then(
         function(data)
         {
-            console.log(data)
+            // console.log(data)
+            Storage.set("latestDiagnose","");
             if(data.results.diagnosisInfo.length>0)
+            {
                 Storage.set("latestDiagnose",angular.toJson(data.results.diagnosisInfo[data.results.diagnosisInfo.length-1]));
+                // console.log(data.results.diagnosisInfo[data.results.diagnosisInfo.length-1])
+            }
+            else if(data.results.diagnosisInfo.length==0)
+            {
+                var lD={
+                    content:"",
+                    hypertension:data.results.hypertension,
+                    name:data.results.class,
+                    operationTime:data.results.operationTime,
+                    progress:data.results.class_info?data.results.class_info[0]:"",
+                    time:""
+                }
+                Storage.set("latestDiagnose",angular.toJson(lD));
+            }
             $scope.patient=data.results;
             $scope.diagnosisInfo = data.results.diagnosisInfo;           
         },
@@ -917,14 +933,14 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
     );
 
     Insurance.getInsMsg({
-         doctorId:Storage.get('UID'),
-         patientId:Storage.get('getpatientId')
+        doctorId:Storage.get('UID'),
+        patientId:Storage.get('getpatientId')
     })
     .then(
         function(data)
         {
-            //console.log(data)
-            $scope.Ins=data.results;       
+            // console.log(data.results)
+            $scope.Ins=data.results||{count:0};                   
         },
         function(err)
         {

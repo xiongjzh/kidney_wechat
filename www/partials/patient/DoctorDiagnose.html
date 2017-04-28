@@ -1,18 +1,35 @@
 <ion-view title="医生诊断">
-  <ion-nav-bar class="bar-dark nav-title-slide-ios7" style="" >
+<!--   <ion-nav-bar class="bar-dark nav-title-slide-ios7" style="" >
     <ion-nav-back-button class="button-icon ion-arrow-left-c">
     </ion-nav-back-button>
-    
-  </ion-nav-bar>
+  </ion-nav-bar> -->
+  <ion-nav-buttons side="primary">
+      <button class="button button-clear icon ion-compose" ng-click="canEdit()"></button>
+    </ion-nav-buttons>
   <div  style="position: absolute;top: 43px;z-index:100;display: block;height: 2.5px;background-color: #33cd5f;{{barwidth}}" ></div>
   <ion-content padding="true" style="">
-    
-    <div  class="list">
+    <div  class="list" ng-show="!edit">
+        <ion-item>
+          肾病类型:{{Diagnose.diagname|diagname}}
+        </ion-item>
+        <ion-item ng-if="Diagnose.diagname == 1||Diagnose.diagname == 5||Diagnose.diagname == 6">
+          {{showDateTitle(Diagnose.diagname)}}:{{Diagnose.diagoperationTime|dateFormat:"YYYY-MM-DD"}}
+        </ion-item>
+        <ion-item ng-if="Diagnose.diagname == 2||Diagnose.diagname == 3">
+          疾病进程:{{Diagnose.diagprogress}}
+        </ion-item>
+        <ion-item>
+          是否高血压:{{Diagnose.diaghypertension|hypertension}}
+        </ion-item>
+        <ion-item>
+          诊断:{{Diagnose.diagcontent}}
+        </ion-item>
+    </div>
+    <div  class="list" ng-show="edit">
       <label  class="item item-input item-select">
         <div class="input-label"><i class="icon ion-asterisk" style="color:red;font-size:6px">
           </i>肾病类型</div>
         <select ng-model="Diagnose.diagname">
-          <option  value=''>请选择</option>
           <option ng-repeat="x in Diseases" value="{{x.Type}}">{{x.Name}}</option> 
         </select>
       </label>
@@ -24,7 +41,7 @@
       </label> -->
 
       <button class="button button-block button-positive button-outline" ng-click="openDatePicker(1)" ng-if="Diagnose.diagname == 1||Diagnose.diagname == 5||Diagnose.diagname == 6">
-        {{showDateTitle(Diagnose.diagname)}}:{{Diagnose.operationTime|dateFormat:"YYYY-MM-DD"}}
+        {{showDateTitle(Diagnose.diagname)}}:{{Diagnose.diagoperationTime|dateFormat:"YYYY-MM-DD"}}
       </button>
       <!-- cdk1-2 -->
       <label  class="item item-input item-select" ng-if="Diagnose.diagname == 2">
@@ -50,7 +67,7 @@
       <label  class="item item-input item-select">
         <div class="input-label"><i class="icon ion-asterisk" style="color:red;font-size:6px">
           </i>是否高血压</div>
-        <select ng-model="Diagnose.hypertension">
+        <select ng-model="Diagnose.diaghypertension">
           <option ng-repeat="x in Hypers" value="{{x.Type}}">{{x.Name}}</option> 
         </select>
       </label>
@@ -60,15 +77,10 @@
         <input  ng-model="Diagnose.diagcontent"  type="text">
       </label>
 
-    </div>
-      <button style="margin-top:0" class="button button-block button-balanced" ng-click ="saveDiagnose()">
+      <button class="button button-block button-balanced" ng-click ="saveDiagnose()">
             提交
       </button>
-      <button style="margin-top:0" class="button button-block button-balanced" class="button button-clear" ng-click="reset()">重置
-      </button>
-    
-
-
+    </div>
            
   </ion-content>
           

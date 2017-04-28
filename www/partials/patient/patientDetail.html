@@ -8,18 +8,22 @@
 
 		</ion-nav-back-button> -->
     </ion-nav-bar>
-    <div class="button-bar bar-positive" style="margin-top: 40px;">
+    <div class="button-bar bar-positive" style="margin-top: 40px">
 		<a class="button" href="#/tab/DoctorDiagnose">
-			<span style="vertical-align: sub">医生诊断</span>
+			<span style="vertical-align: sub;font-size:12px">医生诊断</span>
+			<!-- <div style="font-size:12px">医生诊断</div> -->
 		</a>
 		<a class="button" href="#/tab/TaskSet">
-			<span style="vertical-align: sub">管理方案</span>
+			<span style="vertical-align: sub;font-size:12px">管理方案</span>
+			<!-- <div style="font-size:12px">管理方案</div> -->
 		</a>
-		<a class="button" href="#/tab/TestRecord">
-			<span style="vertical-align: sub">测量记录</span>
+		<a class="button" ng-click="gototestrecord()" >
+			<span style="vertical-align: sub;font-size:12px">测量记录</span>
+			<!-- <div style="font-size:12px">测量记录</div> -->
 		</a>
 		<a class="button" href="#/tab/HealthInfo">
-			<span style="vertical-align: sub">健康信息</span>
+		    <span style="vertical-align: sub;font-size:12px">健康信息</span>
+			<!-- <div style="font-size:12px">健康信息</div> -->
 		</a>
 	</div>
     <ion-content class="has-header" style="margin-top: 44px;">
@@ -27,16 +31,16 @@
             <ion-item class="item item-avatar">
 				<img ng-src={{patient.photoUrl|imgUrl:'patient'}}>
 				
-				<div class="row">
-					<div class="col-90">
+				<!-- <div class="row">
+					<div class="col-90"> -->
 						<span>{{patient.name}}</span><span>&nbsp;&nbsp;&nbsp;{{patient.gender | filterGender}}</span>&nbsp;&nbsp;&nbsp;<span>{{patient.birthday | filterAge}}岁</span>
 						<p>身份证号：{{patient.IDNo}}</p>
 						<p>地区：{{patient.address.province}} {{patient.address.city}}</p>
 						<p>是否VIP：{{patient.VIP | filterVIP}}</p>
 						<p>是否有高血压：{{patient.hypertension | filterhypertension}}</p>
 						<p>保险推送次数：{{Ins.count}}</p>
-					</div>
-					<div class="col-10">
+					<!-- </div>
+					<div class="col-10"> -->
 						<button class="button button-small button-positive" ng-click="SendInsMsg()">推送保险</button>
 					</div>
 				</div>
@@ -55,4 +59,5 @@
         </div>
     </ion-content>
 </ion-view>
+
 

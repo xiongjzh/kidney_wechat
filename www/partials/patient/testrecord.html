@@ -11,18 +11,30 @@
   <!-- <select ng-model="vitalInfo" ng-change="changeVitalInfo(vitalInfo)" ng-controller="TestRecordCtrl">  
       <option ng-repeat="option in options" >{{option.SignName}}</option>  
   </select>   -->
-  <p> 舒张压 ：mmg </p>
-  <div id="chartdiv" style="width: 100%; height: 400px; background-color: #FFFFFF;" ></div>
-  <p> 收缩压 ：mmg </p>
-  <div id="chartdiv1" style="width: 100%; height: 400px; background-color: #FFFFFF;" ></div>
-  <p> 体温 ：℃ </p>
-  <div id="chartdiv2" style="width: 100%; height: 400px; background-color: #FFFFFF;" ></div>
-  <p> 体重 ：kg </p>
-  <div id="chartdiv3" style="width: 100%; height: 400px; background-color: #FFFFFF;" ></div>
-  <p> 尿量 ：ml </p>
-  <div id="chartdiv4" style="width: 100%; height: 400px; background-color: #FFFFFF;" ></div>
-  <p> 心率 ：次/分钟 </p>
-  <div id="chartdiv5" style="width: 100%; height: 400px; background-color: #FFFFFF;" ></div>         
+  <div ng-show="chartdiv">
+    <p> 舒张压 ：mmg </p>
+    <div id="chartdiv" style="width: 100%; height: 400px; background-color: #FFFFFF;" ></div>
+  </div>
+  <div ng-show="chartdi1">
+    <p> 收缩压 ：mmg </p>
+    <div id="chartdiv1" style="width: 100%; height: 400px; background-color: #FFFFFF;" ></div>
+  </div>
+  <div ng-show="chartdiv2">
+    <p> 体温 ：℃ </p>
+    <div id="chartdiv2" style="width: 100%; height: 400px; background-color: #FFFFFF;" ></div>
+  </div>
+  <div ng-show="chartdiv3">
+    <p> 体重 ：kg </p>
+    <div id="chartdiv3" style="width: 100%; height: 400px; background-color: #FFFFFF;" ></div>
+  </div>
+  <div ng-show="chartdiv4">
+    <p> 尿量 ：ml </p>
+    <div id="chartdiv4" style="width: 100%; height: 400px; background-color: #FFFFFF;" ></div>
+  </div>
+  <div ng-show="chartdiv5">
+    <p> 心率 ：次/分钟 </p>
+    <div id="chartdiv5" style="width: 100%; height: 400px; background-color: #FFFFFF;" ></div>         
+  </div>
   </ion-content>
           
 </ion-view>
