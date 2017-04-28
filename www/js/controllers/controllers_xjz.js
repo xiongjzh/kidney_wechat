@@ -1816,7 +1816,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                 avatarPath:CONFIG.mediaUrl+'uploads/photos/resized'+$scope.params.UID+'_myAvatar.jpg'
             },
             targetID:$scope.params.groupId,
-            teamID:$scope.params.teamId,
+            teamId:$scope.params.teamId,
             targetName:'',
             targetType:'group',
             status:'send_going',
