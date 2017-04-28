@@ -24,6 +24,48 @@ angular.module('kidney.filters', [])
         return g;
     }
 }])
+.filter('diagname',[function(){
+    return function(type){
+        var name;
+        switch(type)
+        {
+          case '2':
+            name="CKD1-2期";
+            break;
+          case '3':
+            name="CKD3-4期";
+            break;
+          case '4':
+            name="CDK5期未透析";
+            break;
+          case '5':
+            name="腹透";
+            break;
+          case '6':
+            name="血透";
+            break;
+          case '1':
+            name="肾移植";
+            break;
+        }
+        return name;
+    }
+}])
+.filter('hypertension',[function(){
+    return function(type){
+        var name="--";
+        switch(type)
+        {
+          case '1':
+            name="是";
+            break;
+          case '2':
+            name="否";
+            break;
+        }
+        return name;
+    }
+}])
 .filter('filterAge',[function(){
     return function(date){
         var d=new Date(date)
