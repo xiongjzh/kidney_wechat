@@ -591,6 +591,15 @@ angular.module('kidney',[
             }
         }
     })
+    .state('tab.doctor-search', {
+        url: '/doctorsearch',
+        views: {
+            'tab-groups': {
+                templateUrl: 'partials/group/doctor-search.html',
+                controller: 'DoctorSearchCtrl'
+            }
+        }
+    })
     .state('tab.group-add', {
             url: '/groups/add/:teamId',
             views: {

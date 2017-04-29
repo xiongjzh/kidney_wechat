@@ -1,9 +1,9 @@
 <ion-view show-tabs title="交流">
     <ion-nav-buttons side="right">
-        <a class="button button-icon icon ion-android-search" ng-hide="params.showSearch" ng-click="search()"></a>
+        <!-- <a class="button button-icon icon ion-android-search" ng-hide="params.showSearch" ng-click="search()"></a> -->
         <a class="button button-icon icon ion-android-add" ng-click="popover.show($event)"></a>
     </ion-nav-buttons>
-    <div ng-show="params.showSearch" class="bar item-input-inset bar-light ng-hide" style="position:absolute;top:44px;z-index:999">
+    <!-- <div ng-show="params.showSearch" class="bar item-input-inset bar-light ng-hide" style="position:absolute;top:44px;z-index:999">
         <div class="item-input-wrapper">
             <i style="color:#3d6399;font-size:1.6em" class="icon ion-android-search placeholder-icon"></i>
             <input type="search" ng-blur="doResume()" ng-model="query.name" ng-change="startSearch(query)" placeholder="搜索团队或医生">
@@ -12,7 +12,7 @@
         <button class="button button-clear button-positive" ng-click="closeSearch()">
             确认
         </button>
-    </div>
+    </div> -->
     <div class="bar bar-subheader item-input-inset bar-light text-center" style="padding:0;">
         <a ng-class="{'high-light':params.isTeam}" class="item col-50 " style="height:50px" ng-click="showTeams()">团队</a>
         <a ng-class="{'high-light':!params.isTeam}" class="item col-50 " style="border-right: 0px;height:50px" ng-click="showDocs()">医生</a>
