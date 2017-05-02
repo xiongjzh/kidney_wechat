@@ -1084,7 +1084,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
 
 
 //"我”个人资料页
-.controller('myinfoCtrl', ['Doctor','$scope','Storage', 'wechat','$location','$ionicPopup','$ionicPopover',function(Doctor,$scope, Storage,wechat,$location,$ionicPopup,$ionicPopover) {
+.controller('myinfoCtrl', ['Doctor','$scope','Storage', 'wechat','$location','$ionicPopup','$ionicPopover','$ionicloading',function(Doctor,$scope, Storage,wechat,$location,$ionicPopup,$ionicPopover,$ionicloading) {
     $scope.hideTabs = true;
     //$scope.userid=Storage.get('userid');
     //$scope.doctor=meFactory.GetDoctorInfo($scope.userid);
@@ -1291,6 +1291,9 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
  
  // 上传照片并将照片读入页面-------------------------
   var photo_upload_display = function(serverId){
+    $ionicLoading.show({
+        template:'头像更新中'
+    })
    // 给照片的名字加上时间戳
     var temp_photoaddress = Storage.get("UID") + "_" +  "myAvatar.jpg";
     console.log(temp_photoaddress)
@@ -1300,6 +1303,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
       //res.path_resized
       //图片路径
       $scope.doctor.photoUrl="http://121.43.107.106:8052/uploads/photos/"+temp_name+'?'+new Date().getTime();
+      $ionicLoading.hide();
       console.log($scope.doctor.photoUrl)
       // $state.reload("tab.mine")
       Doctor.editDoctorDetail({userId:Storage.get("UID"),photoUrl:$scope.doctor.photoUrl}).then(function(r){
