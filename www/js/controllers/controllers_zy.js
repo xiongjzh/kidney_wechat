@@ -509,7 +509,27 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
                       User.setOpenId({phoneNo:phoneNumber,openId:Storage.get('openid')}).then(function(data){
                           if(data.msg == "success!")
                           {
-                            Storage.set('USERNAME',phoneNumber)
+                            Storage.set('USERNAME',phoneNumber);
+                            //注册论坛
+
+                            $http({
+                                method  : 'POST',
+                                url     : 'http://121.43.107.106/member.php?mod=register&mobile=2&handlekey=registerform&inajax=1',
+                                params    :{
+                                    'regsubmit':'yes',
+                                    'formhash':'',
+                                    'username':phoneNumber,
+                                    'password':phoneNumber,
+                                    'password2':phoneNumber,
+                                    'email':phoneNumber+'@qq.com'
+                                },  // pass in data as strings
+                                headers : {
+                                    'Content-Type': 'application/x-www-form-urlencoded',
+                                    'Accept':'application/xml, text/xml, */*'
+                                }  // set the headers so angular passing info as form data (not request payload)
+                            }).success(function(data) {
+                                // console.log(data);
+                            });
                             $state.go('tab.home');
                           }
                       },function(){
