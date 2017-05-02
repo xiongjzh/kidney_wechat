@@ -7,9 +7,9 @@
                 {{item.Name}}  
                 <p>{{item.content}}</p>              
                 <i class="icon ion-android-alarm-clock" style="font-size:16px">
-                    <select ng-model="item.frequencyTimes" ng-options="item1 for item1 in Times" ></select>
-                    <select ng-model="item.frequencyUnits" ng-options="item1 for item1 in Units" ></select>
-                    <select ng-model="item.times" ng-options="item1 for item1 in Times" ></select>
+                    <select ng-model="item.frequencyTimes" ng-options="item1 for item1 in Times" ng-change = "ChangeFreq(item)"></select>
+                    <select ng-model="item.frequencyUnits" ng-options="item1 for item1 in Units" ng-change = "ChangeFreq(item)"></select>
+                    <select ng-model="item.times" ng-options="item1 for item1 in Times" ng-change = "ChangeFreq(item)"></select>
                     次                     
                 </i>
             </a>   
@@ -18,9 +18,9 @@
                 {{item.Name}}
                 <p>{{item.content}}</p>               
                 <i class="icon ion-android-alarm-clock" style="font-size:16px">                  
-                    <select ng-model="item.frequencyTimes" ng-options="item1 for item1 in Times" ></select>
-                    <select ng-model="item.frequencyUnits" ng-options="item1 for item1 in Units" ></select>
-                    <select ng-model="item.times" ng-options="item1 for item1 in Times" ></select>
+                    <select ng-model="item.frequencyTimes" ng-options="item1 for item1 in Times" ng-change = "ChangeFreq(item)"></select>
+                    <select ng-model="item.frequencyUnits" ng-options="item1 for item1 in Units" ng-change = "ChangeFreq(item)"></select>
+                    <select ng-model="item.times" ng-options="item1 for item1 in Times" ng-change = "ChangeFreq(item)"></select>
                     次                                 
                 </i>               
             </a>   
