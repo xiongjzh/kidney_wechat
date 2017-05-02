@@ -142,6 +142,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
 
 .controller('GroupsSearchCtrl', ['$scope', '$state','Communication', function($scope, $state,Communication) {
     $scope.search='';
+    $scope.noteam=0;
   $scope.Searchgroup=function(){
     console.log($scope.search)
      Communication.getTeam({teamId:$scope.search})
@@ -158,6 +159,68 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         $scope.search='';
      }    
 
+}])
+//医生查找
+.controller('DoctorSearchCtrl', ['$scope', '$state', '$ionicHistory', 'arrTool', 'Communication', '$ionicLoading', '$rootScope', 'Patient', 'JM', 'CONFIG', function($scope, $state, $ionicHistory, arrTool, Communication, $ionicLoading, $rootScope, Patient, JM, CONFIG) {
+
+    //get groupId via $state.params.groupId
+    $scope.moredata = true;
+    $scope.issearching = true;
+    $scope.isnotsearching = false;
+    $scope.group = {
+        members: []
+    }
+    $scope.doctors = [];
+    $scope.alldoctors = [];
+    $scope.skipnum = 0;
+    $scope.loadMore = function() {
+        // $scope.$apply(function() {
+        Patient.getDoctorLists({ skip: $scope.skipnum, limit: 10 })
+            .then(function(data) {
+                console.log(data.results)
+                $scope.$broadcast('scroll.infiniteScrollComplete');
+
+                $scope.alldoctors = $scope.alldoctors.concat(data.results);
+                $scope.doctors = $scope.alldoctors;
+                $scope.nexturl = data.nexturl;
+                var skiploc = data.nexturl.indexOf('skip');
+                $scope.skipnum = data.nexturl.substring(skiploc + 5);
+                if (data.results.length == 0) { $scope.moredata = false } else { $scope.moredata = true };
+            }, function(err) {
+                console.log(err);
+            })
+            // });
+    }
+    $scope.goSearch = function() {
+        $scope.isnotsearching = true;
+        $scope.issearching = false;
+        $scope.moredata = false;
+        Patient.getDoctorLists({ skip: 0, limit: 10, name: $scope.search.name })
+            .then(function(data) {
+                console.log(data.results)
+                $scope.doctors = data.results;
+                if (data.results.length == 0) {
+                    console.log("aaa")
+                    $ionicLoading.show({ template: '查无此人', duration: 1000 })
+                }
+            }, function(err) {
+                console.log(err);
+            })
+    }
+    $scope.closeSearch = function() {
+        $scope.issearching = true;
+        $scope.isnotsearching = false;
+        $scope.moredata = true;
+        $scope.doctors = $scope.alldoctors;
+        $scope.search.name = '';
+    }
+    $scope.clearSearch = function() {
+        $scope.search.name = '';
+    }
+    $scope.doctorClick = function(doc) {
+        console.log(doc)
+        $state.go('tab.detail', { type: '2', chatId:doc });
+    }
 }])
 //我的团队
 .controller('groupsCtrl', ['$scope', '$http', '$state', '$ionicPopover', 'Doctor', 'Storage', 'Patient','arrTool','$q','wechat','$location', function($scope, $http, $state, $ionicPopover, Doctor, Storage, Patient,arrTool,$q,wechat,$location) {
@@ -349,6 +412,9 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
     }, {
         name: '新建团队',
         href: '#/tab/newgroup'
+    }, {
+        name: '搜索医生',
+        href: '#/tab/doctorsearch'        
     }];
     $ionicPopover.fromTemplateUrl('partials/group/pop-menu.html', {
         scope: $scope,
@@ -357,23 +423,23 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         $scope.popover = popover;
     });
 
-    $scope.team1 = [{
-        photoUrl: "img/avatar.png",
-        teamId: "22825679",
-        name: "肾病管理团队",
-        workUnit: "浙江XXX医院",
-        sponsorName: '陈有维',
-        major: "肾上腺分泌失调",
-        number: 31
-    }, {
-        photoUrl: "img/avatar.png",
-        teamId: "22825863",
-        name: "肾病小组测试",
-        sponsorName: '陈有维',
-        workUnit: "浙江XXX医院",
-        major: "慢性肾炎、肾小管疾病",
-        number: 12
-    }];
+    // $scope.team1 = [{
+    //     photoUrl: "img/avatar.png",
+    //     teamId: "22825679",
+    //     name: "肾病管理团队",
+    //     workUnit: "浙江XXX医院",
+    //     sponsorName: '陈有维',
+    //     major: "肾上腺分泌失调",
+    //     number: 31
+    // }, {
+    //     photoUrl: "img/avatar.png",
+    //     teamId: "22825863",
+    //     name: "肾病小组测试",
+    //     sponsorName: '陈有维',
+    //     workUnit: "浙江XXX医院",
+    //     major: "慢性肾炎、肾小管疾病",
+    //     number: 12
+    // }];
 
     $scope.itemClick = function(ele, team) {
         if (ele.target.id == 'discuss') $state.go("tab.group-patient", { teamId: team.teamId });

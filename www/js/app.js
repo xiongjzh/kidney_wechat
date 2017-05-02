@@ -50,8 +50,16 @@ angular.module('kidney',[
                 logPromise.then(function(data){
                     console.log(data);
                     if(data.results==1){
-                        Storage.set('validMode',0)
-                        $state.go('phonevalid',{phonevalidType:"wechat"})
+                        if(data.msg == "No authority!")
+                        {
+                            alert("您没有权限登陆肾病守护者联盟，如您是患者，请登录肾事管家");
+                            $state.go('signin')
+                        }
+                        else
+                        {
+                            Storage.set('validMode',0)
+                            $state.go('phonevalid',{phonevalidType:"wechat"})
+                        }
                     }
                     else if(data.results.mesg=="login success!"){
 
@@ -101,10 +109,10 @@ angular.module('kidney',[
         }
 
         //是否登陆
-        var isSignIN = Storage.get("isSignIN");
-        if (isSignIN == 'YES') {
-            $state.go('tab.home');
-        }
+        // var isSignIN = Storage.get("isSignIN");
+        // if (isSignIN == 'YES') {
+        //     $state.go('tab.home');
+        // }
         
         //用户ID
         var userid = '';
@@ -580,6 +588,15 @@ angular.module('kidney',[
             'tab-groups': {
                 templateUrl: 'partials/group/groups-search.html',
                 controller: 'GroupsSearchCtrl'
+            }
+        }
+    })
+    .state('tab.doctor-search', {
+        url: '/doctorsearch',
+        views: {
+            'tab-groups': {
+                templateUrl: 'partials/group/doctor-search.html',
+                controller: 'DoctorSearchCtrl'
             }
         }
     })

@@ -19,7 +19,7 @@
             <!-- <a class="button button-icon icon ion-android-more-vertical" ng-click="openpopover($event)"></a> -->
         </div>
         <ion-content style="padding-top:44px" class="has-subheader gray-back" >
-        <div class="list">
+        <div class="list" ng-hide" ng-hide="noteam">
             <a ng-repeat="team in teamresult" class="item item-avatar" href="#tab/groups/add/{{team.teamId}}">
                 <img ng-src="img/avatar.png">
                 <h2>{{team.name}}</h2><p>{{team.teamId}}</p>
