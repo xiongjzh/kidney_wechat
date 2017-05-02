@@ -635,8 +635,8 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
 
 //"咨询”进行中
 .controller('doingCtrl', ['$scope','$state','$interval','$rootScope', 'Storage','$ionicPopover','Counsel','$ionicHistory',  function($scope, $state,$interval,$rootScope,Storage,$ionicPopover,Counsel,$ionicHistory) {
-    $scope.patients=angular.fromJson(Storage.get("consulting"));
-    console.log($scope.patients)
+    // $scope.patients=angular.fromJson(Storage.get("consulting"));
+    // console.log($scope.patients)
     $ionicPopover.fromTemplateUrl('partials/others/sort_popover_consult.html', {
     scope: $scope
     }).then(function(popover) {
@@ -652,7 +652,12 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
         });
         $state.go('tab.consult');
     }
-    
+    $scope.$on('$ionicView.beforeEnter',function(){
+        Counsel.getCounsels({userId:Storage.get('UID'), status:1 })
+        .then(function(data){
+            $scope.patients=data.results
+        })
+    })
     $scope.query={
         name:''
     }
@@ -661,7 +666,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
         $scope.query.name='';
     }
 
-    $scope.itemClick = function(ele, userId) {
+    $scope.itemClick = function(ele, userId,counselId) {
         if (ele.target.id == 'doingdetail'){
             console.log(userId)
             Storage.set('getpatientId',userId);
@@ -670,15 +675,15 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
         {
             // Storage.set('getpatientId',userId);
             //[type]:0=已结束;1=进行中;2=医生
-            $state.go('tab.detail',{type:'1',chatId:userId});
+            $state.go('tab.detail',{type:'1',chatId:userId,counselId:counselId});
         }
     }
     //$scope.isChecked1=true;
 }])
 
 //"咨询”已完成
-.controller('didCtrl', ['$scope','$state','$interval','$rootScope', 'Storage','$ionicPopover','$ionicHistory',  function($scope, $state,$interval,$rootScope,Storage,$ionicPopover,$ionicHistory) {
-    $scope.patients=angular.fromJson(Storage.get("consulted"));
+.controller('didCtrl', ['$scope','$state','$interval','$rootScope', 'Storage','$ionicPopover','$ionicHistory','Counsel',  function($scope, $state,$interval,$rootScope,Storage,$ionicPopover,$ionicHistory,Counsel) {
+    // $scope.patients=angular.fromJson(Storage.get("consulted"));
   
     $ionicPopover.fromTemplateUrl('partials/others/sort_popover_consult.html', {
         scope: $scope
@@ -695,7 +700,12 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
         });
         $state.go('tab.consult');
     }
-
+    $scope.$on('$ionicView.beforeEnter',function(){
+        Counsel.getCounsels({userId:Storage.get('UID'), status:0 })
+        .then(function(data){
+            $scope.patients=data.results
+        })
+    })
     $scope.query={
         name:''
     }
@@ -704,7 +714,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
         $scope.query.name='';
     }
 
-    $scope.itemClick = function(ele, userId) {
+    $scope.itemClick = function(ele, userId,counselId) {
         if (ele.target.id == 'diddetail'){
             console.log(userId)
             Storage.set('getpatientId',userId);
@@ -713,7 +723,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
         {
             // Storage.set('getpatientId',userId);
             //[type]:0=已结束;1=进行中;2=医生
-            $state.go('tab.detail',{type:'0',chatId:userId});
+            $state.go('tab.detail',{type:'0',chatId:userId,counselId:counselId});
         }
     }
     //$scope.isChecked1=true;

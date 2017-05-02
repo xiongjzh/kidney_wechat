@@ -15,14 +15,14 @@
       <div class="item item-avatar" style="padding-bottom:10px">
           <img ng-src="img/avatar.png">
           <div>
-              <div style="display:inline-block;margin-right:1.2em;font-size:1.25em">{{patient.name}} </div>
-              <div style="display:inline-block">{{patient.gender}} {{patient.age}}</div>
-              <div style="display:inline-block;float:right">4/9/17 12:17</div>
+              <div style="display:inline-block;margin-right:1.2em;font-size:1.25em">{{patient.patientId.name}} </div>
+              <div style="display:inline-block">{{patient.patientId.gender}} {{patient.patientId.age}}</div>
+              <div style="display:inline-block;float:right">{{patient.time}}</div>
           </div>
           <!-- <h2>范德萨user006</h2><span> fahdjksfh</span> -->
-          <p style="width:60%;display:inline-block;"><i class="icon ion-android-car"></i>{{patient.discription}}</p>
-          <a ng-if="patient.undergo" class="item" style="float:right;background-color:#00E676;border-radius:0.4em;padding:2px;color:#FFF" ng-click="goConclusion()">回复患者</a>
-           <div ng-if="!patient.undergo" style="float:right;background-color:#888;border-radius:0.4em;padding:2px;color:#FFF">已回复</div>
+          <p style="width:60%;display:inline-block;"><i class="icon ion-android-car"></i>{{patient.diseaseInfo.discription}}</p>
+          <a ng-if="!params.isOver" class="item" style="float:right;background-color:#00E676;border-radius:0.4em;padding:2px;color:#FFF" ng-click="goConclusion()">回复患者</a>
+           <div ng-if="params.isOver" style="float:right;background-color:#888;border-radius:0.4em;padding:2px;color:#FFF">已回复</div>
       </div>
       <div ng-if="params.type=='2'" class="item item-body">
 

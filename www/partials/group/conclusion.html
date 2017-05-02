@@ -9,20 +9,20 @@
             <div class="item item-avatar" style="padding-bottom:10px">
                 <img ng-src="img/avatar.png">
                 <div>
-                    <div style="display:inline-block;margin-right:1.2em;font-size:1.25em">{{patient.name}} </div>
-                    <div style="display:inline-block">{{patient.gender}} {{patient.age}}</div>
-                    <div style="display:inline-block;float:right">4/9/17 12:17</div>
+                    <div style="display:inline-block;margin-right:1.2em;font-size:1.25em">{{patient.patientId.name}} </div>
+                    <div style="display:inline-block">{{patient.patientId.gender}} {{patient.patientId.birthday}}</div>
+                    <div style="display:inline-block;float:right">{{patient.time}}</div>
                 </div>
-                <!-- <h2>范德萨user006</h2><span> fahdjksfh</span> -->
-                <p style="width:60%;display:inline-block;"><i class="icon ion-android-car"></i>{{patient.discription}}</p>
+                <p style="width:60%;display:inline-block;"><i class="icon ion-android-car"></i>{{patient.diseaseInfo.symptom}}</p>
             </div>
             <div class="item item-body">
-                <div style="display:inline-block;color:#00897b;width:65%">肾功能障碍 肾内科</div>
-                <div style="display:inline-block;float:right;text-align:right;width:30%"><i style="color:#00E676" class="icon ion-android-pin"></i> 杭州</div>
+                <div style="display:inline-block;color:#00897b;width:65%">{{patient.patientId.class}} {{patient.patientId.hypertension}}</div>
+                <div style="display:inline-block;color:#00897b;width:30%">{{patient.patientId.operationTime}} {{patient.patientId.allergic}}</div>
+                <!-- <div style="display:inline-block;float:right;text-align:right;width:30%"><i style="color:#00E676" class="icon ion-android-pin"></i> 杭州</div> -->
                 <div>
-                    赵老师，您好！这是我妈妈的检查结果，您看还有没有什么好办法可以降肌酐？现在口服药有，早上拜新同两片，中午47.5mg的倍他乐克一片，晚上盐酸特拉唑嗪片一粒！早中晚各吃开同4粒，白令胶囊2片，尿毒清颗粒两袋！这是我妈妈的检查结果，您看还有没有什么好办法可以降肌酐？现在口服药有，早上拜新同两片，中午47.5mg的倍他乐克一片，晚上盐酸特拉唑嗪片一粒！早中晚各吃开同4粒，白令胶囊2片，尿毒清颗粒两袋！赵老师，您好！这是我妈妈的检查结果，您看还有没有什么好办法可以降肌酐？现在口服药有，早上拜新同两片，中午47.5mg的倍他乐克一片，晚上盐酸特拉唑嗪片一粒！早中晚各吃开同4粒，白令胶囊2片，尿毒清颗粒两袋！这是我妈妈的检查结果，您看还有没有什么好办法可以降肌酐？现在口服药有，早上拜新同两片，中午47.5mg的倍他乐克一片，晚上盐酸特拉唑嗪片一粒！早中晚各吃开同4粒，白令胶囊2片，尿毒清颗粒两袋！赵老师，您好！这是我妈妈的检查结果，您看还有没有什么好办法可以降肌酐？现在口服药有，早上拜新同两片，中午47.5mg的倍他乐克一片，晚上盐酸特拉唑嗪片一粒！早中晚各吃开同4粒，白令胶囊2片，尿毒清颗粒两袋！这是我妈妈的检查结果，您看还有没有什么好办法可以降肌酐？现在口服药有，早上拜新同两片，中午47.5mg的倍他乐克一片，晚上盐酸特拉唑嗪片一粒！早中晚各吃开同4粒，白令胶囊2片，尿毒清颗粒两袋！
+                    {{patient.diseaseInfo.help}}
                 </div>
-                <img style="height:3.5em;width:3.5em;margin:0.4em 0.8em 0 0" ng-repeat="pic in content.pics" ng-src="{{pic}}" ng-click="viewPic(this.pic)" />
+                <!--  <img style="height:3.5em;width:3.5em;margin:0.4em 0.8em 0 0" ng-repeat="pic in content.pics" ng-src="{{pic}}" ng-click="viewPic(this.pic)" /> -->
             </div>
         </div>
         <form>
