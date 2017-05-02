@@ -509,6 +509,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
                       User.setOpenId({phoneNo:phoneNumber,openId:Storage.get('openid')}).then(function(data){
                           if(data.msg == "success!")
                           {
+                            Storage.set('USERNAME',phoneNumber)
                             $state.go('tab.home');
                           }
                       },function(){
