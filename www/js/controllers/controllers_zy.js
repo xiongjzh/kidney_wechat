@@ -637,41 +637,55 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
     $scope.riqi=date1;
 
     //获取在等待
-    Counsel.getCounsels({
-        userId:Storage.get('UID'),
-        status:0
+    var load = function()
+    {
+        Counsel.getCounsels({
+            userId:Storage.get('UID'),
+            status:0
+        })
+        .then(
+            function(data)
+            {
+                console.log(data)
+                Storage.set("consulted",angular.toJson(data.results))
+                // console.log(angular.fromJson(Storage.get("consulted",data.results)))
+                $scope.doctor.b=data.results.length;
+            },
+            function(err)
+            {
+                console.log(err)
+            }
+        )
+        //获取进行中
+        Counsel.getCounsels({
+            userId:Storage.get('UID'),
+            status:1
+        })
+        .then(
+            function(data)
+            {
+                console.log(data)
+                Storage.set("consulting",angular.toJson(data.results))
+                // console.log(angular.fromJson(Storage.get("consulting",data.results)))
+                $scope.doctor.a=data.results.length;
+            },
+            function(err)
+            {
+                console.log(err)
+            }
+        )        
+    }
+    $scope.doRefresh = function(){
+        load();
+        // Stop the ion-refresher from spinning
+        $scope.$broadcast('scroll.refreshComplete');
+    }    
+    // $scope.$on('$ionicView.beforeEnter', function() {
+    //     $scope.params.isPatients = '1';
+    // })
+    $scope.$on('$ionicView.enter', function() {
+        load();
     })
-    .then(
-        function(data)
-        {
-            console.log(data)
-            Storage.set("consulted",angular.toJson(data.results))
-            // console.log(angular.fromJson(Storage.get("consulted",data.results)))
-            $scope.doctor.b=data.results.length;
-        },
-        function(err)
-        {
-            console.log(err)
-        }
-    )
-    //获取进行中
-    Counsel.getCounsels({
-        userId:Storage.get('UID'),
-        status:1
-    })
-    .then(
-        function(data)
-        {
-            console.log(data)
-            Storage.set("consulting",angular.toJson(data.results))
-            // console.log(angular.fromJson(Storage.get("consulting",data.results)))
-            $scope.doctor.a=data.results.length;
-        },
-        function(err)
-        {
-            console.log(err)
-        }
-    )
 }])
 
 //"咨询”进行中
