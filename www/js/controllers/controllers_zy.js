@@ -489,6 +489,27 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
                       User.setOpenId({phoneNo:phoneNumber,openId:Storage.get('openid')}).then(function(data){
                           if(data.msg == "success!")
                           {
+                            Storage.set('USERNAME',phoneNumber);
+                            //注册论坛
+
+                            $http({
+                                method  : 'POST',
+                                url     : 'http://121.43.107.106/member.php?mod=register&mobile=2&handlekey=registerform&inajax=1',
+                                params    :{
+                                    'regsubmit':'yes',
+                                    'formhash':'',
+                                    'username':phoneNumber,
+                                    'password':phoneNumber,
+                                    'password2':phoneNumber,
+                                    'email':phoneNumber+'@qq.com'
+                                },  // pass in data as strings
+                                headers : {
+                                    'Content-Type': 'application/x-www-form-urlencoded',
+                                    'Accept':'application/xml, text/xml, */*'
+                                }  // set the headers so angular passing info as form data (not request payload)
+                            }).success(function(data) {
+                                // console.log(data);
+                            });
                             $state.go('tab.home');
                           }
                       },function(){
@@ -511,10 +532,10 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
                 params    :{
                     'regsubmit':'yes',
                     'formhash':'',
-                    'D2T9s9':phoneNumber,
-                    'O9Wi2H':phoneNumber,
-                    'hWhtcM':phoneNumber,
-                    'qSMA7S':phoneNumber+'@qq.com'
+                    'username':phoneNumber,
+                    'password':phoneNumber,
+                    'password2':phoneNumber,
+                    'email':phoneNumber+'@qq.com'
                 },  // pass in data as strings
                 headers : {
                     'Content-Type': 'application/x-www-form-urlencoded',
@@ -596,41 +617,55 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
     $scope.riqi=date1;
 
     //获取在等待
-    Counsel.getCounsels({
-        userId:Storage.get('UID'),
-        status:0
+    var load = function()
+    {
+        Counsel.getCounsels({
+            userId:Storage.get('UID'),
+            status:0
+        })
+        .then(
+            function(data)
+            {
+                console.log(data)
+                Storage.set("consulted",angular.toJson(data.results))
+                // console.log(angular.fromJson(Storage.get("consulted",data.results)))
+                $scope.doctor.b=data.results.length;
+            },
+            function(err)
+            {
+                console.log(err)
+            }
+        )
+        //获取进行中
+        Counsel.getCounsels({
+            userId:Storage.get('UID'),
+            status:1
+        })
+        .then(
+            function(data)
+            {
+                console.log(data)
+                Storage.set("consulting",angular.toJson(data.results))
+                // console.log(angular.fromJson(Storage.get("consulting",data.results)))
+                $scope.doctor.a=data.results.length;
+            },
+            function(err)
+            {
+                console.log(err)
+            }
+        )        
+    }
+    $scope.doRefresh = function(){
+        load();
+        // Stop the ion-refresher from spinning
+        $scope.$broadcast('scroll.refreshComplete');
+    }    
+    // $scope.$on('$ionicView.beforeEnter', function() {
+    //     $scope.params.isPatients = '1';
+    // })
+    $scope.$on('$ionicView.enter', function() {
+        load();
     })
-    .then(
-        function(data)
-        {
-            console.log(data)
-            Storage.set("consulted",angular.toJson(data.results))
-            // console.log(angular.fromJson(Storage.get("consulted",data.results)))
-            $scope.doctor.b=data.results.length;
-        },
-        function(err)
-        {
-            console.log(err)
-        }
-    )
-    //获取进行中
-    Counsel.getCounsels({
-        userId:Storage.get('UID'),
-        status:1
-    })
-    .then(
-        function(data)
-        {
-            console.log(data)
-            Storage.set("consulting",angular.toJson(data.results))
-            // console.log(angular.fromJson(Storage.get("consulting",data.results)))
-            $scope.doctor.a=data.results.length;
-        },
-        function(err)
-        {
-            console.log(err)
-        }
-    )
 }])
 
 //"咨询”进行中

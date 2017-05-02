@@ -737,7 +737,9 @@ angular.module('kidney.services', ['ionic','ngResource'])
     var Task2 = function(){
         return $resource(CONFIG.baseUrl + ':path/:route',{path:'tasks'},{
             changeTaskstatus:{method:'GET', params:{route: 'status'}, timeout: 100000},
-            changeTasktime:{method:'GET', params:{route: 'time'}, timeout: 100000}
+            changeTasktime:{method:'GET', params:{route: 'time'}, timeout: 100000},
+            getUserTask:{method:'GET', params:{route: 'getUserTask'}, timeout: 100000},
+            updateUserTask:{method:'POST', params:{route: 'updateUserTask'}, timeout: 100000}
         });
     };
 
@@ -1052,6 +1054,33 @@ angular.module('kidney.services', ['ionic','ngResource'])
         });
         return deferred.promise;
     };
+
+    self.getUserTask = function(params){
+        var deferred = $q.defer();
+        Data.Task2.getUserTask(
+            params,
+            function(data, headers){
+                deferred.resolve(data);
+            },
+            function(err){
+                deferred.reject(err);
+        });
+        return deferred.promise;
+    };
+
+    self.updateUserTask = function(params){
+        var deferred = $q.defer();
+        Data.Task2.updateUserTask(
+            params,
+            function(data, headers){
+                deferred.resolve(data);
+            },
+            function(err){
+                deferred.reject(err);
+        });
+        return deferred.promise;
+    };
+    
     return self;
 }])
 .factory('Compliance', ['$q', 'Data', function($q, Data){
