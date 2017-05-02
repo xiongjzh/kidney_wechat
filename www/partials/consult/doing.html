@@ -21,7 +21,7 @@
         <span>等待患者：</span><span>{{patients.length}}</span>
         </div>
         <div class="list">
-            <a class="item item-thumbnail-left" ng-repeat="p in patients | filter:query.name" ng-click="itemClick($event,p.patientId.userId)">
+            <a class="item item-thumbnail-left" ng-repeat="p in patients | filter:query.name" ng-click="itemClick($event,p.patientId.userId,p.counselId)">
                 <img ng-src="{{p.patientId.photoUrl|imgUrl:'doctor'}}" id="doingdetail">
                 <span>{{p.patientId.name}}</span>
                 <span style="margin-left:5px;">{{p.patientId.gender|filterGender}}</span>

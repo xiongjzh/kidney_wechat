@@ -54,32 +54,12 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
                         Storage.set('isSignIn',true);
                         Storage.set('UID',data.results.userId);
 
-                        // Doctor.getDoctorInfo({userId:data.results.userId})
-                        // .then(function(response){
-                        //     socket = io.connect('ws://121.43.107.106:4050/chat');
-                        //     socket.emit('newUser',{user_name:response.results.name,user_id:data.results.userId});
-                        //     socket.on('err',function(data){
-                        //         console.log(data)
-                        //         // $rootScope.$broadcast('receiveMessage',data);
-                        //     });
-                        //     socket.on('onlineCount',function(data){
-                        //         console.info('onlineCount');
-                        //         console.log(data);
-                        //         // $rootScope.$broadcast('receiveMessage',data);
-                        //     });
-                        //     socket.on('getMsg',function(data){
-                        //         console.info('getMsg');
-                        //         console.log(data);
-                        //         $rootScope.$broadcast('receiveMessage',data);
-                        //     });
-                        //     socket.on('messageRes',function(data){
-                        //         console.info('messageRes');
-                        //         console.log(data);
-                        //         $rootScope.$broadcast('messageResponse',data);
-                        //     });
-                        // },function(err){
-                        //     reject(err);
-                        // }) 
+                        Doctor.getDoctorInfo({userId:data.results.userId})
+                        .then(function(response){
+                            thisDoctor = response.results;
+                        },function(err){
+                            thisDoctor=null;
+                        }) 
                         // socket = io.connect('ws://121.43.107.106:4050/chat');
                         // socket.emit('newUser',{user_name:response.results.name,user_id:data.results.userId});
                         // socket.on('err',function(data){
@@ -690,8 +670,8 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
 
 //"咨询”进行中
 .controller('doingCtrl', ['$scope','$state','$interval','$rootScope', 'Storage','$ionicPopover','Counsel','$ionicHistory',  function($scope, $state,$interval,$rootScope,Storage,$ionicPopover,Counsel,$ionicHistory) {
-    $scope.patients=angular.fromJson(Storage.get("consulting"));
-    console.log($scope.patients)
+    // $scope.patients=angular.fromJson(Storage.get("consulting"));
+    // console.log($scope.patients)
     $ionicPopover.fromTemplateUrl('partials/others/sort_popover_consult.html', {
     scope: $scope
     }).then(function(popover) {
@@ -707,7 +687,12 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
         });
         $state.go('tab.consult');
     }
-    
+    $scope.$on('$ionicView.beforeEnter',function(){
+        Counsel.getCounsels({userId:Storage.get('UID'), status:1 })
+        .then(function(data){
+            $scope.patients=data.results
+        })
+    })
     $scope.query={
         name:''
     }
@@ -716,7 +701,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
         $scope.query.name='';
     }
 
-    $scope.itemClick = function(ele, userId) {
+    $scope.itemClick = function(ele, userId,counselId) {
         if (ele.target.id == 'doingdetail'){
             console.log(userId)
             Storage.set('getpatientId',userId);
@@ -725,15 +710,15 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
         {
             // Storage.set('getpatientId',userId);
             //[type]:0=已结束;1=进行中;2=医生
-            $state.go('tab.detail',{type:'1',chatId:userId});
+            $state.go('tab.detail',{type:'1',chatId:userId,counselId:counselId});
         }
     }
     //$scope.isChecked1=true;
 }])
 
 //"咨询”已完成
-.controller('didCtrl', ['$scope','$state','$interval','$rootScope', 'Storage','$ionicPopover','$ionicHistory',  function($scope, $state,$interval,$rootScope,Storage,$ionicPopover,$ionicHistory) {
-    $scope.patients=angular.fromJson(Storage.get("consulted"));
+.controller('didCtrl', ['$scope','$state','$interval','$rootScope', 'Storage','$ionicPopover','$ionicHistory','Counsel',  function($scope, $state,$interval,$rootScope,Storage,$ionicPopover,$ionicHistory,Counsel) {
+    // $scope.patients=angular.fromJson(Storage.get("consulted"));
   
     $ionicPopover.fromTemplateUrl('partials/others/sort_popover_consult.html', {
         scope: $scope
@@ -750,7 +735,12 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
         });
         $state.go('tab.consult');
     }
-
+    $scope.$on('$ionicView.beforeEnter',function(){
+        Counsel.getCounsels({userId:Storage.get('UID'), status:0 })
+        .then(function(data){
+            $scope.patients=data.results
+        })
+    })
     $scope.query={
         name:''
     }
@@ -759,7 +749,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
         $scope.query.name='';
     }
 
-    $scope.itemClick = function(ele, userId) {
+    $scope.itemClick = function(ele, userId,counselId) {
         if (ele.target.id == 'diddetail'){
             console.log(userId)
             Storage.set('getpatientId',userId);
@@ -768,7 +758,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
         {
             // Storage.set('getpatientId',userId);
             //[type]:0=已结束;1=进行中;2=医生
-            $state.go('tab.detail',{type:'0',chatId:userId});
+            $state.go('tab.detail',{type:'0',chatId:userId,counselId:counselId});
         }
     }
     //$scope.isChecked1=true;
