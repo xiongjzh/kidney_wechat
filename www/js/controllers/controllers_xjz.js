@@ -906,7 +906,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             console.log(args[2].target.attributes.hires.nodeValue);
             $scope.modal.show();
         } else {
-            Storage.set('getpatientId',args[1]); 
+            Storage.set('getpatientId',args[1].content.patientId);
             $state.go('tab.patientDetail');
             // $state.go('tab.consult-detail',{consultId:args[1]});
         }
