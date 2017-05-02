@@ -16,103 +16,123 @@
 		<div ng-show="myDiv">
         <ion-item>
             <span class="msg">姓名</span>
-			<p class="myinfo-msg-right">{{doctor.name}}</p>
-   
+			<p class="myinfo-msg-right">{{doctor.name}}</p>   
         </ion-item>
         <ion-item>
-            <span class="msg">我的头像</span>
-			<p class="myinfo-img-right"><img style="width:40px;height:40px;" ng-src="{{doctor.photoUrl || 'img/doctor.png'}}"   name="Photo"></p>
+            <span class="msg">头像</span>
+			<p class="myinfo-img-right"><img style="width:40px;height:40px;" ng-src="{{doctor.photoUrl || 'img/doctor.png'}}"></p>
         </ion-item>
-         <!-- 上传照片的弹出框 -->
-	    <script id="my-popover.html" type="text/ng-template">
-	        <ion-popover-view>
-	            <ion-header-bar class="bar-calm">
-	                <h1 class="title">上传头像</h1>
-	            </ion-header-bar>
-	        <ion-content>
-	          <ion-list> 
-	            <div class = "padding">
-	              <button class="button button-block button-primary " ng-click="getPhoto()"><i class="icon ion-camera"></i>
-	                  拍照
-	              </button>
-	            
-	              <button class="button button-block button-primary " ng-click="onClickCameraPhotos()"><i class="icon ion-image"></i>
-	                  相册
-	              </button>
-	             
-	            </div>
-	          </ion-list>
-	        </ion-content>
-	      </ion-popover-view>
-	    </script>
-	    <!-- 上传照片的弹出框 -->
         <ion-item>
-            <span class="msg">我的职称</span>
+            <span class="msg">职称</span>
 			<p class="myinfo-msg-right">{{doctor.title}}</p>
-
         </ion-item>
         <ion-item>
-            <span class="msg">我的医院</span>
+            <span class="msg">省份</span>
+			<p class="myinfo-msg-right">{{doctor.province}}</p>	            
+	        </select>
+        </ion-item>
+        <ion-item>
+            <span class="msg">城市</span>
+			<p class="myinfo-msg-right">{{doctor.city}}</p>
+        </ion-item>        
+        <ion-item>
+            <span class="msg">医院</span>
 			<p class="myinfo-msg-right">{{doctor.workUnit}}</p>
-
         </ion-item>
 		<ion-item>
-            <span class="msg">我的科室</span>
+            <span class="msg">科室</span>
 			<p class="myinfo-msg-right">{{doctor.department}}</p>
-
         </ion-item>
 		<ion-item>
-            <span class="msg">我的擅长</span>
+            <span class="msg">擅长</span>
 			<p class="myinfo-msg-right">{{doctor.major}}</p>
-
         </ion-item>
          <ion-item>
-            <span class="msg">我的简介</span>
+            <span class="msg">简介</span>
 			<p class="myinfo-msg-right">{{doctor.description}}</p>
-
         </ion-item>
 		</div>
 		
 		<div ng-show="updateDiv">
-			<ion-item>
-				<span class="msg">姓名</span>
-				<i class="icon  ion-edit"></i>
-				<p class="myinfo-msg-right"><input type=text ng-model="doctor.name"></p>
+			<ion-item class="item item-input">
+				<span class="input-label">姓名</span>
+				<input type=text ng-model="doctor.name" style="width:100%;text-align: right;">
 			</ion-item>
-			<ion-item>
-				<span class="msg">我的头像</span>
-				<i class="icon  ion-edit"></i>
-				<p class="myinfo-img-right"><img style="width:40px;height:40px;" ng-src="{{doctor.photoUrl || 'img/doctor.png'}}"" name="Photo" ng-click="onClickCamera($event)" ></p>
+
+			<ion-item class="item item-input">
+				<span class="input-label">头像</span>
+				<p class="myinfo-img-right"><img style="width:40px;height:40px;" ng-src="{{doctor.photoUrl || 'img/doctor.png'}}" name="Photo" ng-click="onClickCamera($event)"></p>
 			</ion-item>
-			<ion-item>
-				<span class="msg">我的职称</span>
-				<i class="icon  ion-edit"></i>
-				<p class="myinfo-msg-right"><input type=text ng-model="doctor.title"></p>
+
+		    <!-- 上传照片的弹出框 -->
+		    <script id="my-popover.html" type="text/ng-template">
+			    <ion-popover-view>
+			        <ion-header-bar class="bar-calm">
+			          	<h1 class="title">上传图片</h1>
+			        </ion-header-bar>
+			        <ion-content>
+			          	<ion-list> 
+			            	<div class = "padding">
+			              		<button class="button button-block button-primary " ng-click="getPhoto()"><i class="icon ion-camera"></i>
+			                  拍照
+			              		</button>
+			            
+			              		<button class="button button-block button-primary " ng-click="onClickCameraPhotos()"><i class="icon ion-image"></i>
+			                  相册
+			              		</button>
+			             
+			            	</div>
+			          	</ion-list>
+			        </ion-content>
+			    </ion-popover-view>
+		    </script>
+		    <!-- 上传照片的弹出框 -->
+
+			<ion-item class="item item-input">
+				<span class="input-label">职称</span>
+				<!-- <i class="icon  ion-edit"></i> -->
+				<input type=text ng-model="doctor.title" style="width:100%;text-align: right;">
 			</ion-item>
-			<ion-item>
-				<span class="msg">我的医院</span>
-				<i class="icon  ion-edit"></i>
-				<p class="myinfo-msg-right"><input type=text ng-model="doctor.workUnit"></p>
+
+            <ion-item  class="item item-input item-select">
+                <span class="input-label">省份</span>
+                <select class="myinfo-msg-right" ng-model="ProvinceObject" ng-options="Province.name for Province in Provinces track by Province.province" style="width:100%" ng-change="getCity(ProvinceObject.province)">
+                <!-- <option selected value={{doctor.province}}></option>  -->
+                </select>
+            </ion-item>
+
+			<ion-item  class="item item-input item-select">
+				<span class="input-label">城市</span>
+                <select class="myinfo-msg-right" ng-model="CityObject" ng-options="City.name for City in Cities track by City.city" style="width:100%" ng-change="getHospital(CityObject.name)">
+                </select>
 			</ion-item>
-			<ion-item>
-				<span class="msg">我的科室</span>
-				<i class="icon  ion-edit"></i>
-				<p class="myinfo-msg-right"><input type=text ng-model="doctor.department"></p>
+			<ion-item  class="item item-input item-select">
+				<span class="input-label">医院</span>
+                <select class="myinfo-msg-right" ng-model="HosObject" ng-options="Hospital.hospitalName for Hospital in Hospitals track by Hospital._id" style="width:100%" ng-change="trans(HosObject)">
+                </select>
 			</ion-item>
-			<ion-item>
-				<span class="msg">我的擅长</span>
-				<i class="icon  ion-edit"></i>
-				<p class="myinfo-msg-right"><input type=text ng-model="doctor.major"></p>
+			<ion-item class="item item-input">
+				<span class="input-label">科室</span>
+				<input type=text ng-model="doctor.department" style="width:100%;text-align: right;">
 			</ion-item>
- 			<ion-item>
-				<span class="msg">我的简介</span>
-				<i class="icon  ion-edit"></i>
-				<p class="myinfo-msg-right"><input type=text ng-model="doctor.description"></p>
+			<ion-item class="item item-input">
+				<span class="input-label">擅长</span>
+				<input type=text ng-model="doctor.major" style="width:100%;text-align: right;">
+			</ion-item>
+ 			<ion-item class="item item-input">
+				<span class="input-label">简介</span>
+				<input type=text ng-model="doctor.description" style="width:100%;text-align: right;">
 			</ion-item>
 			
 			<ion-item>
-			<button class="btn btn-success" ng-click="editinfo()"><span class="glyphicon glyphicon-save"></span>修改</button>
+			<button class="btn btn-success" ng-click="editinfo()"><span class="glyphicon glyphicon-save"></span>保存</button>
 			</ion-item>
+
+
+
+
+
+
         </div>
     </ion-content>
 	

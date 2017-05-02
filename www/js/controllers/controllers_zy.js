@@ -1091,14 +1091,32 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
     $scope.updateDiv=false;
     $scope.myDiv=true;
 
+    $scope.ProvinceObject={};
+    $scope.CityObject={};
+    $scope.HosObject={};
+
     Doctor.getDoctorInfo({
         userId:Storage.get('UID')
     })
     .then(
         function(data)
         {
-          // console.log(data)
+            // console.log(data)
             $scope.doctor=data.results;
+            // if(data.results.photoUrl==undefined||data.results.photoUrl==""){
+            //   $scope.doctor.photoUrl="img/doctor.png"
+            // }else{
+            //   $scope.doctor.photoUrl=data.results.photoUrl;
+            // }
+            // if ($scope.doctor.province != null){
+            //     $scope.doctor.province = searchObj($scope.doctor.province,$scope.Provinces)
+            // }
+            // if ($scope.doctor.city != null){
+            //     $scope.doctor.city = searchObj($scope.doctor.city,$scope.Cities)
+            // }
+            // if ($scope.doctor.workUnit != null){
+            //     $scope.doctor.workUnit = searchObj($scope.doctor.workUnit,$scope.Hospitals)
+            // }
         },
         function(err)
         {
@@ -1106,7 +1124,10 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
         }
     )
 
+
     $scope.editinfo = function() {
+        // $scope.ProvinceObject = $scope.doctor.province;
+        // console.log("123"+$scope.ProvinceObject);
         Doctor.editDoctorDetail($scope.doctor)
         .then(
             function(data)
@@ -1119,14 +1140,140 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
             }
         );
         $scope.myDiv = !$scope.myDiv;
-        $scope.updateDiv = !$scope.updateDiv;
+        $scope.updateDiv = !$scope.updateDiv;       
     };
-  
-
+    
     $scope.toggle = function() {
         $scope.myDiv = !$scope.myDiv;
-        $scope.updateDiv = !$scope.updateDiv;   
+        $scope.updateDiv = !$scope.updateDiv;
+        //$scope.ProvinceObject = $scope.doctor.province;
+        //console.log($scope.ProvinceObject);
+        var searchObj = function(code,array){
+            if(array && array.length){
+                for (var i = 0; i < array.length; i++) {
+                    if(array[i].name == code || array[i].hospitalName == code) return array[i];
+                };
+            }
+            return "未填写";           
+        } 
+        //-------------点击编辑省市医院读字典表--------------
+        if ($scope.doctor.province != null){
+            //console.log($scope.doctor.province)
+            //console.log($scope.Provinces)
+            $scope.ProvinceObject = searchObj($scope.doctor.province,$scope.Provinces)
+
+        }
+        if ($scope.doctor.city != null){
+            //console.log($scope.ProvinceObject.province)
+            Dict.getDistrict({level:"2",province:$scope.ProvinceObject.province,city:"",district:""})
+            .then(
+                function(data)
+                {
+                    $scope.Cities = data.results;
+                    //console.log($scope.Cities);
+                    $scope.CityObject = searchObj($scope.doctor.city,$scope.Cities)
+                    console.log($scope.CityObject)
+                    console.log($scope.CityObject.name)
+                    if ($scope.doctor.workUnit != null){
+                        //console.log($scope.Hospitals)
+                        console.log($scope.doctor.workUnit)
+                        console.log($scope.CityObject)
+                        console.log($scope.CityObject.name)
+                        Dict.getHospital({city:$scope.CityObject.name})
+                        .then(
+                            function(data)
+                            {
+                                $scope.Hospitals = data.results;
+                                //console.log($scope.Hospitals);
+                                $scope.HosObject = searchObj($scope.doctor.workUnit,$scope.Hospitals)
+                            },
+                            function(err)
+                            {
+                                console.log(err);
+                            }
+                        )                   
+                    }
+                },
+                function(err)
+                {
+                    console.log(err);
+                }
+            );                       
+        }
+        //-------------点击编辑省市医院读字典表--------------
+
     };
+
+    //--------------省市医院读字典表---------------------
+    Dict.getDistrict({level:"1",province:"",city:"",district:""})
+    .then(
+        function(data)
+        {
+            $scope.Provinces = data.results;
+            //$scope.Province.province = "";
+            //console.log($scope.Provinces)
+        },
+        function(err)
+        {
+            console.log(err);
+        }
+    )    
+
+    $scope.getCity = function (pro) {
+        console.log(pro)
+        if(pro!=null){
+            Dict.getDistrict({level:"2",province:pro,city:"",district:""})
+            .then(
+                function(data)
+                {
+                    $scope.Cities = data.results;
+                    console.log($scope.Cities);            
+                },
+                function(err)
+                {
+                    console.log(err);
+                }
+            );
+        }else{
+            $scope.Cities = {};
+            $scope.Hospitals = {};
+        }
+    }
+
+    $scope.getHospital = function (city) {
+            console.log(city)
+        if(city!=null){
+            //var locationCode = district.province + district.city + district.district
+            //console.log(locationCode)
+
+            Dict.getHospital({city:city})
+            .then(
+                function(data)
+                {
+                    $scope.Hospitals = data.results;
+                    console.log($scope.Hospitals);
+                },
+                function(err)
+                {
+                    console.log(err);
+                }
+            )
+        }else{
+            $scope.Hospitals = {};
+        }
+    }
+
+    $scope.trans = function(docinfo){
+        console.log(docinfo)
+        if (docinfo !=null)
+        {
+            $scope.doctor.province = docinfo.province;
+            $scope.doctor.city = docinfo.city;
+            $scope.doctor.workUnit = docinfo.hospitalName;    
+        }
+      
+    }
+    //------------省市医院读字典表--------------------
     
       // 上传头像的点击事件----------------------------
   $scope.onClickCamera = function($event){

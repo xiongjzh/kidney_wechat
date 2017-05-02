@@ -32,7 +32,7 @@
 
         <div ng-if="params.isPatients" class="list">
             <div ng-repeat="p in patients | filter:query.name |orderBy:filter.propertyName" collection-item-height="94px" class="item item-avatar" type="item-text-wrap" ng-click="getPatientDetail(p.patientId.userId)">
-                <img ng-src={{p.patientId.photoUrl|imgUrl:'patient'}}>
+                <img ng-src="{{p.patientId.photoUrl||'img/patient.png'}}">
                     <div style="display:inline-block;width:70%;">
                         <h2>{{p.patientId.name}}</h2>
                     <!-- <span>{{p.patientId.gender | filterGender}}</span><span>{{p.patientId.birthday | filterAge}}岁</span> -->
@@ -57,7 +57,7 @@
 
         <div ng-if="!params.isPatients" class="list">
             <div ng-repeat="t in Todays | filter:query.name |orderBy:filter.propertyName" collection-item-height="94px" class="item item-avatar" type="item-text-wrap" ng-click="getPatientDetail(t.patientId.userId)">
-                <img ng-src={{t.patientId.photoUrl|imgUrl:'patient'}}>
+                <img ng-src="{{t.patientId.photoUrl||'img/patient.png'}}">
                     <div style="display:inline-block;width:70%;">
                         <h2>{{t.patientId.name}}</h2>
 
