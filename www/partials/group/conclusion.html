@@ -17,7 +17,7 @@
             </div>
             <div class="item item-body">
                 <div style="display:inline-block;color:#00897b;width:65%">{{patient.patientId.class}} {{patient.patientId.hypertension}}</div>
-                <div style="display:inline-block;color:#00897b;width:30%">{{patient.patientId.operationTime}} {{patient.patientId.allergic}}</div>
+                <div style="display:inline-block;color:#00897b;width:30%">{{patient.patientId.operationTime}}</div>
                 <!-- <div style="display:inline-block;float:right;text-align:right;width:30%"><i style="color:#00E676" class="icon ion-android-pin"></i> 杭州</div> -->
                 <div>
                     {{patient.diseaseInfo.help}}
@@ -27,7 +27,7 @@
         </div>
         <form>
             <div class="item">
-                <textarea rows="6" style="width:100%" autofocus ng-model="input.detail" placeholder="总结"></textarea>
+                <textarea rows="6" style="width:100%" autofocus ng-model="input.text" placeholder="总结"></textarea>
             </div>
         </form>
     </ion-content>
