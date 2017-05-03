@@ -16,11 +16,10 @@
           <img ng-src="img/avatar.png">
           <div>
               <div style="display:inline-block;margin-right:1.2em;font-size:1.25em">{{patient.patientId.name}} </div>
-              <div style="display:inline-block">{{patient.patientId.gender}} {{patient.patientId.age}}</div>
-              <div style="display:inline-block;float:right">{{patient.time}}</div>
+              <div style="display:inline-block">{{patient.patientId.gender |filterGender}} {{patient.patientId.age |filterAge}}</div>
+              <div style="display:inline-block;float:right">{{patient.time | msgdate}}</div>
           </div>
-          <!-- <h2>范德萨user006</h2><span> fahdjksfh</span> -->
-          <p style="width:60%;display:inline-block;"><i class="icon ion-android-car"></i>{{patient.diseaseInfo.discription}}</p>
+          <p style="width:60%;display:inline-block;">{{patient.diseaseInfo.symptom}}</p>
           <a ng-if="!params.isOver" class="item" style="float:right;background-color:#00E676;border-radius:0.4em;padding:2px;color:#FFF" ng-click="goConclusion()">回复患者</a>
            <div ng-if="params.isOver" style="float:right;background-color:#888;border-radius:0.4em;padding:2px;color:#FFF">已回复</div>
       </div>
@@ -28,17 +27,16 @@
 
           <div>
           <span style="color:#2196F3">结论 </span>
-          血压怎么样了？肾脏超声提示慢性病变。加用羟苯磺酸钙一天三次，一次两粒，与饭同服。一月后再复查肾功能。
-          因不能面诊患者，无法全面了解病情，以上建议仅供参考，具体诊疗请一定到医院在医生指导下进行！
+          {{patient.conclusion}}
           </div>
       </div>
       <div class="item item-body">
-          <div style="display:inline-block;color:#00897b;width:65%">肾功能障碍 肾内科</div>
-        <div style="display:inline-block;float:right;text-align:right;width:30%"><i style="color:#00E676" class="icon ion-android-pin"></i> 杭州</div>
+          <div style="display:inline-block;color:#00897b;width:65%">class:{{patient.patientId.class}} hypertension:{{patient.patientId.hypertension}}</div>
+        <div style="display:inline-block;float:right;text-align:right;width:30%"> operationTime:{{patient.operationTime}}</div>
           <div >
-          赵老师，您好！这是我妈妈的检查结果，您看还有没有什么好办法可以降肌酐？现在口服药有，早上拜新同两片，中午47.5mg的倍他乐克一片，晚上盐酸特拉唑嗪片一粒！早中晚各吃开同4粒，白令胶囊2片，尿毒清颗粒两袋！
+          {{patient.diseaseInfo.help}}
           </div>
-          <img style="height:3.5em;width:3.5em;margin:0.4em 0.8em 0 0" ng-repeat="pic in content.pics" ng-src="{{pic}}" ng-click="viewPic(this.pic)" />
+          <!-- <img style="height:3.5em;width:3.5em;margin:0.4em 0.8em 0 0" ng-repeat="pic in content.pics" ng-src="{{pic}}" ng-click="viewPic(this.pic)" /> -->
       </div>
   </div>
 
@@ -57,7 +55,7 @@
         <ion-footer-bar class="input-box" style="position:absolute" keyboard-attach>
             <!-- 语音button -->
             <div style="position:absolute;bottom:0;">
-                <button style="padding:0 4px" class="button button-icon icon ion-android-microphone" on-hold="getVoice()" on-release="stopAndSend()"></button>
+                <!-- <button style="padding:0 4px" class="button button-icon icon ion-android-microphone" on-hold="getVoice()" on-release="stopAndSend()"></button> -->
                 <div  style="padding:0 2px"  class="button button-icon icon ion-android-image" ng-click="getImage('gallery')"></div>
                 <div  style="padding:0 2px"  class="button button-icon icon ion-android-camera" ng-click="getImage('cam')"></div>
                 <!-- <div  style="padding:0 2px"  class="button button-icon icon ion-android-add" ng-click="tt()"></div> -->

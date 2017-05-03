@@ -700,7 +700,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                         .then(function(data){
                             if(data.result<=0){
                                 $scope.counselstatus=0;
-                                endCounsel();
+                                endCounsel(1);
                             }
                         })
                     })
@@ -939,17 +939,17 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         // }
         event.stopPropagation();
     })
-    function endCounsel(){
+    function endCounsel(type){
         Counsel.changeStatus({doctorId:Storage.get('UID'),patientId:$scope.params.chatId,type:2,status:0})
         .then(function(data){
 
             var endlMsg={
                 type:'endl',
-                info:"问诊已结束",
+                info:"咨询已结束",
                 docId:thisDoctor.userId,
                 counseltype:2
-
             }
+            if(type==2) endlMsg.info="问诊已结束";
             var msgJson={
                 contentType:'custom',
                 fromName:thisDoctor.userId,
@@ -976,7 +976,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         });
         confirmPopup.then(function(res) {
             if (res) {
-                endCounsel();
+                endCounsel(2);
             } else {
             }
         });
@@ -2000,7 +2000,10 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
     }
 }])
 //病历结论
-.controller('GroupConclusionCtrl',['$state','$scope','$ionicModal','$ionicScrollDelegate','Communication',function($state,$scope,$ionicModal,$ionicScrollDelegate,Communication){
+.controller('GroupConclusionCtrl',['$state','$scope','$ionicModal','$ionicScrollDelegate','Communication','$ionicLoading',function($state,$scope,$ionicModal,$ionicScrollDelegate,Communication,$ionicLoading){
+    $scope.input = {
+        text: ''
+    }
     $scope.params = {
         type: '',
         groupId: '',
@@ -2016,16 +2019,17 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
     $scope.patient = {
     }
     $scope.$on('$ionicView.beforeEnter', function() {
-            $scope.params.type = $state.params.type;
-            $scope.params.groupId = $state.params.groupId;
-            $scope.params.teamId = $state.params.teamId;
-            Communication.getConsultation({ consultationId: $scope.params.groupId })
-                .then(function(data) {
-                    console.log(data)
-                    $scope.patient = data.result;
-                    
-                })
-        })
+        $scope.input.text='';
+        $scope.params.type = $state.params.type;
+        $scope.params.groupId = $state.params.groupId;
+        $scope.params.teamId = $state.params.teamId;
+        Communication.getConsultation({ consultationId: $scope.params.groupId })
+            .then(function(data) {
+                console.log(data)
+                $scope.patient = data.result;
+                
+            })
+    })
         // $scope.save = function() {
         //     var confirmPopup = $ionicPopup.confirm({
         //         title: '确定要结束此次咨询吗?',
@@ -2069,7 +2073,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
     }
     $scope.save = function(){
        
-         Communication.conclusion({consultationId:$state.params.consultationId,conclusion:$scope.input.detail,status:1})
+         Communication.conclusion({consultationId:$state.params.groupId,conclusion:$scope.input.text,status:0})
                 .then(function(data){
                   console.log(data)
                  $ionicLoading.show({ template: '回复成功', duration: 1500 }); 
@@ -2104,6 +2108,9 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         console.log($scope.params.isSearch);
     })
     
+    $scope.listenenter = function(){
+
+    }
     $scope.loadMore = function() {
         Patient.getDoctorLists({ skip: $scope.params.skip, limit: $scope.params.limit })
             .then(function(data) {
