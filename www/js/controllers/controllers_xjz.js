@@ -906,7 +906,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             console.log(args[2].target.attributes.hires.nodeValue);
             $scope.modal.show();
         } else {
-            Storage.set('getpatientId',args[1]); 
+            Storage.set('getpatientId',args[1].content.patientId);
             $state.go('tab.patientDetail');
             // $state.go('tab.consult-detail',{consultId:args[1]});
         }
@@ -1264,7 +1264,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         $state.go('tab.group-profile',{memberId:member.userId});
     }
     $scope.showQRCode = function() {
-        $state.go('tab.group-qrcode', { teamId: $scope.team.teamId });
+        $state.go('tab.group-qrcode', { team: $scope.team });
     }
     $scope.closeModal = function() {
         // $scope.imageHandle.zoomTo(1,true);
@@ -1523,18 +1523,18 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                 .then(function(data) {
                     console.log(data)
                     $scope.params.team = data.results;
-                    $scope.params.title = $scope.params.team.name + '(' + ($scope.params.team.number+1) + ')';
+                    $scope.params.title = $scope.params.team.name + '(' + $scope.params.team.number + ')';
                 })
 
         } else if ($scope.params.type == '1') {
             getConsultation();
             $scope.params.hidePanel = true;
-            $scope.params.title = '病历讨论';
+            $scope.params.title = '会诊';
             $scope.params.isDiscuss = true;
         } else if ($scope.params.type == '2') {
             getConsultation();
             $scope.params.hidePanel = false;
-            $scope.params.title = '病历讨论';
+            $scope.params.title = '会诊';
             $scope.params.isDiscuss = true;
             $rootScope.patient.undergo = false;
             $scope.params.isOver = true;
@@ -1635,6 +1635,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
     function getConsultation(){
         Communication.getConsultation({ consultationId: $scope.params.groupId })
                 .then(function(data) {
+                    $scope.params.title+= '-'+data.result.patientId.name;
                     console.log(data)
                     $rootScope.patient = data.result;
                     
@@ -1808,7 +1809,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
     $scope.$on('profile', function(event, args) {
         console.log(args)
         event.stopPropagation();
-        $state.go('tab.group-profile', { memberId: args[1] });
+        $state.go('tab.group-profile', { memberId: args[1].fromName });
     })
     $scope.$on('viewcard', function(event, args) {
         console.log(args[2]);
@@ -2090,7 +2091,8 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         skip:0,
         limit:20,
         query:'',
-        isSearch:false
+        isSearch:false,
+        preKey:''
     }
     var allDoctors=[];
     $scope.doctors=[];
