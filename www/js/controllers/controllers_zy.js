@@ -131,8 +131,8 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
      //验证码BUTTON效果
         $scope.isable=true;
         console.log($scope.isable)
-        $scope.veritext="180S再次发送"; 
-        var time = 179;
+        $scope.veritext="60S再次发送"; 
+        var time = 59;
         var timer;
         timer = $interval(function(){
             if(time==0){
@@ -1453,7 +1453,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
 }])
 
 //"我”个人收费页
-.controller('myfeeCtrl', ['Doctor','$scope','$ionicPopup','$state','Storage' ,function(Doctor,$scope, $ionicPopup,$state,Storage) {
+.controller('myfeeCtrl', ['Account','Doctor','$scope','$ionicPopup','$state','Storage' ,function(Account,Doctor,$scope, $ionicPopup,$state,Storage) {
     $scope.hideTabs = true;
   
     Doctor.getDoctorInfo({
@@ -1464,6 +1464,30 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
         {
         // console.log(data)
             $scope.doctor=data.results;
+        },
+        function(err)
+        {
+            console.log(err)
+        }
+    )
+
+    Account.getAccountInfo({
+        userId:Storage.get('UID')
+    })
+    .then(
+        function(data)
+        {
+            //console.log(data)
+            //console.log(data.results[0].money)
+            $scope.account={money:data.results.length==0?0:data.results[0].money};
+            // if (data.results.length!=0)
+            // {
+            //     $scope.account=data.results
+            // }
+            // else
+            // {
+            //     $scope.account={money:0}
+            // }
         },
         function(err)
         {

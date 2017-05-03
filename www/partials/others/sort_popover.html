@@ -4,39 +4,39 @@
 		      	筛选
 		    </li>
 		    <li class="item">
-		      <ion-checkbox ng-model="filter.choose.isChecked1" class="check">肾移植</ion-checkbox>
+		      <ion-checkbox ng-model="filter.choose.isChecked1" class="check" ng-change="filterShow()">肾移植</ion-checkbox>
 		    </li>
 		    <li class="item">
-		      <ion-checkbox ng-model="filter.choose.isChecked2" class="check">血透</ion-checkbox>
+		      <ion-checkbox ng-model="filter.choose.isChecked2" class="check" ng-change="filterShow()">血透</ion-checkbox>
 		    </li>
 		    <li class="item">
-		      <ion-checkbox ng-model="filter.choose.isChecked3" class="check">腹透</ion-checkbox>
+		      <ion-checkbox ng-model="filter.choose.isChecked3" class="check" ng-change="filterShow()">腹透</ion-checkbox>
 		    </li>
 		    <li class="item">
-		      <ion-checkbox ng-model="filter.choose.isChecked4" class="check">ckd1-2期</ion-checkbox>
+		      <ion-checkbox ng-model="filter.choose.isChecked4" class="check" ng-change="filterShow()">ckd1-2期</ion-checkbox>
 		    </li>
 		    <li class="item">
-		      <ion-checkbox ng-model="filter.choose.isChecked5" class="check">ckd3-4期</ion-checkbox>
+		      <ion-checkbox ng-model="filter.choose.isChecked5" class="check" ng-change="filterShow()">ckd3-4期</ion-checkbox>
 		    </li>
 		    <li class="item">
-		      <ion-checkbox ng-model="filter.choose.isChecked6" class="check">ckd5期</ion-checkbox>
+		      <ion-checkbox ng-model="filter.choose.isChecked6" class="check" ng-change="filterShow()">ckd5期</ion-checkbox>
 		    </li>
 		    <li class="item">
 		      <ion-checkbox ng-model="filter.choose.isChecked7" class="check" ng-change="filterShow()">男</ion-checkbox>
 		    </li>
 		    <li class="item">
-		      <ion-checkbox ng-model="filter.choose.isChecked8" class="check">女</ion-checkbox>
+		      <ion-checkbox ng-model="filter.choose.isChecked8" class="check" ng-change="filterShow()">女</ion-checkbox>
 		    </li>
 		    <li class="item">
 		      <ion-checkbox ng-model="filter.choose.isChecked9" class="check" ng-change="filterShow()">保险</ion-checkbox>
 		    </li>
+		    <button class="button button-block button-positive button-outline" ng-click="resetFilter()">重置</button>
 
 			<li class="item"">
 		      	排序
 		    </li>
-
-		    <ion-radio ng-model="filter.propertyName" ng-value="'patientId.birthday'" class="radio" ng-change="change()">年龄</ion-radio>
-		    <ion-radio ng-model="filter.propertyName" ng-value="'-patientId.VIP'" class="radio" ng-change="change()">保险</ion-radio>
+		    <ion-radio ng-model="filter.propertyName" ng-value="'patientId.birthday'" class="radio">年龄</ion-radio>
+		    <ion-radio ng-model="filter.propertyName" ng-value="'-patientId.VIP'" class="radio">保险</ion-radio>
 		</ul>
 </ion-popover-view>
 <style type="text/css">
