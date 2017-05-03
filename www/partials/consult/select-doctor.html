@@ -2,7 +2,7 @@
     <div class="bar bar-subheader item-input-inset bar-light">
         <div class="item-input-wrapper">
             <i style="color:#3d6399;font-size:1.6em" class="icon ion-android-search placeholder-icon"></i>
-            <input id="searchBox" type="search" ng-model="params.query" placeholder="搜索医生" autofocus/>
+            <input id="searchBox" type="search" ng-keyup="listenEnter()" ng-model="params.query" placeholder="搜索医生" autofocus/>
             <i style="color:#EF473A;font-size:1.6em" class="icon ion-android-close placeholder-icon ng-hide" ng-show="params.query" ng-click="clearSearch()"></i>
         </div>
         <button class="button button-clear button-positive" ng-click="docSearch()">
@@ -22,6 +22,6 @@
                 </div>
             </a>
         </div>
-        <ion-infinite-scroll ng-if="params.moredata" on-infinite="loadMore()" distance="5%"></ion-infinite-scroll>
+        <ion-infinite-scroll ng-if="params.moredata && !isSearch" on-infinite="loadMore()" distance="5%"></ion-infinite-scroll>
     </ion-content>
 </ion-view>

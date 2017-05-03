@@ -39,7 +39,7 @@
         <!-- 医生 -->
         <div ng-if="!params.showSearch && !params.isTeam">
             <div class="item item-avatar" ng-repeat="d in doctors | orderBy:'-lastMsgDate'" ng-click="doctorClick($event,d.doctorId)">
-                <img src="{{d.doctorId.photoUrl|imgUrl:'doctor'}}">
+                <img src="{{d.doctorId.photoUrl || 'img/doctor.png'}}">
 
                 <div style="display:inline-block;width:70%;">
                     

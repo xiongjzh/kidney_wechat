@@ -668,7 +668,7 @@ angular.module('kidney',[
                     controller: 'GroupQrcodeCtrl'
                 }
             },
-            params:{teamId:null}
+            params:{team:null}
         })
     .state('tab.group-chat', {
         //'0':团队交流  '1': 未结束病历  '2':已结束病历
