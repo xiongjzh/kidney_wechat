@@ -1,6 +1,8 @@
 <ion-view show-tabs view-title="患者列表">
     <ion-nav-bar class="bar-positive" align-title="center">
-
+        <!-- <ion-nav-buttons side="left">
+            <a class="button icon-right ion-ios-refresh-empty button-clear" ng-click="doRefresh()"></a>
+        </ion-nav-buttons> -->
      <ion-nav-buttons class="bar-dark nav-title-slide-ios7" side="right" >
          <button class="button button-clear"  ng-click="openPopover($event)"><i class="icon ion-android-funnel"></i></button>
       </ion-nav-buttons>
@@ -15,7 +17,6 @@
             <button class="button button-clear button-positive" ng-click="clearSearch()">
                 取消
             </button>
-
         </div>
 
         <div class="bar bar-subheader item-input-inset bar-light text-center" style="padding:0;position: 0px;top: 0px">
@@ -28,10 +29,10 @@
             </a>
         </div>
 
-        <p></p>
+        <ion-refresher pulling-text="下拉刷新..." on-refresh="doRefresh()"></ion-refresher>
 
         <div ng-if="params.isPatients" class="list">
-            <div ng-repeat="p in patients | filter:query.name |orderBy:filter.propertyName" collection-item-height="94px" class="item item-avatar" type="item-text-wrap" ng-click="getPatientDetail(p.patientId.userId)">
+            <div ng-repeat="p in patients | filter:query.name |orderBy:filter.propertyName" collection-item-height="94px" class="item item-avatar" type="item-text-wrap" ng-click="getPatientDetail(p.patientId.userId)" ng-show="p.show">
                 <img ng-src="{{p.patientId.photoUrl||'img/patient.png'}}">
                     <div style="display:inline-block;width:70%;">
                         <h2>{{p.patientId.name}}</h2>
@@ -56,7 +57,7 @@
 
 
         <div ng-if="!params.isPatients" class="list">
-            <div ng-repeat="t in Todays | filter:query.name |orderBy:filter.propertyName" collection-item-height="94px" class="item item-avatar" type="item-text-wrap" ng-click="getPatientDetail(t.patientId.userId)">
+            <div ng-repeat="t in Todays | filter:query.name |orderBy:filter.propertyName" collection-item-height="94px" class="item item-avatar" type="item-text-wrap" ng-click="getPatientDetail(t.patientId.userId)" ng-show="t.show">
                 <img ng-src="{{t.patientId.photoUrl||'img/patient.png'}}">
                     <div style="display:inline-block;width:70%;">
                         <h2>{{t.patientId.name}}</h2>
