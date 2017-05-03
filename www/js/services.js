@@ -846,6 +846,7 @@ angular.module('kidney.services', ['ionic','ngResource'])
 
     var Communication =function(){
         return $resource(CONFIG.baseUrl + ':path/:route',{path:'communication'},{
+            conclusion:{method:'POST', params:{route: 'conclusion'}, timeout: 100000},
             getCommunication:{method:'GET', params:{route: 'getCommunication'}, timeout: 100000},
             getCounselReport:{method:'GET', params:{route: 'getCounselReport'}, timeout: 100000},
             getTeam:{method:'GET', params:{route: 'getTeam'}, timeout: 100000},
@@ -1277,7 +1278,7 @@ angular.module('kidney.services', ['ionic','ngResource'])
         });
         return deferred.promise;
     };
-    
+
     self.conclusion = function(params){
         var deferred = $q.defer();
         Data.Communication.conclusion(
@@ -1290,7 +1291,7 @@ angular.module('kidney.services', ['ionic','ngResource'])
         });
         return deferred.promise;
     };
-    
+
     return self;
 }])
 .factory('User', ['$q', 'Data', function($q, Data){
