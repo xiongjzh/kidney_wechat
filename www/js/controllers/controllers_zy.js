@@ -1300,8 +1300,9 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
     .then(function(res){
       //res.path_resized
       //图片路径
-      $scope.doctor.photoUrl="http://121.43.107.106:8052/uploads/photos/"+temp_name+'?'+new Date().getTime();
       $ionicLoading.hide();
+      $scope.doctor.photoUrl="http://121.43.107.106:8052/uploads/photos/"+temp_name+'?'+new Date().getTime();
+      
       console.log($scope.doctor.photoUrl)
       // $state.reload("tab.mine")
       Doctor.editDoctorDetail({userId:Storage.get("UID"),photoUrl:$scope.doctor.photoUrl}).then(function(r){
