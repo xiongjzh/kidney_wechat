@@ -25,8 +25,8 @@
         已完成：{{patients.length}}
         </div>
         <div class="list">
-            <a class="item item-thumbnail-left" ng-repeat="p in patients | filter:query.name" ng-click="itemClick($event,p.patientId.userId,p.counselId)">
-                <img src="{{p.patientId.photoUrl||'img/patient.png'}}" id="diddetail">
+            <a class="item item-thumbnail-left" ng-repeat="p in patients | filter:query.name| orderBy:p.time:-1|orderBy:p.VIP" ng-click="itemClick($event,p.patientId.userId,p.counselId)" ng-show="p.show!=false">
+                <img ng-src="{{p.patientId.photoUrl||'img/patient.png'}}" id="diddetail">
                 <div>
                 <span>{{p.patientId.name}}</span>
                 <span style="margin-left:5px;">{{p.patientId.gender|filterGender}}</span>

@@ -4,10 +4,10 @@
 		      	筛选
 		    </li> -->
 		    <li class="item">
-		      <ion-checkbox ng-model="isChecked1" class="check">咨询</ion-checkbox>
+		      <ion-checkbox ng-model="filters.item1" class="check" ng-change="filterShow()">咨询</ion-checkbox>
 		    </li>
 		    <li class="item">
-		      <ion-checkbox ng-model="isChecked2" class="check">问诊</ion-checkbox>
+		      <ion-checkbox ng-model="filters.item2" class="check" ng-change="filterShow()">问诊</ion-checkbox>
 		    </li>
 
 		</ul>
