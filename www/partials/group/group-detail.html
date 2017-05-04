@@ -8,7 +8,7 @@
     <ion-content class=" gray-back">
         <div style="background-color: #FFF" class="padding">
         <div class="avatar-item" ng-repeat="member in members" ng-click="viewProfile(member)">
-            <img src="{{member.photoUrl}}" />
+            <img src="{{member.photoUrl || 'img/DefaultAvatar.jpg'}}" />
             <div>{{member.name}}</div>
         </div>
         <div style="vertical-align: top" class="avatar-item" ng-click="addMember()">
