@@ -176,7 +176,12 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
             {
                 console.log(succ)
                 if($stateParams.phonevalidType=='wechat'){
-                        if (succ.mesg=="User password isn't correct!")
+                        if (succ.mesg=="No authority!")
+                        {
+                            $scope.logStatus = "该手机号码没有医生权限,请确认手机号码或转移到肾事管家进行操作";
+                            return;
+                        }
+                        else if (succ.mesg=="User password isn't correct!")
                         {
                             User.getUserId({phoneNo:Verify.Phone}).then(function(data){
                                 if(data.results == 0){
