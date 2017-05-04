@@ -1448,7 +1448,8 @@ angular.module('tdy.controllers', ['ionic','kidney.services','ionic-datepicker']
  // 上传照片并将照片读入页面-------------------------
   var photo_upload_display = function(serverId){
     $ionicLoading.show({
-      template:'图片更新中'
+      template:'图片更新中',
+      duration:5000
     })
    // 给照片的名字加上时间戳
     var temp_photoaddress = Storage.get("UID") + "_" + new Date().getTime() + "healthinfo.jpg";
@@ -1457,8 +1458,11 @@ angular.module('tdy.controllers', ['ionic','kidney.services','ionic-datepicker']
     .then(function(res){
       // var data=angular.fromJson(res)
       //图片路径
-      $ionicLoading.hide();
-      $scope.health.imgurl.push("http://121.43.107.106:8052/uploads/photos/"+temp_photoaddress)
+      $timeout(function(){
+        $ionicLoading.hide();
+        $scope.health.imgurl.push("http://121.43.107.106:8052/uploads/photos/"+temp_photoaddress)
+      },1000)
+      
       
       // $state.reload("tab.mine")
       // Storage.set('localhealthinfoimg',angular.toJson($scope.health.imgurl));

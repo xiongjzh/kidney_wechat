@@ -1426,7 +1426,8 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
  // 上传照片并将照片读入页面-------------------------
   var photo_upload_display = function(serverId){
     $ionicLoading.show({
-        template:'头像更新中'
+        template:'头像更新中',
+        duration:5000
     })
    // 给照片的名字加上时间戳
     var temp_photoaddress = Storage.get("UID") + "_" +  "myAvatar.jpg";
@@ -1436,14 +1437,17 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
     .then(function(res){
       //res.path_resized
       //图片路径
-      $ionicLoading.hide();
-      $scope.doctor.photoUrl="http://121.43.107.106:8052/uploads/photos/"+temp_name+'?'+new Date().getTime();
+      $timeout(function(){
+          $ionicLoading.hide();
+          $scope.doctor.photoUrl="http://121.43.107.106:8052/uploads/photos/"+temp_name+'?'+new Date().getTime();
+          
+          console.log($scope.doctor.photoUrl)
+          // $state.reload("tab.mine")
+          Doctor.editDoctorDetail({userId:Storage.get("UID"),photoUrl:$scope.doctor.photoUrl}).then(function(r){
+            console.log(r);
+          })
+      },1000)
       
-      console.log($scope.doctor.photoUrl)
-      // $state.reload("tab.mine")
-      Doctor.editDoctorDetail({userId:Storage.get("UID"),photoUrl:$scope.doctor.photoUrl}).then(function(r){
-        console.log(r);
-      })
     },function(err){
       console.log(err);
       reject(err);
