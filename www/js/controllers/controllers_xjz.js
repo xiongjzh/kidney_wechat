@@ -660,7 +660,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                             head+='-已结束';
                             body='您仍可以向患者追加回答，该消息不计费';
                         }else{
-                            body='您还需要回答'+res.result+'个问题';
+                            body='您还需要回答'+res.result.count+'个问题';
                         }
                     }
                     var alertPopup = $ionicPopup.alert({
