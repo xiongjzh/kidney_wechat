@@ -656,7 +656,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                         }
                     }else{
                         head+='咨询';
-                        if(res.result<=0){
+                        if(res.result.count<=0){
                             head+='-已结束';
                             body='您仍可以向患者追加回答，该消息不计费';
                         }else{
