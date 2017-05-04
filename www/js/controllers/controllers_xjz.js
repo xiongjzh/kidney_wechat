@@ -724,7 +724,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                     .then(function(){
                         Account.getCounts({doctorId:Storage.get('UID'),patientId:$scope.params.chatId})
                         .then(function(data){
-                            if(data.result<=0){
+                            if(data.result.count<=0){
                                 $scope.counselstatus=0;
                                 $scope.params.title="咨询";
                                 endCounsel(1);
