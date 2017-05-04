@@ -11,7 +11,7 @@
       <a class="button button-icon icon ion-android-people ng-hide" ng-click="viewGroup()" ng-hide="params.isDiscuss"></a>
     </ion-nav-buttons>
     </ion-nav-bar>
-  <div style="position:absolute;top:44px;width:100%;margin:0;min-height:35vh;max-height:55vh;overflow: scroll;" ng-hide="params.hidePanel" class="list card ng-hide hide-animate">
+  <div style="position:absolute;top:44px;width:100%;margin:0;min-height:35vh;max-height:55vh;overflow-y: scroll;background-color: #fff !important" ng-hide="params.hidePanel" class="list card ng-hide hide-animate">
       <div class="item item-avatar" style="padding-bottom:10px">
           <img ng-src="img/avatar.png">
           <div>
@@ -32,7 +32,7 @@
       </div>
       <div class="item item-body">
           <div style="display:inline-block;color:#00897b;width:65%">class:{{patient.patientId.class}} hypertension:{{patient.patientId.hypertension}}</div>
-        <div style="display:inline-block;float:right;text-align:right;width:30%"> operationTime:{{patient.operationTime}}</div>
+        <div style="display:inline-block;float:right;text-align:right;width:30%">{{patient.operationTime}}</div>
           <div >
           {{patient.diseaseInfo.help}}
           </div>

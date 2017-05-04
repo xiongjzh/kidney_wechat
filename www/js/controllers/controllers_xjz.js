@@ -2027,7 +2027,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
     }
 }])
 //病历结论
-.controller('GroupConclusionCtrl',['$state','$scope','$ionicModal','$ionicScrollDelegate','Communication','$ionicLoading',function($state,$scope,$ionicModal,$ionicScrollDelegate,Communication,$ionicLoading){
+.controller('GroupConclusionCtrl',['$state','$scope','$ionicModal','$ionicScrollDelegate','Communication','$ionicLoading','CONFIG',function($state,$scope,$ionicModal,$ionicScrollDelegate,Communication,$ionicLoading,CONFIG){
     $scope.input = {
         text: ''
     }
@@ -2098,19 +2098,52 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             $scope.imageHandle.zoomTo(3, true);
         }
     }
-    $scope.save = function(){
-       
-         Communication.conclusion({consultationId:$state.params.groupId,conclusion:$scope.input.text,status:0})
-                .then(function(data){
-                  console.log(data)
-                 $ionicLoading.show({ template: '回复成功', duration: 1500 }); 
-                   setTimeout(function(){
-                $state.go('tab.groups',{type:'0'});
-            },1500);                
-                },function(err){
-                    console.log(err);
-                })
+    $scope.save = function() {
+
+        Communication.conclusion({ consultationId: $state.params.groupId, conclusion: $scope.input.text, status: 0 })
+            .then(function(data) {
+                console.log(data)
+                Communication.getCounselReport({ counselId: $scope.patient.diseaseInfo.counselId })
+                    .then(function(res) {
+                        var DID=res.results.doctorId.userId,PID=res.results.patientId.userId
+                        var msgJson = {
+                            contentType: 'text',
+                            fromName: DID,
+                            fromUser: {
+                                avatarPath: CONFIG.mediaUrl + 'uploads/photos/resized' + DID + '_myAvatar.jpg'
+                            },
+                            targetID: PID,
+                            targetName: res.results.patientId.name,
+                            targetType: 'single',
+                            status: 'send_going',
+                            createTimeInMillis: Date.now(),
+                            content: {
+                                text: $scope.input.text
+
+                            }
+                        }
+                        Account.modifyCounts({doctorId:DID,patientId:PID,modify:'-1'})
+                        .then(function(){
+                            socket.emit('newUser', { user_name: res.results.doctorId.name, user_id: DID });
+                            socket.emit('message', { msg: msgJson, to: PID });
+                            // socket.on('messageRes', function(data) {
+                            // socket.off('messageRes');
+                            socket.emit('disconnect');
+                            // $state.go('tab.detail', { type: '2', chatId: doc.userId, counselId: msgdata.counselId });
+                            // })
+                            $ionicLoading.show({ template: '回复成功', duration: 1500 });
+                            setTimeout(function() {
+                                $state.go('tab.groups', { type: '0' });
+                            }, 1500);
+                        })
+                    })
+
+            }, function(err) {
+                console.log(err);
+            })
     }
+
+
 
     $scope.$on('$ionicView.leave', function() {
         if ($scope.modal) $scope.modal.remove();

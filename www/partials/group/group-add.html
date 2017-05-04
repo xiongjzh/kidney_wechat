@@ -43,7 +43,7 @@
 				        <i class="icon ion-android-pin"></i>团队成员
 
 							    <div class="avatar-item" ng-repeat="member in group.members" ng-click="">
-                                   <img src="{{member.photoUrl}}" />
+                                   <img src="{{member.photoUrl || 'img/DefaultAvatar.jpg'}}" />
                                        <div>{{member.name}}</div>
                                  </div>
 						   <!--  <span style="margin-top:16px" class="item-note">
