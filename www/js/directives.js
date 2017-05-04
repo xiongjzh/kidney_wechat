@@ -28,6 +28,8 @@ angular.module('kidney.directives', ['kidney.services'])
                     if(type=='card'){
                         try{
                             $scope.counsel=$scope.msg.content.counsel;
+                            if($scope.counsel.type==1){$scope.counsel.counseltype="咨询服务，医生只有三次回答机会"}
+                            else if($scope.counsel.type==2){$scope.counsel.counseltype="问诊服务，医生可以不限次回答问题，点击结束按钮结束问诊"};
                             // $scope.picurl=picArr;
                         }catch(e){
                             
