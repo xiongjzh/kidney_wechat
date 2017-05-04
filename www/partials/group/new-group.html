@@ -23,7 +23,7 @@
         <div class="item">添加成员</div>
         <div style="background-color: #FFF;border-bottom: 1px #ccc solid" class="padding">
             <div class="avatar-item" ng-repeat="member in members">
-                <img src="{{member.url}}" />
+                <img src="{{member.photoUrl || 'img/DefaultAvatar.jpg'}}" />
                 <div>{{member.name}}</div>
             </div>
             <div style="vertical-align: top" class="avatar-item" ng-click="addMember()">
