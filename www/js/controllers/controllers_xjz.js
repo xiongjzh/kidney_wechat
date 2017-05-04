@@ -643,6 +643,31 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                 console.log(data)
                 $scope.counseltype=data.results.type;
                 $scope.counselstatus=data.results.status;
+                Account.getCounts({doctorId:Storage.get('UID'),patientId:$scope.params.chatId})
+                .then(function(res){
+                    var head='',body='';
+                    if($scope.counseltype!='1'){
+                        head+='问诊';
+                        if($scope.counselstatus=='0'){
+                            head+='-已结束';
+                            body='您仍可以向患者追加回答，该消息不计费';
+                        }else{
+                            body='患者提问不限次数，您可以手动结束';
+                        }
+                    }else{
+                        head+='咨询';
+                        if(res.result<=0){
+                            head+='-已结束';
+                            body='您仍可以向患者追加回答，该消息不计费';
+                        }else{
+                            body='您还需要回答'+res.result+'个问题';
+                        }
+                    }
+                    var alertPopup = $ionicPopup.alert({
+                        title: head,
+                        template: body
+                    });
+                })
             
             },function(err){
                 console.log(err);
@@ -667,6 +692,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             $rootScope.conversation.type = 'single';
             $rootScope.conversation.id = $state.params.chatId;
         }
+
         Doctor.getDoctorInfo({userId:$scope.params.UID})
         .then(function(response){
             
@@ -700,6 +726,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                         .then(function(data){
                             if(data.result<=0){
                                 $scope.counselstatus=0;
+                                $scope.params.title="咨询";
                                 endCounsel(1);
                             }
                         })
