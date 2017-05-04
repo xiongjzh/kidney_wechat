@@ -194,7 +194,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
                                             isregisted = true
                                             User.sendSMS({
                                                 mobile:Verify.Phone,
-                                                smsType:1
+                                                smsType:2
                                             })
                                             .then(function(validCode)
                                             {
@@ -231,7 +231,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
                             validMode = 0
                             User.sendSMS({
                                 mobile:Verify.Phone,
-                                smsType:1
+                                smsType:2
                             })
                             .then(function(validCode)
                             {
@@ -266,7 +266,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
                 {
                     User.sendSMS({
                         mobile:Verify.Phone,
-                        smsType:1
+                        smsType:2
                     })
                     .then(function(validCode)
                     {
@@ -320,7 +320,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
 
                 User.verifySMS({
                     mobile:Verify.Phone,
-                    smsType:1,
+                    smsType:2,
                     smsCode:Verify.Code
                 })
                 .then(function(succ)
