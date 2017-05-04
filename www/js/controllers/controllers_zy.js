@@ -784,11 +784,18 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
 
             function(data)
             {
-                
                 if (data.results!='')
                 {
                     $scope.patients=data.results.patients;
                     //$scope.patients[1].patientId.VIP=0;
+                    // $scope.patients.push(
+                    //     {show:true,patientId:{IDNo:"330183199210315001",gender:1,class:"class_1",VIP:0,name:'static_01',birthday:"2017-04-18T00:00:00.000Z"}},
+                    //     {show:false,patientId:{IDNo:"330183199210315002",gender:0,class:"class_2",VIP:1,name:'static_02',birthday:"2016-04-18T00:00:00.000Z"}},
+                    //     {show:true,patientId:{IDNo:"330183199210315003",gender:1,class:"class_3",VIP:1,name:'static_03',birthday:"2015-04-18T00:00:00.000Z"}},
+                    //     {show:true,patientId:{IDNo:"330183199210315004",gender:0,class:"class_4",VIP:0,name:'static_04',birthday:"2014-04-18T00:00:00.000Z"}},
+                    //     {show:true,patientId:{IDNo:"330183199210315005",gender:1,class:"class_5",VIP:1,name:'static_05',birthday:"2013-04-18T00:00:00.000Z"}},
+                    //     {show:true,patientId:{IDNo:"330183199210315006",gender:0,class:"class_6",VIP:1,name:'static_06',birthday:"2012-04-18T00:00:00.000Z"}})
+                    // console.log($scope.patients)
                 }
                 else
                 {
@@ -815,13 +822,20 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
             {
                 //console.log(data)
                 $scope.Todays=data.results2;
+                // $scope.Todays.push(
+                //         {show:true,patientId:{IDNo:"330183199210315001",gender:1,class:"class_1",VIP:0,name:'static_01',birthday:"2017-04-18T00:00:00.000Z"}},
+                //         {show:false,patientId:{IDNo:"330183199210315002",gender:0,class:"class_2",VIP:1,name:'static_02',birthday:"2016-04-18T00:00:00.000Z"}},
+                //         {show:true,patientId:{IDNo:"330183199210315003",gender:1,class:"class_3",VIP:1,name:'static_03',birthday:"2015-04-18T00:00:00.000Z"}},
+                //         {show:true,patientId:{IDNo:"330183199210315004",gender:0,class:"class_4",VIP:0,name:'static_04',birthday:"2014-04-18T00:00:00.000Z"}},
+                //         {show:true,patientId:{IDNo:"330183199210315005",gender:1,class:"class_5",VIP:1,name:'static_05',birthday:"2013-04-18T00:00:00.000Z"}},
+                //         {show:true,patientId:{IDNo:"330183199210315006",gender:0,class:"class_6",VIP:1,name:'static_06',birthday:"2012-04-18T00:00:00.000Z"}})
                 //console.log($scope.Todays)            
-                // angular.forEach($scope.Todays,
-                //     function(value,key)
-                //     {
-                //         $scope.Todays[key].show=true;
-                //     }
-                // )
+                angular.forEach($scope.Todays,
+                    function(value,key)
+                    {
+                        $scope.Todays[key].show=true;
+                    }
+                )
             },
             function(err)
             {
@@ -885,11 +899,48 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
             isChecked9:false,
         }
     }
+    var filterReset=angular.copy($scope.filter);
+    $scope.resetFilter=function()
+    {
+        // console.log("reset")
+        $scope.filter=angular.copy(filterReset);
+        $scope.filterShow();
+    }
     $scope.filterShow=function () {
         angular.forEach($scope.patients,
             function(value,key)
             {
                 $scope.patients[key].show=true;
+                if(!$scope.filter.choose.isChecked1)
+                {
+                    if(value.patientId.class=='class_1')
+                        $scope.patients[key].show=false;
+                }
+                if(!$scope.filter.choose.isChecked2)
+                {
+                    if(value.patientId.class=='class_5')
+                        $scope.patients[key].show=false;
+                }
+                if(!$scope.filter.choose.isChecked3)
+                {
+                    if(value.patientId.class=='class_6')
+                        $scope.patients[key].show=false;
+                }
+                if(!$scope.filter.choose.isChecked4)
+                {
+                    if(value.patientId.class=='class_2')
+                        $scope.patients[key].show=false;
+                }
+                if(!$scope.filter.choose.isChecked5)
+                {
+                    if(value.patientId.class=='class_3')
+                        $scope.patients[key].show=false;
+                }
+                if(!$scope.filter.choose.isChecked6)
+                {
+                    if(value.patientId.class=='class_4')
+                        $scope.patients[key].show=false;
+                }
                 if(!$scope.filter.choose.isChecked7)
                 {
                     if(value.patientId.gender==1)
@@ -904,6 +955,57 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
                 {
                     if(value.patientId.VIP==0)
                         $scope.patients[key].show=false;
+                }
+            }
+        )
+        angular.forEach($scope.Todays,
+            function(value,key)
+            {
+                $scope.Todays[key].show=true;
+                if(!$scope.filter.choose.isChecked1)
+                {
+                    if(value.patientId.class=='class_1')
+                        $scope.Todays[key].show=false;
+                }
+                if(!$scope.filter.choose.isChecked2)
+                {
+                    if(value.patientId.class=='class_5')
+                        $scope.Todays[key].show=false;
+                }
+                if(!$scope.filter.choose.isChecked3)
+                {
+                    if(value.patientId.class=='class_6')
+                        $scope.Todays[key].show=false;
+                }
+                if(!$scope.filter.choose.isChecked4)
+                {
+                    if(value.patientId.class=='class_2')
+                        $scope.Todays[key].show=false;
+                }
+                if(!$scope.filter.choose.isChecked5)
+                {
+                    if(value.patientId.class=='class_3')
+                        $scope.Todays[key].show=false;
+                }
+                if(!$scope.filter.choose.isChecked6)
+                {
+                    if(value.patientId.class=='class_4')
+                        $scope.Todays[key].show=false;
+                }
+                if(!$scope.filter.choose.isChecked7)
+                {
+                    if(value.patientId.gender==1)
+                        $scope.Todays[key].show=false;
+                }
+                if(!$scope.filter.choose.isChecked8)
+                {
+                    if(value.patientId.gender==0)
+                        $scope.Todays[key].show=false;
+                }
+                if($scope.filter.choose.isChecked9)
+                {
+                    if(value.patientId.VIP==0)
+                        $scope.Todays[key].show=false;
                 }
             }
         )
