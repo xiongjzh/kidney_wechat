@@ -548,3 +548,9 @@
         width:3em;
         height:3em;
     }
+
+    .card-prefix span{
+        color:#2196F3;
+        font-size:1.15em;
+        padding-right:0.5em;
+    }

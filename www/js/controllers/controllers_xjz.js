@@ -1826,17 +1826,27 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         $state.go('tab.group-profile', { memberId: args[1].fromName });
     })
     $scope.$on('viewcard', function(event, args) {
-        console.log(args[2]);
+        console.log(args[1]);
         event.stopPropagation();
-        if (args[2].target.tagName == "IMG") {
-            $scope.imageHandle.zoomTo(1, true);
-            $scope.imageUrl = args[2].target.currentSrc;
-            console.log(args[2].target.attributes.hires.nodeValue);
-            $scope.modal.show();
-        }
+        // if (args[2].target.tagName == "IMG") {
+        //     $scope.imageHandle.zoomTo(1, true);
+        //     $scope.imageUrl = args[2].target.currentSrc;
+        //     console.log(args[2].target.attributes.hires.nodeValue);
+        //     $scope.modal.show();
+        // }
         // else{
         //     $state.go('tab.consult-detail',{consultId:args[1]});
         // }
+        if($scope.params.type=='0'){
+            Communication.getConsultation({ consultationId: args[1].content.consultationId})
+                .then(function(data) {
+                    $state.go('tab.group-chat',{'type':data.result.status,'teamId':$scope.params.teamId,'groupId':args[1].content.consultationId});
+                    // $scope.params.title+= '-'+data.result.patientId.name;
+                    // console.log(data)
+                    // $rootScope.patient = data.result;
+                    
+                })
+        }
         // $state.go('tab.consult-detail',{consultId:args[1]});
     })
 
@@ -2312,7 +2322,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                         fromUser:{
                             avatarPath:CONFIG.mediaUrl+'uploads/photos/resized'+thisDoctor.userId+'_myAvatar.jpg'
                         },
-                        targetID:gid,
+                        targetID:team.teamId,
                         teamId:team.teamId,
                         targetName:'',
                         targetType:'group',
@@ -2324,11 +2334,11 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                     .then(function(data){
                         console.log(data);
                         socket.emit('newUser',{user_name:thisDoctor.name,user_id:thisDoctor.userId});
-                        socket.emit('message',{msg:msgJson,to:gid});
+                        socket.emit('message',{msg:msgJson,to:team.teamId});
                         socket.on('messageRes',function(data){
                             socket.off('messageRes');
                             socket.emit('disconnect');
-                            $state.go('tab.group-chat', { type: '1', groupId: gid, teamId: team.teamId });
+                            $state.go('tab.group-chat', { type: '0', groupId: team.teamId, teamId: team.teamId });
                         });
                     },function(er){
                         console.error(err);
