@@ -503,10 +503,10 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
                                 params    :{
                                     'regsubmit':'yes',
                                     'formhash':'',
-                                    'username':phoneNumber,
-                                    'password':phoneNumber,
-                                    'password2':phoneNumber,
-                                    'email':phoneNumber+'@qq.com'
+                                    'username':$scope.doctor.name+phoneNumber.slice(7),
+                                    'password':$scope.doctor.name+phoneNumber.slice(7),
+                                    'password2':$scope.doctor.name+phoneNumber.slice(7),
+                                    'email':phoneNumber+'@bme319.com'
                                 },  // pass in data as strings
                                 headers : {
                                     'Content-Type': 'application/x-www-form-urlencoded',
@@ -537,10 +537,10 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
                 params    :{
                     'regsubmit':'yes',
                     'formhash':'',
-                    'username':phoneNumber,
-                    'password':phoneNumber,
-                    'password2':phoneNumber,
-                    'email':phoneNumber+'@qq.com'
+                    'username':$scope.doctor.name+phoneNumber.slice(7),
+                    'password':$scope.doctor.name+phoneNumber.slice(7),
+                    'password2':$scope.doctor.name+phoneNumber.slice(7),
+                    'email':phoneNumber+'@bme319.com'
                 },  // pass in data as strings
                 headers : {
                     'Content-Type': 'application/x-www-form-urlencoded',
@@ -560,14 +560,50 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
 }])
 
 //首页
-.controller('homeCtrl', ['Communication','$scope','$state','$interval','$rootScope', 'Storage','$http','$sce',function(Communication,$scope, $state,$interval,$rootScope,Storage,$http,$sce) {
+.controller('homeCtrl', ['Communication','$scope','$state','$interval','$rootScope', 'Storage','$http','$sce','$timeout','Doctor',function(Communication,$scope, $state,$interval,$rootScope,Storage,$http,$sce,$timeout,Doctor) {
     $scope.barwidth="width:0%";
     
-    console.log(Storage.get('USERNAME'))
+    console.log(Storage.get('USERNAME'));
+    $scope.isWriting={'margin-top': '100px'};
+    if(!sessionStorage.addKBEvent)
+    {
+        // console.log("true")
+        sessionStorage.addKBEvent=true;
+        window.addEventListener('native.keyboardshow', keyboardShowHandler);
+        window.addEventListener('native.keyboardhide', keyboardHideHandler);
+    }
+    function keyboardShowHandler(e){
+        $scope.$apply(function(){
+            $scope.isWriting={'margin-top': '-40px','z-index':'20'};
+        })
+    }
+    function keyboardHideHandler(e){
+        $scope.$apply(function(){
+            $scope.isWriting={'margin-top': '100px'};
+        })
+    }
 
-    $scope.navigation_login=$sce.trustAsResourceUrl("http://121.43.107.106/member.php?mod=logging&action=login&loginsubmit=yes&loginhash=$loginhash&mobile=2&username="+Storage.get('USERNAME')+"&password="+Storage.get('USERNAME'));
-    $scope.navigation=$sce.trustAsResourceUrl("http://121.43.107.106/");
-
+    Doctor.getDoctorInfo({
+        userId:Storage.get('UID')
+    })
+    .then(
+        function(data)
+        {
+            console.log(data)
+            $http({
+                method  : 'POST',
+                url     : 'http://121.43.107.106/member.php?mod=logging&action=logout&formhash=xxxxxx'
+            }).success(function(d) {
+                    // console.log(data);
+                $scope.navigation_login=$sce.trustAsResourceUrl("http://121.43.107.106/member.php?mod=logging&action=login&loginsubmit=yes&loginhash=$loginhash&mobile=2&username="+data.results.name+Storage.get('USERNAME').slice(7)+"&password="+data.results.name+Storage.get('USERNAME').slice(7));
+                $scope.navigation=$sce.trustAsResourceUrl("http://121.43.107.106/");
+            });
+        },
+        function(err)
+        {
+            console.log(err)
+        }
+    )
     $scope.options = {
         loop: false,
         effect: 'fade',
@@ -674,9 +710,38 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
 }])
 
 //"咨询”进行中
-.controller('doingCtrl', ['$scope','$state','$interval','$rootScope', 'Storage','$ionicPopover','Counsel','$ionicHistory',  function($scope, $state,$interval,$rootScope,Storage,$ionicPopover,Counsel,$ionicHistory) {
-    $scope.patients=angular.fromJson(Storage.get("consulting"));
-    console.log($scope.patients)
+.controller('doingCtrl', ['$scope','$state','$ionicLoading','$interval','$rootScope', 'Storage','$ionicPopover','Counsel','$ionicHistory',  function($scope, $state,$ionicLoading,$interval,$rootScope,Storage,$ionicPopover,Counsel,$ionicHistory) {
+    $scope.allpatients=angular.fromJson(Storage.get("consulting"));
+    $scope.patients=$scope.allpatients;
+    console.log($scope.allpatients)
+    //----------------开始搜索患者------------------
+    $scope.search={
+        name:''
+    }
+    
+    $scope.goSearch = function() {
+        Counsel.getCounsels({
+            userId:Storage.get('UID'),
+            status:1,
+            name:$scope.search.name
+        })
+        .then(function(data) {
+            $scope.patients = data.results
+            if (data.results.length == 0) {
+                //console.log("aaa")
+                $ionicLoading.show({ template: '查无此人', duration: 1000 })
+            }
+        }, function(err) {
+            console.log(err);
+        })
+    }
+
+    $scope.clearSearch = function() {
+        $scope.search.name = '';
+        $scope.patients = $scope.allpatients;
+        $scope.search.name = '';
+    }
+    //----------------结束搜索患者------------------
     $ionicPopover.fromTemplateUrl('partials/others/sort_popover_consult.html', {
         scope: $scope
     }).then(function(popover) {
@@ -714,14 +779,6 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
             disableBack: true
         });
         $state.go('tab.consult');
-    }
-    
-    $scope.query={
-        name:''
-    }
-    $scope.clearSearch = function(){
-        //console.log($scope.PatientSearch)
-        $scope.query.name='';
     }
 
     $scope.itemClick = function(ele, userId, counselId) {
@@ -739,9 +796,36 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
 }])
 
 //"咨询”已完成
-.controller('didCtrl', ['$scope','$state','$interval','$rootScope', 'Storage','$ionicPopover','$ionicHistory',  function($scope, $state,$interval,$rootScope,Storage,$ionicPopover,$ionicHistory) {
-    $scope.patients=angular.fromJson(Storage.get("consulted"));
-  
+.controller('didCtrl', ['$scope','$state','Counsel','$ionicLoading','$interval','$rootScope', 'Storage','$ionicPopover','$ionicHistory',  function($scope, $state,Counsel,$ionicLoading,$interval,$rootScope,Storage,$ionicPopover,$ionicHistory) {
+    $scope.allpatients=angular.fromJson(Storage.get("consulted"));
+    $scope.patients=$scope.allpatients;
+    //----------------开始搜索患者------------------
+    $scope.search={
+        name:''
+    }
+    $scope.goSearch = function() {
+        Counsel.getCounsels({
+            userId:Storage.get('UID'),
+            status:0,
+            name:$scope.search.name
+        })
+        .then(function(data) {
+            $scope.patients = data.results
+            if (data.results.length == 0) {
+                //console.log("aaa")
+                $ionicLoading.show({ template: '查无此人', duration: 1000 })
+            }
+        }, function(err) {
+            console.log(err);
+        })
+    }
+
+    $scope.clearSearch = function() {
+        $scope.search.name = '';
+        $scope.patients = $scope.allpatients;
+        $scope.search.name = '';
+    }
+    //----------------结束搜索患者------------------      
     $ionicPopover.fromTemplateUrl('partials/others/sort_popover_consult.html', {
         scope: $scope
     }).then(function(popover) {
@@ -778,14 +862,6 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
             }
         })
         // console.log($scope.patients)
-    }
-
-    $scope.query={
-        name:''
-    }
-    $scope.clearSearch = function(){
-        //console.log($scope.PatientSearch)
-        $scope.query.name='';
     }
 
     $scope.itemClick = function(ele, userId, counselId) {
@@ -805,10 +881,10 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
 
 
 //"患者”页
-.controller('patientCtrl', ['Doctor','$scope','$state','$interval','$rootScope', 'Storage','$ionicPopover',  function(Doctor,$scope, $state,$interval,$rootScope,Storage,$ionicPopover) {
+.controller('patientCtrl', ['Doctor','$scope','$state','$ionicLoading','$interval','$rootScope', 'Storage','$ionicPopover',  function(Doctor,$scope, $state,$ionicLoading,$interval,$rootScope,Storage,$ionicPopover) {
     $scope.barwidth="width:0%";
     var patients=[];
-    //var patientlength = '';
+
     $scope.params={
         isPatients:true,
         updateTime:0
@@ -823,9 +899,11 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
 
             function(data)
             {
+                console.log(data)
                 if (data.results!='')
                 {
-                    $scope.patients=data.results.patients;
+                    $scope.allpatients=data.results.patients;
+                    $scope.patients=$scope.allpatients;
                     //$scope.patients[1].patientId.VIP=0;
                     // $scope.patients.push(
                     //     {show:true,patientId:{IDNo:"330183199210315001",gender:1,class:"class_1",VIP:0,name:'static_01',birthday:"2017-04-18T00:00:00.000Z"}},
@@ -882,7 +960,35 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
             }
         );
     }
+    //----------------开始搜索患者------------------
+    $scope.search={
+        name:''
+    }
+    $scope.goSearch = function() {
+        Doctor.getPatientList({ 
+            userId:Storage.get('UID'),
+            name: $scope.search.name 
+        })
+        .then(function(data) {
+            //$scope.params.isPatients=true;
+            //console.log(data.results)
+            $scope.patients = data.results.patients;
+            //console.log($scope.patients[0].patientId.name)
+            if (data.results.patients.length == 0) {
+                console.log("aaa")
+                $ionicLoading.show({ template: '查无此人', duration: 1000 })
+            }
+        }, function(err) {
+            console.log(err);
+        })
+    }
 
+    $scope.clearSearch = function() {
+        $scope.search.name = '';
+        $scope.patients = $scope.allpatients;
+        $scope.search.name = '';
+    }
+    //----------------结束搜索患者------------------
     $scope.doRefresh = function(){
         load();
         // Stop the ion-refresher from spinning
@@ -906,15 +1012,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
         Storage.set('getpatientId',id);
         $state.go('tab.patientDetail');
     }
-
-    $scope.query={
-        name:''
-    }
-    $scope.clearSearch = function(){
-        //console.log($scope.PatientSearch)
-        $scope.query.name='';
-    }
-
+ 
     $ionicPopover.fromTemplateUrl('partials/others/sort_popover.html', {
         scope: $scope
     }).then(function(popover) {
