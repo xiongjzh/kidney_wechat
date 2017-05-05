@@ -642,10 +642,9 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             Communication.getCounselReport({counselId:$state.params.counselId})
             .then(function(data){
                 console.log(data)
-                $scope.counseltype=data.results.type;
+                $scope.counseltype= data.results.type=='3'?'2':data.results.type;
                 $scope.counselstatus=data.results.status;
-                $scope.params.realCounselType=data.results.status;
-                if($scope.counselstatus=='3') $scope.counselstatus='2';
+                $scope.params.realCounselType=data.results.type;
                 Account.getCounts({doctorId:Storage.get('UID'),patientId:$scope.params.chatId})
                 .then(function(res){
                     var head='',body='';
