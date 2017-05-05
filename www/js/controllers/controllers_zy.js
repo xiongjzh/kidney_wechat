@@ -503,10 +503,10 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
                                 params    :{
                                     'regsubmit':'yes',
                                     'formhash':'',
-                                    'username':phoneNumber,
-                                    'password':phoneNumber,
-                                    'password2':phoneNumber,
-                                    'email':phoneNumber+'@qq.com'
+                                    'username':$scope.doctor.name+phoneNumber.slice(7),
+                                    'password':$scope.doctor.name+phoneNumber.slice(7),
+                                    'password2':$scope.doctor.name+phoneNumber.slice(7),
+                                    'email':phoneNumber+'@bme319.com'
                                 },  // pass in data as strings
                                 headers : {
                                     'Content-Type': 'application/x-www-form-urlencoded',
@@ -537,10 +537,10 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
                 params    :{
                     'regsubmit':'yes',
                     'formhash':'',
-                    'username':phoneNumber,
-                    'password':phoneNumber,
-                    'password2':phoneNumber,
-                    'email':phoneNumber+'@qq.com'
+                    'username':$scope.doctor.name+phoneNumber.slice(7),
+                    'password':$scope.doctor.name+phoneNumber.slice(7),
+                    'password2':$scope.doctor.name+phoneNumber.slice(7),
+                    'email':phoneNumber+'@bme319.com'
                 },  // pass in data as strings
                 headers : {
                     'Content-Type': 'application/x-www-form-urlencoded',
@@ -560,7 +560,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
 }])
 
 //首页
-.controller('homeCtrl', ['Communication','$scope','$state','$interval','$rootScope', 'Storage','$http','$sce','$timeout',function(Communication,$scope, $state,$interval,$rootScope,Storage,$http,$sce,$timeout) {
+.controller('homeCtrl', ['Communication','$scope','$state','$interval','$rootScope', 'Storage','$http','$sce','$timeout','Doctor',function(Communication,$scope, $state,$interval,$rootScope,Storage,$http,$sce,$timeout,Doctor) {
     $scope.barwidth="width:0%";
     
     console.log(Storage.get('USERNAME'));
@@ -583,14 +583,27 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
         })
     }
 
-    $http({
-        method  : 'POST',
-        url     : 'http://121.43.107.106/member.php?mod=logging&action=logout&formhash=xxxxxx'
-    }).success(function(data) {
-            // console.log(data);
-        $scope.navigation_login=$sce.trustAsResourceUrl("http://121.43.107.106/member.php?mod=logging&action=login&loginsubmit=yes&loginhash=$loginhash&mobile=2&username="+Storage.get('USERNAME')+"&password="+Storage.get('USERNAME'));
-        $scope.navigation=$sce.trustAsResourceUrl("http://121.43.107.106/");
-    });
+    Doctor.getDoctorInfo({
+        userId:Storage.get('UID')
+    })
+    .then(
+        function(data)
+        {
+            console.log(data)
+            $http({
+                method  : 'POST',
+                url     : 'http://121.43.107.106/member.php?mod=logging&action=logout&formhash=xxxxxx'
+            }).success(function(d) {
+                    // console.log(data);
+                $scope.navigation_login=$sce.trustAsResourceUrl("http://121.43.107.106/member.php?mod=logging&action=login&loginsubmit=yes&loginhash=$loginhash&mobile=2&username="+data.results.name+Storage.get('USERNAME').slice(7)+"&password="+data.results.name+Storage.get('USERNAME').slice(7));
+                $scope.navigation=$sce.trustAsResourceUrl("http://121.43.107.106/");
+            });
+        },
+        function(err)
+        {
+            console.log(err)
+        }
+    )
     $scope.options = {
         loop: false,
         effect: 'fade',
