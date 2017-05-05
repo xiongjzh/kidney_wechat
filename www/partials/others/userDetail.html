@@ -13,16 +13,27 @@
                 <p class="myinfo-msg-right"><input type=text ng-model="doctor.name">{{doctor.name}}</p>
                 <i class="icon ion-edit mine-msg-right"></i>
         </ion-item>
-<!--         <ion-item>
+<!--    <ion-item>
             <span class="msg">性别</span>
             <p class="myinfo-msg-right"><input type=text ng-model="doctor.gender">{{doctor.gender}}</p>
             <i class="icon ion-edit mine-msg-right"></i>
         </ion-item> -->
-        <ion-item>
-            <span class="msg">医院</span>
-                <p class="myinfo-msg-right"><input type=text ng-model="doctor.workUnit">{{doctor.workUnit}}</p>
-                <i class="icon ion-edit mine-msg-right"></i>
+        <ion-item  class="item item-input item-select">
+            <span class="input-label">省份</span>
+                <select class="myinfo-msg-right" ng-model="ProvinceObject" ng-options="Province.name for Province in Provinces track by Province.province" style="width:100%" ng-change="getCity(ProvinceObject.province)">
+                </select>
+            </ion-item>
+        <ion-item  class="item item-input item-select">
+            <span class="input-label">城市</span>
+                <select class="myinfo-msg-right" ng-model="CityObject" ng-options="City.name for City in Cities track by City.city" style="width:100%" ng-change="getHospital(CityObject.name)">
+                </select>
         </ion-item>
+        <ion-item  class="item item-input item-select">
+            <span class="input-label">医院</span>
+                <select class="myinfo-msg-right" ng-model="HosObject" ng-options="Hospital.hospitalName for Hospital in Hospitals track by Hospital._id" style="width:100%" ng-change="test(HosObject)">
+                </select>
+        </ion-item>
+
         <ion-item>
             <span class="msg">科室</span>
                 <p class="myinfo-msg-right"><input type=text ng-model="doctor.department">{{doctor.department}}</p>
@@ -60,84 +71,3 @@
     </ion-content>
 
 </ion-view>
-
-
- <!--  <div  style="position: absolute;top: 43px;z-index:100;display: block;height: 2.5px;background-color: #33cd5f;{{barwidth}}" ></div>
-  <ion-content padding="true" style="">
-    
-    <div  class="list">
-      <label class="item item-input">
-        <span class="input-label"><i class="icon ion-asterisk" style="color:red;font-size:6px"></i>姓名</span>
-        <input  ng-model="User.Name"  type="text" style="width:100%">
-      </label>
-    
-    
-      <label  class="item item-input item-select">
-        <div class="input-label"><i class="icon ion-asterisk" style="color:red;font-size:6px"></i>性别</div>
-        <select ng-model="User.Gender" ng-options="Gender.Name for Gender in Genders track by Gender.Type" style="width:100%">
-          
-        </select>
-      </label>
-
-      
-      <label class="item item-input">
-        <span class="input-label"><i class="icon ion-asterisk" style="color:red;font-size:6px"></i>医院</span>
-        <input  ng-model="User.workUnit"  type="text" style="width:100%">
-      </label>
-
-      <label class="item item-input">
-        <span class="input-label"><i class="icon ion-asterisk" style="color:red;font-size:6px"></i>科室</span>
-        <input  ng-model="User.department"  type="text" style="width:100%">
-      </label>
-
-       <label class="item item-input">
-        <span class="input-label"><i class="icon ion-asterisk" style="color:red;font-size:6px"></i>职称</span>
-        <input  ng-model="User.title"  type="text" style="width:100%">
-      </label> -->
-
-    
-
-<!--       <ionic-datepicker input-obj="datepickerObject3" class="item item-input">
-        <span class="input-label" style="margin-left:8px ">出生日期</span>
-        <input  ng-model="User.Birthday"  type="text">
-      </ionic-datepicker> -->
-
-<!--       <label class="item item-input">
-        <span class="input-label" style="margin-left:8px ">身份证号</span>
-        <span class="error" ng-show="IDCard.$error.pattern" style="color:red"></span>
-        <input  ng-model="User.IDCard"  type="text"    style="width:100%" >
-      </label>
-    </div>
-
-    <div>
-      <span class="input-label" style="margin-left:6px "><i class="icon ion-clipboard" style="margin-right:3px;font-size:20px" ></i>个人秀</span>
-      <label class="item item-input">
-        <span class="input-label" style="margin-left:8px ">个人擅长</span>
-        <input  ng-model="User.major"  type="text">
-      </label>
-
-        <label class="item item-input">
-        <span class="input-label" style="margin-left:8px ">个人简介</span>
-        <input  ng-model="User.Numberroduction"  type="text">
-      </label>
-    </div>
-
-
-    
-
-   
-
-    </div>
-      <!<button style="margin-top:10px" class="button button-block button-positive" ng-click ="infoSetup(User)">
-            保存
-      </button> -->
-<!--      <button  style="margin-top:0" class="button button-block button-positive" ng-click ="infoSetup()">
-        保存信息
-      </button>
-    
-
-
-           
-  </ion-content>
-          
-</ion-view> --> -->

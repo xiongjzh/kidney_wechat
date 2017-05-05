@@ -445,9 +445,9 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
 }])
 
 //注册时填写医生个人信息
-.controller('userdetailCtrl',['Doctor','$scope','$state','$ionicHistory','$timeout' ,'Storage', '$ionicPopup','$ionicLoading','$ionicPopover','User','$http',function(Doctor,$scope,$state,$ionicHistory,$timeout,Storage, $ionicPopup,$ionicLoading, $ionicPopover,User,$http){
+.controller('userdetailCtrl',['Dict','Doctor','$scope','$state','$ionicHistory','$timeout' ,'Storage', '$ionicPopup','$ionicLoading','$ionicPopover','User','$http',function(Dict,Doctor,$scope,$state,$ionicHistory,$timeout,Storage, $ionicPopup,$ionicLoading, $ionicPopover,User,$http){
     $scope.barwidth="width:0%";
-    var phoneNumber=Storage.get('phoneNumber');
+    var phoneNumber=Storage.get('USERNAME');
     var password=Storage.get('password');
     $scope.doctor={
         userId:"",
@@ -458,6 +458,72 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
         IDNo:"",
         major:"",
         description:""};
+
+    //------------省市医院读字典表---------------------
+    Dict.getDistrict({level:"1",province:"",city:"",district:""})
+    .then(
+        function(data)
+        {
+            $scope.Provinces = data.results;
+            // $scope.Province.province = "";
+            console.log($scope.Provinces)
+        },
+        function(err)
+        {
+            console.log(err);
+        }
+    )    
+
+    $scope.getCity = function (pro) {
+        console.log(pro)
+        if(pro!=null){
+            Dict.getDistrict({level:"2",province:pro,city:"",district:""})
+            .then(
+                function(data)
+                {
+                    $scope.Cities = data.results;
+                    console.log($scope.Cities);            
+                },
+                function(err)
+                {
+                    console.log(err);
+                }
+            );
+        }else{
+            $scope.Cities = {};
+            $scope.Hospitals = {};
+        }
+    }
+
+    $scope.getHospital = function (city) {
+            console.log(city)
+        if(city!=null){
+            //var locationCode = district.province + district.city + district.district
+            //console.log(locationCode)
+
+            Dict.getHospital({city:city})
+            .then(
+                function(data)
+                {
+                    $scope.Hospitals = data.results;
+                    console.log($scope.Hospitals);
+                },
+                function(err)
+                {
+                    console.log(err);
+                }
+            )
+        }else{
+            $scope.Hospitals = {};
+        }
+    }
+    $scope.test = function(docinfo){
+        console.log(docinfo)
+        $scope.doctor.province = docinfo.province;
+        $scope.doctor.city = docinfo.city;
+        $scope.doctor.workUnit = docinfo.hospitalName;        
+    }
+    //------------省市医院读字典表---------------------
 
     $scope.infoSetup = function() 
     {
