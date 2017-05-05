@@ -614,7 +614,8 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             msgCount: 0,
             helpDivHeight: 0,
             moreMsgs: true,
-            UID:Storage.get('UID')
+            UID:Storage.get('UID'),
+            realCounselType:''
         }
         // var audio = new Audio('http://121.43.107.106:8088/PersonalPhoto/Emotions.mp3');
         // audio.play();
@@ -641,8 +642,9 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             Communication.getCounselReport({counselId:$state.params.counselId})
             .then(function(data){
                 console.log(data)
-                $scope.counseltype=data.results.type;
+                $scope.counseltype= data.results.type=='3'?'2':data.results.type;
                 $scope.counselstatus=data.results.status;
+                $scope.params.realCounselType=data.results.type;
                 Account.getCounts({doctorId:Storage.get('UID'),patientId:$scope.params.chatId})
                 .then(function(res){
                     var head='',body='';
@@ -967,7 +969,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         event.stopPropagation();
     })
     function endCounsel(type){
-        Counsel.changeStatus({doctorId:Storage.get('UID'),patientId:$scope.params.chatId,type:2,status:0})
+        Counsel.changeStatus({doctorId:Storage.get('UID'),patientId:$scope.params.chatId,type:type,status:0})
         .then(function(data){
 
             var endlMsg={
@@ -1003,7 +1005,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         });
         confirmPopup.then(function(res) {
             if (res) {
-                endCounsel(2);
+                endCounsel($scope.params.realCounselType);
             } else {
             }
         });
@@ -1039,24 +1041,9 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             $scope.msgs.push(msg);
         }
         toBottom(true,100);
-        // $scope.$apply(function(){
-            // $scope.msgs.push(msg);
-
-        // });
-        // $scope.msgs=$scope.msgs;
     }
     // send message--------------------------------------------------------------------------------
-    //
-    // function onSendSuccess(res) {
-    //     console.log(res);
-    //     viewUpdate(10);
-    // }
 
-    // function onSendErr(err) {
-    //     console.log(err);
-    //     alert('[send msg]:err');
-    //     viewUpdate(10);
-    // }
     function msgGen(content,type,local){
         var data={};
         if(type=='text'){
@@ -1839,17 +1826,27 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         $state.go('tab.group-profile', { memberId: args[1].fromName });
     })
     $scope.$on('viewcard', function(event, args) {
-        console.log(args[2]);
+        console.log(args[1]);
         event.stopPropagation();
-        if (args[2].target.tagName == "IMG") {
-            $scope.imageHandle.zoomTo(1, true);
-            $scope.imageUrl = args[2].target.currentSrc;
-            console.log(args[2].target.attributes.hires.nodeValue);
-            $scope.modal.show();
-        }
+        // if (args[2].target.tagName == "IMG") {
+        //     $scope.imageHandle.zoomTo(1, true);
+        //     $scope.imageUrl = args[2].target.currentSrc;
+        //     console.log(args[2].target.attributes.hires.nodeValue);
+        //     $scope.modal.show();
+        // }
         // else{
         //     $state.go('tab.consult-detail',{consultId:args[1]});
         // }
+        if($scope.params.type=='0'){
+            Communication.getConsultation({ consultationId: args[1].content.consultationId})
+                .then(function(data) {
+                    $state.go('tab.group-chat',{'type':data.result.status,'teamId':$scope.params.teamId,'groupId':args[1].content.consultationId});
+                    // $scope.params.title+= '-'+data.result.patientId.name;
+                    // console.log(data)
+                    // $rootScope.patient = data.result;
+                    
+                })
+        }
         // $state.go('tab.consult-detail',{consultId:args[1]});
     })
 
@@ -2027,7 +2024,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
     }
 }])
 //病历结论
-.controller('GroupConclusionCtrl',['$state','$scope','$ionicModal','$ionicScrollDelegate','Communication','$ionicLoading','CONFIG',function($state,$scope,$ionicModal,$ionicScrollDelegate,Communication,$ionicLoading,CONFIG){
+.controller('GroupConclusionCtrl',['$state','$scope','$ionicModal','$ionicScrollDelegate','Communication','$ionicLoading','CONFIG','Account',function($state,$scope,$ionicModal,$ionicScrollDelegate,Communication,$ionicLoading,CONFIG,Account){
     $scope.input = {
         text: ''
     }
@@ -2325,7 +2322,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                         fromUser:{
                             avatarPath:CONFIG.mediaUrl+'uploads/photos/resized'+thisDoctor.userId+'_myAvatar.jpg'
                         },
-                        targetID:gid,
+                        targetID:team.teamId,
                         teamId:team.teamId,
                         targetName:'',
                         targetType:'group',
@@ -2337,11 +2334,11 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                     .then(function(data){
                         console.log(data);
                         socket.emit('newUser',{user_name:thisDoctor.name,user_id:thisDoctor.userId});
-                        socket.emit('message',{msg:msgJson,to:gid});
+                        socket.emit('message',{msg:msgJson,to:team.teamId});
                         socket.on('messageRes',function(data){
                             socket.off('messageRes');
                             socket.emit('disconnect');
-                            $state.go('tab.group-chat', { type: '1', groupId: gid, teamId: team.teamId });
+                            $state.go('tab.group-chat', { type: '0', groupId: team.teamId, teamId: team.teamId });
                         });
                     },function(er){
                         console.error(err);
