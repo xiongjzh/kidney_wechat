@@ -1,4 +1,4 @@
-<ion-view show-tabs view-title='主页' hide-nav-bar=false>
+<ion-view show-tabs view-title='主页' hide-nav-bar="false">
 	<ion-nav-bar class="bar-positive" align-title="center">
 		<ion-nav-buttons side="left">
 			<a class="button button-icon icon ion-qr-scanner" ng-click=""></a>
@@ -30,7 +30,7 @@
 		</a>
 	</div> -->
 	<!-- <a class="button" style="z-index: 20;" ng-click="importDocs()">import user 2 forum</a> -->
-	<ion-content style="margin-top: 100px;padding:0px;">
+	<ion-content style="padding:0px;" ng-style="isWriting">
 
 	    <iframe id="bbsframe" ng-src ='{{navigation}}' height="100%" width="100%">
 			<p>Your browser does not support iframes.</p>
