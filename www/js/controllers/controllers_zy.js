@@ -1878,7 +1878,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
 
 
 //"我”设置页
-.controller('setCtrl', ['$scope','$ionicPopup','$state','$timeout','$stateParams', 'Storage',function($scope, $ionicPopup,$state,$timeout,$stateParams,Storage) {
+.controller('setCtrl', ['$scope','$ionicPopup','$state','$timeout','$stateParams', 'Storage','$sce',function($scope, $ionicPopup,$state,$timeout,$stateParams,Storage,$sce) {
     $scope.hideTabs = true; 
     $scope.logout = function() {
     //Storage.set('IsSignIn','NO');
@@ -1888,6 +1888,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
     //Storage.rm('USERNAME');
     Storage.rm('PASSWORD');
     Storage.rm('userid');
+    $scope.navigation_login=$sce.trustAsResourceUrl("http://121.43.107.106/member.php?mod=logging&action=logout&formhash=xxxxxx");
     console.log($state);
     $timeout(function(){$state.go('signin');},500);
     };
