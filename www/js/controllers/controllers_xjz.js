@@ -708,7 +708,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             socket.on('getMsg',function(data){
                 console.info('getMsg');
                 console.log(data);
-                if (data.msg.targetType == 'single' && data.msg.fromName == $state.params.chatId) {
+                if (data.msg.targetType == 'single' && data.msg.fromID == $state.params.chatId) {
                     $scope.$apply(function(){
                         $scope.pushMsg(data.msg);
                     });
@@ -814,11 +814,11 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                         if ($scope.msgs.length!=0) $scope.msgs[0].diff = ($scope.msgs[0].createTimeInMillis - res[0].createTimeInMillis) > 300000 ? true : false;
                         for (var i = 0; i < res.length - 1; ++i) {
                             if(res[i].contentType=='image') res[i].content.thumb=CONFIG.mediaUrl+res[i].content['src_thumb'];
-                            res[i].direct = res[i].fromName==$scope.params.UID?'send':'receive';
+                            res[i].direct = res[i].fromID==$scope.params.UID?'send':'receive';
                             res[i].diff = (res[i].createTimeInMillis - res[i + 1].createTimeInMillis) > 300000 ? true : false;
                             $scope.msgs.unshift(res[i]);
                         }
-                        res[i].direct = res[i].fromName==$scope.params.UID?'send':'receive';
+                        res[i].direct = res[i].fromID==$scope.params.UID?'send':'receive';
                         res[i].diff = true;
                         $scope.msgs.unshift(res[i]);
                     // });
@@ -955,9 +955,9 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         console.log(args[1])
         if(args[1].direct=='receive'){
             if($scope.params.type=='2'){
-                return $state.go('tab.group-profile', { memberId: args[1].fromName });
+                return $state.go('tab.group-profile', { memberId: args[1].fromID });
             }else{
-                Storage.set('getpatientId',args[1].fromName); 
+                Storage.set('getpatientId',args[1].fromID); 
                 return $state.go('tab.patientDetail');
             }
             
@@ -984,7 +984,8 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             if(type==2) endlMsg.info="问诊已结束";
             var msgJson={
                 contentType:'custom',
-                fromName:thisDoctor.userId,
+                fromID:thisDoctor.userId,
+                fromName:thisDoctor.name,
                 fromUser:{
                     avatarPath:CONFIG.mediaUrl+'uploads/photos/resized'+thisDoctor.userId+'_myAvatar.jpg'
                 },
@@ -1022,7 +1023,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             if(msg.contentType=='image') msg.content.thumb=CONFIG.mediaUrl+msg.content['src_thumb'];
             msg.diff=$scope.msgs[pos].diff;
             // $scope.$apply(function(){
-                msg.direct = msg.fromName==$scope.params.UID?'send':'receive';
+                msg.direct = msg.fromID==$scope.params.UID?'send':'receive';
                 $scope.msgs[pos]=msg;
             // });
             alert(JSON.stringify(msg));
@@ -1036,7 +1037,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         }else{
             msg.diff=(msg.createTimeInMillis - $scope.msgs[$scope.msgs.length-1].createTimeInMillis) > 300000 ? true : false;
         }
-        msg.direct = msg.fromName==$scope.params.UID?'send':'receive';
+        msg.direct = msg.fromID==$scope.params.UID?'send':'receive';
         if(msg.contentType=='image') {
             msg.content.thumb=CONFIG.mediaUrl+msg.content['src_thumb'];
             $http.get(msg.content.thumb).then(function(data){
@@ -1070,7 +1071,8 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         }
         var msgJson={
             contentType:type,
-            fromName:$scope.params.UID,
+            fromID:$scope.params.UID,
+            fromName:thisDoctor.name,
             fromUser:{
                 avatarPath: CONFIG.mediaUrl+'uploads/photos/resized'+$scope.params.UID+'_myAvatar.jpg'
             },
@@ -1699,11 +1701,11 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                         if ($scope.msgs.length!=0) $scope.msgs[0].diff = ($scope.msgs[0].createTimeInMillis - res[0].createTimeInMillis) > 300000 ? true : false;
                         for (var i = 0; i < res.length - 1; ++i) {
                             if(res[i].contentType=='image') res[i].content.thumb=CONFIG.mediaUrl+res[i].content['src_thumb'];
-                            res[i].direct = res[i].fromName==$scope.params.UID?'send':'receive';
+                            res[i].direct = res[i].fromID==$scope.params.UID?'send':'receive';
                             res[i].diff = (res[i].createTimeInMillis - res[i + 1].createTimeInMillis) > 300000 ? true : false;
                             $scope.msgs.unshift(res[i]);
                         }
-                        res[i].direct = res[i].fromName==$scope.params.UID?'send':'receive';
+                        res[i].direct = res[i].fromID==$scope.params.UID?'send':'receive';
                         res[i].diff = true;
                         $scope.msgs.unshift(res[i]);
                         // $scope.msgs[0].diff = true;
@@ -1836,7 +1838,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
     $scope.$on('profile', function(event, args) {
         console.log(args)
         event.stopPropagation();
-        $state.go('tab.group-profile', { memberId: args[1].fromName });
+        $state.go('tab.group-profile', { memberId: args[1].fromID });
     })
     $scope.$on('viewcard', function(event, args) {
         console.log(args[1]);
@@ -1879,7 +1881,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             if(msg.contentType=='image') msg.content.thumb=CONFIG.mediaUrl+msg.content['src_thumb'];
             msg.diff=$scope.msgs[pos].diff;
             // $scope.$apply(function(){
-                msg.direct = msg.fromName==$scope.params.UID?'send':'receive';
+                msg.direct = msg.fromID==$scope.params.UID?'send':'receive';
                 $scope.msgs[pos]=msg;
             // });
         }
@@ -1892,7 +1894,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         }else{
             msg.diff=(msg.createTimeInMillis - $scope.msgs[$scope.msgs.length-1].createTimeInMillis) > 300000 ? true : false;
         }
-        msg.direct = msg.fromName==$scope.params.UID?'send':'receive';
+        msg.direct = msg.fromID==$scope.params.UID?'send':'receive';
         if(msg.contentType=='image') {
             msg.content.thumb=CONFIG.mediaUrl+msg.content['src_thumb'];
             $http.get(msg.content.thumb).then(function(data){
@@ -1929,7 +1931,8 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         }
         var msgJson={
             contentType:type,
-            fromName:$scope.params.UID,
+            fromID:$scope.params.UID,
+            fromName:thisDoctor.name,
             fromUser:{
                 avatarPath:CONFIG.mediaUrl+'uploads/photos/resized'+$scope.params.UID+'_myAvatar.jpg'
             },
@@ -2119,7 +2122,8 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                         var DID=res.results.doctorId.userId,PID=res.results.patientId.userId
                         var msgJson = {
                             contentType: 'text',
-                            fromName: DID,
+                            fromID: DID,
+                            fromName:res.results.doctorId.name,
                             fromUser: {
                                 avatarPath: CONFIG.mediaUrl + 'uploads/photos/resized' + DID + '_myAvatar.jpg'
                             },
@@ -2253,7 +2257,8 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                 //     });
                 var msgJson={
                     contentType:'custom',
-                    fromName:thisDoctor.userId,
+                    fromID:thisDoctor.userId,
+                    fromName:thisDoctor.name,
                     fromUser:{
                         avatarPath:CONFIG.mediaUrl+'uploads/photos/resized'+thisDoctor.userId+'_myAvatar.jpg'
                     },
@@ -2334,7 +2339,8 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                     msgdata.fromId=thisDoctor.userId;
                     var msgJson={
                         contentType:'custom',
-                        fromName:thisDoctor.userId,
+                        fromID:thisDoctor.userId,
+                        fromName:thisDoctor.name,
                         fromUser:{
                             avatarPath:CONFIG.mediaUrl+'uploads/photos/resized'+thisDoctor.userId+'_myAvatar.jpg'
                         },

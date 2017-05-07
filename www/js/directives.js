@@ -17,7 +17,7 @@ angular.module('kidney.directives', ['kidney.services'])
         controller:function($scope){
             var type='';
             $scope.base=CONFIG.mediaUrl;
-            $scope.msg.direct = $scope.msg.fromName==Storage.get('UID')?'send':'receive';
+            $scope.msg.direct = $scope.msg.fromID==Storage.get('UID')?'send':'receive';
             $scope.getTemplateUrl = function(){
                 type=$scope.msg.contentType;
                 if(type=='image'){
