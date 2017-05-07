@@ -8,7 +8,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
     {
         var state = temp[2].split('#')[0]
     }
-    if (state == 'patient' || sessionStorage.getItem('wechatstate') == "patient")
+    if (state == 'patient')
     {
         path = 'http://t.go5le.net/?code=' + Storage.get('code') + '#/signin'
         $window.location.href = path

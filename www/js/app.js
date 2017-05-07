@@ -31,7 +31,6 @@ angular.module('kidney',[
         if (angular.isDefined(temp[2]) == true)
         {
             var state = temp[2].split('#')[0]
-            sessionStorage.setItem('wechatstate',state)
         }
         var wechatData = ""
         if (state == 'patient')
