@@ -1660,7 +1660,8 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
   };      
   $scope.choosePhotos = function() {
     var config = "";
-    wechat.settingConfig({url:$location.absUrl()}).then(function(data){
+    var path = "http://test.go5le.net/?code=" + Storage.get('code');
+    wechat.settingConfig({url:path}).then(function(data){
       // alert(data.results.timestamp)
       config = data.results;
       config.jsApiList = ['chooseImage','uploadImage']
@@ -1715,7 +1716,8 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
     $scope.isShow=true;
     $scope.takePicture = function() {
       var config = "";
-      wechat.settingConfig({url:$location.absUrl()}).then(function(data){
+      var path = "http://test.go5le.net/?code=" + Storage.get('code');
+      wechat.settingConfig({url:path}).then(function(data){
         // alert(data.results.timestamp)
         config = data.results;
         config.jsApiList = ['chooseImage','uploadImage']
