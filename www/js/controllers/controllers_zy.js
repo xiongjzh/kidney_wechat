@@ -2,10 +2,10 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
 
 /////////////////////////////zhangying///////////////////////
 //登录
-.controller('SignInCtrl', ['User','$scope','$timeout','$state','Storage','loginFactory','$ionicHistory','JM', '$location','wechat','$window','$rootScope','Doctor',function(User,$scope, $timeout,$state,Storage,loginFactory,$ionicHistory,JM,$location,wechat,$window,$rootScope,Doctor) {
+.controller('SignInCtrl', ['User','$scope','$timeout','$state','Storage','loginFactory','$ionicHistory','JM', '$location','wechat','$window','$rootScope','Doctor','$sce',function(User,$scope, $timeout,$state,Storage,loginFactory,$ionicHistory,JM,$location,wechat,$window,$rootScope,Doctor,$sce) {
 
     $scope.barwidth="width:0%";
-
+    $scope.navigation_login=$sce.trustAsResourceUrl("http://121.43.107.106/member.php?mod=logging&action=logout&formhash=xxxxxx");
     if(Storage.get('USERNAME')!=null){
         $scope.logOn={username:Storage.get('USERNAME'),password:""};
     }
@@ -636,7 +636,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
 //首页
 .controller('homeCtrl', ['Communication','$scope','$state','$interval','$rootScope', 'Storage','$http','$sce','$timeout','Doctor',function(Communication,$scope, $state,$interval,$rootScope,Storage,$http,$sce,$timeout,Doctor) {
     $scope.barwidth="width:0%";
-    
+
     console.log(Storage.get('USERNAME'));
     $scope.isWriting={'margin-top': '100px'};
     if(!sessionStorage.addKBEvent)
@@ -656,7 +656,6 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
             $scope.isWriting={'margin-top': '100px'};
         })
     }
-
     Doctor.getDoctorInfo({
         userId:Storage.get('UID')
     })
@@ -664,14 +663,8 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
         function(data)
         {
             console.log(data)
-            $http({
-                method  : 'POST',
-                url     : 'http://121.43.107.106/member.php?mod=logging&action=logout&formhash=xxxxxx'
-            }).success(function(d) {
-                    // console.log(data);
-                $scope.navigation_login=$sce.trustAsResourceUrl("http://121.43.107.106/member.php?mod=logging&action=login&loginsubmit=yes&loginhash=$loginhash&mobile=2&username="+data.results.name+Storage.get('USERNAME').slice(7)+"&password="+data.results.name+Storage.get('USERNAME').slice(7));
-                $scope.navigation=$sce.trustAsResourceUrl("http://121.43.107.106/");
-            });
+            $scope.navigation_login=$sce.trustAsResourceUrl("http://121.43.107.106/member.php?mod=logging&action=login&loginsubmit=yes&loginhash=$loginhash&mobile=2&username="+data.results.name+Storage.get('USERNAME').slice(7)+"&password="+data.results.name+Storage.get('USERNAME').slice(7));
+            $scope.navigation=$sce.trustAsResourceUrl("http://121.43.107.106/");
         },
         function(err)
         {
