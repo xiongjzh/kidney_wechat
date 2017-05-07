@@ -606,7 +606,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
     $scope.input = {
         text: ''
     }
-    var path = "http://test.go5le.net/?code=" + Storage.get('code');
+    var path = "http://test.go5le.net/?code=" + Storage.get('code') + "&state=";
     $scope.params = {
             //[type]:0=已结束;1=进行中;2=医生
             type: '',
@@ -1492,6 +1492,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
     $scope.input = {
         text: ''
     }
+    var path = "http://test.go5le.net/?code=" + Storage.get('code') + "&state=";
     $scope.params = {
         type: '', //'0':团队交流  '1': 未结束病历  '2':已结束病历
         groupId: '',
@@ -1568,7 +1569,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         }
     })
     $scope.$on('$ionicView.enter', function() {
-            wechat.settingConfig({ url: $location.absUrl() }).then(function(data) {
+            wechat.settingConfig({ url: path }).then(function(data) {
                 config = data.results;
                 config.jsApiList = ['startRecord','stopRecord','playVoice','chooseImage','uploadVoice', 'uploadImage']
 

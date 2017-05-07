@@ -1510,7 +1510,7 @@ angular.module('tdy.controllers', ['ionic','kidney.services','ionic-datepicker']
   };      
   $scope.choosePhotos = function() {
     var config = "";
-    var path = "http://test.go5le.net/?code=" + Storage.get('code');
+    var path = "http://test.go5le.net/?code=" + Storage.get('code') + "&state=";
     wechat.settingConfig({url:path}).then(function(data){
       // alert(data.results.timestamp)
       config = data.results;
@@ -1567,7 +1567,7 @@ angular.module('tdy.controllers', ['ionic','kidney.services','ionic-datepicker']
   $scope.isShow=true;
   $scope.takePicture = function() {
       var config = "";
-      var path = "http://test.go5le.net/?code=" + Storage.get('code');
+      var path = "http://test.go5le.net/?code=" + Storage.get('code') + "&state=";
       wechat.settingConfig({url:path}).then(function(data){
         // alert(data.results.timestamp)
         config = data.results;
