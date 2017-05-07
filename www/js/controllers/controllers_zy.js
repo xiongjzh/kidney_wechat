@@ -1390,7 +1390,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
 
 
 //"我”个人资料页
-.controller('myinfoCtrl', ['Doctor','$scope','Storage', 'wechat','$location','$ionicPopup','$ionicPopover','$ionicLoading','Dict',function(Doctor,$scope, Storage,wechat,$location,$ionicPopup,$ionicPopover,$ionicLoading,Dict) {
+.controller('myinfoCtrl', ['Doctor','$scope','Storage', 'wechat','$location','$ionicPopup','$ionicPopover','$ionicLoading','Dict','$timeout',function(Doctor,$scope, Storage,wechat,$location,$ionicPopup,$ionicPopover,$ionicLoading,Dict,$timeout) {
     $scope.hideTabs = true;
     $scope.updateDiv=false;
     $scope.myDiv=true;
