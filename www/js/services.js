@@ -281,6 +281,7 @@ angular.module('kidney.services', ['ionic','ngResource'])
     // }
     // var msgSample={
     //     contentType:'',
+    //     fromID:'',
     //     fromName:'',
     //     fromUser:{
 
@@ -291,7 +292,7 @@ angular.module('kidney.services', ['ionic','ngResource'])
     //     status:'',
     //     diff:true,
     //     createTimeInMillis:'',
-    //     _id:'',
+    //     newsType:'',
     //     content:{}
     // }
     function pGen(u){
