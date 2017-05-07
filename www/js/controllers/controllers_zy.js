@@ -384,6 +384,10 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
             $timeout(function(){$state.go('setpassword',0)},500);
         }
     }
+    var a=document.getElementById("agreement");
+    // console.log(document.body.clientHeight);
+    // console.log(window.screen.height);
+    a.style.height=window.screen.height*0.85+"px";
 }])
 
 //设置密码
