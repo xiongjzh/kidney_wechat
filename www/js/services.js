@@ -211,54 +211,65 @@ angular.module('kidney.services', ['ionic','ngResource'])
     return audio;
 }])
 
-.factory('Chats', function() {
-    // Might use a resource here that returns a JSON array
-
-    // Some fake testing data
-    var chats = [{
-        id: 'user001',
-        name: 'user001',
-        lastText: 'You on your way?',
-        face: 'img/ben.png'
-    }, {
-        id: 'user002',
-        name: 'user002',
-        lastText: 'Hey, it\'s me',
-        face: 'img/max.png'
-    }, {
-        id: 'user003',
-        name: 'user003',
-        lastText: 'I should buy a boat',
-        face: 'img/adam.jpg'
-    }, {
-        id: 'user004',
-        name: 'user004',
-        lastText: 'Look at my mukluks!',
-        face: 'img/perry.png'
-    }, {
-        id: 'user005',
-        name: 'user005',
-        lastText: 'This is wicked good ice cream.',
-        face: 'img/mike.png'
-    }];
-
-    return {
-        all: function() {
-            return chats;
-        },
-        remove: function(chat) {
-            chats.splice(chats.indexOf(chat), 1);
-        },
-        get: function(chatId) {
-            for (var i = 0; i < chats.length; i++) {
-                if (chats[i].id === parseInt(chatId)) {
-                    return chats[i];
-                }
-            }
-            return null;
-        }
+.factory('jmapi',['$http','JM','Doctor',function($http,JM,Doctor){
+    var hs={
+        'Authorization':'Basic Y2YzMmI5NDQ0NGM0ZWFhY2VmODY5MDNlOmJhYjI4M2NkOWQzMDY4ZTE5NDYwODgzMg==',
+        'Content-Type':'application/json'
     };
-})
+    var host="https://api.im.jpush.cn/v1/";
+    function jmreq(method,resource,params){
+        req={
+            method:method,
+            url:host+resource,
+            headers:hs,
+            data:params
+        }
+        return $http(req);
+    }
+    return {
+        userCheck:function(userId){
+            jmreq('GET','users/'+userId)
+            .then(function(res){
+                console.log(res);
+            },function(err){
+                console.error(err);
+                if(err.data.error.code=='899002') return this.users(userId);
+            });
+        }
+        users:function(userId){
+            Doctor.getDoctorInfo({userId:userId})
+            .then(function(data){
+                var d={
+                    "username":userId,
+                    "password":JM.pGen(userId),
+                    "nickname":data.results.name
+                }
+                var arr=[d];
+                return jmreq('POST','users/',arr);
+            },function(err){
+                return null;
+            });
+        },
+        groups:function(userArr,Gname,Gdesc){
+            var owner = userArr[0];
+            userArr.splice(0,1);
+            var d={
+                "owner_username":owner, 
+                "name": Gname, 
+                "members_username": userArr, 
+                "desc": Gdesc
+            };
+            return jmreq('POST','groups/',d);
+        },
+        groupMembers:function(gid,addArr,delArr){
+            var d={
+                "add":addArr,
+                "remove":delArr
+            }
+            return jmreq('POST','groups/'+gid+'/members',d);
+        }
+    }
+}])
 //jmessage XJZ
 .factory('JM', ['Storage','$q','Doctor', function(Storage,$q,Doctor) {
     var ConversationList = [];
