@@ -34,7 +34,7 @@ angular.module('kidney',[
         var wechatData = ""
         if (state == 'patient')
         {
-            path = 'http://t.go5le.net/?code=' + code
+            path = 'http://t.go5le.net/?code=' + code + '#/signin'
             $window.location.href = path
         }
         else

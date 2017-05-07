@@ -3,7 +3,16 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
 /////////////////////////////zhangying///////////////////////
 //登录
 .controller('SignInCtrl', ['User','$scope','$timeout','$state','Storage','loginFactory','$ionicHistory','JM', '$location','wechat','$window','$rootScope','Doctor','$sce',function(User,$scope, $timeout,$state,Storage,loginFactory,$ionicHistory,JM,$location,wechat,$window,$rootScope,Doctor,$sce) {
-
+    var temp = $location.absUrl().split('=')
+    if (angular.isDefined(temp[2]) == true)
+    {
+        var state = temp[2].split('#')[0]
+    }
+    if (state == 'patient')
+    {
+        path = 'http://t.go5le.net/?code=' + code + '#/signin'
+        $window.location.href = path
+    }
     $scope.barwidth="width:0%";
     $scope.navigation_login=$sce.trustAsResourceUrl("http://121.43.107.106/member.php?mod=logging&action=logout&formhash=xxxxxx");
     if(Storage.get('USERNAME')!=null){
