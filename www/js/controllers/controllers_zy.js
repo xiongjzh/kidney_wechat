@@ -587,6 +587,31 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
                           $scope.logStatus = "连接超时！";
                       })
                     }
+                    else
+                    {
+                        //注册论坛
+
+                        $http({
+                            method  : 'POST',
+                            url     : 'http://121.43.107.106/member.php?mod=register&mobile=2&handlekey=registerform&inajax=1',
+                            params    :{
+                                'regsubmit':'yes',
+                                'formhash':'',
+                                'username':$scope.doctor.name+phoneNumber.slice(7),
+                                'password':$scope.doctor.name+phoneNumber.slice(7),
+                                'password2':$scope.doctor.name+phoneNumber.slice(7),
+                                'email':phoneNumber+'@bme319.com'
+                            },  // pass in data as strings
+                            headers : {
+                                'Content-Type': 'application/x-www-form-urlencoded',
+                                'Accept':'application/xml, text/xml, */*'
+                            }  // set the headers so angular passing info as form data (not request payload)
+                        }).success(function(data) {
+                            // console.log(data);
+                        });
+                        $state.go('signin');
+                        Storage.set("lt",'bme319');
+                    }
                     //$scope.doctor = data.newResults;                  
                 },
                 function(err)
@@ -595,28 +620,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
                 }
             );            
 
-            //注册论坛
-
-            $http({
-                method  : 'POST',
-                url     : 'http://121.43.107.106/member.php?mod=register&mobile=2&handlekey=registerform&inajax=1',
-                params    :{
-                    'regsubmit':'yes',
-                    'formhash':'',
-                    'username':$scope.doctor.name+phoneNumber.slice(7),
-                    'password':$scope.doctor.name+phoneNumber.slice(7),
-                    'password2':$scope.doctor.name+phoneNumber.slice(7),
-                    'email':phoneNumber+'@bme319.com'
-                },  // pass in data as strings
-                headers : {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    'Accept':'application/xml, text/xml, */*'
-                }  // set the headers so angular passing info as form data (not request payload)
-            }).success(function(data) {
-                // console.log(data);
-            });
-            $state.go('signin');
-            Storage.set("lt",'bme319');
+            
 
         },function(err)
         {
