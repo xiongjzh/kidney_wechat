@@ -7,22 +7,20 @@
     <ion-content class="gray-back" scroll="false">
         <div style="width:100%;margin:0;max-height:65vh;overflow-y: scroll;" class="list">
             <div class="item item-avatar" style="padding-bottom:10px">
-                <img ng-src="img/avatar.png">
+                <img ng-src="{{patient.patientId.photoUrl || 'img/DefaultAvatar.jpg'}} ">
                 <div>
                     <div style="display:inline-block;margin-right:1.2em;font-size:1.25em">{{patient.patientId.name}} </div>
-                    <div style="display:inline-block">{{patient.patientId.gender}} {{patient.patientId.birthday}}</div>
-                    <div style="display:inline-block;float:right">{{patient.time}}</div>
+                    <div style="display:inline-block">{{patient.patientId.gender | filterGender}} {{patient.patientId.birthday | filterAge}}岁</div>
+                    <div style="display:inline-block;float:right">{{patient.time |msgdate}}</div>
                 </div>
-                <p style="width:60%;display:inline-block;"><i class="icon ion-android-car"></i>{{patient.diseaseInfo.symptom}}</p>
+                <p style="width:60%;display:inline-block;">主题:{{patient.diseaseInfo.symptom}}</p>
             </div>
-            <div class="item item-body">
-                <div style="display:inline-block;color:#00897b;width:65%">{{patient.patientId.class}} {{patient.patientId.hypertension}}</div>
-                <div style="display:inline-block;color:#00897b;width:30%">{{patient.patientId.operationTime}}</div>
-                <!-- <div style="display:inline-block;float:right;text-align:right;width:30%"><i style="color:#00E676" class="icon ion-android-pin"></i> 杭州</div> -->
-                <div>
-                    {{patient.diseaseInfo.help}}
-                </div>
-                <!--  <img style="height:3.5em;width:3.5em;margin:0.4em 0.8em 0 0" ng-repeat="pic in content.pics" ng-src="{{pic}}" ng-click="viewPic(this.pic)" /> -->
+            <div class="item item-body card-prefix">
+                <p><span>发病时间</span> {{patient.diseaseInfo.sickTime}}</p>
+                <p><span>就诊医院</span> {{patient.diseaseInfo.hospital}}</p>
+                <p><span>就诊时间</span>{{patient.diseaseInfo.visitDate.substr(0,10)}}</p>
+                <p><span>诊断结果</span>{{patient.diseaseInfo.diagnosis}}</p>
+                <p><span>期望的帮助</span>{{patient.diseaseInfo.help}}</p>
             </div>
         </div>
         <form>
@@ -32,3 +30,4 @@
         </form>
     </ion-content>
 </ion-view>
+
