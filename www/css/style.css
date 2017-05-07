@@ -549,6 +549,10 @@
         height:3em;
     }
 
+    .card-prefix p{
+        margin-top:8px;
+        margin-bottom:8px;
+    }
     .card-prefix span{
         color:#2196F3;
         font-size:1.15em;
