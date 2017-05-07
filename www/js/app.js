@@ -26,10 +26,12 @@ angular.module('kidney',[
         if (angular.isDefined(temp[1]) == true)
         {
             var code = temp[1].split('&')[0]
+            Storage.set('code',code)
         }
         if (angular.isDefined(temp[2]) == true)
         {
             var state = temp[2].split('#')[0]
+            sessionStorage.setItem('wechatstate',state)
         }
         var wechatData = ""
         if (state == 'patient')
