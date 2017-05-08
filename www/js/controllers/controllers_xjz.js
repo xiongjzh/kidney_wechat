@@ -687,7 +687,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         // }
         $scope.getMsg(15).then(function(data){
             $scope.msgs=data;
-            toBottom(true,250);
+            toBottom(true,500);
         });
     });
 
@@ -1046,7 +1046,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         }else{
             $scope.msgs.push(msg);
         }
-        toBottom(true,100);
+        toBottom(true,500);
     }
     // send message--------------------------------------------------------------------------------
 
@@ -1623,7 +1623,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             // })
             $scope.getMsg(15).then(function(data){
                 $scope.msgs=data;
-                toBottom(true,250);
+                toBottom(true,500);
             });
 
             imgModalInit();
@@ -1903,7 +1903,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         }else{
             $scope.msgs.push(msg);
         }
-        toBottom(true,250);
+        toBottom(true,500);
         // $scope.$apply(function(){
             // $scope.msgs.push(msg);
 
