@@ -1616,7 +1616,7 @@ angular.module('kidney.services', ['ionic','ngResource'])
     };
     return self;
 }])
-.factory('New',['$q','Data',function($q,Data){
+.factory('New',['$q','Data','arrTool',function($q,Data,arrTool){
     var self = this;
     self.getNews = function(params){
         var deferred = $q.defer();
@@ -1641,6 +1641,67 @@ angular.module('kidney.services', ['ionic','ngResource'])
                 deferred.reject(err);
         });
         return deferred.promise;
+    }
+    function getIndex(arr,val){
+        for(var i in arr){
+            if(arr.userId==val || arr.sendBy==val) return i;
+        }
+        return -1;
+    }
+    function addLastMsg(type,userId,msg){
+        // item.lastMsg=msg;
+        try{
+            if(type=='13' && msg.url.userId!=userId) {
+                msg.url=JSON.parse(msg.url);
+                msg.description=msg.url.name + ':' + msg.description;
+            }
+        }catch(e){}
+        return msg;
+    }
+    self.addNews = function(type,userId,arr,idName){
+        return $q(function(resolve,reject){
+            var q={
+                userId:userId,
+                type:type
+            }
+            this.getNews(q)
+            .then(function(res){
+                var msgs=res.results;
+                arr.map(function(item){
+                    var pos = getIndex(msgs,item[idName]);
+                    if(pos!=-1){
+                        item.lastMsg= addLastMsg(type,userId,msgs[pos]);
+                    }
+                    return item;
+                })
+                resolve(arr);
+            },function(err){
+                resolve(arr);
+            });
+        });
+
+    }
+    self.addNestNews = function(type,userId,arr,idName,keyName){
+        return $q(function(resolve,reject){
+            var q={
+                userId:userId,
+                type:type
+            }
+            this.getNews(q)
+            .then(function(res){
+                var msgs=res.results;
+                arr.map(function(item){
+                    var pos = getIndex(msgs,item[keyName][idName]);
+                    if(pos!=-1){
+                        item.lastMsg= addLastMsg(type,userId,msgs[pos]);
+                    }
+                    return item;
+                });
+                resolve(arr);
+            },function(err){
+                resolve(arr);
+            });
+        });
     }
     return self;
 }])

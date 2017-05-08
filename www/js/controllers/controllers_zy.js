@@ -957,7 +957,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
 
 
 //"患者”页
-.controller('patientCtrl', ['Doctor','$scope','$state','$ionicLoading','$interval','$rootScope', 'Storage','$ionicPopover',  function(Doctor,$scope, $state,$ionicLoading,$interval,$rootScope,Storage,$ionicPopover) {
+.controller('patientCtrl', ['Doctor','$scope','$state','$ionicLoading','$interval','$rootScope', 'Storage','$ionicPopover','New',  function(Doctor,$scope, $state,$ionicLoading,$interval,$rootScope,Storage,$ionicPopover,New) {
     $scope.barwidth="width:0%";
     var patients=[];
 
@@ -979,7 +979,11 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
                 if (data.results!='')
                 {
                     $scope.allpatients=data.results.patients;
-                    $scope.patients=$scope.allpatients;
+                    New.addNestNews('11',Storage.get('UID'),$scope.allpatients,'userId','patientId')
+                    .then(function(pats){
+                        $scope.patients=pats;
+                    })
+                    // $scope.patients=$scope.allpatients;
                     //$scope.patients[1].patientId.VIP=0;
                     // $scope.patients.push(
                     //     {show:true,patientId:{IDNo:"330183199210315001",gender:1,class:"class_1",VIP:0,name:'static_01',birthday:"2017-04-18T00:00:00.000Z"}},
@@ -1014,7 +1018,11 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
             function(data)
             {
                 //console.log(data)
-                $scope.Todays=data.results2;
+                New.addNestNews('11',Storage.get('UID'),data.results2,'userId','patientId')
+                .then(function(pats){
+                    $scope.Todays=pats;
+                })
+                // $scope.Todays=data.results2;
                 // $scope.Todays.push(
                 //         {show:true,patientId:{IDNo:"330183199210315001",gender:1,class:"class_1",VIP:0,name:'static_01',birthday:"2017-04-18T00:00:00.000Z"}},
                 //         {show:false,patientId:{IDNo:"330183199210315002",gender:0,class:"class_2",VIP:1,name:'static_02',birthday:"2016-04-18T00:00:00.000Z"}},

@@ -223,7 +223,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
     }
 }])
 //我的团队
-.controller('groupsCtrl', ['$scope', '$http', '$state', '$ionicPopover', 'Doctor', 'Storage', 'Patient','arrTool','$q','wechat','$location', function($scope, $http, $state, $ionicPopover, Doctor, Storage, Patient,arrTool,$q,wechat,$location) {
+.controller('groupsCtrl', ['$scope', '$http', '$state', '$ionicPopover', 'Doctor', 'Storage', 'Patient','arrTool','$q','wechat','$location','New', function($scope, $http, $state, $ionicPopover, Doctor, Storage, Patient,arrTool,$q,wechat,$location,New) {
     // $scope.teams=[];
     // $scope.doctors=[];
     $scope.query = {
@@ -318,18 +318,26 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             Doctor.getMyGroupList({ userId: Storage.get('UID') })
                 .then(function(data) {
                     console.log(data);
-                    setGroupUnread(data)
+                    New.addNews('13',Storage.get('UID'),data,'teamId')
                     .then(function(teams){
                         $scope.teams=teams;
-                    });
+                    })
+                    // setGroupUnread(data)
+                    // .then(function(teams){
+                    //     $scope.teams=teams;
+                    // });
                 });
             Doctor.getRecentDoctorList({ userId: Storage.get('UID') })
                 .then(function(data) {
                     console.log(data);
-                    setSingleUnread(data.results)
+                    New.addNestNews('12',Storage.get('UID'),data.results,'userId','doctorId')
                     .then(function(doctors){
                         $scope.doctors=doctors;
-                    });
+                    })
+                    // setSingleUnread(data.results)
+                    // .then(function(doctors){
+                    //     $scope.doctors=doctors;
+                    // });
                 }, function(err) {
                     console.log(err)
                 });
@@ -617,7 +625,8 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             moreMsgs: true,
             UID:Storage.get('UID'),
             realCounselType:'',
-            newsType:''
+            newsType:'',
+            counsel:{}
         }
         // var audio = new Audio('http://121.43.107.106:8088/PersonalPhoto/Emotions.mp3');
         // audio.play();
@@ -645,6 +654,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             Communication.getCounselReport({counselId:$state.params.counselId})
             .then(function(data){
                 console.log(data)
+                $scope.params.counsel = data.results;
                 $scope.counseltype= data.results.type=='3'?'2':data.results.type;
                 $scope.counselstatus=data.results.status;
                 $scope.params.realCounselType=data.results.type;
@@ -980,9 +990,12 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                 type:'endl',
                 info:"咨询已结束",
                 docId:thisDoctor.userId,
-                counseltype:2
+                counseltype:1
             }
-            if(type==2) endlMsg.info="问诊已结束";
+            if(type==2){
+                endlMsg.info="问诊已结束";
+                endlMsg.counseltype=2;
+            }
             var msgJson={
                 contentType:'custom',
                 fromID:thisDoctor.userId,
@@ -991,7 +1004,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                     avatarPath:CONFIG.mediaUrl+'uploads/photos/resized'+thisDoctor.userId+'_myAvatar.jpg'
                 },
                 targetID:$scope.params.chatId,
-                targetName:'',
+                targetName:$scope.params.counsel.patientId.name,
                 targetType:'single',
                 status:'send_going',
                 createTimeInMillis: Date.now(),
@@ -1078,7 +1091,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                 avatarPath: CONFIG.mediaUrl+'uploads/photos/resized'+$scope.params.UID+'_myAvatar.jpg'
             },
             targetID:$scope.params.chatId,
-            targetName:'',
+            targetName:$scope.params.counsel.patientId.name,
             targetType:'single',
             status:'send_going',
             createTimeInMillis: Date.now(),
@@ -1940,7 +1953,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             },
             targetID:$scope.params.groupId,
             teamId:$scope.params.teamId,
-            targetName:'',
+            targetName:$scope.team.name,
             targetType:'group',
             status:'send_going',
             createTimeInMillis: Date.now(),
@@ -2265,7 +2278,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                         avatarPath:CONFIG.mediaUrl+'uploads/photos/resized'+thisDoctor.userId+'_myAvatar.jpg'
                     },
                     targetID:doc.userId,
-                    targetName:'',
+                    targetName:doc.name,
                     targetType:'single',
                     status:'send_going',
                     createTimeInMillis: Date.now(),
@@ -2348,7 +2361,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                         },
                         targetID:team.teamId,
                         teamId:team.teamId,
-                        targetName:'',
+                        targetName:msgdata.patientName + '-' +team.name,
                         targetType:'group',
                         status:'send_going',
                         newsType:'13',
