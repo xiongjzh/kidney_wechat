@@ -25,20 +25,11 @@ angular.module('kidney',[
         // alert(temp)
         if (angular.isDefined(temp[1]) == true)
         {
-            var code = temp[1].split('&')[0]
+            var code = temp[1].split('#')[0]
             Storage.set('code',code)
         }
-        if (angular.isDefined(temp[2]) == true)
-        {
-            var state = temp[2].split('#')[0]
-        }
         var wechatData = ""
-        if (state == 'patient')
-        {
-            path = 'http://t.go5le.net/?code=' + code + '#/signin'
-            $window.location.href = path
-        }
-        else
+        if (code != '' && code != undefined)
         {
             wechat.getUserInfo({code:code}).then(function(data){ 
                 // alert(1)
@@ -850,5 +841,9 @@ angular.module('kidney',[
         $state.go('tab.patient', {});
       },20);
     }
-
+    $scope.goMe = function(){
+        setTimeout(function() {
+        $state.go('tab.me', {});
+      },20);
+    }
 }])

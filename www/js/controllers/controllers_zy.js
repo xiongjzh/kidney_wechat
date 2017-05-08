@@ -598,8 +598,29 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
                     }).success(function(data) {
                         // console.log(data);
                     });
-                    $state.go('signin');
-                    Storage.set("lt",'bme319');
+                    if (Storage.get('openid') == null)
+                    {
+                        $state.go('signin');
+                        Storage.set("lt",'bme319');
+                    }
+                    else
+                    {
+                        User.setOpenId({phoneNo:phoneNumber,openId:Storage.get('openid')})
+                        .then(
+                            function(data)
+                            {
+                                if(data.msg == "success!")
+                                {
+                                    $state.go('tab.home');
+                                }            
+                            },
+                            function(err)
+                            {
+                                console.log(err)
+                            }
+                        ); 
+                    }
+                    
 
                 },function(err)
                 {
@@ -1684,7 +1705,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
   };      
   $scope.choosePhotos = function() {
     var config = "";
-    var path = "http://test.go5le.net/?code=" + Storage.get('code') + "&state=";
+    var path = "http://121.43.107.106:8060/?code=" + Storage.get('code');
     wechat.settingConfig({url:path}).then(function(data){
       // alert(data.results.timestamp)
       config = data.results;
@@ -1740,7 +1761,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
     $scope.isShow=true;
     $scope.takePicture = function() {
       var config = "";
-      var path = "http://test.go5le.net/?code=" + Storage.get('code') + "&state=";
+      var path = "http://121.43.107.106:8060/?code=" + Storage.get('code');
       wechat.settingConfig({url:path}).then(function(data){
         // alert(data.results.timestamp)
         config = data.results;
