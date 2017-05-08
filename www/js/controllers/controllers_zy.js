@@ -598,8 +598,29 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
                     }).success(function(data) {
                         // console.log(data);
                     });
-                    $state.go('signin');
-                    Storage.set("lt",'bme319');
+                    if (Storage.get('openid') == null)
+                    {
+                        $state.go('signin');
+                        Storage.set("lt",'bme319');
+                    }
+                    else
+                    {
+                        User.setOpenId({phoneNo:phoneNumber,openId:Storage.get('openid')})
+                        .then(
+                            function(data)
+                            {
+                                if(data.msg == "success!")
+                                {
+                                    $state.go('tab.home');
+                                }            
+                            },
+                            function(err)
+                            {
+                                console.log(err)
+                            }
+                        ); 
+                    }
+                    
 
                 },function(err)
                 {
