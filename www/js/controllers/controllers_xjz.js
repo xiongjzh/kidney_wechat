@@ -623,7 +623,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
     $scope.input = {
         text: ''
     }
-    var path = "http://121.43.107.106:8060/?code=" + Storage.get('code');
+    var path = "http://test.go5le.net/?code=" + Storage.get('code');
     $scope.params = {
             //[type]:0=已结束;1=进行中;2=医生
             type: '',
@@ -1514,7 +1514,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
     $scope.input = {
         text: ''
     }
-    var path = "http://121.43.107.106:8060/?code=" + Storage.get('code');
+    var path = "http://test.go5le.net/?code=" + Storage.get('code');
     $scope.params = {
         type: '', //'0':团队交流  '1': 未结束病历  '2':已结束病历
         groupId: '',
