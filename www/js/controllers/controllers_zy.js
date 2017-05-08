@@ -1691,7 +1691,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
   };      
   $scope.choosePhotos = function() {
     var config = "";
-    var path = "http://test.go5le.net/?code=" + Storage.get('code') + "&state=";
+    var path = "http://121.43.107.106:8060/?code=" + Storage.get('code');
     wechat.settingConfig({url:path}).then(function(data){
       // alert(data.results.timestamp)
       config = data.results;
@@ -1747,7 +1747,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
     $scope.isShow=true;
     $scope.takePicture = function() {
       var config = "";
-      var path = "http://test.go5le.net/?code=" + Storage.get('code') + "&state=";
+      var path = "http://121.43.107.106:8060/?code=" + Storage.get('code');
       wechat.settingConfig({url:path}).then(function(data){
         // alert(data.results.timestamp)
         config = data.results;
