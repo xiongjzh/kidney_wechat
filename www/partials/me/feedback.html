@@ -9,6 +9,7 @@
         </ion-nav-back-button>
         </ion-nav-bar>
     <ion-content>
+        <ion-refresher pulling-text="下拉刷新..." on-refresh="doRefresh()"></ion-refresher>
         <ion-item>
             <span class="msg">我的评分</span>
             <p class="myinfo-msg-right" style="color:red;">{{doctor.score}}</p>
@@ -17,14 +18,14 @@
         <span class="input-label" style="margin-left:10px;color:#0066FF;"><i class="icon ion-ios-star" style="margin-right:5px;font-size:20px" ></i>我的评价</span>
         </ion-item>
         <div class="list">
-			<a class="item item-thumbnail-left" ng-repeat="fb in feedbacks">
-				<img ng-src="fb.photoUrl">
+            <a class="item item-thumbnail-left" ng-repeat="fb in feedbacks">
+                <img ng-src="fb.photoUrl">
                 <h2>{{fb.patientId.name}}</h2>
                 <p class="friend-detail-p">评分：{{fb.totalScore}}</p>
                 <p class="friend-detail-p">{{fb.content}}</p>
-				<p class="friend-detail-p">评论时间：{{fb.time}}</p>
+                <p class="friend-detail-p">评论时间：{{fb.time}}</p>
 
-			</a>
+            </a>
         </div>
     </ion-content>
 </ion-view>

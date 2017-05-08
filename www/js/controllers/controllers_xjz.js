@@ -398,6 +398,11 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         // });
 
     })
+    $scope.doRefresh = function(){
+        $scope.load();
+        // Stop the ion-refresher from spinning
+        $scope.$broadcast('scroll.refreshComplete');
+    } 
     $scope.showTeams = function() {
         $scope.params.isTeam = true;
     }
@@ -530,7 +535,11 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             })
     }
 
-
+    $scope.doRefresh = function(){
+        $scope.load();
+        // Stop the ion-refresher from spinning
+        $scope.$broadcast('scroll.refreshComplete');
+    }
     $scope.enterChat = function(type, patient) {
         $state.go('tab.group-chat', { type: type, teamId: $scope.params.teamId, groupId: patient.consultationId });
     }

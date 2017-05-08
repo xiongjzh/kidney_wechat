@@ -807,7 +807,17 @@ angular.module('kidney',[
             }
         }
     })
-
+    //查看协议页
+    .state('tab.viewAgree', {
+        // cache: false,
+        url: '/me/set/viewAgree',
+        views: {
+            'tab-me':{
+                controller: 'viewAgreeCtrl',
+                templateUrl: 'partials/me/set/viewAgree.html'
+            }
+        }
+    }) 
     //关于
     .state('tab.about', {
         // cache: false,

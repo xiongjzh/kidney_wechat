@@ -217,18 +217,24 @@ angular.module('tdy.controllers', ['ionic','kidney.services','ionic-datepicker']
       console.log(Storage.get("getpatientId"))
       VitalSign.getVitalSigns({userId:Storage.get("getpatientId"),type:'血压'}).then(
       function(Data){
-        $scope.ChartData=[];
+        $scope.ChartData1=[];
+        $scope.ChartData2=[];
         console.log(Data.results.length)
         for(var i=0;i<Data.results.length;i++){
           // if(Data.results[i].date>="2017-04-08"&&Data.results[i].code=="舒张压"){
           if(Data.results[i].code=="舒张压"){
             for(var j=0;j<Data.results[i].data.length;j++){
-              $scope.ChartData.push(Data.results[i].data[j])
+              $scope.ChartData1.push(Data.results[i].data[j])
+            }
+          }else{
+            for(var j=0;j<Data.results[i].data.length;j++){
+
+              $scope.ChartData2.push(Data.results[i].data[j])
             }
           }
         }
-        if($scope.ChartData.length==0){
-          console.log($scope.ChartData)
+        if($scope.ChartData1.length==0){
+          console.log($scope.ChartData1)
           $scope.chartdiv=false;
         }else{
           $scope.chartdiv=true;
@@ -237,7 +243,7 @@ angular.module('tdy.controllers', ['ionic','kidney.services','ionic-datepicker']
             "theme": "light",
             "marginTop":0,
             "marginRight": 80,
-            "dataProvider": $scope.ChartData,
+            "dataProvider": $scope.ChartData1,
             "valueAxes": [{
                 "axisAlpha": 0,
                 "position": "left"
@@ -291,32 +297,18 @@ angular.module('tdy.controllers', ['ionic','kidney.services','ionic-datepicker']
             }
         });
         }
-        // console.log($scope.ChartData);
-        // createStockChart("chartdiv",$scope.ChartData,"舒张压","mmHg");
-      }, function(e) {  
-      });
-
-      VitalSign.getVitalSigns({userId:Storage.get("getpatientId"),type:'血压'}).then(
-      function(Data){
-        $scope.ChartData=[];
-        console.log(Data.results.length)
-        for(var i=0;i<Data.results.length;i++){
-          if(Data.results[i].code=="收缩压"){
-            for(var j=0;j<Data.results[i].data.length;j++){
-              $scope.ChartData.push(Data.results[i].data[j])
-            }
-          }
-        }
-        if($scope.ChartData.length==0){
+        if($scope.ChartData2.length==0){
           $scope.chartdiv1=false;
         }else{
+          console.log($scope.ChartData2)
           $scope.chartdiv1=true;
+          console.log($scope.chartdiv1)
           AmCharts.makeChart("chartdiv1", {
             "type": "serial",
             "theme": "light",
             "marginTop":0,
             "marginRight": 80,
-            "dataProvider": $scope.ChartData,
+            "dataProvider": $scope.ChartData2,
             "valueAxes": [{
                 "axisAlpha": 0,
                 "position": "left"
@@ -368,12 +360,92 @@ angular.module('tdy.controllers', ['ionic','kidney.services','ionic-datepicker']
             "export": {
                 "enabled": true
             }
-          });
+        });
         }
+
         // console.log($scope.ChartData);
-        // createStockChart("chartdiv",$scope.ChartData,"收缩压","mmHg");
+        // createStockChart("chartdiv",$scope.ChartData,"舒张压","mmHg");
       }, function(e) {  
       });
+
+      // VitalSign.getVitalSigns({userId:Storage.get("getpatientId"),type:'血压'}).then(
+      // function(Data){
+      //   $scope.ChartData=[];
+      //   console.log(Data.results.length)
+      //   for(var i=0;i<Data.results.length;i++){
+      //     if(Data.results[i].code=="收缩压"){
+      //       for(var j=0;j<Data.results[i].data.length;j++){
+      //         $scope.ChartData.push(Data.results[i].data[j])
+      //       }
+      //     }
+      //   }
+      //   if($scope.ChartData.length==0){
+      //     $scope.chartdiv1=false;
+      //   }else{
+      //     $scope.chartdiv1=true;
+      //     AmCharts.makeChart("chartdiv1", {
+      //       "type": "serial",
+      //       "theme": "light",
+      //       "marginTop":0,
+      //       "marginRight": 80,
+      //       "dataProvider": $scope.ChartData,
+      //       "valueAxes": [{
+      //           "axisAlpha": 0,
+      //           "position": "left"
+      //       }],
+      //       "graphs": [{
+      //           "id":"g1",
+      //           "balloonText": "[[category]]<br><b><span style='font-size:14px;'>[[value]]</span></b>",
+      //           "bullet": "round",
+      //           "bulletSize": 8,
+      //           "lineColor": "#d1655d",
+      //           "lineThickness": 2,
+      //           "negativeLineColor": "#637bb6",
+      //           // "type": "smoothedLine",
+      //           "valueField": "value"
+      //       }],
+      //       "chartScrollbar": {
+      //           "graph":"g1",
+      //           "gridAlpha":0,
+      //           "color":"#888888",
+      //           "scrollbarHeight":55,
+      //           "backgroundAlpha":0,
+      //           "selectedBackgroundAlpha":0.1,
+      //           "selectedBackgroundColor":"#888888",
+      //           "graphFillAlpha":0,
+      //           "autoGridCount":true,
+      //           "selectedGraphFillAlpha":0,
+      //           "graphLineAlpha":0.2,
+      //           "graphLineColor":"#c2c2c2",
+      //           "selectedGraphLineColor":"#888888",
+      //           "selectedGraphLineAlpha":1
+
+      //       },
+      //       "chartCursor": {
+      //           "categoryBalloonDateFormat": "YYYY-MM-DD",
+      //           "cursorAlpha": 0,
+      //           "valueLineEnabled":true,
+      //           "valueLineBalloonEnabled":true,
+      //           "valueLineAlpha":0.5,
+      //           "fullWidth":true
+      //       },
+      //       "dataDateFormat": "YYYY-MM-DD",
+      //       "categoryField": "time",
+      //       "categoryAxis": {
+      //           "minPeriod": "mm",
+      //           "parseDates": true,
+      //           "minorGridAlpha": 0.1,
+      //           "minorGridEnabled": true
+      //       },
+      //       "export": {
+      //           "enabled": true
+      //       }
+      //     });
+      //   }
+      //   // console.log($scope.ChartData);
+      //   // createStockChart("chartdiv",$scope.ChartData,"收缩压","mmHg");
+      // }, function(e) {  
+      // });
 
       VitalSign.getVitalSigns({userId:Storage.get("getpatientId"),type:'体温'}).then(
       function(Data){
@@ -843,7 +915,7 @@ angular.module('tdy.controllers', ['ionic','kidney.services','ionic-datepicker']
 .controller('TaskSetCtrl', ['$scope', '$state', '$ionicPopup', 'Storage', 'Task', function ($scope, $state, $ionicPopup, Storage, Task) {
   //初始化
    var UserId = Storage.get('getpatientId'); 
-   //var UserId = "Test09";
+   //UserId = "Test12";
    $scope.Tasks = [];
    $scope.EditTasks = []; //修改任务
    $scope.$on('$ionicView.enter', function() {
@@ -890,11 +962,13 @@ angular.module('tdy.controllers', ['ionic','kidney.services','ionic-datepicker']
                var newTask = task.details[j];       
                if(newTask.times != 0)
                {
+                 newTask.flag = true;
                  newTask.type = task.type;
                  if((newTask.type == "ReturnVisit") && (newTask.code == "stage_9"))//血透
                  {
-                    newTask.dateStr = newTask.content;
-                    newTask.content = newTask.instruction;
+                    //newTask.dateStr = newTask.content;
+                    newTask.flag = false; //暂时设定血透排班不可更改备注
+                    newTask.content = "设定血透排班";
                  }    
                  newTask.Name = NameMatch(newTask.type);               
                  $scope.Tasks.Other.push(newTask);   
@@ -1016,11 +1090,10 @@ angular.module('tdy.controllers', ['ionic','kidney.services','ionic-datepicker']
           var flag = false;
           var newTask = JSON.parse(JSON.stringify(task));
           newTask.Flag = false;
-          if((newTask.type == "ReturnVisit") && (newTask.code == "stage_9"))//血透
-          {
-             newTask.instruction = newTask.content;
+         /* if((newTask.type == "ReturnVisit") && (newTask.code == "stage_9"))//血透
+          {            
              newTask.content = newTask.dateStr;
-          }
+          }*/
           for(var i=0;i<$scope.EditTasks.length;i++)
           {
              if($scope.EditTasks[i].Name == newTask.Name)
@@ -1044,11 +1117,11 @@ angular.module('tdy.controllers', ['ionic','kidney.services','ionic-datepicker']
     {
       var newTask = JSON.parse(JSON.stringify(item));
       var flag = false;
-      if((newTask.type == "ReturnVisit") && (newTask.code == "stage_9"))//血透
+      /*if((newTask.type == "ReturnVisit") && (newTask.code == "stage_9"))//血透
       {
          newTask.instruction = newTask.content;
          newTask.content = newTask.dateStr;
-      }
+      }*/
       for(var i=0;i<$scope.EditTasks.length;i++)
       { 
          var task = $scope.EditTasks[i]

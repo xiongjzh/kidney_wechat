@@ -19,7 +19,7 @@ angular.module('kidney.filters', [])
         var g="未知";
         if(gender==1)
         	g='男'
-        if(gender==0)
+        if(gender==2)
         	g='女'
         return g;
     }
