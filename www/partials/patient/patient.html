@@ -2,24 +2,24 @@
     <ion-nav-bar class="bar-positive" align-title="center">
 
      <ion-nav-buttons class="bar-dark nav-title-slide-ios7" side="right" >
-         <button class="button button-clear"  ng-click="openPopover($event)"><i class="icon ion-android-funnel"></i></button>
+         <button class="button button-clear"  ng-click="openPopover($event)"><i class="iconfont icon-menu pat-mun-icon"></i></button>
       </ion-nav-buttons>
     </ion-nav-bar>
 
 
     <ion-content>
-        <div class="bar item-input-inset bar-light">
-            <div class="item-input-wrapper">
-                <i style="color:#3d6399;font-size:1.6em" class="icon ion-android-search placeholder-icon"></i>
+        <div class="bar bar-header item-input-inset" style="height:60px;">
+            <label class="item-input-wrapper">
+                <i class="icon ion-ios-search placeholder-icon f-24"></i>
                 <input type="search" ng-model="search.name" placeholder="搜索患者姓名">
                 <i style="color:#EF473A;font-size:1.6em" class="icon ion-android-close placeholder-icon" ng-click="clearSearch()"></i>
-            </div>
+            </label>
             <button  class="button button-clear button-positive" ng-click="goSearch()">
                 搜索
             </button>
         </div>
 
-        <div class="bar bar-subheader item-input-inset bar-light text-center" style="padding:0;position: 0px;top:0px">
+        <div class="bar bar-subheader item-input-inset text-center" style="padding:0;position: 0px;top:0px">
 
             <a ng-class="{'high-light':params.isPatients}" class="item col-50 " ng-click="ShowPatients()">
                 <span>全部患者：{{patients.length}}</span>
@@ -34,13 +34,16 @@
         <div ng-if="params.isPatients" class="list">
             <div ng-repeat="p in patients |orderBy:filter.propertyName" collection-item-height="94px" class="item item-avatar" type="item-text-wrap" ng-click="getPatientDetail(p.patientId.userId)">
                 <img ng-src="{{p.patientId.photoUrl||'img/patient.png'}}">
-                    <!-- <div style="display:inline-block;width:70%;"> -->
+                    <div style="display:inline-block;width:70%;">
                         <h2>{{p.patientId.name}}</h2>
                     <!-- <span>{{p.patientId.gender | filterGender}}</span><span>{{p.patientId.birthday | filterAge}}岁</span> -->
                     <!-- <span class="mine-msg-right">{{p.patientId.diagnosisInfo[p.patientId.diagnosisInfo.length-1].name}}</span> -->
-                        <div style="display:inline-block;background-color: #0288D1;border-radius: 0.3em;color:#FFF;padding:0 3px">
-                            <i style="font-size:1em" class="icon ion-android-star" ng-if="p.patientId.VIP==1"></i>
-                        </div> 
+                        <div style="display:inline-block;color:#d81e06;">
+                            <i style="" class="iconfont icon-vip f-24" ng-if="p.patientId.VIP==1"></i>
+                        </div>
+<!--                         <i class="y-message bg-a2">过敏史</i>
+                        <i class="y-message bg-f7">警报</i>
+                        <i class="y-message bg-12">血压</i>  -->
                         <!-- <div style="display:inline-block;background-color: #0288D1;border-radius: 0.3em;color:#FFF;padding:0 3px"><i style="font-size:1em" class="icon ion-ios-flame"></i>
                         </div>                    
                         <div style="display:inline-block;background-color: #0288D1;border-radius: 0.3em;color:#FFF;padding:0 3px"><i style="font-size:1em" class="icon ion-android-hand"></i>
@@ -51,9 +54,7 @@
                         </div>    -->
                           
                         <!-- <p>是否VIP：{{p.patientId.VIP | filterVIP}}</p>  -->
-                    <!-- </div> -->
-                    <p><span style="color:#ea4335" ng-show="p.lastMsg.readOrNot" class="ng-hide">[新消息]</span>{{p.lastMsg.description}}<span style="color:#FFF">.</span></p>
-
+                    </div>
             </div>
         </div>
 
@@ -61,15 +62,14 @@
         <div ng-if="!params.isPatients" class="list">
             <div ng-repeat="t in Todays |orderBy:filter.propertyName" collection-item-height="94px" class="item item-avatar" type="item-text-wrap" ng-click="getPatientDetail(t.patientId.userId)" ng-show="t.show">
                 <img ng-src="{{t.patientId.photoUrl||'img/patient.png'}}">
-                    <!-- <div style="display:inline-block;width:70%;"> -->
+                    <div style="display:inline-block;width:70%;">
                         <h2>{{t.patientId.name}}</h2>
 
                         <div style="display:inline-block;background-color: #0288D1;border-radius: 0.3em;color:#FFF;padding:0 3px">
                             <i style="font-size:1em" class="icon ion-android-star" ng-if="t.patientId.VIP==1"></i>
                         </div> 
-                    <p><span style="color:#ea4335" ng-show="t.lastMsg.readOrNot" class="ng-hide">[新消息]</span>{{t.lastMsg.description}}<span style="color:#FFF">.</span></p>
 
-                    <!-- </div> -->
+                    </div>
             </div>
         </div>        
 

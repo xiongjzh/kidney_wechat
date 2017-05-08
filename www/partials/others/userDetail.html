@@ -8,8 +8,8 @@
 
 
     <ion-content>
-        <ion-item>
-            <span class="msg">姓名</span>
+        <ion-item class="item item-input">
+            <span class="input-label"><i class="icon ion-asterisk" style="color:red;font-size:6px"></i>姓名</span>
                 <p class="myinfo-msg-right"><input type=text ng-model="doctor.name">{{doctor.name}}</p>
                 <i class="icon ion-edit mine-msg-right"></i>
         </ion-item>
@@ -19,52 +19,47 @@
             <i class="icon ion-edit mine-msg-right"></i>
         </ion-item> -->
         <ion-item  class="item item-input item-select">
-            <span class="input-label">省份</span>
+            <span class="input-label"><i class="icon ion-asterisk" style="color:red;font-size:6px"></i>省份</span>
                 <select class="myinfo-msg-right" ng-model="ProvinceObject" ng-options="Province.name for Province in Provinces track by Province.province" style="width:100%" ng-change="getCity(ProvinceObject.province)">
                 </select>
             </ion-item>
         <ion-item  class="item item-input item-select">
-            <span class="input-label">城市</span>
+            <span class="input-label"><i class="icon ion-asterisk" style="color:red;font-size:6px"></i>城市</span>
                 <select class="myinfo-msg-right" ng-model="CityObject" ng-options="City.name for City in Cities track by City.city" style="width:100%" ng-change="getHospital(CityObject.name)">
                 </select>
         </ion-item>
         <ion-item  class="item item-input item-select">
-            <span class="input-label">医院</span>
+            <span class="input-label"><i class="icon ion-asterisk" style="color:red;font-size:6px"></i>医院</span>
                 <select class="myinfo-msg-right" ng-model="HosObject" ng-options="Hospital.hospitalName for Hospital in Hospitals track by Hospital._id" style="width:100%" ng-change="test(HosObject)">
                 </select>
         </ion-item>
 
-        <ion-item>
-            <span class="msg">科室</span>
+        <ion-item class="item item-input">
+            <span class="input-label"><i class="icon ion-asterisk" style="color:red;font-size:6px"></i>科室</span>
                 <p class="myinfo-msg-right"><input type=text ng-model="doctor.department">{{doctor.department}}</p>
                 <i class="icon ion-edit mine-msg-right"></i>
-        </ion-item>
-        <ion-item>
-            <span class="msg">职称</span>
+        </ion-item class="item item-input">
+        <ion-item class="item item-input">
+            <span class="input-label"><i class="icon ion-asterisk" style="color:red;font-size:6px"></i>职称</span>
                 <p class="myinfo-msg-right"><input type=text ng-model="doctor.title">{{doctor.title}}</p>
                 <i class="icon ion-edit mine-msg-right"></i>
         </ion-item>
-        <ion-item>
-            <span class="msg">身份证号</span>
+        <ion-item class="item item-input">
+            <span class="input-label"><i class="icon ion-asterisk" style="color:red;font-size:6px"></i>身份证号</span>
                 <p class="myinfo-msg-right"><input type=text ng-model="doctor.IDNo">{{doctor.IDNo}}</p>
                 <i class="icon ion-edit mine-msg-right"></i>
         </ion-item>
-        <ion-item>
-            <span class="msg">擅长</span>
+        <ion-item class="item item-input">
+            <span class="input-label" style="margin-left:8px ">擅长</span>
                 <p class="myinfo-msg-right"><input type=text ng-model="doctor.major">{{doctor.major}}</p>
                 <i class="icon ion-edit mine-msg-right"></i>
         </ion-item>
-        <ion-item>
-            <span class="msg">简介</span>
+        <ion-item class="item item-input">
+            <span class="input-label" style="margin-left:8px ">简介</span>
                 <p class="myinfo-msg-right"><input type=text ng-model="doctor.description">{{doctor.description}}</p>
                 <i class="icon ion-edit mine-msg-right"></i>
         </ion-item>
-
-
-
-
-        <div class="blank-h12"></div>
-        <button  style="margin-top:0" class="button button-block button-positive" ng-click ="infoSetup()">
+        <button  style="margin-top:20px" class="button button-block button-positive" ng-click ="infoSetup()">
         保存信息
         </button>
 
