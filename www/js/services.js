@@ -1664,7 +1664,7 @@ angular.module('kidney.services', ['ionic','ngResource'])
                 userId:userId,
                 type:type
             }
-            this.getNews(q)
+            self.getNews(q)
             .then(function(res){
                 var msgs=res.results;
                 arr.map(function(item){
@@ -1687,7 +1687,7 @@ angular.module('kidney.services', ['ionic','ngResource'])
                 userId:userId,
                 type:type
             }
-            this.getNews(q)
+            self.getNews(q)
             .then(function(res){
                 var msgs=res.results;
                 arr.map(function(item){
