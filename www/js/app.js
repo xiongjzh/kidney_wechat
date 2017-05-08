@@ -26,6 +26,7 @@ angular.module('kidney',[
         if (angular.isDefined(temp[1]) == true)
         {
             var code = temp[1].split('&')[0]
+            Storage.set('code',code)
         }
         if (angular.isDefined(temp[2]) == true)
         {
@@ -34,7 +35,7 @@ angular.module('kidney',[
         var wechatData = ""
         if (state == 'patient')
         {
-            path = 'http://t.go5le.net/?code=' + code
+            path = 'http://t.go5le.net/?code=' + code + '#/signin'
             $window.location.href = path
         }
         else
