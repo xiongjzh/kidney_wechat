@@ -1644,7 +1644,7 @@ angular.module('kidney.services', ['ionic','ngResource'])
     }
     function getIndex(arr,val){
         for(var i in arr){
-            if(arr.userId==val || arr.sendBy==val) return i;
+            if(arr[i].userId==val || arr[i].sendBy==val) return i;
         }
         return -1;
     }
