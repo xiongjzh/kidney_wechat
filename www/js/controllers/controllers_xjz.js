@@ -1528,7 +1528,8 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         isOver: false,
         moreMsgs: true,
         UID:Storage.get('UID'),
-        newsType:''
+        newsType:'',
+        targetName:''
     }
     $rootScope.patient = {}
         // $rootScope.goConclusion =function(){
@@ -1572,6 +1573,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                     console.log(data)
                     $scope.params.team = data.results;
                     $scope.params.title = $scope.params.team.name + '(' + $scope.params.team.number + ')';
+                    $scope.params.targetName = $scope.params.team.name;
                 })
 
         } else if ($scope.params.type == '1') {
@@ -1689,6 +1691,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                     $scope.params.title+= '-'+data.result.patientId.name;
                     console.log(data)
                     $rootScope.patient = data.result;
+                    $scope.params.targetName = '['+data.result.patientId.name+']'+$scope.params.team.name;
                     
                 })
     }
@@ -1962,7 +1965,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             },
             targetID:$scope.params.groupId,
             teamId:$scope.params.teamId,
-            targetName:$scope.team.name,
+            targetName:$scope.params.targetName,
             targetType:'group',
             status:'send_going',
             createTimeInMillis: Date.now(),
