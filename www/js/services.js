@@ -235,7 +235,7 @@ angular.module('kidney.services', ['ionic','ngResource'])
                 console.error(err);
                 if(err.data.error.code=='899002') return this.users(userId);
             });
-        }
+        },
         users:function(userId){
             Doctor.getDoctorInfo({userId:userId})
             .then(function(data){
