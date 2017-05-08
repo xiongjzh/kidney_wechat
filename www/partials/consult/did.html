@@ -12,9 +12,9 @@
       </ion-nav-back-button> -->
     </ion-nav-bar>
     <ion-content>
-        <div class="bar item-input-inset bar-light">
+        <div  class="bar bar-header item-input-inset" style="height:40px;">
             <div class="item-input-wrapper">
-                <i style="color:#3d6399;font-size:1.6em" class="icon ion-android-search placeholder-icon"></i>
+                <i class="icon ion-ios-search placeholder-icon"></i>
                 <input type="search" ng-model="search.name" placeholder="搜索患者姓名">
                 <i style="color:#EF473A;font-size:1.6em" class="icon ion-android-close placeholder-icon" ng-click="clearSearch()"></i>
             </div>
@@ -25,16 +25,17 @@
         <div>
         已完成：{{patients.length}}
         </div>
-        <div class="list">
-            <a class="item item-thumbnail-left" ng-repeat="p in patients| orderBy:p.time:-1|orderBy:p.VIP" ng-click="itemClick($event,p.patientId.userId,p.counselId)" ng-show="p.show!=false">
-                <img ng-src="{{p.patientId.photoUrl||'img/patient.png'}}" id="diddetail">
+        <div class="list bg-fa">
+            <a class="item item-avatar context-pading m-b5 br-none fc-4c" ng-repeat="p in patients| orderBy:p.time:-1|orderBy:p.VIP" ng-click="itemClick($event,p.patientId.userId,p.counselId)" ng-show="p.show!=false">
+                <img class="avatar-icon" ng-src="{{p.patientId.photoUrl||'img/patient.png'}}" id="diddetail">
                 <div>
                 <span>{{p.patientId.name}}</span>
                 <span style="margin-left:5px;">{{p.patientId.gender|filterGender}}</span>
                 <span style="margin-left:5px;">{{p.patientId.birthday|filterAge}}岁</span>
+                <span style="float: right">{{p.time|dateFormat:"YYYY-MM-DD h:m"}}</span>
                 </div>
-                <p><i class="icon ion-android-hand"></i>{{p.topic}}</p>
-                <span class="mine-msg-right">{{p.time|dateFormat:"YYYY-MM-DD h:m"}}</span>
+                <p><i class="icon ion-android-hand"></i><em class="m-em">{{p.topic}}</em></p>
+                
             </a>
         </div>
     </ion-content>
