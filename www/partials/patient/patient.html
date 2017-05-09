@@ -34,7 +34,7 @@
         <div ng-if="params.isPatients" class="list">
             <div ng-repeat="p in patients |orderBy:filter.propertyName" collection-item-height="94px" class="item item-avatar" type="item-text-wrap" ng-click="getPatientDetail(p.patientId.userId)">
                 <img ng-src="{{p.patientId.photoUrl||'img/patient.png'}}">
-                    <div style="display:inline-block;width:70%;">
+                    <div style="display:inline-block;width:100%;">
                         <h2>{{p.patientId.name}}</h2>
                     <!-- <span>{{p.patientId.gender | filterGender}}</span><span>{{p.patientId.birthday | filterAge}}岁</span> -->
                     <!-- <span class="mine-msg-right">{{p.patientId.diagnosisInfo[p.patientId.diagnosisInfo.length-1].name}}</span> -->
@@ -63,7 +63,7 @@
         <div ng-if="!params.isPatients" class="list">
             <div ng-repeat="t in Todays |orderBy:filter.propertyName" collection-item-height="94px" class="item item-avatar" type="item-text-wrap" ng-click="getPatientDetail(t.patientId.userId)" ng-show="t.show">
                 <img ng-src="{{t.patientId.photoUrl||'img/patient.png'}}">
-                    <div style="display:inline-block;width:70%;">
+                    <div style="display:inline-block;width:100%;">
                         <h2>{{t.patientId.name}}</h2>
 
                         <div style="display:inline-block;background-color: #0288D1;border-radius: 0.3em;color:#FFF;padding:0 3px">
