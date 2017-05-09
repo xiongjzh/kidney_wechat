@@ -1655,12 +1655,13 @@ angular.module('kidney.services', ['ionic','ngResource'])
             if(type=='13' && msg.url.userId!=userId) {
                 msg.description=msg.url.name + ':' + msg.description;
             }
-            if(type!='13') msg.readOrNot = msg.readOrNot || userTd==msg.url.userId;
+            if(type!='13') msg.readOrNot = msg.readOrNot || userId==msg.url.userId;
         }catch(e){}
         return msg;
     }
     self.addNews = function(type,userId,arr,idName){
         return $q(function(resolve,reject){
+            if(!Array.isArray(arr) || arr.length==0) return resolve(arr);
             var q={
                 userId:userId,
                 type:type
@@ -1684,6 +1685,7 @@ angular.module('kidney.services', ['ionic','ngResource'])
     }
     self.addNestNews = function(type,userId,arr,idName,keyName){
         return $q(function(resolve,reject){
+            if(!Array.isArray(arr) || arr.length==0) return resolve(arr);
             var q={
                 userId:userId,
                 type:type
