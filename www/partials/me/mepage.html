@@ -4,46 +4,79 @@
             <i class="ion-chevron-left"></i>
         </ion-nav-back-button>
 </ion-nav-bar> -->
-    <ion-content has-bouncing="true" overflow-scroll="false" class="has-header has-tabs">
-        <ion-list>
+    <ion-content overflow-scroll="false" class="has-tabs bg-f5">
+    <div class="me-top-box">
+        <a href="#/tab/qrcode"><i class="me-code iconfont icon-erweima"></i>
+        <qrcode  version=3 error-correction-level="M" size="50" data="{{params.userId}}" style="width:30px;height:30px;position: absolute;right: 30px;top:10px;"></qrcode>
+        </a>
+        <div class="me-top-bg"></div>
+        <div class="me-massage-box">
+            <div class="me-avatar-box">
+                <div class="img-cen me-avatar">
+                    <img ng-src="{{doctor.photoUrl||'img/doctor.png'}}" name="Photo" ng-click="onClickCamera($event)">
+                </div>
+
+                <!-- 上传照片的弹出框 -->
+                <script id="my-popover.html" type="text/ng-template">
+                    <ion-popover-view>
+                        <ion-header-bar class="bar-calm">
+                            <h1 class="title">上传图片</h1>
+                        </ion-header-bar>
+                        <ion-content>
+                            <ion-list> 
+                                <div class = "padding">
+                                    <button class="button button-block button-primary " ng-click="getPhoto()"><i class="icon ion-camera"></i>
+                                  拍照
+                                    </button>
+                            
+                                    <button class="button button-block button-primary " ng-click="onClickCameraPhotos()"><i class="icon ion-image"></i>
+                                  相册
+                                    </button>
+                             
+                                </div>
+                            </ion-list>
+                        </ion-content>
+                    </ion-popover-view>
+                </script>
+                <!-- 上传照片的弹出框 -->
+
+                <div class="me-edit-btn">更换头像</div>
+            </div>
+            <div class="me-massage">
+                <p class="f16 m-b5 fc-2b">{{doctor.name}}</p>
+                <p class="fc-66">{{doctor.workUnit}}</p>
+                <p class="fc-66">{{doctor.department}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="me-mun bg-wite mt-10">
+        <div class="row ">
+            <a class="col col-50 text-center br-e9" href="#/tab/schedual"><i class="iconfont icon-paibanguanli"></i>排班 <em class="me-dic iconfont  icon-dian"></em></a>
+            <a class="col col-50 text-center" href="#/tab/myinfo"><i class="iconfont icon-jibenziliao"></i>我的资料</a>
+        </div>
+        <div class="row">
+            <a class="col col-50 text-center br-e9" href="#/tab/myfee"><i class="iconfont icon-wodezhanghu"></i>我的账户</a>
+            <a class="col col-50 text-center" href="#/tab/feedback"><i class="iconfont icon-wujiaoxing"></i>我的评价</a>
+        </div>
+    </div>
+    <div class="me-list list mt-15">
+        <a class="item item-icon-left" href="#/tab/set">
+            <i class="iconfont icon-shezhi"></i>
+        设置
+        </a>
+        <a class="item item-icon-left" href="#/tab/about">
+            <i class="iconfont icon-jiangpai"></i>
+        关于我们
+        </a>
+    </div>
+
+
+<!--         <ion-list>
             <ion-item class="item-avatar item-icon-right item-button-right" type="item-text-wrap" href="#/tab/qrcode">
-                <img ng-src="{{doctor.photoUrl || 'img/doctor.png'}}">
-                <h2>{{doctor.name}}&nbsp;&nbsp;&nbsp;&nbsp;{{doctor.title}}</h2>
-                <p>{{doctor.workUnit}}&nbsp;&nbsp;{{doctor.department}}</p>
                 <qrcode  version=3 error-correction-level="M" size="50" data="{{params.userId}}" style="width:60px;height:60px;position: absolute;right: 30px;top:10px;"></qrcode>
-                <i class="icon ion-chevron-right icon-accessory"></i>
             </ion-item>
-           
-            <a class="item item-icon-left" href="#/tab/schedual">
-                <i class="icon ion-ios-list-outline"></i>
-                排班
-                <span class="badge badge-positive">></span>
-            </a>
-            <a class="item item-icon-left" href="#/tab/myinfo">
-                <i class="icon ion-ios-pricetags-outline"></i>
-                我的资料
-                <span class="badge badge-positive">></span>
-            </a>
-            <a class="item item-icon-left" href="#/tab/myfee">
-                <i class="icon ion-android-globe"></i>
-                我的账户
-                <span class="badge badge-positive">></span>
-            </a>
-			 <a class="item item-icon-left" href="#/tab/feedback">
-                <i class="icon ion-android-star"></i>
-                我的评价
-                <span class="badge badge-positive">></span>
-            </a>
-            <a class="item item-icon-left" href="#/tab/set">
-                <i class="icon ion-ios-gear-outline"></i>
-                设置
-				<span class="badge badge-positive">></span>
-            </a>
-			<a class="item item-icon-left" href="#/tab/about">
-                <i class="icon ion-information"></i>
-                关于
-				<span class="badge badge-positive">></span>
-            </a>
-        </ion-list>
+
+
+        </ion-list> -->
     </ion-content>
 </ion-view>

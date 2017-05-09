@@ -8,11 +8,14 @@
         <ion-refresher pulling-text="下拉刷新..." on-refresh="doRefresh()"></ion-refresher>
         <div class="blank-h12"></div>
         <ion-item>
-            <span class="msg">我的余额</span>
+            <span class="iconfont icon-yue01 icon-yue011"></span>
+            <span >我的余额</span>
             <p class="myinfo-msg-right">{{account.money}}</p>
         </ion-item>
         <ion-item>
-        <span class="input-label" style="margin-left:10px;color:#0066FF;"><i class="icon ion-clipboard" style="margin-right:5px;font-size:20px" ></i>收费定制</span>
+<!--         <span class="input-label"></span><img class="icon_charge" src="/img/icon_charge.png" style="color:#6ac4f8;">
+        <span style="color:#6ac4f8;">收费定制</span> -->
+        <span class="input-label" style="margin-left:5px;color:#6ac4f8;"><i class="icon ion-clipboard" style="margin-right:5px;font-size:20px" ></i>收费定制</span>
         </ion-item>
         <ion-item>
             <span class="msg">咨询收费</span>
@@ -26,7 +29,7 @@
             
         </ion-item>
         <div class="blank-h12"></div>
-        <button class="button button-positive mine-verfy-btn" ng-click="savefee()">保存修改</button>
+        <button style="margin-top:0; background: #6ac4f8" class="button button-block button-positive login_outbtn" ng-click="savefee()">保存修改</button>
 
       
     </ion-content>

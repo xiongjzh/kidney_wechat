@@ -81,11 +81,11 @@ display: inline-block;
 /*搜索*/
 .item-input-inset {
   padding: 20px;
-  background: #fafafa;
-}
+/*  background: #fafafa;
+*/}
 
 .item-input-wrapper {
-  background: #FFFFFF;
+  background: #f0f0f0;
   border-radius: 20px;
 }
 /*筛选*/

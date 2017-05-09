@@ -1,7 +1,7 @@
 <ion-view view-title="进行中" hide-tabs>
     <ion-nav-bar class="bar-positive" align-title="center">
         <ion-nav-buttons side="left" >
-            <button class="button button-icon icon ion-chevron-left" ng-click="goCounsel()"></button>
+            <button class="button button-icon icon ion-ios-arrow-left fc-ff" ng-click="goCounsel()"></button>
         </ion-nav-buttons>
         <ion-nav-buttons side="right" >
             <button class="button button-clear"  ng-click="openPopover($event)">筛选<i class="icon ion-navicon"></i></button>
@@ -30,7 +30,7 @@
                 <span style="margin-left:5px;">{{p.patientId.birthday|filterAge}}岁</span>
                 <span style="float: right">{{p.time|dateFormat:"YYYY-MM-DD h:m"}}</span>
                 </div>
-                <p><i class="icon ion-android-hand"></i><em class="m-em">{{p.topic}}</em></p>   
+                <p><i class="icon ion-android-hand"></i><em class="m-em">{{p.symptom}}</em></p>   
             </a>
         </div>
     </ion-content>
