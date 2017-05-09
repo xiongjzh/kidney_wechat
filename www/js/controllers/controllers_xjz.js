@@ -1658,8 +1658,9 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                 $scope.msgs=data;
                 toBottom(true,500);
             });
-            
+
             var t=$scope.params.title;
+            $scope.params.title='';
             $scope.params.title=t;
             imgModalInit();
         })
