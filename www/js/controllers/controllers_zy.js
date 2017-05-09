@@ -1362,7 +1362,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
 }])
 
 //"我”页
-.controller('meCtrl', ['Doctor','$scope','$state','$interval','$rootScope', 'Storage', 'wechat','$location','$ionicPopup','$ionicPopover','$ionicLoading',function(Doctor,$scope, $state,$interval,$rootScope,Storage,wechat,$location,$ionicPopup,$ionicPopover,$ionicLoading) {
+.controller('meCtrl', ['Doctor','$scope','$state','$interval','$rootScope', 'Storage', 'wechat','$location','$ionicPopup','$ionicPopover','$ionicLoading','$timeout',function(Doctor,$scope, $state,$interval,$rootScope,Storage,wechat,$location,$ionicPopup,$ionicPopover,$ionicLoading,$timeout) {
   $scope.barwidth="width:0%";
    
     //$scope.userid=Storage.get('userid');
