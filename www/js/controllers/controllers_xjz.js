@@ -830,11 +830,12 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                 console.log(data);
                 var d=data.results;
                 $scope.$broadcast('scroll.refreshComplete');
+                if(d=='没有更多了!') return $scope.params.moreMsgs = false;
                 var res=[];
                 for(var i in d){
                     res.push(d[i].content);
                 }
-                if(res.length==0 || res=='没有更多了!') $scope.params.moreMsgs = false;
+                if(res.length==0 ) $scope.params.moreMsgs = false;
                 else{
                     $scope.params.msgCount += res.length;
                     // $scope.$apply(function() {
@@ -1727,11 +1728,12 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                 console.log(data);
                 var d=data.results;
                 $scope.$broadcast('scroll.refreshComplete');
+                if(d=='没有更多了!') return $scope.params.moreMsgs = false;
                 var res=[];
                 for(var i in d){
                     res.push(d[i].content);
                 }
-                if(res.length==0 || res=='没有更多了!') $scope.params.moreMsgs = false;
+                if(res.length==0) $scope.params.moreMsgs = false;
                 else{
                     $scope.params.msgCount += res.length;
                     // $scope.$apply(function() {
