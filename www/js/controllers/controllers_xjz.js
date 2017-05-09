@@ -664,6 +664,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             .then(function(data){
                 console.log(data)
                 $scope.params.counsel = data.results;
+                $scope.params.targetName = data.results.patientId.name;
                 $scope.counseltype= data.results.type=='3'?'2':data.results.type;
                 $scope.counselstatus=data.results.status;
                 $scope.params.realCounselType=data.results.type;
@@ -697,7 +698,13 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                 console.log(err);
             })
         }
-        if ($scope.params.type == '2') $scope.params.title = "医生交流";
+        if ($scope.params.type == '2'){
+            $scope.params.title = "医生交流";
+            Doctor.getDoctorInfo({userId:$scope.params.UID})
+            .then(function(data){
+                $scope.params.targetName = data.results.name;
+            });
+        }
         else if ($scope.params.type == '1') $scope.params.title = "咨询-进行中";
         else $scope.params.title = "咨询详情";
         
@@ -1013,7 +1020,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                     avatarPath:CONFIG.mediaUrl+'uploads/photos/resized'+thisDoctor.userId+'_myAvatar.jpg'
                 },
                 targetID:$scope.params.chatId,
-                targetName:$scope.params.counsel.patientId.name,
+                targetName:$scope.params.targetName,
                 targetType:'single',
                 status:'send_going',
                 createTimeInMillis: Date.now(),
