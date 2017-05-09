@@ -1320,13 +1320,16 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
             function(data)
             {
                 //console.log(data)
-                $scope.Ins.count=$scope.Ins.count + 1; 
+                $scope.Ins.count=$scope.Ins.count + 1;
+                console.log(data)
+                Storage.set('MessId',data.newResults.message.messageId)
                 New.insertNews({
                     sendBy:Storage.get('UID'),
                     userId:Storage.get('getpatientId'),
                     type:5,
                     readOrNot:'0',
-                    description:'医生给您发送了一条保险消息'                    
+                    description:'医生给您发送了一条保险消息',
+                    messageId:Storage.get('MessId')                    
                 })
                 .then(
                     function(data)
@@ -2082,7 +2085,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
                 $scope.feedbacks=data.comments;
                 $scope.doctor=data.results;
                 //console.log($scope.feedbacks.length)
-                commentlength=data.comments.length;
+                //commentlength=data.comments.length;
                 //   for (var i=0; i<commentlength; i++){
                 //       commentlist[i]=$scope.feedbacks[i].pateintId.userId;
             },
@@ -2092,22 +2095,22 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
             }
         );
 
-        for (var i=0; i<commentlength; i++){
-            Patient.getPatientDetail({
-            userId:$scope.feedbacks[i].pateintId.userId
-        })
-            .then(
-                function(data)
-                {
-                // console.log(data)
-                    $scope.feedbacks[i].photoUrl=data.results.photoUrl;
-                },
-                function(err)
-                {
-                    console.log(err)
-                }
-            );
-        }
+        // for (var i=0; i<commentlength; i++){
+        //     Patient.getPatientDetail({
+        //     userId:$scope.feedbacks[i].pateintId.userId
+        // })
+        //     .then(
+        //         function(data)
+        //         {
+        //         // console.log(data)
+        //             $scope.feedbacks[i].photoUrl=data.results.photoUrl;
+        //         },
+        //         function(err)
+        //         {
+        //             console.log(err)
+        //         }
+        //     );
+        // }
     }
     $scope.$on('$ionicView.enter', function() {
         load();

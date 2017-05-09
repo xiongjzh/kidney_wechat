@@ -13,18 +13,18 @@
         <ion-item>
             <i class="iconfont icon-wujiaoxing icon-wujiaoxing1"></i>
             我的评分
-            <span class="myinfo-msg-right" style="color:red;">{{doctor.score}}</span>
+            <span class="myinfo-msg-right" style="color:red;">{{doctor.score.toFixed(1)}}</span>
         </ion-item>
         <ion-item>
         <span class="input-label" style="margin-left:5px;color:#6ac4f8;"><i class="iconfont icon-jiaoyilishi icon-jiaoyilishi "  ></i>我的评价</span>
         </ion-item>
         <div class="list">
             <a class="item item-thumbnail-left" ng-repeat="fb in feedbacks">
-                <img ng-src="fb.photoUrl">
-                <h2>{{fb.patientId.name}}</h2>
+                <img ng-src="{{fb.patientId.photoUrl||'img/patient.png'}}">
+                <h2 style="margin-left: 10px">{{fb.patientId.name}}</h2>
                 <p class="friend-detail-p">评分：{{fb.totalScore}}</p>
                 <p class="friend-detail-p">{{fb.content}}</p>
-                <p class="friend-detail-p">评论时间：{{fb.time}}</p>
+                <p class="friend-detail-p">评论时间：{{fb.time|dateFormat:"YYYY-MM-DD h:m"}}</p>
 
             </a>
         </div>
