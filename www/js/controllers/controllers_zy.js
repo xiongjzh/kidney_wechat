@@ -341,7 +341,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
                               $scope.logStatus = "连接超时！";
                           })
                         }
-                        if(validMode == 0){
+                        else if(validMode == 0){
                             $state.go('agreement',{last:'register'});
                         }else{
                             $state.go('setpassword'); 
