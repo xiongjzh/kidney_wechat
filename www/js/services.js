@@ -1651,10 +1651,11 @@ angular.module('kidney.services', ['ionic','ngResource'])
     function addLastMsg(type,userId,msg){
         // item.lastMsg=msg;
         try{
+            msg.url=JSON.parse(msg.url);
             if(type=='13' && msg.url.userId!=userId) {
-                msg.url=JSON.parse(msg.url);
                 msg.description=msg.url.name + ':' + msg.description;
             }
+            if(type!='13') msg.readOrNot = msg.readOrNot || userTd==msg.url.userId;
         }catch(e){}
         return msg;
     }

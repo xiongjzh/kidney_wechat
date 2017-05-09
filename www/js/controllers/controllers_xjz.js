@@ -830,11 +830,12 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                 console.log(data);
                 var d=data.results;
                 $scope.$broadcast('scroll.refreshComplete');
+                if(d=='没有更多了!') return $scope.params.moreMsgs = false;
                 var res=[];
                 for(var i in d){
                     res.push(d[i].content);
                 }
-                if(res.length==0 || res=='没有更多了!') $scope.params.moreMsgs = false;
+                if(res.length==0 ) $scope.params.moreMsgs = false;
                 else{
                     $scope.params.msgCount += res.length;
                     // $scope.$apply(function() {
@@ -1107,7 +1108,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                 avatarPath: CONFIG.mediaUrl+'uploads/photos/resized'+$scope.params.UID+'_myAvatar.jpg'
             },
             targetID:$scope.params.chatId,
-            targetName:$scope.params.counsel.patientId.name,
+            targetName:$scope.params.targetName,
             targetType:'single',
             status:'send_going',
             createTimeInMillis: Date.now(),
@@ -1659,6 +1660,9 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                 toBottom(true,500);
             });
 
+            var t=$scope.params.title;
+            $scope.params.title='';
+            $scope.params.title=t;
             imgModalInit();
         })
         //receiving new massage
@@ -1724,11 +1728,12 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                 console.log(data);
                 var d=data.results;
                 $scope.$broadcast('scroll.refreshComplete');
+                if(d=='没有更多了!') return $scope.params.moreMsgs = false;
                 var res=[];
                 for(var i in d){
                     res.push(d[i].content);
                 }
-                if(res.length==0 || res=='没有更多了!') $scope.params.moreMsgs = false;
+                if(res.length==0) $scope.params.moreMsgs = false;
                 else{
                     $scope.params.msgCount += res.length;
                     // $scope.$apply(function() {
