@@ -1108,7 +1108,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                 avatarPath: CONFIG.mediaUrl+'uploads/photos/resized'+$scope.params.UID+'_myAvatar.jpg'
             },
             targetID:$scope.params.chatId,
-            targetName:$scope.params.counsel.patientId.name,
+            targetName:$scope.params.targetName,
             targetType:'single',
             status:'send_going',
             createTimeInMillis: Date.now(),
