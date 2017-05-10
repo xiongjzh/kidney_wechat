@@ -31,7 +31,7 @@
 
                     <div style="display:inline-block;"><span style="display:inline-block;margin:0 0.2em 0 0.5em ;background-color:#AAA;color:#FFF">创建者</span>{{team.sponsorName}}</div>
                     <!-- <p>{{team.description}}</p> -->
-                    <p><span style="color:#ea4335" ng-hide="team.lastMsg.readOrNot" class="ng-hide">[新消息]</span>{{team.lastMsg.description}}<span style="color:#FFF">.</span></p>
+                    <p><span style="color:#ea4335" ng-show="team.lastMsg.readOrNot===0" class="ng-hide">[新消息]</span>{{team.lastMsg.description}}<span style="color:#FFF">.</span></p>
                 </div>
                 <!--注意 id="discuss" 用于页面跳转 -->
                 <a id="discuss" style="display:inline-block;width:auto;background-color: #00C853;height:100%;float:right;padding:0.4em 0.6em;border-radius: 0.1em;color:#FFF">讨论</a>
@@ -48,7 +48,7 @@
                     <p><span>{{d.doctorId.workUnit}}</span> <span>{{d.doctorId.department}}</span> </p>
                     <p><span><i style="color:#FFD600" class="icon ion-android-star"></i>{{d.doctorId.score}}</span> 咨询:{{d.doctorId.count2}} 问诊:{{d.doctorId.count2}} </p>
                     <p>擅长：{{d.doctorId.major}}</p>
-                    <p><span style="color:#ea4335" ng-hide="d.lastMsg.readOrNot" class="ng-hide">[新消息]</span>{{d.lastMsg.description}}<span style="color:#FFF">.</span></p>
+                    <p><span style="color:#ea4335" ng-show="team.lastMsg.readOrNot===0" class="ng-hide">[新消息]</span>{{d.lastMsg.description}}<span style="color:#FFF">.</span></p>
                 </div>
                 <!--注意 id="profile" 用于页面跳转 -->
                 <div style="display:inline-block;width:30%;vertical-align: top;padding-right:10px">
