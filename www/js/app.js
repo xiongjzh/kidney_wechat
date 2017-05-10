@@ -16,7 +16,7 @@ angular.module('kidney',[
     'ionic-datepicker'
 ])
 
-.run(['$ionicPlatform', '$state', 'Storage', 'JM','$ionicHistory','$rootScope','CONFIG','Communication', '$location','wechat','$window','User','Doctor',function($ionicPlatform, $state, Storage, JM,$ionicHistory,$rootScope,CONFIG,Communication,$location,wechat,$window,User,Doctor) {
+.run(['$ionicPlatform', '$state', 'Storage', 'JM','$ionicHistory','$rootScope','CONFIG','Communication', '$location','wechat','$window','User','Doctor','jmapi',function($ionicPlatform, $state, Storage, JM,$ionicHistory,$rootScope,CONFIG,Communication,$location,wechat,$window,User,Doctor,jmapi) {
     $ionicPlatform.ready(function() {
         socket = io.connect('ws://121.43.107.106:4050/chat');
         
@@ -71,6 +71,8 @@ angular.module('kidney',[
                         Storage.set('TOKEN',data.results.token);//token作用目前还不明确
                         Storage.set('isSignIn',true);
                         Storage.set('UID',data.results.userId);
+                        
+                        jmapi.users(data.results.userId);
 
                         Doctor.getDoctorInfo({userId:data.results.userId})
                         .then(function(response){

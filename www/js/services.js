@@ -211,62 +211,87 @@ angular.module('kidney.services', ['ionic','ngResource'])
     return audio;
 }])
 
-.factory('jmapi',['$http','JM','Doctor',function($http,JM,Doctor){
-    var hs={
-        'Authorization':'Basic Y2YzMmI5NDQ0NGM0ZWFhY2VmODY5MDNlOmJhYjI4M2NkOWQzMDY4ZTE5NDYwODgzMg==',
-        'Content-Type':'application/json'
-    };
-    var host="https://api.im.jpush.cn/v1/";
-    function jmreq(method,resource,params){
-        req={
-            method:method,
-            url:host+resource,
-            headers:hs,
-            data:params
-        }
-        return $http(req);
-    }
+.factory('jmapi',['$http','JM','Doctor','$q','jm',function($http,JM,Doctor,$q,jm){
+    // var hs={
+    //     'Authorization':'Basic Y2YzMmI5NDQ0NGM0ZWFhY2VmODY5MDNlOmJhYjI4M2NkOWQzMDY4ZTE5NDYwODgzMg==',
+    //     'Content-Type':'application/json'
+    // };
+    // var host="https://api.im.jpush.cn/v1/";
+    // function jmreq(method,resource,params){
+    //     req={
+    //         method:method,
+    //         url:host+resource,
+    //         headers:hs,
+    //         data:params
+    //     }
+    //     return $http(req);
+    // }
     return {
-        userCheck:function(userId){
-            jmreq('GET','users/'+userId)
-            .then(function(res){
-                console.log(res);
-            },function(err){
-                console.error(err);
-                if(err.data.error.code=='899002') return this.users(userId);
-            });
+        // userCheck:function(userId){
+        //     jmreq('GET','users/'+userId)
+        //     .then(function(res){
+        //         console.log(res);
+        //     },function(err){
+        //         console.error(err);
+        //         if(err.data.error.code=='899002') return this.users(userId);
+        //     });
+        // },
+        registerByPhone:function(phone){
+            return User.getUserId({phoneNo:phone})
+                .then(function(data){
+                    if(data.UserId) return this.users(data.UserId);
+                    return data;
+                },function(err){
+                    return err;
+                })
         },
         users:function(userId){
-            Doctor.getDoctorInfo({userId:userId})
-            .then(function(data){
-                var d={
-                    "username":userId,
-                    "password":JM.pGen(userId),
-                    "nickname":data.results.name
-                }
-                var arr=[d];
-                return jmreq('POST','users/',arr);
-            },function(err){
-                return null;
-            });
+            // return jm.users({flag:'doctor',username:userId})
+            // return Doctor.getDoctorInfo({userId:userId})
+            //     .then(function(data){
+                    var d={
+                        "username":userId,
+                        "password":JM.pGen(userId),
+                        "flag":'doctor'
+                    }
+                    var arr=[d];
+                    return jm.users(d);
+                // },function(err){
+                //     return 'neterr';
+                // });
+            // Doctor.getDoctorInfo({userId:userId})
+            // .then(function(data){
+            //     var d={
+            //         "username":userId,
+            //         "password":JM.pGen(userId),
+            //         "nickname":data.results.name
+            //     }
+            //     var arr=[d];
+            //     return jmreq('POST','users/',arr);
+            // },function(err){
+            //     return null;
+            // });
         },
-        groups:function(userArr,Gname,Gdesc){
-            var owner = userArr[0];
-            userArr.splice(0,1);
+        groups:function(owner,userArr,Gname,Gdesc){
+            // var owner = userArr[0];
+            // userArr.splice(0,1);
             var d={
                 "owner_username":owner, 
                 "name": Gname, 
                 "members_username": userArr, 
-                "desc": Gdesc
+                "desc": Gdesc,
+                "flag":'doctor'
             };
-            return jmreq('POST','groups/',d);
+            return jm.groups(d);
         },
-        groupMembers:function(gid,addArr,delArr){
+        groupsMembers:function(gid,addArr,delArr){
             var d={
                 "add":addArr,
-                "remove":delArr
+                "remove":delArr,
+                "groupId":gid,
+                "flag":'doctor'
             }
-            return jmreq('POST','groups/'+gid+'/members',d);
+            return jm.groupsMembers(d);
         }
     }
 }])
@@ -895,6 +920,14 @@ angular.module('kidney.services', ['ionic','ngResource'])
         })
     }
 
+    var jm = function(){
+        return $resource(CONFIG.baseUrl + ':path/:route',{path:'jm'},{
+            users:{method:'POST', params:{route: 'users'}, timeout: 100000},
+            groups:{method:'POST', params:{route: 'groups'}, timeout: 100000},
+            groupsMembers:{method:'POST', params:{route: 'groups/members'}, timeout: 100000}
+        })
+    }
+
     serve.abort = function ($scope) {
         abort.resolve();
         $interval(function () {
@@ -916,6 +949,7 @@ angular.module('kidney.services', ['ionic','ngResource'])
             serve.User = User();
             serve.Insurance = Insurance();
             serve.wechat = wechat();
+            serve.jm = jm();
         }, 0, 1);
     };
     serve.Dict = Dict();
@@ -935,6 +969,7 @@ angular.module('kidney.services', ['ionic','ngResource'])
     serve.User = User();
     serve.Insurance = Insurance();   
     serve.wechat = wechat(); 
+    serve.jm = jm(); 
     return serve;
 }])
 .factory('Dict', ['$q', 'Data', function($q, Data){
@@ -2384,6 +2419,57 @@ angular.module('kidney.services', ['ionic','ngResource'])
     self.download = function(params){
         var deferred = $q.defer();
         Data.wechat.download(
+            params,
+            function(data, headers){
+                deferred.resolve(data);
+            },
+            function(err){
+                deferred.reject(err);
+        });
+        return deferred.promise;
+    };
+
+    return self;
+}])
+.factory('jm', ['$q', 'Data', function($q, Data){
+    var self = this;
+    //params->{
+            //  url:'patient_class'
+           // }
+    self.users = function(params){
+        var deferred = $q.defer();
+        Data.jm.users(
+            params,
+            function(data, headers){
+                deferred.resolve(data);
+            },
+            function(err){
+                deferred.reject(err);
+        });
+        return deferred.promise;
+    };
+    //params->{
+            //  code:'3'
+            // }
+    self.groups = function(params){
+        var deferred = $q.defer();
+        Data.jm.groups(
+            params,
+            function(data, headers){
+                deferred.resolve(data);
+            },
+            function(err){
+                deferred.reject(err);
+        });
+        return deferred.promise;
+    };
+    //params->{
+            //  serverId:
+            //  name:
+            // }
+    self.groupsMembers = function(params){
+        var deferred = $q.defer();
+        Data.jm.groupsMembers(
             params,
             function(data, headers){
                 deferred.resolve(data);

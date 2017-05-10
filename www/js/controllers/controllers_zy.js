@@ -2,7 +2,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
 
 /////////////////////////////zhangying///////////////////////
 //登录
-.controller('SignInCtrl', ['User','$scope','$timeout','$state','Storage','loginFactory','$ionicHistory','JM', '$location','wechat','$window','$rootScope','Doctor','$sce',function(User,$scope, $timeout,$state,Storage,loginFactory,$ionicHistory,JM,$location,wechat,$window,$rootScope,Doctor,$sce) {
+.controller('SignInCtrl', ['User','$scope','$timeout','$state','Storage','loginFactory','$ionicHistory','jmapi', '$location','wechat','$window','$rootScope','Doctor','$sce',function(User,$scope, $timeout,$state,Storage,loginFactory,$ionicHistory,jmapi,$location,wechat,$window,$rootScope,Doctor,$sce) {
     $scope.barwidth="width:0%";
     $scope.navigation_login=$sce.trustAsResourceUrl("http://121.43.107.106/member.php?mod=logging&action=logout&formhash=xxxxxx");
     if(Storage.get('USERNAME')!=null){
@@ -53,6 +53,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
                         Storage.set('isSignIn',true);
                         Storage.set('UID',data.results.userId);
 
+                        jmapi.users(data.results.userId);
                         Doctor.getDoctorInfo({userId:data.results.userId})
                         .then(function(response){
                             thisDoctor = response.results;
@@ -391,7 +392,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
 }])
 
 //设置密码
-.controller('setPasswordCtrl', ['$scope','$state','$rootScope' ,'$timeout' ,'Storage','User',function($scope,$state,$rootScope,$timeout,Storage,User) {
+.controller('setPasswordCtrl', ['$scope','$state','$rootScope' ,'$timeout' ,'Storage','User','jmapi',function($scope,$state,$rootScope,$timeout,Storage,User) {
     $scope.barwidth="width:0%";
     var validMode=Storage.get('validMode');//0->set;1->reset
     var phoneNumber=Storage.get('RegisterNO');
@@ -568,6 +569,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
                     .then(
                         function(data)
                         {
+                            jmapi.users(Storage.get('UID'));
                             console.log(data);
                             console.log($scope.doctor)
                             //$scope.doctor = data.newResults;                  

@@ -926,7 +926,15 @@ display: inline-block;
   white-space: nowrap;
   overflow: hidden;
 }
-
+.card-prefix p{
+    margin-top:8px;
+    margin-bottom:8px;
+}
+.card-prefix span{
+    color:#2196F3;
+    font-size:1.15em;
+    padding-right:0.5em;
+}
 /*QR code ----------------------------------------------------------*/
 .qr-code {
   width: 90%;
