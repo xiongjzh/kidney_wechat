@@ -388,7 +388,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
     var a=document.getElementById("agreement");
     // console.log(document.body.clientHeight);
     // console.log(window.screen.height);
-    a.style.height=window.screen.height*0.85+"px";
+    a.style.height=window.screen.height*0.65+"px";
 }])
 
 //设置密码
