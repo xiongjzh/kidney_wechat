@@ -88,7 +88,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
 }])
 //团队查找
 
-.controller('GroupsSearchCtrl', ['$scope', '$state','Communication', 'wechat',function($scope, $state,Communication,wechat) {
+.controller('GroupsSearchCtrl', ['$scope', '$state','Communication', 'wechat','Storage',function($scope, $state,Communication,wechat,Storage) {
     $scope.search='';
     $scope.noteam=0;
   $scope.Searchgroup=function(){
