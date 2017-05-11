@@ -2366,7 +2366,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                             socket.on('messageRes',function(data){
                                 socket.off('messageRes');
                                 socket.emit('disconnect');
-                                $state.go('tab.group-chat', { type: '0', groupId: team.teamId, teamId: team.teamId });
+                                $state.go('tab.group-chat', { type: '1', groupId: res.results.gid, teamId: team.teamId });
                             });
                         },function(er){
                             console.error(err);
