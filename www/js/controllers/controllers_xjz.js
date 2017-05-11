@@ -88,7 +88,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
 }])
 //团队查找
 
-.controller('GroupsSearchCtrl', ['$scope', '$state','Communication', function($scope, $state,Communication) {
+.controller('GroupsSearchCtrl', ['$scope', '$state','Communication', 'wechat',function($scope, $state,Communication,wechat) {
     $scope.search='';
     $scope.noteam=0;
   $scope.Searchgroup=function(){
@@ -107,6 +107,48 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         $scope.search='';
      }    
 
+     $scope.QRscan = function(){
+        // alert(1)
+        var config = "";
+        var path = "http://doctor.haihonghospitalmanagement.com/?code=" + Storage.get('code');
+        wechat.settingConfig({url:path}).then(function(data){
+          // alert(data.results.timestamp)
+          config = data.results;
+          config.jsApiList = ['scanQRCode']
+          // alert(config.jsApiList)
+          // alert(config.debug)
+          console.log(angular.toJson(config))
+          wx.config({
+            debug:false,
+            appId:config.appId,
+            timestamp:config.timestamp,
+            nonceStr:config.nonceStr,
+            signature:config.signature,
+            jsApiList:config.jsApiList
+          })
+          wx.ready(function(){
+            wx.checkJsApi({
+                jsApiList: ['scanQRCode'],
+                success: function(res) {
+                    wx.scanQRCode({
+                      needResult:1,
+                      scanType: ['qrCode','barCode'],
+                      success: function(res) {
+                        var result = res.resultStr;
+                        $state.go('tab.group-add',{teamId:result})
+                      }
+                    })
+                }
+            });
+          })
+          wx.error(function(res){
+            alert(res.errMsg)
+          })
+
+        },function(err){
+
+        })
+      }
 }])
 //医生查找
 .controller('DoctorSearchCtrl', ['$scope', '$state', '$ionicHistory', 'arrTool', 'Communication', '$ionicLoading', '$rootScope', 'Patient', 'JM', 'CONFIG', function($scope, $state, $ionicHistory, arrTool, Communication, $ionicLoading, $rootScope, Patient, JM, CONFIG) {
