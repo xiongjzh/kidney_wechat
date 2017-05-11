@@ -1412,6 +1412,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             $ionicHistory.goBack();
         } else {
             console.log($state.params.teamId)
+            $ionicLoading.show({ template: '正在更新数据'});
 
             Communication.insertMember({ teamId: $state.params.teamId, members: $scope.group.members })
                 .then(function(data) {
@@ -1438,17 +1439,11 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                         
                     }
                     // setTimeout(function() { $ionicHistory.goBack(); }, 1500);
+                },function(err){
+                    $ionicLoading.show({ template: '添加失败', duration: 2000 });
                 })
 
         }
-        // console.log(idStr);
-
-        // Communication.insertMember({ teamId: $state.params.teamId, members: $scope.group.members })
-        //     .then(function(data) {
-        //         $ionicLoading.show({ template: '添加成功', duration: 1500 });
-        //         setTimeout(function() { $ionicHistory.goBack(); }, 1500);
-        //     })
-
     }
 
 }])
@@ -2371,7 +2366,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                             socket.on('messageRes',function(data){
                                 socket.off('messageRes');
                                 socket.emit('disconnect');
-                                $state.go('tab.group-chat', { type: '0', groupId: team.teamId, teamId: team.teamId });
+                                $state.go('tab.group-chat', { type: '1', groupId: res.results.gid, teamId: team.teamId });
                             });
                         },function(er){
                             console.error(err);
