@@ -1,19 +1,17 @@
 <ion-view view-title="个人资料">
 <ion-nav-bar class="bar-positive" align-title="center">
 
-		<ion-nav-back-button class="button-clear">
-			<i class="ion-chevron-left"></i>
-		</ion-nav-back-button>
+  <ion-nav-buttons side="left">
+    <button class="button button-icon icon ion-ios-arrow-left fc-ff" ng-click="$ionicGoBack()"></button>
+  </ion-nav-buttons>
 
        <ion-nav-buttons class="bar-dark nav-title-slide-ios7" side="right" >
-           <button class="button ion-edit button-stable" ng-click="toggle()">编辑</button>
+           <button class="button defa-bg defa-font" ng-click="toggle()">编辑</button>
       </ion-nav-buttons>
  </ion-nav-bar>
 
     <ion-content>
-        <!-- <div class="blank-h12"></div> -->
-		
-		<div ng-show="myDiv">
+		<div ng-show="myDiv" >
 	    	<div class="myinfo-avatar">
 	    		<div class="img-cen ">
 	    			<div>
@@ -26,7 +24,7 @@
 		    <div class="myinfo-cont">
 		        <ion-item>
 		            <span class="msg">姓名</span>
-					<p class="myinfo-msg-right">{{doctor.name}}</p>   
+					<p class="myinfo-msg-right top16">{{doctor.name}}</p>   
 		        </ion-item>
 		<!--         <ion-item>
 		            <span class="msg">头像</span>
@@ -34,7 +32,7 @@
 		        </ion-item> -->
 		        <ion-item>
 		            <span class="msg">职称</span>
-					<p class="myinfo-msg-right">{{doctor.title}}</p>
+					<p class="myinfo-msg-right top16">{{doctor.title}}</p>
 		        </ion-item>
 		        <ion-item>
 		            <span class="msg">省份</span>
@@ -43,23 +41,23 @@
 		        </ion-item>
 		        <ion-item>
 		            <span class="msg">城市</span>
-					<p class="myinfo-msg-right">{{doctor.city}}</p>
+					<p class="myinfo-msg-right top16">{{doctor.city}}</p>
 		        </ion-item>        
 		        <ion-item>
 		            <span class="msg">医院</span>
-					<p class="myinfo-msg-right">{{doctor.workUnit}}</p>
+					<p class="myinfo-msg-right top16">{{doctor.workUnit}}</p>
 		        </ion-item>
 				<ion-item>
 		            <span class="msg">科室</span>
-					<p class="myinfo-msg-right">{{doctor.department}}</p>
+					<p class="myinfo-msg-right top16">{{doctor.department}}</p>
 		        </ion-item>
 				<ion-item>
 		            <span class="msg">擅长</span>
-					<p class="myinfo-msg-right">{{doctor.major}}</p>
+					<p class="myinfo-msg-right top16">{{doctor.major}}</p>
 		        </ion-item>
 		         <ion-item>
 		            <span class="msg">简介</span>
-					<p class="myinfo-msg-right">{{doctor.description}}</p>
+					<p class="myinfo-msg-right top16">{{doctor.description}}</p>
 		        </ion-item>
 			</div>
 		</div>
@@ -138,12 +136,6 @@
 		<!-- </div> -->
 
 			<button ng-click="editinfo()" style="margin-top:0 ;background: #6ac4f8;width: 80%;margin: 0 auto" class="button button-block button-positive mt-40">保存</button>
-
-
-
-
-
-
 
         </div>
     </ion-content>

@@ -1,18 +1,28 @@
 <ion-view hide-tabs view-title="选择医生">
-    <div class="bar bar-subheader item-input-inset bar-light">
+<!--     <div class="bar bar-subheader item-input-inset bar-light">
         <div class="item-input-wrapper">
             <i style="color:#3d6399;font-size:1.6em" class="icon ion-android-search placeholder-icon"></i>
-            <input id="searchBox" type="search" ng-keyup="listenEnter()" ng-model="params.query" placeholder="搜索医生" autofocus/>
+            <input id="searchBox" type="search" ng-model="params.query" placeholder="搜索医生" autofocus/>
             <i style="color:#EF473A;font-size:1.6em" class="icon ion-android-close placeholder-icon ng-hide" ng-show="params.query" ng-click="clearSearch()"></i>
         </div>
         <button class="button button-clear button-positive" ng-click="docSearch()">
             {{params.isSearch?'取消':'搜索'}}
         </button>
+    </div> -->
+    <ion-content class="gray-back">
+    <div class="bar item-input-inset bar-light">
+      <div class="item-input-wrapper">
+        <i style="color:#3d6399;font-size:1.6em" class="icon ion-android-search placeholder-icon"></i>
+        <input id="searchBox" type="search" ng-model="params.query" placeholder="搜索医生" autofocus>
+        <i style="color:#EF473A;font-size:1.6em" class="icon ion-android-close placeholder-icon  ng-hide" ng-show="params.query" ng-click="clearSearch()"></i>
+      </div>
+      <button class="button button-clear button-positive" ng-click="docSearch()">
+            {{params.isSearch?'取消':'搜索'}}
+        </button>
     </div>
-    <ion-content class="has-subheader gray-back">
         <div class="list">
             <a class="item item-avatar" collection-repeat="d in doctors" collection-item-height="135" collection-item-width="'100%'" ng-click="sendTo(d)">
-                <img src="{{d.photoUrl || 'img/DefaultAvatar.jpg'}}">
+                <img src="{{d.photoUrl || 'img/doctor.png'}}">
                 <div class="doctor-msg-left balanced balanced-border">专家团队</div>
                 <div>
                     <span>{{d.name}}</span> {{d.title}}
@@ -22,6 +32,7 @@
                 </div>
             </a>
         </div>
-        <ion-infinite-scroll ng-if="params.moredata && !isSearch" on-infinite="loadMore()" distance="5%"></ion-infinite-scroll>
+
+        <ion-infinite-scroll ng-if="params.moredata" on-infinite="loadMore()" distance="5%"></ion-infinite-scroll>
     </ion-content>
 </ion-view>

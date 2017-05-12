@@ -1,24 +1,24 @@
 <ion-view view-title="我的二维码">
-<ion-nav-bar class="bar-positive nav-title-slide-ios7" align-title="center">
-          <ion-nav-back-button class="button-clear">
-            <i class="ion-chevron-left"></i>
-        </ion-nav-back-button>
+<ion-nav-bar class="bar-positive " align-title="center">
+    <ion-nav-buttons side="left">
+        <button class="button button-icon icon ion-ios-arrow-left fc-ff" ng-click="$ionicGoBack()"></button>
+    </ion-nav-buttons>
 </ion-nav-bar>
     <ion-content has-bouncing="true" overflow-scroll="false">
-      <div style="width:100%;height:100px;"></div>
-        <div style="width:280px;height:350px;display:block;margin:auto;padding-top:20px;padding-left:20px;border:solid lightblue">         
-     <div style="width:100px;height:90px;float:left;padding-top:10px;padding-left:10px;"><img style="width:60px;height:60px;" ng-src="{{doctor.photoUrl||'img/doctor.png'}}"></div>
-     <div style="width:150px;height:90px;float:left;padding-top:20px;">
+        <div style="width:100%;height:100px;"></div>
+        <div style="width:280px;height:350px;display:block;margin:auto;padding-top:20px;padding-left:20px;border:solid lightblue">
+         <div style="width:100px;height:90px;float:left;padding-top:10px;padding-left:10px;"><img style="width:60px;height:60px;" ng-src="img/doctor.png"></div>
+         <div style="width:150px;height:90px;float:left;padding-top:20px;">
                 <span>{{doctor.name}}</span> <span>{{doctor.title}}</span>
                 <p>{{doctor.workUnit}}&nbsp;&nbsp;&nbsp;
                 <!-- {{doctor.department}} -->
                 </p>
-     </div>
-<!--     <div style="width:100%;padding-left:60px;"><img ng-src="img/default_user.png"></div> -->
+         </div>
+<!--         <div style="width:100%;padding-left:60px;"><img ng-src="img/default_user.png"></div> -->
          <div>
          <qrcode  version=3 error-correction-level="M" size="225" data="{{params.userId}}"></qrcode>
 <!--          <div style="color:#888;margin-top:10px">长按扫一扫我的二维码，关注我</div> -->
-       </div>
+         </div>
     </ion-content>
 
     <!--选择地区-->

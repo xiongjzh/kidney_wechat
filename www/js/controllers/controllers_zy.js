@@ -668,6 +668,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
 //首页
 .controller('homeCtrl', ['Communication','$scope','$state','$interval','$rootScope', 'Storage','$http','$sce','$timeout','Doctor','New',function(Communication,$scope, $state,$interval,$rootScope,Storage,$http,$sce,$timeout,Doctor,New) {
     $scope.barwidth="width:0%";
+    console.log(Storage.get('USERNAME'));    
     $scope.hasUnreadMessages = false;
     var RefreshUnread;
     var GetUnread = function(){
@@ -682,6 +683,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
             });
     }
     GetUnread();
+    RefreshUnread = $interval(GetUnread,2000);
     $scope.isWriting={'margin-top': '100px'};
     if(!sessionStorage.addKBEvent)
     {
@@ -740,6 +742,63 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
         // }).success(function(data) {
         //         // console.log(data);
         // });
+    }
+    var forumReg=function(phone,role)
+    {
+        // console.log(phone.userName+phone.phoneNo.slice(7))
+        var un=phone.userName+phone.phoneNo.slice(7);
+        var url='http://121.43.107.106';
+        if(role=='patient')
+            url+=':6699/member.php?mod=register&mobile=2&handlekey=registerform&inajax=1'
+        else if(role=='doctor')
+            url+='/member.php?mod=register&mobile=2&handlekey=registerform&inajax=1';
+        $http({
+            method  : 'POST',
+            url     : url,
+            params    :{
+                'regsubmit':'yes',
+                'formhash':'xxxxxx',
+                'username':un,
+                'password':un,
+                'password2':un,
+                'email':phone.phoneNo+'@bme319.com'
+            },  // pass in data as strings
+            headers : {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'Accept':'application/xml, text/xml, */*'
+            }  // set the headers so angular passing info as form data (not request payload)
+        }).success(function(s){
+            console.log(s)
+        })
+    }
+    $scope.importDocs=function()
+    {
+        $http({
+            method:'GET',
+            url:'http://121.196.221.44:4050/user/getPhoneNoByRole?role=patient'
+        })
+        .success(function(data)
+        {
+            console.log(data)
+            var users=data.results;
+            for(var i=0;i<users.length;i++)
+            {
+                forumReg(users[i],'patient');
+            }
+        })
+        $http({
+            method:'GET',
+            url:'http://121.196.221.44:4050/user/getPhoneNoByRole?role=doctor'
+        })
+        .success(function(data)
+        {
+            console.log(data)
+            var users=data.results;
+            for(var i=0;i<users.length;i++)
+            {
+                forumReg(users[i],'doctor');
+            }
+        })
     }
     // $scope.testRestful=function()
     // {

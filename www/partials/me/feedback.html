@@ -3,10 +3,10 @@
 <!--       <ion-nav-buttons side="left">
             <a class="button button-icon icon ion-chevron-left" href="#/tab/me"></a>
       </ion-nav-buttons> -->
-      <ion-nav-bar class="bar-positive nav-title-slide-ios7" align-title="center">
-          <ion-nav-back-button class="button-clear">
-            <i class="ion-chevron-left"></i>
-        </ion-nav-back-button>
+      <ion-nav-bar class="bar-positive " align-title="center">
+          <ion-nav-buttons side="left">
+            <button class="button button-icon icon ion-ios-arrow-left fc-ff" ng-click="$ionicGoBack()"></button>
+        </ion-nav-buttons>
         </ion-nav-bar>
     <ion-content>
         <ion-refresher pulling-text="下拉刷新..." on-refresh="doRefresh()"></ion-refresher>
@@ -20,12 +20,11 @@
         </ion-item>
         <div class="list">
             <a class="item item-thumbnail-left" ng-repeat="fb in feedbacks">
-                <img ng-src="{{fb.patientId.photoUrl||'img/patient.png'}}">
-                <h2 style="margin-left: 10px">{{fb.patientId.name}}</h2>
-                <p class="friend-detail-p">评分：{{fb.totalScore}}</p>
-                <p class="friend-detail-p">{{fb.content}}</p>
-                <p class="friend-detail-p">评论时间：{{fb.time|dateFormat:"YYYY-MM-DD h:m"}}</p>
-
+                <img class="mgleft-10" ng-src="{{fb.patientId.photoUrl||'img/patient.png'}}">
+                <span class="span-text" style="margin-left: 10px">{{fb.patientId.name}}</span>
+                <span style="text-align: right;float: right;font-size: 15px;color: #333333" >{{fb.time|dateFormat:"YYYY-MM-DD h:m"}}</span>
+                <p class="friend-detail-p mg-top10">评分:{{fb.totalScore}}</p>
+                <p class="friend-detail-p">描述：{{fb.content}}</p>
             </a>
         </div>
     </ion-content>

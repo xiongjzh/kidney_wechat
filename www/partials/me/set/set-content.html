@@ -26,33 +26,31 @@
 </ion-header-bar>
 <ion-view>
     <ion-content>
-        <p ng-switch="type">
+        <div ng-switch="type">
 <!--             <span ng-switch-when="about">
               个人设置文档...
             </span>
             <span ng-switch-when="userprotocol">
                用户协议文档...
             </span> -->
-            <span ng-switch-when="resetpassword">
-                <div class="list list-inset">
-                    <label class="item item-input">
-                        <span class="input-label">输入旧密码</span>
-                        <input type="password" ng-model="oldPW">
-                    </label>
-                    <label class="item item-input">
-                        <span class="input-label">输入新密码</span>
-                        <input type="password" ng-model="newPW">
-                    </label>
-                    <label class="item item-input">
-                        <span class="input-label">确认新密码</span>
-                        <input type="password" ng-model="confirmPW">
-                    </label>
-                    <span>{{changePasswordStatus}}</span>
-                    <button class="button button-block button-positive" ng-click=resetPassword(oldPW,newPW,confirmPW)>
-                        确定
-                    </button>
-                </div>
-            </span>
-        </p>
+            <div class="list list-inset" ng-switch-when="resetpassword">
+                <label class="item item-input" style="border:1px solid #6ac4f8;border-radius: 5px">
+                    <span class="input-label">输入旧密码</span>
+                    <input type="password" ng-model="oldPW">
+                </label>
+                <label class="item item-input" style="border:1px solid #6ac4f8;border-radius: 5px;margin-top: 10px">
+                    <span class="input-label">输入新密码</span>
+                    <input type="password" ng-model="newPW">
+                </label>
+                <label class="item item-input" style="border:1px solid #6ac4f8;border-radius: 5px;margin-top: 10px">
+                    <span class="input-label">确认新密码</span>
+                    <input type="password" ng-model="confirmPW">
+                </label>
+                <span>{{changePasswordStatus}}</span>
+                <button class="button button-block button-positive login_btn" ng-click=resetPassword(oldPW,newPW,confirmPW)>
+                确定
+                </button>
+            </div>
+        </div>
     </ion-content>
 </ion-view>

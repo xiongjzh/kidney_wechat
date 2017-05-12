@@ -1,14 +1,14 @@
 <ion-view title="消息中心" >
 
-  <ion-nav-bar class="bar-positive nav-title-slide-ios7" style="" >
-      <ion-nav-buttons class="bar-dark nav-title-slide-ios7" side="left" >
-         <button class="button button-clear"  ng-click="Goback()"><i class="icon ion-chevron-left"></i>返回</button>
-      </ion-nav-buttons>
-    </ion-nav-bar>
+  <ion-nav-bar class="bar-positive " align-title="center">
+    <ion-nav-buttons side="left">
+      <button class="button button-icon icon ion-ios-arrow-left fc-ff" ng-click="Goback()"></button>
+    </ion-nav-buttons>
+  </ion-nav-bar>
 
 
   <div  style="position: absolute;top: 43px;z-index:100;display: block;height: 2.5px;background-color: #33cd5f;{{barwidth}}" ></div>
-  <ion-content padding="true" style="">
+  <ion-content >
     <div class="card" ng-if="!(Pchats.length||Dchats.length||Tchats.length)">
         <div class="item item-text-wrap">
             暂时没有消息
@@ -17,31 +17,31 @@
     <ion-list>
 
       <!-- 支付消息 -->
-<!--       <ion-item class="item-thumbnail-left" ng-click="getMessageDetail('ZF')">
-        <img ng-src="img/payment.png">
-        <h2 style="margin-top: 30px;">支付消息</h2>
-        <span class="badge badge-assertive" style="margin-top: 20px;" ng-if="messages.ZF.values.length">{{messages.ZF.values.length}}</span>
+<!--       <ion-item class="item message-item item-avatar right message-new" ng-click="getMessageDetail('ZF')">
+        <img   src="/img/icon_paymessage.png">
+        <h2>支付消息</h2>
+        <p ng-if="messages.ZF.values.length">[{{messages.ZF.values.length}}条]你有新的支付消息请注意查收</p>
       </ion-item> -->
 
       <!-- 警报消息 -->
-<!--       <ion-item class="item-thumbnail-left item-text-wrap" ng-click="getMessageDetail('JB')">
+      <!-- <ion-item class="item-thumbnail-left item-text-wrap" ng-click="getMessageDetail('JB')">
         <img ng-src="img/alert.png">
         <h2 style="margin-top: 30px;">警报消息</h2>
         <span class="badge badge-assertive" style="margin-top: 20px;" ng-if="messages.JB.values.length">{{messages.JB.values.length}}</span>
       </ion-item> -->
 
       <!-- 任务消息 -->
-<!--       <ion-item class="item-thumbnail-left item-text-wrap" ng-click="getMessageDetail('RW')">
-        <img ng-src="img/task.png">
-        <h2 style="margin-top: 30px;">任务消息</h2>
-        <span class="badge badge-assertive" style="margin-top: 20px;" ng-if="messages.RW.values.length">{{messages.RW.values.length}}</span>
+<!--       <ion-item class="item message-item item-avatar right "ng-click="getMessageDetail('RW')">
+        <img   src="/img/icon_renwu.png">
+        <h2>待做任务</h2>
+        <p ng-if="messages.RW.values.length">[{{messages.RW.values.length}}条]你有新的支付消息请注意查收</p>
       </ion-item> -->
 
       <!-- 保险消息 -->
-<!--       <ion-item class="item-thumbnail-left item-text-wrap" ng-click="getMessageDetail('BX')">
-        <img ng-src="img/security.png">
-        <h2 style="margin-top: 30px;">保险消息</h2>
-        <span class="badge badge-assertive" style="margin-top: 20px;" ng-if="messages.BX.values.length">{{messages.BX.values.length}}</span>
+<!--       <ion-item class="item message-item item-avatar right "ng-click="getMessageDetail('BX')">
+        <img   src="/img/icon_warning.png">
+        <h2>警报消息</h2>
+        <p ng-if="messages.BX.values.length">[{{messages.RW.values.length}}条]你有新的支付消息请注意查收</p>
       </ion-item> -->
 
       <!-- 聊天消息 -->
@@ -72,8 +72,9 @@
         <span class="row" style="margin-left:5px;">{{Tchat.description}}</span>
       </ion-item>
 
+
     </ion-list>
-    <ion-refresher pulling-text="下拉刷新..." on-refresh="do_refresher()"></ion-refresher>
+    <ion-refresher pulling-text="下拉刷新..." on-refresh="do_refresher()"></ion-refresher>   
   </ion-content>
           
 </ion-view>

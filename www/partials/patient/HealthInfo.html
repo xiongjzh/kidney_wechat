@@ -1,17 +1,32 @@
 <ion-view cache-view="false" title="健康信息" >
 
   <ion-nav-bar class="bar-dark nav-title-slide-ios7" style="" >
-      <ion-nav-buttons class="bar-dark nav-title-slide-ios7" side="left" >
-         <button class="button button-clear"  ng-click="Goback()"><i class="icon ion-chevron-left"></i>返回</button>
-      </ion-nav-buttons>
+      <ion-nav-buttons side="left">
+      <button class="button button-icon icon ion-ios-arrow-left fc-ff" ng-click="Goback()"></button>
+    </ion-nav-buttons>
       <ion-nav-buttons class="bar-dark nav-title-slide-ios7" side="right" >
          <button class="button button-clear" ng-click="newHealth()"><i class="icon ion-plus-round"></i></button>
       </ion-nav-buttons>
     </ion-nav-bar>
 
 
-  <div  style="position: absolute;top: 43px;z-index:100;display: block;height: 2.5px;background-color: #33cd5f;{{barwidth}}" ></div>
-  <ion-content padding="true" style="">
+<!--   <div  style="position: absolute;top: 43px;z-index:100;display: block;height: 2.5px;background-color: #33cd5f;{{barwidth}}" ></div> -->
+  <div class="button-bar bar-positive tast-bar patient-bar" style="margin-top: 40px;">
+    <a class="button" href="#/tab/DoctorDiagnose">
+      <span class="br-e9" style="vertical-align: sub">医生诊断</span>
+    </a>
+    <a class="button  " href="#/tab/TaskSet">
+      <span class="br-e9" style="vertical-align: sub">治疗方案</span>
+    </a>
+    <a class="button" href="#/tab/TestRecord">
+      <span class="br-e9" style="vertical-align: sub">测量记录</span>
+    </a>
+    <a class="button tast-active" href="#/tab/health">
+      <span class="br-e9" style="vertical-align: sub">健康信息</span>
+    </a>
+  </div>
+  
+  <ion-content class="has-header" padding="true" style="">
 
     <ion-list>
       <ion-item ng-repeat="item in items | orderBy:'-time'" ng-click="gotoHealthDetail($event,item)">
@@ -27,7 +42,7 @@
               <p style="text-align:right">{{item.time|dateFormat:"YYYY-MM-DD"}}</p>
             </div>
             <div>
-              <p>{{item.description}}</p>
+              <p style="margin-left:3%">{{item.description}}</p>
             </div>
           </div>
         </div>  
