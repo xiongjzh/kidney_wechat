@@ -186,6 +186,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
                         {
                             User.getUserId({phoneNo:Verify.Phone}).then(function(data){
                                 if(data.results == 0){
+                                    var tempuserId = data.UserId
                                     Doctor.getDoctorInfo({userId:data.UserId}).then(function(data){
                                         if(data.results == "不存在的医生ID！"){
                                             $scope.logStatus = "该手机号码没有医生权限,请确认手机号码或转移到肾事管家进行操作";
@@ -336,7 +337,16 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
                           User.setOpenId({phoneNo:Verify.Phone,openId:Storage.get('openid')}).then(function(data){
                               if(data.msg == "success!")
                               {
-                                $state.go('tab.home');
+                                console.log(tempuserId)
+                                User.getAgree({userId:tempuserId}).then(function(res){
+                                    if(res.results.agreement=="0"){
+                                        $state.go('tab.home');
+                                    }else{
+                                        $state.go('agreement',{last:'signin'});
+                                    }
+                                },function(err){
+                                    console.log(err);
+                                })
                               }
                           },function(){
                               $scope.logStatus = "连接超时！";
@@ -1424,7 +1434,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
           //图片路径
           $timeout(function(){
               $ionicLoading.hide();
-              $scope.doctor.photoUrl="http://121.43.107.106:8052/uploads/photos/"+temp_name+'?'+new Date().getTime();
+              $scope.doctor.photoUrl="http://121.196.221.44:8052/uploads/photos/"+temp_name+'?'+new Date().getTime();
               
               console.log($scope.doctor.photoUrl)
               // $state.reload("tab.mine")
@@ -1841,7 +1851,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
       //图片路径
       $timeout(function(){
           $ionicLoading.hide();
-          $scope.doctor.photoUrl="http://121.43.107.106:8052/uploads/photos/"+temp_name+'?'+new Date().getTime();
+          $scope.doctor.photoUrl="http://121.196.221.44:8052/uploads/photos/"+temp_name+'?'+new Date().getTime();
           
           console.log($scope.doctor.photoUrl)
           // $state.reload("tab.mine")
