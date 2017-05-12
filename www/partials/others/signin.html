@@ -1,12 +1,12 @@
 <ion-view title="登录">
-  <ion-nav-bar class="bar-positive bar-calm" style="background: #6ac4f8"align-title="center" >
+  <ion-nav-bar class="bar-positive bar-calm" style="background: #6ac4f8" align-title="center" >
      
   </ion-nav-bar>
   <div  style="position: absolute;top: 43px;z-index:100;display: block;height: 2px;background-color: #6ac4f8;{{barwidth}}" ></div>
   <ion-content padding="true"  style=" padding-left:10%;padding-right:10%;background : #ffffff;">
           <div class="list list-inset mt-40" style="margin-bottom:0">
             <label class="item item-input" style="border:1px solid #6ac4f8;border-radius: 5px">
-              <span class="input" style="margin-right:16px"><i class="icon ion-person"></i></span>
+              <span class="input" style="margin-right:16px"><i class="icon ion-iphone""></i></span>
               <input type="tel"  ng-model="logOn.username" placeholder="手机号" >
             </label>
             <label class="item item-input" style="margin-top: 10px;border:1px solid #6ac4f8;border-radius: 5px">
@@ -21,7 +21,7 @@
           </div>
 
           <button style="margin-top:0; background: #6ac4f8" class="button button-block button-positive login_btn" ng-click="signIn(logOn)">立即登录</button>
-          <button style="margin-top:0 ;background: #6ac4f8" class="button button-block button-positive" >微信登录</button>
+          <!-- <button style="margin-top:0 ;background: #6ac4f8" class="button button-block button-positive" >微信登录</button> -->
            
 <!--           <iframe id="bbsframe_login" ng-src ='{{navigation_login}}' height="100%" width="100%" ng-show=false>
               <p>Your browser does not support iframes.</p>

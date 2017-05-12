@@ -4,38 +4,39 @@
             <button class="button button-icon icon ion-ios-arrow-left fc-ff" ng-click="goCounsel()"></button>
         </ion-nav-buttons>
         <ion-nav-buttons side="right" >
-             <button class="button button-clear"  ng-click="openPopover($event)">筛选<i class="icon ion-navicon"></i></button>
+             <button class="button button-clear"  ng-click="openPopover($event)"><i class="icon ion-navicon"></i></button>
         </ion-nav-buttons>
      <!--  <ion-nav-back-button class="button-clear">
         <i class="ion-chevron-left"></i>
         
       </ion-nav-back-button> -->
     </ion-nav-bar>
-    <ion-content>
+    <ion-content style="background: #fafafa">
         <div  class="bar bar-header item-input-inset" style="height:40px;">
-            <div class="item-input-wrapper">
+            <label class="item-input-wrapper">
                 <i class="icon ion-ios-search placeholder-icon"></i>
                 <input type="search" ng-model="search.name" placeholder="搜索患者姓名">
                 <i style="color:#EF473A;font-size:1.6em" class="icon ion-android-close placeholder-icon" ng-click="clearSearch()"></i>
-            </div>
+            </label>
             <button  class="button button-clear button-positive" ng-click="goSearch()">
                 搜索
             </button>
         </div>
         <div>
-        已完成：{{patients.length}}
+        <h4 class="m-h4">已完成：{{patients.length}} 人</h4>
         </div>
         <div class="list bg-fa">
             <a class="item item-avatar context-pading m-b5 br-none fc-4c" ng-repeat="p in patients| orderBy:p.time:-1|orderBy:p.VIP" ng-click="itemClick($event,p.patientId.userId,p.counselId)" ng-show="p.show!=false">
                 <img class="avatar-icon" ng-src="{{p.patientId.photoUrl||'img/patient.png'}}" id="diddetail">
                 <div>
+<!--                 <span>{{p.patientId.name}}</span><span style="float: right">{{p.time|dateFormat:"YYYY-MM-DD h:m"}}</span></div>
+                <em class="m-em">{{p.symptom}}</em> -->
                 <span>{{p.patientId.name}}</span>
                 <span style="margin-left:5px;">{{p.patientId.gender|filterGender}}</span>
                 <span style="margin-left:5px;">{{p.patientId.birthday|filterAge}}岁</span>
                 <span style="float: right">{{p.time|dateFormat:"YYYY-MM-DD h:m"}}</span>
                 </div>
-                <p><span style="color:#ea4335" ng-show="p.lastMsg.readOrNot==0" class="ng-hide">[新消息]</span>{{p.lastMsg.description}}<span style="color:#FFF">.</span></p>
-                <!-- <p><i class="icon ion-android-hand"></i><em class="m-em">{{p.symptom}}</em></p> -->
+                <em class="m-em">{{p.symptom}}</em>
                 
             </a>
         </div>

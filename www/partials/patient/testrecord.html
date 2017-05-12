@@ -1,25 +1,34 @@
 <ion-view title="测量记录">
-  <ion-nav-bar class="bar-dark nav-title-slide-ios7" style="" >
-    <ion-nav-back-button class="button-icon ion-arrow-left-c">
-    </ion-nav-back-button>
-    
+  <ion-nav-bar class="bar-positive " align-title="center">
+    <ion-nav-buttons side="left">
+      <button class="button button-icon icon ion-ios-arrow-left fc-ff" ng-click="$ionicGoBack()"></button>
+    </ion-nav-buttons>
   </ion-nav-bar>
-
-
+<!--   <ion-nav-bar class="bar-dark nav-title-slide-ios7" style="" >
+    <ion-nav-back-button class="button-icon ion-arrow-left-c">
+    </ion-nav-back-button>    
+  </ion-nav-bar>  --> 
   <ion-content padding="true" style="">
 
   <!-- <select ng-model="vitalInfo" ng-change="changeVitalInfo(vitalInfo)" ng-controller="TestRecordCtrl">  
       <option ng-repeat="option in options" >{{option.SignName}}</option>  
   </select>   -->
-  <div ng-show="chartdiv">
+<!-- <div ng-show="chartdiv1" > -->
+  <div  id="chartdiv1" style="width: 100%;height:400px;"></div>
+  <div  id="chartdiv2" style="width: 100%;height:400px;"></div>
+  <div  id="chartdiv3" style="width: 100%;height:400px;"></div>
+  <div  id="chartdiv4" style="width: 100%;height:400px;"></div>
+  <div  id="chartdiv5" style="width: 100%;height:400px;"></div>
+<!-- </div> -->
+<!--   <div ng-show="chartdiv">
     <p> 舒张压 ：mmg </p>
     <div id="chartdiv" style="width: 100%; height: 400px; background-color: #FFFFFF;" ></div>
-  </div>
-  <div ng-show="chartdiv1">
+  </div> -->
+<!--   <div ng-show="chartdiv1">
     <p> 收缩压 ：mmg </p>
     <div id="chartdiv1" style="width: 100%; height: 400px; background-color: #FFFFFF;" ></div>
-  </div>
-  <div ng-show="chartdiv2">
+  </div> -->
+<!--   <div ng-show="chartdiv2">
     <p> 体温 ：℃ </p>
     <div id="chartdiv2" style="width: 100%; height: 400px; background-color: #FFFFFF;" ></div>
   </div>
@@ -34,7 +43,10 @@
   <div ng-show="chartdiv5">
     <p> 心率 ：次/分钟 </p>
     <div id="chartdiv5" style="width: 100%; height: 400px; background-color: #FFFFFF;" ></div>         
-  </div>
+  </div> -->
+
+
+
   </ion-content>
           
 </ion-view>

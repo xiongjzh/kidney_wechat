@@ -1,13 +1,13 @@
 <ion-view view-title="排班">
-<ion-nav-bar class="bar-positive nav-title-slide-ios7" align-title="center">
-          <ion-nav-back-button class="button-clear">
-            <i class="ion-chevron-left"></i>
-        </ion-nav-back-button>
-</ion-nav-bar>
+  <ion-nav-bar class="bar-positive " align-title="center">
+    <ion-nav-buttons side="left">
+      <button class="button button-icon icon ion-ios-arrow-left fc-ff" ng-click="$ionicGoBack()"></button>
+    </ion-nav-buttons>
+  </ion-nav-bar>
     <ion-content>
 		<div class="list card">
 
-			<div class="item">
+			<div class="item noborder">
 				<h2>
 					状态：{{stausText}}
 					<a class="button button-small button-positive" style="float:right " ng-click="showSch()">
@@ -29,41 +29,41 @@
 				</button>
 				<div class="button-bar">
 					  <a class="button button-positive" ng-click="stopWork(1)">取消</a>
+
 					  <a class="button button-assertive" ng-click="stopWork()">保存</a>
 				</div>
 			</div>
 
-			<div class="item">
-				<h2>值班表</h2>
+			<div class="item noborder">
 				<div class="row">
-					<div class="col" style="border-left:solid;border-top:solid;border-color:#6ac4f8"><span style="opacity:0">上午</span></div>
-					<div class="col" style="border-left:solid;border-top:solid;border-color:#6ac4f8">一</div>
-					<div class="col" style="border-left:solid;border-top:solid;border-color:#6ac4f8">二</div>
-					<div class="col" style="border-left:solid;border-top:solid;border-color:#6ac4f8">三</div>
-					<div class="col" style="border-left:solid;border-top:solid;border-color:#6ac4f8">四</div>
-					<div class="col" style="border-left:solid;border-top:solid;border-color:#6ac4f8">五</div>
-					<div class="col" style="border-left:solid;border-top:solid;border-color:#6ac4f8">六</div>
-					<div class="col" style="border-left:solid;border-top:solid;border-right:solid;border-color:#6ac4f8">日</div>
+					<div class="col schedual-border" ><span style="opacity:0">上午</span></div>
+					<div class="col schedual-border" >一</div>
+					<div class="col schedual-border" >二</div>
+					<div class="col schedual-border" >三</div>
+					<div class="col schedual-border" >四</div>
+					<div class="col schedual-border">五</div>
+					<div class="col schedual-border" >六</div>
+					<div class="col schedual-border-right">日</div>
 				</div>
 				<div class="row">
-					<div class="col" style="border-left:solid;border-top:solid;border-color: #6ac4f8">上午</div>
-					<div class="col" ng-click="changeWorkStatus(0)" ng-style="workStatus[0].style" style="border-left:solid;border-top:solid;border-color:#6ac4f8;"></div>
-					<div class="col" ng-click="changeWorkStatus(1)" ng-style="workStatus[1].style" style="border-left:solid;border-top:solid;border-color:#6ac4f8;"></div>
-					<div class="col" ng-click="changeWorkStatus(2)" ng-style="workStatus[2].style" style="border-left:solid;border-top:solid;border-color:#6ac4f8"></div>
-					<div class="col" ng-click="changeWorkStatus(3)" ng-style="workStatus[3].style" style="border-left:solid;border-top:solid;border-color:#6ac4f8"></div>
-					<div class="col" ng-click="changeWorkStatus(4)" ng-style="workStatus[4].style" style="border-left:solid;border-top:solid;border-color:#6ac4f8;"></div>
-					<div class="col" ng-click="changeWorkStatus(5)" ng-style="workStatus[5].style" style="border-left:solid;border-top:solid;border-color:#6ac4f8"></div>
-					<div class="col" ng-click="changeWorkStatus(6)" ng-style="workStatus[6].style" style="border-left:solid;border-top:solid;border-right: solid;border-color: #6ac4f8"></div>
+					<div class="col schedual-border" >上午</div>
+					<div class="col schedual-border" ng-click="changeWorkStatus(0)" ng-style="workStatus[0].style" ></div>
+					<div class="col schedual-border" ng-click="changeWorkStatus(1)" ng-style="workStatus[1].style" ></div>
+					<div class="col schedual-border" ng-click="changeWorkStatus(2)" ng-style="workStatus[2].style" ></div>
+					<div class="col schedual-border" ng-click="changeWorkStatus(3)" ng-style="workStatus[3].style" ></div>
+					<div class="col schedual-border" ng-click="changeWorkStatus(4)" ng-style="workStatus[4].style" ></div>
+					<div class="col schedual-border" ng-click="changeWorkStatus(5)" ng-style="workStatus[5].style"></div>
+					<div class="col schedual-border-right" ng-click="changeWorkStatus(6)" ng-style="workStatus[6].style" ></div>
 				</div>
 				<div class="row">
-					<div class="col" style="border-left:solid;border-top:solid;border-bottom: solid;border-color: #6ac4f8;">下午</div>
-					<div class="col" ng-click="changeWorkStatus(7)" ng-style="workStatus[7].style" style="border-left:solid;border-top:solid;border-bottom: solid;border-color: #6ac4f8"></div>
-					<div class="col" ng-click="changeWorkStatus(8)" ng-style="workStatus[8].style" style="border-left:solid;border-top:solid;border-bottom: solid;border-color: #6ac4f8"></div>
-					<div class="col" ng-click="changeWorkStatus(9)" ng-style="workStatus[9].style" style="border-left:solid;border-top:solid;border-bottom: solid;border-color: #6ac4f8;"></div>
-					<div class="col" ng-click="changeWorkStatus(10)" ng-style="workStatus[10].style" style="border-left:solid;border-top:solid;border-bottom: solid;border-color: #6ac4f8"></div>
-					<div class="col" ng-click="changeWorkStatus(11)" ng-style="workStatus[11].style" style="border-left:solid;border-top:solid;border-bottom: solid;border-color: #6ac4f8"></div>
-					<div class="col" ng-click="changeWorkStatus(12)" ng-style="workStatus[12].style" style="border-left:solid;border-top:solid;border-bottom: solid;border-color: #6ac4f8"></div>
-					<div class="col" ng-click="changeWorkStatus(13)" ng-style="workStatus[13].style" style="border-left:solid;border-top:solid;border-bottom: solid;border-right: solid;border-color: #6ac4f8"></div>
+					<div class="col schedual-border-bottom" >下午</div>
+					<div class="col schedual-border-bottom" ng-click="changeWorkStatus(7)" ng-style="workStatus[7].style" ></div>
+					<div class="col schedual-border-bottom" ng-click="changeWorkStatus(8)" ng-style="workStatus[8].style" ></div>
+					<div class="col schedual-border-bottom" ng-click="changeWorkStatus(9)" ng-style="workStatus[9].style" ></div>
+					<div class="col schedual-border-bottom" ng-click="changeWorkStatus(10)" ng-style="workStatus[10].style" ></div>
+					<div class="col schedual-border-bottom" ng-click="changeWorkStatus(11)" ng-style="workStatus[11].style" ></div>
+					<div class="col schedual-border-bottom" ng-click="changeWorkStatus(12)" ng-style="workStatus[12].style" ></div>
+					<div class="col schedual-border-all" ng-click="changeWorkStatus(13)" ng-style="workStatus[13].style" ></div>
 				</div>
 				<p style="padding-left:4px;">点击某一时段以修改状态</p>
 				<div class="row" style="padding:0px;">

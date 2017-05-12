@@ -1,13 +1,28 @@
 <ion-view title="医生诊断">
-<!--   <ion-nav-bar class="bar-dark nav-title-slide-ios7" style="" >
-    <ion-nav-back-button class="button-icon ion-arrow-left-c">
-    </ion-nav-back-button>
-  </ion-nav-bar> -->
+<ion-nav-bar class="bar-positive " align-title="center">
+    <ion-nav-buttons side="left">
+      <button class="button button-icon icon ion-ios-arrow-left fc-ff" ng-click="$ionicGoBack()"></button>
+    </ion-nav-buttons>
+  </ion-nav-bar>
   <ion-nav-buttons side="primary">
       <button class="button button-clear icon ion-compose" ng-click="canEdit()"></button>
     </ion-nav-buttons>
-  <div  style="position: absolute;top: 43px;z-index:100;display: block;height: 2.5px;background-color: #33cd5f;{{barwidth}}" ></div>
-  <ion-content padding="true" style="">
+<!--   <div  style="position: absolute;top: 43px;z-index:100;display: block;height: 2.5px;background-color: #33cd5f;{{barwidth}}" ></div> -->
+  <div class="button-bar bar-positive tast-bar patient-bar" style="margin-top: 40px;">
+    <a class="button  tast-active" href="#/tab/DoctorDiagnose">
+      <span class="br-e9" style="vertical-align: sub">医生诊断</span>
+    </a>
+    <a class="button  " href="#/tab/TaskSet">
+      <span class="br-e9" style="vertical-align: sub">治疗方案</span>
+    </a>
+    <a class="button" href="#/tab/TestRecord">
+      <span class="br-e9" style="vertical-align: sub">测量记录</span>
+    </a>
+    <a class="button" href="#/tab/health">
+      <span class="br-e9" style="vertical-align: sub">健康信息</span>
+    </a>
+  </div>
+  <ion-content  style="margin-top: 42px;">
     <div  class="list" ng-show="!edit">
         <ion-item>
           肾病类型:{{Diagnose.diagname|diagname}}
@@ -77,7 +92,7 @@
         <input  ng-model="Diagnose.diagcontent"  type="text">
       </label>
 
-      <button class="button button-block button-balanced" ng-click ="saveDiagnose()">
+      <button style="margin:0 auto;width: 80%" class="button button-block button-balanced bg-63 mt-40" ng-click ="saveDiagnose()">
             提交
       </button>
     </div>

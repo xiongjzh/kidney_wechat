@@ -1,15 +1,12 @@
 <ion-view hide-tabs view-title="选择团队">
-    <div class="bar bar-subheader item-input-inset bar-light">
-        <div class="item-input-wrapper">
-            <i style="color:#3d6399;font-size:1.6em" class="icon ion-android-search placeholder-icon"></i>
-            <input type="search" ng-model="query.name" ng-change="startSearch(query)" placeholder="搜索团队">
-            <i style="color:#EF473A;font-size:1.6em" class="icon ion-android-close placeholder-icon ng-hide" ng-hide="clearIt" ng-click="clearSearch()"></i>
+    <ion-content class="gray-back">
+        <div class="bar item-input-inset bar-light">
+            <div class="item-input-wrapper">
+                <i style="color:#3d6399;font-size:1.6em" class="icon ion-android-search placeholder-icon"></i>
+                <input type="search" ng-model="query.name" ng-change="startSearch(query)" placeholder="搜索团队">
+                <i style="color:#EF473A;font-size:1.6em" class="icon ion-android-close placeholder-icon ng-hide" ng-hide="clearIt" ng-click="clearSearch()"></i>
+            </div>
         </div>
-        <!-- <button class="button button-clear button-positive" ng-click="docSearch()">
-            {{query.name?'取消':'搜索'}}
-        </button> -->
-    </div>
-    <ion-content class="has-subheader gray-back">
         <div class="list">
             <a ng-repeat="team in teams | filter:query.name" class="item item-avatar" ng-click="sendTo(team)">
                 <img ng-src="{{team.photoUrl|imgUrl:'group'}}">

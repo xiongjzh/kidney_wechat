@@ -1,4 +1,4 @@
-<ion-popover-view>
+<ion-popover-view class="consult-pop">
 		<ul class="list">
 <!-- 			<li class="item"">
 		      	筛选
@@ -13,12 +13,19 @@
 		</ul>
 </ion-popover-view>
 <style type="text/css">
-	.item{
+  .popover{
+  }
+  .popover .item{
 		padding-top: 5px;padding-bottom: 5px;
+    border-left: 0;
+    border-right: 0;
 	}
 	.check
 	{
-		padding-top: 0px;padding-bottom: 0px;padding-left: 45px;
+		padding-top: 0px;
+    padding-bottom: 0px;
+    padding-left: 45px;
+    border: 0;
 	}
 	.radio
 	{
@@ -29,4 +36,11 @@
 	.item-radio .radio-content .item-content {
     	background: #fafafa;
 	}
+  .popover .list{
+    width: 145px;
+    margin-bottom: 0;
+    padding: 10px;
+    float: right;
+  }
+  .consult-pop{width: 145px}
 </style>

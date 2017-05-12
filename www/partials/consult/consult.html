@@ -1,38 +1,38 @@
 <ion-view show-tabs view-title="咨询">
-    <ion-nav-bar class="bar-positive">
-        <!-- <ion-nav-buttons side="left">
+<!--     <ion-nav-bar class="bar-positive">
+        <ion-nav-buttons side="left">
             <a class="button button-icon icon ion-qr-scanner" ng-click="qrscan()"></a>
-        </ion-nav-buttons> -->
-        <!-- <ion-nav-buttons side="right">
-            <a class="button button-icon ion-ios-refresh-empty" ng-click="doRefresh()"></a>
-        </ion-nav-buttons> -->
-    </ion-nav-bar>
+        </ion-nav-buttons>
+        <ion-nav-buttons side="right">
+            <a class="button button-icon icon ion-android-mail" ng-click="popover.show($event)"></a>
+        </ion-nav-buttons>
+    </ion-nav-bar> -->
     <ion-content has-bouncing="true" overflow-scroll="false">  
-       <div class="blank-h12"></div>
-       <ion-refresher pulling-text="下拉刷新..." on-refresh="doRefresh()">           
-        </ion-refresher> 
-	    <div>进行中</div>
+        <div class="blank-h12"></div>
+        <ion-refresher pulling-text="下拉刷新..." on-refresh="doRefresh()">           
+        </ion-refresher>
         <div class="card">
-            <a href="#/tab/doing" class="subdued">
-                <div class="item item-text-wrap"">
-				    <i class="icon ion-calendar"></i>
-					{{riqi}}&nbsp;&nbsp;&nbsp;
-                    {{doctor.a}}位  等待咨询患者
-                    <!-- 1位  等待咨询患者 -->
-					<i class="icon ion-ios-arrow-right mine-msg-right"></i>
-                </div>
-            </a>
+          <a href="#/tab/doing" class="subdued">
+            <div class="item item-text-wrap item-avatar-left bg-f0">
+            <img src="../../img/counseling@2x.png" alt="">
+            <p>{{riqi}}</p>
+            <p>
+            {{doctor.a}}位 等待咨询患者
+            </p>
+            <!-- 1位  等待咨询患者 -->
+            <i class="icon ion-ios-arrow-right mine-msg-right" style="top:24px"></i>
         </div>
-		<div>已完成</div>
+        </a>
+        </div>
         <div class="card">
-            <a href="#/tab/did" class="subdued">
-                <div class="item item-text-wrap">
-				    <i class="icon ion-android-clipboard"></i>
-                    {{riqi}}&nbsp;&nbsp;&nbsp;
-                    {{doctor.b}}位  已完成咨询
-					<i class="icon ion-ios-arrow-right mine-msg-right"></i>
-                </div>
-            </a>
+          <a href="#/tab/did" class="subdued">
+            <div class="item item-text-wrap item-avatar-left bg-f0">
+              <img src="../../img/finish@2x.png" alt="">
+              <p>{{riqi}}</p>
+              <p>{{doctor.b}}位 已完成咨询</p>
+              <i class="icon ion-ios-arrow-right mine-msg-right" style="top:24px"></i>
+            </div>
+          </a>
         </div>
     </ion-content>
 </ion-view>
