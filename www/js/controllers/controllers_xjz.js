@@ -1093,11 +1093,11 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             msg.content.thumb=CONFIG.mediaUrl+msg.content['src_thumb'];
             $http.get(msg.content.thumb).then(function(data){
                 $scope.msgs.push(msg);
-                toBottom(true,250);
+                toBottom(true,200);
             })
         }else{
             $scope.msgs.push(msg);
-            toBottom(true,200);
+            toBottom(true,100);
         }
     }
     // send message--------------------------------------------------------------------------------
@@ -1998,11 +1998,11 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             msg.content.thumb=CONFIG.mediaUrl+msg.content['src_thumb'];
             $http.get(msg.content.thumb).then(function(data){
                 $scope.msgs.push(msg);
-                toBottom(true,250);
+                toBottom(true,200);
             })
         }else{
             $scope.msgs.push(msg);
-            toBottom(true,200);
+            toBottom(true,100);
         }
     }
     function sendmsg(content,type){
