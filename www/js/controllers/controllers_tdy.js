@@ -1533,7 +1533,7 @@ angular.module('tdy.controllers', ['ionic','kidney.services','ionic-datepicker']
       //图片路径
       $timeout(function(){
         $ionicLoading.hide();
-        $scope.health.imgurl.push("http://121.43.107.106:8052/uploads/photos/"+temp_photoaddress)
+        $scope.health.imgurl.push("http://121.196.221.44:8052/uploads/photos/"+temp_photoaddress)
       },1000)
       
       
@@ -1583,7 +1583,7 @@ angular.module('tdy.controllers', ['ionic','kidney.services','ionic-datepicker']
   };      
   $scope.choosePhotos = function() {
     var config = "";
-    var path = "http://test.go5le.net/?code=" + Storage.get('code');
+    var path = "http://doctor.haihonghospitalmanagement.com/?code=" + Storage.get('code');
     wechat.settingConfig({url:path}).then(function(data){
       // alert(data.results.timestamp)
       config = data.results;
@@ -1640,7 +1640,7 @@ angular.module('tdy.controllers', ['ionic','kidney.services','ionic-datepicker']
   $scope.isShow=true;
   $scope.takePicture = function() {
       var config = "";
-      var path = "http://test.go5le.net/?code=" + Storage.get('code');
+      var path = "http://doctor.haihonghospitalmanagement.com/?code=" + Storage.get('code');
       wechat.settingConfig({url:path}).then(function(data){
         // alert(data.results.timestamp)
         config = data.results;
@@ -1715,7 +1715,7 @@ angular.module('tdy.controllers', ['ionic','kidney.services','ionic-datepicker']
   $scope.showoriginal=function(resizedpath){
     $scope.openModal();
     console.log(resizedpath)
-    var originalfilepath="http://121.43.107.106:8052/uploads/photos/"+resizedpath.slice(resizedpath.lastIndexOf('/')+1)
+    var originalfilepath="http://121.196.221.44:8052/uploads/photos/"+resizedpath.slice(resizedpath.lastIndexOf('/')+1)
     console.log(originalfilepath)
     $scope.healthinfoimgurl=originalfilepath;
   }

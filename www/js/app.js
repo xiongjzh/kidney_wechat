@@ -16,9 +16,9 @@ angular.module('kidney',[
     'ionic-datepicker'
 ])
 
-.run(['$ionicPlatform', '$state', 'Storage', 'JM','$ionicHistory','$rootScope','CONFIG','Communication', '$location','wechat','$window','User','Doctor','jmapi',function($ionicPlatform, $state, Storage, JM,$ionicHistory,$rootScope,CONFIG,Communication,$location,wechat,$window,User,Doctor,jmapi) {
+.run(['$ionicPlatform', '$state', 'Storage', 'JM','$ionicHistory','$rootScope','CONFIG','Communication', '$location','wechat','$window','User','Doctor','jmapi','$ionicPopup',function($ionicPlatform, $state, Storage, JM,$ionicHistory,$rootScope,CONFIG,Communication,$location,wechat,$window,User,Doctor,jmapi,$ionicPopup) {
     $ionicPlatform.ready(function() {
-        socket = io.connect('ws://121.43.107.106:4050/chat');
+        socket = io.connect('ws://121.196.221.44:4050/chat');
         
 
         var temp = $location.absUrl().split('=')
@@ -49,8 +49,27 @@ angular.module('kidney',[
                         }
                         else
                         {
-                            Storage.set('validMode',0)
-                            $state.go('phonevalid',{phonevalidType:"wechat"})
+                            $ionicPopup.show({   
+                                 title: '您的微信账号尚未在本系统注册，如您已拥有手机账号，请进行验证并绑定微信账号。',
+                                 buttons: [
+                                   { 
+                                        text: '取消',
+                                        type: 'button-positive',
+                                        onTap: function(e) {
+                                            $state.go('signin')
+                                        }
+                                    },
+                                   {
+                                        text: '<b>確定</b>',
+                                        type: 'button-positive',
+                                        onTap: function(e) {
+                                            Storage.set('validMode',0)
+                                            $state.go('phonevalid',{phonevalidType:"wechat"})
+                                        }
+                                   },
+                                   ]
+                            })
+                            
                         }
                     }
                     else if(data.results.mesg=="login success!"){
