@@ -189,7 +189,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
                                 if(data.results == 0){
                                     tempuserId = data.UserId
                                     Doctor.getDoctorInfo({userId:data.UserId}).then(function(data){
-                                        if(data.results == "不存在的医生ID！"){
+                                        if(data.result == "不存在的医生ID！"){
                                             $scope.logStatus = "该手机号码没有医生权限,请确认手机号码或转移到肾事管家进行操作";
                                             return;
                                         }else {
