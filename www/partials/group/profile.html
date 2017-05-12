@@ -7,44 +7,27 @@
     <ion-content class=" gray-back">
         <div class="list">
             <a class="item item-avatar">
-                <img ng-src="{{doctor.photoUrl}}">
-                <!-- <h2 style="display:inline-block;"> -->
-                {{doctor.name}}
-               <!--  </h2> -->
-               &nbsp;&nbsp;{{doctor.title}}
-                <!-- <div style="display:inline-block;background-color: #0288D1;border-radius: 0.3em;color:#FFF;padding:0 3px"><i style="font-size:1em" class="icon ion-android-person"></i></div> -->
+                <img ng-src="{{doctor.photoUrl || 'img/doctor.png'}}"> {{doctor.name}} &nbsp;&nbsp;{{doctor.title}}
             </a>
         </div>
-       <!--  <div class="list margin-list">
-            <div class="item" href="#">
-                设置备注
-            </div>
-        </div> -->
         <div class="list margin-list">
-            
             <div class="item" ng-click="">
                 医院
                 <span class="item-note">{{doctor.workUnit}}</span>
-
-
             </div>
             <div class="item" ng-click="">
                 科室
                 <span class="item-note">{{doctor.department}}</span>
-
             </div>
             <div class="item">
-                擅长 
+                擅长
                 <span class="item-note">{{doctor.major}}</span>
             </div>
             <div class="item" ng-click="">
                 简介
                 <span class="item-note">{{doctor.description}}</span>
-
             </div>
-            <a style="width:120px;text-align:center;box-shadow: 1px 1.5px 3px #aaa;font-size:1.1em;padding:10px 16px;margin:20px auto" class="item" ng-hide='isme' ng-click="goChat()">
-            发消息
-            </a>
+            <button class="button   login_btn login_outbtn" ng-click="goChat()">发消息</button>
         </div>
     </ion-content>
 </ion-view>

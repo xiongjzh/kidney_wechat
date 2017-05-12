@@ -1,23 +1,15 @@
 <ion-view hide-tabs view-title="团队管理">
-
-
-
-  <ion-content style="padding-top:10px" class="gray-back" >
-<div class="list">
-
-    <div class="item item-avatar" ng-repeat="d in doctors">
-        <img src="{{d.photoUrl}}">
-        <div class="doctor-msg-left balanced balanced-border">专家团队</div>
-        <div style="display:inline-block;width:70%">
-            <span>{{d.name}}</span> {{d.title}}
-            <p><span>{{d.userId}}</span>  </p>
-            <p><span>{{d.workUnit}}</span> <span>{{d.department}}</span> </p>
-            <p><span>评分{{d.score}}</span> 问诊量：{{d.count2}} </p>
-            <p>擅长：{{d.major}}</p>
-            
+    <ion-content style="padding-top:10px" class="gray-back">
+        <div class="list">
+            <div class="item item-avatar" ng-repeat="d in doctors">
+                <img src="{{d.photoUrl || 'img/DefaultAvatar.jpg'}}">
+                <div class="doctor-msg-left balanced balanced-border">{{teamname}}</div>
+                <div style="display:inline-block;width:70%">
+                    <span>{{d.name}}</span> {{d.title}}
+                    <p><span>{{d.userId}}</span></p>
+                </div>
+                <button id="kickhim" style="display:inline-block;width:auto;background-color: #00C853;height:100%;float:right;padding:0.4em 0.6em;border-radius: 0.5em;color:#FFF" ng-click="kick($index)">移除</button>
+            </div>
         </div>
-       <button id="kickhim" style="display:inline-block;width:auto;background-color: #00C853;height:100%;float:right;padding:0.4em 0.6em;border-radius: 0.5em;color:#FFF" ng-click="kick($index)">移除</button>
-    </div>
-</div>
-  </ion-content>
+    </ion-content>
 </ion-view>

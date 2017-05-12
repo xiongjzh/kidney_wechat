@@ -1,9 +1,14 @@
 <ion-view hide-tabs view-title="团队二维码">
+  <ion-nav-bar class="bar-positive " align-title="center">
+    <ion-nav-buttons side="left">
+      <button class="button button-icon icon ion-ios-arrow-left fc-ff" ng-click="$ionicGoBack()"></button>
+    </ion-nav-buttons>
+  </ion-nav-bar>
   <ion-content class="padding gray-back">
-  
+
   <div class="qr-code">
     <div >
-      <img src="img/ionic.png"/>
+      <!-- <img src="img/ionic.png"/> -->
       <div class="title">{{team.name}}</div>
     </div>
     <div>
