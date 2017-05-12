@@ -727,10 +727,14 @@ display: inline-block;
 .media-card .title{
     font-size: 1.25em;
     padding:0.2em;
-
+}
+.media-card .title span{
+    font-size: 0.8em;
+    padding-left:0.2em;
+    color:#aaa;
 }
 .media-card p{
-
+    margin-bottom:8px;
 }
 .media-card span{
     color:#2196F3;

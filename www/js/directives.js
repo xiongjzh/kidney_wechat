@@ -27,14 +27,24 @@ angular.module('kidney.directives', ['kidney.services'])
                 }else if(type=='custom'){
                     type=$scope.msg.content.type;
                     if(type=='card'){
-                        try{
+                        // try{
                             $scope.counsel=$scope.msg.content.counsel;
-                            if($scope.counsel.type==1){$scope.counsel.counseltype="咨询服务，医生只有三次回答机会"}
-                            else if($scope.counsel.type==2){$scope.counsel.counseltype="问诊服务，医生可以不限次回答问题，点击结束按钮结束问诊"};
+                            if($scope.msg.targetId!=$scope.msg.content.doctorId){
+                                if($scope.msg.content.consultationId){
+                                    $scope.subtitle= $scope.msg.fromName + '转发'
+                                    $scope.title= $scope.msg.content.patientName + '的病历讨论'
+                                }else{
+                                    $scope.title= $scope.msg.content.patientName + '的病历'
+                                }
+                            }else{
+                                $scope.title= "患者使用在线"+ ($scope.counsel.type=='1'?'咨询':'问诊') + "服务"
+                            }
+                            // if($scope.counsel.type==1){$scope.counsel.counseltype="咨询服务，医生只有三次回答机会"}
+                            // else if($scope.counsel.type==2){$scope.counsel.counseltype="问诊服务，医生可以不限次回答问题，点击结束按钮结束问诊"};
                             // $scope.picurl=picArr;
-                        }catch(e){
-                            
-                        }
+                        // }catch(e){
+                            // 
+                        // }
                     }
                     // return 'templates/msg/'+ type+'.html';
                 }
