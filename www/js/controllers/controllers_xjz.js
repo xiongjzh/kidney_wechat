@@ -1656,13 +1656,13 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             getConsultation();
             $scope.params.newsType=$scope.params.teamId;
             $scope.params.hidePanel = true;
-            $scope.params.title = '病例';
+            $scope.params.title = '病历';
             $scope.params.isDiscuss = true;
         } else if ($scope.params.type == '2') {
             getConsultation();
             $scope.params.newsType=$scope.params.teamId;
             $scope.params.hidePanel = false;
-            $scope.params.title = '病例';
+            $scope.params.title = '病历';
             $scope.params.isDiscuss = true;
             $rootScope.patient.undergo = false;
             $scope.params.isOver = true;
@@ -2452,7 +2452,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                             },
                             targetID:team.teamId,
                             teamId:team.teamId,
-                            targetName:msgdata.patientName + '-' +team.name,
+                            targetName:team.name,
                             targetType:'group',
                             status:'send_going',
                             newsType:'13',
@@ -2468,7 +2468,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                             socket.on('messageRes',function(data){
                                 socket.off('messageRes');
                                 socket.emit('disconnect');
-                                $state.go('tab.group-chat', { type: '1', groupId: res.results.gid, teamId: team.teamId });
+                                $state.go('tab.group-chat', { type: '0', groupId:team.teamId, teamId: team.teamId });
                             });
                         },function(er){
                             console.error(err);
