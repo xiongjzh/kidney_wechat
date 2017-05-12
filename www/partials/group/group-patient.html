@@ -5,41 +5,37 @@
         </ion-nav-buttons>
     </ion-nav-bar>
     <ion-content class="gray-back">
-    <ion-refresher pulling-text="下拉刷新..." on-refresh="doRefresh()"></ion-refresher>
-<div class="list">
-    <div style="width:100%;background-color: #FFF;height:2.4em;line-height: 2.4em;font-size:1.3em;padding:0 1.5em">
-        <div>
-            <i style="color:green;font-size:1.5em;position:relative;top:4px" class="icon ion-android-calendar"></i> 进行中：{{grouppatients0.length}}
+        <ion-refresher pulling-text="下拉刷新..." on-refresh="doRefresh()"></ion-refresher>
+        <div class="list">
+            <div style="width:100%;background-color: #FFF;height:2.4em;line-height: 2.4em;font-size:1.2em;padding:0 1.5em">
+                <div>
+                    <i style="color:green;font-size:1.5em;position:relative;top:4px" class="icon ion-android-calendar"></i> 进行中：{{grouppatients0.length}}
+                </div>
+            </div>
+            <a class="item item-avatar context-pading" ng-repeat="grouppatient in grouppatients0" ng-click="enterChat(1,grouppatient)">
+                <img class="avatar-icon" src="{{grouppatient.patientId.photoUrl || 'img/patient.png'}}">
+                <div><span class="patient-title">{{grouppatient.patientId.name}}</span>
+                    <span class="mgleft-10 patient-title">{{grouppatient.patientId.gender|filterGender}}</span>
+                    <span class="mgleft-10 patient-title">{{grouppatient.patientId.birthday|filterAge}}岁</span>
+                    <!-- <span class="mgleft-10 patient-title">{{grouppatient.time|dateFormat:"YYYY/MM/DD h:m"}}</span> -->
+                </div>
+                <p class=" mg-top5 patient-content">{{grouppatient.time|dateFormat:"YYYY-MM-DD h:m"}}</p>
+                <p class=" mg-top5 patient-content">主题: {{grouppatient.diseaseInfo.symptom}}</p>
+            </a>
+            <div style="width:100%;margin-top: 20px;background-color: #FFF;height:2.4em;line-height: 2.4em;font-size:1.2em;padding:0 1.5em">
+                <div>
+                    <i style="color:green;font-size:1.5em;position:relative;top:4px" class="icon ion-android-calendar"></i> 已处理：{{grouppatients1.length}}
+                </div>
+            </div>
+            <a class="item item-avatar context-pading" ng-repeat="grouppatient in grouppatients1" ng-click="enterChat(2,grouppatient)">
+                <img class="avatar-icon" src="{{grouppatient.patientId.photoUrl || 'img/patient.png'}}">
+                <div><span class=" patient-title">{{grouppatient.patientId.name}}</span>
+                    <span class="mgleft-10 patient-title">{{grouppatient.patientId.gender|filterGender}}</span>
+                    <span class="mgleft-10 patient-title">{{grouppatient.patientId.birthday|filterAge}}岁</span>
+                </div>
+                <p class=" mg-top5 patient-content">{{grouppatient.time|dateFormat:"YYYY-MM-DD h:m"}}</p>
+                <p class=" mg-top5 patient-content">问题描述: {{grouppatient.diseaseInfo.symptom}}</p>
+            </a>
         </div>
-    </div>
-    <a ng-repeat="grouppatient in grouppatients0" class="item item-avatar" ng-click="enterChat(1,grouppatient)">
-        <img ng-src="{{grouppatient.patientId.photoUrl|imgUrl:'patient'}}">
-        <div>
-            <div style="display:inline-block;margin-right:1.2em;font-size:1.25em">{{grouppatient.patientId.name}}</div>
-            <div style="display:inline-block">{{grouppatient.patientId.gender|filterGender}} {{grouppatient.patientId.birthday|filterAge}}岁</div>
-            <div style="display:inline-block;float:right">{{grouppatient.time|dateFormat:"YYYY-MM-DD h:m"}}</div>
-        </div>
-        <p><span style="color:#ea4335" ng-show="grouppatient.lastMsg.readOrNot===0" class="ng-hide">[新消息]</span>{{grouppatient.lastMsg.description}}<span style="color:#FFF">.</span></p>
-
-    </a>
-
-    <div style="width:100%;background-color: #FFF;height:2.4em;line-height: 2.4em;margin-top:1.5em;font-size:1.3em;padding:0 1.5em">
-        <div>
-            <i style="color:green;font-size:1.5em;position:relative;top:4px" class="icon ion-android-calendar"></i> 已处理：{{grouppatients1.length}}
-        </div>
-    </div>
-    <a ng-repeat="grouppatient in grouppatients1" class="item item-avatar" ng-click="enterChat(2,grouppatient)">
-        <img ng-src="{{grouppatient.patientId.photoUrl|imgUrl:'patient'}}">
-        <div>
-            <div style="display:inline-block;margin-right:1.2em;font-size:1.25em">{{grouppatient.patientId.name}}</div>
-            <div style="display:inline-block">{{grouppatient.patientId.gender|filterGender}} {{grouppatient.patientId.birthday|filterAge}}岁</div>
-            <div style="display:inline-block;float:right">{{grouppatient.time|dateFormat:"YYYY-MM-DD h:m"}}</div>
-        </div>
-        <p><span style="color:#ea4335" ng-show="grouppatient.lastMsg.readOrNot===0" class="ng-hide">[新消息]</span>{{grouppatient.lastMsg.description}}<span style="color:#FFF">.</span></p>
-        
-    </a>
-</div>
-
-
     </ion-content>
 </ion-view>

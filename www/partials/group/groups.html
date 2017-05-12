@@ -1,71 +1,47 @@
 <ion-view show-tabs title="交流">
     <ion-nav-buttons side="right">
-        <!-- <a class="button button-icon icon ion-android-search" ng-hide="params.showSearch" ng-click="search()"></a> -->
-        <a class="button button-icon icon ion-android-add" ng-click="popover.show($event)"></a>
+        <a class="iconfont icon-add1 icon-add11" ng-click="popover.show($event)"></a>
     </ion-nav-buttons>
-    <!-- <div ng-show="params.showSearch" class="bar item-input-inset bar-light ng-hide" style="position:absolute;top:44px;z-index:999">
-        <div class="item-input-wrapper">
-            <i style="color:#3d6399;font-size:1.6em" class="icon ion-android-search placeholder-icon"></i>
-            <input type="search" ng-blur="doResume()" ng-model="query.name" ng-change="startSearch(query)" placeholder="搜索团队或医生">
-            <i style="color:#EF473A;font-size:1.6em" class="icon ion-android-close placeholder-icon" ng-hide="clearIt" ng-click="clearSearch()"></i>
+    <div class="bar bar-subheader item-input-inset  text-center br-box" style="margin-top:0 !important;background-color:#fff ">
+        <div class="row">
+            <div class="col"></div>
+            <div class="col">
+                <a ng-class="{'high-light':params.isTeam}" class="consult-tab" style="" ng-click="showTeams()">团队</a>
+            </div>
+            <div class="col">
+                <a ng-class="{'high-light':!params.isTeam}" class="consult-tab" style="" ng-click="showDocs()">医生</a>
+            </div>
+            <div class="col"></div>
         </div>
-        <button class="button button-clear button-positive" ng-click="closeSearch()">
-            确认
-        </button>
-    </div> -->
-    <div class="bar bar-subheader item-input-inset bar-light text-center" style="padding:0;">
-        <a ng-class="{'high-light':params.isTeam}" class="item col-50 " style="height:50px" ng-click="showTeams()">团队</a>
-        <a ng-class="{'high-light':!params.isTeam}" class="item col-50 " style="border-right: 0px;height:50px" ng-click="showDocs()">医生</a>
     </div>
     <ion-content class="gray-back has-subheader content-item-list">
-    <ion-refresher pulling-text="下拉刷新..." on-refresh="doRefresh()"></ion-refresher>
+        <ion-refresher pulling-text="下拉刷新..." on-refresh="doRefresh()"></ion-refresher>
         <div ng-if="!params.showSearch && params.isTeam">
             <!-- 团队 -->
-            <div  ng-repeat="team in teams |filter:query | orderBy:'-lastMsgDate'" collection-item-height="94px" class="item item-avatar" type="item-text-wrap" ng-click="itemClick($event,team)">
+            <div ng-repeat="team in teams |filter:query | orderBy:'-lastMsgDate'" collection-item-height="94px" class="item item-avatar context-pading" type="item-text-wrap" ng-click="itemClick($event,team)">
                 <img ng-src="{{team.photoUrl|imgUrl:'group'}}">
                 <div style="display:inline-block;width:70%;">
-
                     <h2>{{team.name}} <span>{{team.teamId}}</span></h2>
-                    <div style="display:inline-block;background-color: #0288D1;border-radius: 0.3em;color:#FFF;padding:0 3px"><i style="font-size:1em" class="icon ion-android-person"></i><span>{{team.members.length+1}}</span></div>
-
-
-                    <div style="display:inline-block;"><span style="display:inline-block;margin:0 0.2em 0 0.5em ;background-color:#AAA;color:#FFF">创建者</span>{{team.sponsorName}}</div>
+                    <div style="font-size: 12px;display:inline-block;background-color: #0288D1;border-radius: 0.3em;color:#FFF;padding:0 3px"><i style="font-size:12px" class="icon ion-android-person"></i><span>{{team.members.length+1}}</span></div>
+                    <div style="display:inline-block;margin-top: 5px"><span style="font-size: 12px;border-radius: 3px;display:inline-block;margin:0 0.2em 0 0.5em ;background-color:#f15124;color:#FFF">创建者</span>{{team.sponsorName}}</div>
                     <!-- <p>{{team.description}}</p> -->
                     <p><span style="color:#ea4335" ng-show="team.lastMsg.readOrNot===0" class="ng-hide">[新消息]</span>{{team.lastMsg.description}}<span style="color:#FFF">.</span></p>
                 </div>
                 <!--注意 id="discuss" 用于页面跳转 -->
-                <a id="discuss" style="display:inline-block;width:auto;background-color: #00C853;height:100%;float:right;padding:0.4em 0.6em;border-radius: 0.1em;color:#FFF">病历</a>
+                <a id="discuss" style="display:inline-block;width:auto;background-color: #11c1f3;float:right;padding:0.3em 0.5em;margin-top:10px;border-radius: 0.1em;color:#FFF;position: absolute;right: 15px;top:25px;border-radius: 5px">病历</a>
             </div>
         </div>
         <!-- 医生 -->
         <div ng-if="!params.showSearch && !params.isTeam">
-            <div class="item item-avatar" ng-repeat="d in doctors | orderBy:'-lastMsgDate'" ng-click="doctorClick($event,d.doctorId)">
-                <img src="{{d.doctorId.photoUrl || 'img/doctor.png'}}">
-
-                <div style="display:inline-block;width:70%;">
-                    
-                    {{d.doctorId.name}}<span style="color:#11c1f3"> {{d.doctorId.title}}</span>
-                    <p><span>{{d.doctorId.workUnit}}</span> <span>{{d.doctorId.department}}</span> </p>
-                    <p><span><i style="color:#FFD600" class="icon ion-android-star"></i>{{d.doctorId.score}}</span> 咨询:{{d.doctorId.count2}} 问诊:{{d.doctorId.count2}} </p>
-                    <p>擅长：{{d.doctorId.major}}</p>
-                    <p><span style="color:#ea4335" ng-show="team.lastMsg.readOrNot===0" class="ng-hide">[新消息]</span>{{d.lastMsg.description}}<span style="color:#FFF">.</span></p>
-                </div>
-                <!--注意 id="profile" 用于页面跳转 -->
-                <div style="display:inline-block;width:30%;vertical-align: top;padding-right:10px">
-                    
-                <div style="text-align:right;width:100%" class="doctor-msg-left balanced balanced-border">专家团队</div>
-                <div id="profile" style="display:inline-block;width:auto;background-color: #11c1f3;height:100%;float:right;padding:0.3em 0.5em;margin-top:10px;border-radius: 0.1em;color:#FFF">详情</div>
-                </div>
-
+            <div class="item item-avatar context-pading" ng-repeat="d in doctors | orderBy:'-lastMsgDate'" ng-click="doctorClick($event,d.doctorId)">
+                <img class="avatar-icon" ng-src="{{d.doctorId.photoUrl || 'img/doctor.png'}}">
+                <div> <span class="groud-d">{{d.doctorId.name}}</span> <span class="groud-d mgleft-10">{{d.doctorId.title}}</span></div>
+                <h3 class="mg-top5"><span>{{d.doctorId.workUnit}}</span></h3>
+                <h3 class="mg-top5"><span>{{d.doctorId.department}}</span></h3>
+                <p class="mg-top5 p-dordes"><i style="color:#FFD600;font-size: 16px" class="icon ion-android-star"></i>{{d.doctorId.score}} 咨询:{{d.doctorId.count1}} 问诊:{{d.doctorId.count2}}</p>
+                <p><span style="color:#ea4335" ng-show="team.lastMsg.readOrNot===0" class="ng-hide">[新消息]</span>{{d.lastMsg.description}}<span style="color:#FFF">.</span></p>
+                <div id="profile" style="display:inline-block;width:auto;background-color: #11c1f3;float:right;padding:0.3em 0.5em;margin-top:10px;border-radius: 0.1em;color:#FFF;position: absolute;right: 15px;top:25px;border-radius: 5px">详情</div>
             </div>
-        </div>
-        <div ng-if="params.showSearch" class="list">
-            <a class="item">
-            搜索团队 <span style="color:#EF473A">{{query.name}}<span>
-          </a>
-            <a class="item" href="#">
-            搜索医生 <span style="color:#EF473A">{{query.name}}<span>
-          </a>
         </div>
     </ion-content>
 </ion-view>

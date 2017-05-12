@@ -3,26 +3,26 @@
       <button class="button button-icon" ng-click="confirmAdd()">添加</button>
     </ion-nav-buttons>
 
-<div class="bar item-input-inset bar-light" style="position:absolute;top:44px;z-index:999">
+<div class="bar item-input-inset" style="position:absolute;top:44px;z-index:999;margin-top:0">
         <div class="item-input-wrapper">
             <i style="color:#3d6399;font-size:1.6em" class="icon ion-android-search placeholder-icon"></i>
             <input type="search" ng-blur="doResume()" ng-model="search.name" placeholder="搜索医生姓名">
-            <i style="color:#EF473A;font-size:1.6em" class="icon ion-android-close placeholder-icon" ng-show="issearching" ng-click="clearSearch()"></i>
+            <i style="color:#EF473A;font-size:1.6em" class="icon ion-android-close placeholder-icon" ng-click="clearSearch()"></i>
         </div>
-        <button ng-show="issearching" class="button button-clear button-positive ng-hide" ng-click="goSearch()">
+        <button  class="button button-clear button-positive" ng-click="goSearch()">
             搜索
         </button>
-        <button ng-show="isnotsearching" class="button button-clear button-positive ng-hide" ng-click="closeSearch()">
+       <!--  <button ng-show="isnotsearching" class="button button-clear button-positive ng-hide" ng-click="closeSearch()">
             返回
-        </button>
+        </button> -->
     </div>
-<div style="padding:4px;position:absolute;top:88px;height:44px;width:100%;margin:0;max-height:30vh;overflow-y: scroll;" ng-hide="params.hidePanel" class="item">
+<div style="padding:3px 16px;position:absolute;top:88px;height:50px;width:100%;margin:0;max-height:30vh;overflow-y: scroll;" ng-hide="params.hidePanel" class="item">
     <!-- <div style="display:block-inline;width:2em;height:2em;position:relative;margin:2px 4px 2px 0" ng-repeat="member in group.members"> -->
-            <img style="height:2em;width:2em;margin:3px" ng-repeat="member in group.members" src="{{member.photoUrl || 'img/DefaultAvatar.jpg'}}" />
+            <img style="object-fit:cover;width:38px;height:38px;margin:2px" ng-repeat="member in group.members" src="{{member.photoUrl|| 'img/doctor.png'}}" />
         <!-- </div> -->
   </div>
 
-  <ion-content style="padding-top:44px" class="has-subheader gray-back" >
+  <ion-content style="padding-top:64px" class="has-subheader gray-back" >
  
 <!--   <div class="bar item-input-inset bar-light">
     <div class="item-input-wrapper">
@@ -34,7 +34,7 @@
 <div class="list">
 
     <div class="item item-avatar" ng-repeat="d in doctors">
-        <img src="{{d.photoUrl || 'img/DefaultAvatar.jpg'}}">
+        <img src="{{d.photoUrl || 'img/doctor.png'}}">
         <div class="doctor-msg-left balanced balanced-border">专家团队</div>
         <div style="display:inline-block;width:70%">
             <span>{{d.name}}</span> {{d.title}}
@@ -42,7 +42,7 @@
             <p><span>评分{{d.score}}</span> 问诊量：{{d.count2}} </p>
             <p>擅长：{{d.major}}</p>
         </div>
-        <div style="display:inline-block;float:right;width:20%;border:none">
+        <div style="display:inline-block;float:right;width:20%;border:0px">
             <ion-checkbox  ng-model="d.check" ng-change="update($index)"></ion-checkbox>
         </div>
     </div>

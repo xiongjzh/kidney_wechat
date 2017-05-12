@@ -588,7 +588,8 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             realCounselType:'',
             newsType:'',
             counsel:{},
-            connect:false
+            connect:false,
+            recording:false
         }
         // var audio = new Audio('http://121.43.107.106:8088/PersonalPhoto/Emotions.mp3');
         // audio.play();
@@ -834,6 +835,11 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                 $scope.params.moreMsgs = true;
             });
         },5000);
+    }
+    $scope.scrollBottom = function() {
+        $scope.showVoice = false;
+        $scope.showMore = false;
+        toBottom(true);
     }
     $scope.getMsg = function(num) {
         console.info('getMsg');
@@ -1093,11 +1099,11 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             msg.content.thumb=CONFIG.mediaUrl+msg.content['src_thumb'];
             $http.get(msg.content.thumb).then(function(data){
                 $scope.msgs.push(msg);
-                toBottom(true,250);
+                toBottom(true,200);
             })
         }else{
             $scope.msgs.push(msg);
-            toBottom(true,200);
+            toBottom(true,100);
         }
     }
     // send message--------------------------------------------------------------------------------
@@ -1202,6 +1208,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
     }
     //get image
     $scope.getImage = function(type) {
+        $scope.showMore = false;
         var ids=['',''];
         if(type=='cam') var st=['camera'];
         else var st = ['album'];
@@ -1271,6 +1278,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
     //get voice
     $scope.getVoice = function() {
         wx.startRecord();
+        $scope.params.recording=true;
     }
     $scope.stopAndSend = function() {
         wx.stopRecord({
@@ -1279,6 +1287,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                 var m=msgGen(ids,'voice',true);
                 $scope.pushMsg(m);
                 toBottom(true);
+                $scope.params.recording=false;
                 wx.uploadVoice({
                     localId: res.localId, // 需要上传的图片的本地ID，由chooseImage接口获得
                     isShowProgressTips: 0, // 默认为1，显示进度提示
@@ -1571,7 +1580,8 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         moreMsgs: true,
         UID:Storage.get('UID'),
         newsType:'',
-        targetName:''
+        targetName:'',
+        recording:false
     }
     $rootScope.patient = {}
         // $rootScope.goConclusion =function(){
@@ -1762,6 +1772,11 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         $scope.getMsg(15).then(function(data){
             $scope.msgs=data;
         });
+    }
+    $scope.scrollBottom = function() {
+        $scope.showVoice = false;
+        $scope.showMore = false;
+        toBottom(true);
     }
     // $scope.scrollBottom = function() {
     //     $scope.scrollHandle.scrollBottom(true);
@@ -1998,11 +2013,11 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             msg.content.thumb=CONFIG.mediaUrl+msg.content['src_thumb'];
             $http.get(msg.content.thumb).then(function(data){
                 $scope.msgs.push(msg);
-                toBottom(true,250);
+                toBottom(true,200);
             })
         }else{
             $scope.msgs.push(msg);
-            toBottom(true,200);
+            toBottom(true,100);
         }
     }
     function sendmsg(content,type){
@@ -2062,6 +2077,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
 
     //get image
     $scope.getImage = function(type) {
+        $scope.showMore = false;
         var ids=['',''];
         if(type=='cam') var st=['camera'];
         else var st = ['album'];
@@ -2100,6 +2116,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
 
     $scope.getVoice = function(){
         wx.startRecord();
+        $scope.params.recording=true;
     }
     $scope.stopAndSend = function() {
         wx.stopRecord({
@@ -2107,6 +2124,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                 var ids=['',res.localId];
                 var m=msgGen(ids,'voice',true);
                 $scope.pushMsg(m);
+                $scope.params.recording=false;
                 toBottom(true);
                 wx.uploadVoice({
                     localId: res.localId, // 需要上传的图片的本地ID，由chooseImage接口获得
