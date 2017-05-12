@@ -5,6 +5,9 @@
 .bg-f7{
   background: #ff7f00!important;
 }
+.bg-f0{
+  background: #f0f0f0;
+}
 .bg-12{
   background: #1296db!important;
 }
@@ -131,9 +134,9 @@ margin-bottom:10px!important; ;
 }
   /*选项卡颜色*/
 .bar-positive .button{
-  background-color: #FFFFFF;
+  background-color: #6ac4f8;
   border: none;
-  color: #333;
+  color: #fff;
 }
 .bar-positive .button span{
   padding: 0 12px;
@@ -185,4 +188,6 @@ margin-bottom:10px!important; ;
   vertical-align: middle;
 }
 /*患者也没筛选框*/
-.
+.top16{
+  top:16px
+}
