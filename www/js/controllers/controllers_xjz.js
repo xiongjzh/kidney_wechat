@@ -785,18 +785,22 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
     function sendCnNotice(type,status,cnt){
         var len=$scope.msgs.length;
         if(len==0 || !($scope.msgs[len-1].content.type!='count-notice' && $scope.msgs[len-1].content.count==cnt)){
-            var body='';
+            var bodyDoc='';
             if(type!='1'){
                 if(status=='0'){
-                    body='您仍可以向患者追加回答，该消息不计费';
+                    bodyDoc='您仍可以向患者追加回答，该消息不计费';
+                    bodyPat='您没有提问次数了。如需提问，请新建咨询或问诊';
                 }else{
-                    body='患者提问不限次数';
+                    bodyDoc='患者提问不限次数';
+                    bodyPat='您可以不限次数进行提问';
                 }
             }else{
                 if(cnt<=0 || status=='0'){
-                    body='您仍可以向患者追加回答，该消息不计费';
+                    bodyDoc='您仍可以向患者追加回答，该消息不计费';
+                    bodyPat='您没有提问次数了。如需提问，请新建咨询或问诊';
                 }else{
-                    body='您还需要回答'+cnt+'个问题';
+                    bodyDoc='您还需要回答'+cnt+'个问题';
+                    bodyPat='您还有'+cnt+'次提问机会';
                 }
             }
 
@@ -805,7 +809,8 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                 ctype:type,
                 cstatus:status,
                 count:cnt,
-                body:body,
+                bodyDoc:bodyDoc,
+                bodyPat:bodyPat,
                 counseltype:$scope.counseltype
             }
             var msgJson={
