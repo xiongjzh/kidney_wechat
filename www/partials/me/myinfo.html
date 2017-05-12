@@ -100,10 +100,10 @@
 		    </script> -->
 		    <!-- 上传照片的弹出框 -->
 
-			<ion-item class="item item-input">
+			<ion-item class="item item-input item-select">
 				<span class="input-label">职称</span>
-				<!-- <i class="icon  ion-edit"></i> -->
-				<input type=text ng-model="doctor.title" style="width:100%;text-align: right;">
+                <select class="myinfo-msg-right" ng-model="doctor.title" ng-options="Title.Name for Title in Titles track by Title.Type" style="width:100%">
+                </select>				
 			</ion-item>
 
             <ion-item  class="item item-input item-select">
