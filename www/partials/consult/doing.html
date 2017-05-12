@@ -30,7 +30,8 @@
                 <span style="margin-left:5px;">{{p.patientId.birthday|filterAge}}岁</span>
                 <span style="float: right">{{p.time|dateFormat:"YYYY-MM-DD h:m"}}</span>
                 </div>
-                <p><i class="icon ion-android-hand"></i><em class="m-em">{{p.symptom}}</em></p>   
+                <p><span style="color:#ea4335" ng-show="p.lastMsg.readOrNot==0" class="ng-hide">[新消息]</span>{{p.lastMsg.description}}<span style="color:#FFF">.</span></p>
+                <!-- <p><i class="icon ion-android-hand"></i><em class="m-em">{{p.symptom}}</em></p> -->
             </a>
         </div>
     </ion-content>

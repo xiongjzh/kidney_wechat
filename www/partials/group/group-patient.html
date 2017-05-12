@@ -19,7 +19,8 @@
             <div style="display:inline-block">{{grouppatient.patientId.gender|filterGender}} {{grouppatient.patientId.birthday|filterAge}}岁</div>
             <div style="display:inline-block;float:right">{{grouppatient.time|dateFormat:"YYYY-MM-DD h:m"}}</div>
         </div>
-        <div style="display:inline-block;margin-right:1.2em;font-size:1.25em">{{grouppatient.diseaseInfo.topic}}</div>
+        <p><span style="color:#ea4335" ng-show="grouppatient.lastMsg.readOrNot===0" class="ng-hide">[新消息]</span>{{grouppatient.lastMsg.description}}<span style="color:#FFF">.</span></p>
+
     </a>
 
     <div style="width:100%;background-color: #FFF;height:2.4em;line-height: 2.4em;margin-top:1.5em;font-size:1.3em;padding:0 1.5em">
@@ -34,7 +35,8 @@
             <div style="display:inline-block">{{grouppatient.patientId.gender|filterGender}} {{grouppatient.patientId.birthday|filterAge}}岁</div>
             <div style="display:inline-block;float:right">{{grouppatient.time|dateFormat:"YYYY-MM-DD h:m"}}</div>
         </div>
-        <div style="display:inline-block;margin-right:1.2em;font-size:1.25em">{{grouppatient.diseaseInfo.topic}}</div>
+        <p><span style="color:#ea4335" ng-show="grouppatient.lastMsg.readOrNot===0" class="ng-hide">[新消息]</span>{{grouppatient.lastMsg.description}}<span style="color:#FFF">.</span></p>
+        
     </a>
 </div>
 
