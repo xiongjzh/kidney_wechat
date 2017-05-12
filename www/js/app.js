@@ -499,16 +499,16 @@ angular.module('kidney',[
         }
         // params:{counselId:null}
     })
-    .state('tab.consult-detail', {
-        // cache: false,
-        url: '/consult/detail/:consultId',
-        views: {
-            'tab-consult':{
-                controller: 'consultDetailCtrl',
-                templateUrl: 'partials/consult/consult-detail.html'
-            }
-        }
-    })
+    // .state('tab.consult-detail', {
+    //     // cache: false,
+    //     url: '/consult/detail/:consultId',
+    //     views: {
+    //         'tab-consult':{
+    //             controller: 'consultDetailCtrl',
+    //             templateUrl: 'partials/consult/consult-detail.html'
+    //         }
+    //     }
+    // })
     .state('tab.selectDoc', {
         // cache: false,
         url: '/selectdoc',

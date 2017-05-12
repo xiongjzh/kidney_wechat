@@ -1759,118 +1759,148 @@ angular.module('tdy.controllers', ['ionic','kidney.services','ionic-datepicker']
 
   
 }])
-//消息中心--PXY
-.controller('messageCtrl', ['$scope','$state','$ionicHistory','Dict','Message','Storage',function($scope, $state,$ionicHistory,Dict,Message,Storage) {
+//消息中心--ZY
+.controller('messageCtrl', ['$ionicPopup','$q','$scope','$state','$ionicHistory','New','Storage','Doctor','Patient','Communication','Counsel',function($ionicPopup,$q,$scope, $state,$ionicHistory,New,Storage,Doctor,Patient,Communication,Counsel) {
     $scope.barwidth="width:0%";
-    //get all message types
-    Dict.typeOne({category:'MessageType'})
-    .then(function(data)
-    {
-        // console.log(data.results.details)
-        var messages={};
-        angular.forEach(data.results.details,function(value,key)
-        {
-            // console.log(value)
-            messages[value.inputCode]={name:value.name,code:value.code,values:[]};
-        })
-        // console.log(messages)
-        Message.getMessages({userId:Storage.get('UID'),type:""})//Storage.get('UID')
-        .then(function(data)
-        {
-            // console.log(data)
-            angular.forEach(data.results,function(value,key)
-            {
-                // console.log(value)
-                if(value.type==1)//支付消息
-                {
-                    messages.ZF.values.push(value)
+    var getPatNamePhoto = function(sender,patient){
+        Patient.getPatientDetail({userId:sender}).then(
+            function(data){
+                if(data.results){
+                    patient.patName = data.results.name;
+                    patient.patPhoto = data.results.photoUrl;
+                }                        
+            },function(err){
+                console.log(err);
+            });
+    }   
+
+    var getDocNamePhoto = function(sender,doctor){
+        Doctor.getDoctorInfo({userId:sender}).then(
+            function(data){
+                if(data.results){
+                    doctor.docName = data.results.name;
+                    doctor.docPhoto = data.results.photoUrl;
+                }                        
+            },function(err){
+                console.log(err);
+            });
+            // return doctor;
+    }
+
+    var getTeamNamePhoto = function(sender,team){
+        Communication.getTeam({teamId:sender}).then(
+            function(data){
+                if(data.results){
+                    team.teamName = data.results.name;
+                    team.teamPhoto = data.results.photoUrl;
+                }                        
+            },function(err){
+                console.log(err);
+            });
+            // return doctor;
+    }
+
+    var Lastnews = function(){
+        var receiver = Storage.get('UID');
+        // News.getNews({userId:receiver,type:1}).then(
+        //     function(data){
+        //         if(data.results.length){
+        //             console.log(data.results);
+        //             $scope.pay = data.results[0];
+        //         }
+                
+        //     },function(err){
+        //         console.log(err);
+        //     }
+        // );
+        //type11患者-医生；12医生-医生；13团队-医生
+        New.getNewsByReadOrNot({userId:receiver,type:11,readOrNot:0}).then(
+            function(data){
+                if(data.results.length){                    
+                    for(var x in data.results){
+                        getPatNamePhoto(data.results[x].sendBy,data.results[x]);
+                    }
                 }
-                else if(value.type==2)//警报消息
-                {
-                    messages.JB.values.push(value)
+                $scope.Pchats=data.results;               
+            },function(err){
+                console.log(err);
+            }
+        );
+
+        New.getNewsByReadOrNot({userId:receiver,type:12,readOrNot:0}).then(
+            function(data){
+                if(data.results.length){                    
+                    for(var x in data.results){
+                        getDocNamePhoto(data.results[x].sendBy,data.results[x]);
+                    }
                 }
-                else if(value.type==3)//任务消息
-                {   
-                    messages.RW.values.push(value)
+                $scope.Dchats=data.results;               
+            },function(err){
+                console.log(err);
+            }
+        );
+
+        New.getNewsByReadOrNot({userId:receiver,type:13,readOrNot:0}).then(
+            function(data){
+                if(data.results.length){                   
+                    for(var x in data.results){
+                        getTeamNamePhoto(data.results[x].sendBy,data.results[x]);
+                    }
                 }
-                else if(value.type==4)//聊天消息
-                {
-                    messages.LT.values.push(value)
-                }
-                else if(value.type==5)//保险消息
-                {
-                    messages.BX.values.push(value)
-                }
-            })
-            console.log(messages)
-            Storage.set("allMessages",angular.toJson(messages));
-            $scope.messages=messages;
-        },function(err)
-        {
-            console.log(err)
-        })
-    },function(err)
-    {
-        console.log(err)
+                $scope.Tchats=data.results;               
+            },function(err){
+                console.log(err);
+            }
+        );
+    }
+     $scope.$on('$ionicView.enter', function() {
+        Lastnews();
     })
 
-  $scope.Goback = function(){
-    $ionicHistory.goBack();
-  }
-
-    $scope.getMessageDetail = function(type){
-        Storage.set("getMessageType",type);
-        $state.go('messagesDetail');
+    $scope.do_refresher = function(){
+        Lastnews();
+        $scope.$broadcast("scroll.refreshComplete");
     }
-  //查询余额等等。。。。。
-  // $scope.messages =[
-  // {
-  //   img:"img/default_user.png",
-  //   name:"支付消息",
-  //   type:1,
-  //   time:"2017/04/01",
-  //   response:"恭喜你！成功充值50元，交易账号为0093842345."
-  // },
-  // {
-  //   img:"img/default_user.png",
-  //   name:"任务消息",
-  //   type:2,
-  //   time:"2017/03/21",
-  //   response:"今天还没有测量血压，请及时完成！"
 
-  // },
-  // {
-  //   img:"img/default_user.png",
-  //   name:"警报消息",
-  //   type:3,
-  //   time:"2017/03/11",
-  //   response:"你的血压值已超出控制范围！"
+    $scope.Goback = function(){
+      $ionicHistory.goBack();
+    }
 
-  // }]
+    //患者-医生  获取咨询状态 [status]：1进行中；0已完成  进入聊天：[type]:1=进行中;0=已结束;
+    $scope.getPChatDetail = function(Pchat) {
+        var patientId = Pchat.sendBy;
+        Counsel.getStatus({doctorId:Storage.get('UID'),patientId:patientId})
+        .then(function(data){
+            Storage.set('consultId',data.result.consultId)
+            if(data.result.status==1){
+                $state.go("tab.detail",{chatId:patientId,type:1,consultId:Storage.get('consultId')});
+            }
+            else if(data.result.status==0){
+                $state.go("tab.detail",{chatId:patientId,type:0,consultId:Storage.get('consultId')});
+            }
+        })
+    }
 
+    //医生-医生 进入聊天：type：2
+    $scope.getDChatDetail = function(Dchat) {
+        console.log(Dchat.sendBy)
+        $state.go("tab.detail",{chatId:Dchat.sendBy,type:2,consultId:'DoctorChat'});
+    }
 
-  // $scope.consults =[
-  // {
-  //   img:"img/default_user.png",
-  //   name:"李芳",
-  //   time:"2017/03/04",
-  //   response:"您好,糖尿病患者出现肾病的,一般会出现低蛋白血症.低蛋白血症患者一般会出现浮肿.治疗浮肿时就需要适当的补充蛋白,但我们一般提倡使用优质蛋白,我不知道您的蛋白粉是不是植物蛋白,所以您还是慎重一点好."
-
-  // },
-  // {
-  //   img:"img/default_user.png",
-  //   name:"张三",
-  //   time:"2017/03/01",
-  //   response:"糖尿病肾损害的发生发展分5期.Ⅰ期,为糖尿病初期,肾体积增大,肾小球滤过滤增高,肾小球入球小动脉扩张,肾小球内压升高.Ⅱ期,肾小球毛细血管基底膜增厚,尿白蛋白排泄率多正常,或间歇性升高。"
-
-  // }
-  
-
-  // ]
-    
-
-  
+    //团队-医生  获取交流状态 [status]：1进行中；0已完成  进入聊天：[type]:1=进行中;2=已结束;
+    $scope.getTChatDetail = function(Tchat) {
+        var msg = JSON.parse(Tchat.url)
+        var teamId = msg.teamId
+        var groupId = msg.targetId
+        Communication.getConsultation({consultationId:msg.targetId})
+        .then(function(data){
+            Storage.set('consultId',data.result.consultId)
+            if(data.result.status==1){
+                $state.go("tab.group-chat",{type:1,teamId:teamId,groupId:groupId});
+            }
+            else if(data.result.status==0){
+                $state.go("tab.detail",{type:2,teamId:teamId,groupId:groupId});
+            }
+        })
+    }
 }])
-// .controller('groupQRCodeCtrl', ['$scope', 'Storage', function ($scope, Storage) {
-//   $scope.groupQRCodedata = "www.baidu.com"
-// }])
