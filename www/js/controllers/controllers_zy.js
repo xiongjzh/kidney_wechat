@@ -469,7 +469,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
     [
         {Name:"主任医师",Type:1},
         {Name:"副主任医师",Type:2},
-        {Name:"副主任医师",Type:3},
+        {Name:"主治医师",Type:3},
         {Name:"住院医师",Type:4},
         {Name:"主任护师",Type:5},
         {Name:"副主任护师",Type:6},
@@ -1673,7 +1673,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
     [
         {Name:"主任医师",Type:1},
         {Name:"副主任医师",Type:2},
-        {Name:"副主任医师",Type:3},
+        {Name:"主治医师",Type:3},
         {Name:"住院医师",Type:4},
         {Name:"主任护师",Type:5},
         {Name:"副主任护师",Type:6},
