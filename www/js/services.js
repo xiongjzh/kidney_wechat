@@ -1687,7 +1687,7 @@ angular.module('kidney.services', ['ionic','ngResource'])
         // item.lastMsg=msg;
         try{
             msg.url=JSON.parse(msg.url);
-            if(type=='13' && msg.url.userId!=userId) {
+            if(type!='11' && type!='12' && msg.url.userId!=userId) {
                 msg.description=msg.url.name + ':' + msg.description;
             }
             if(type!='13') msg.readOrNot = msg.readOrNot || userId==msg.url.userId;
