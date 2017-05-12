@@ -1,57 +1,38 @@
 <ion-view hide-tabs view-title="团队信息">
-    <!--     <ion-nav-buttons side="left">
-      <button class="button button-icon icon ion-qr-scanner " ng-click="QRscan()"></button>
-    </ion-nav-buttons> -->
-    <!--    <ion-nav-buttons side="right">
-      <a class="button button-icon icon ion-android-add" href="#/tab/groups/search" ng-click="popover.show($event)"></a>
-    </ion-nav-buttons> -->
+
     <ion-content class="gray-back">
         <ion-list>
             <ion-item class="item-avatar" type="item-text-wrap" href="#">
                 <img ng-src="img/avatar.png">
                 <h2>{{group.name}}</h2>
                 <div>{{group.teamId}}
-                    <div style="display:inline-block;background-color: #0288D1;border-radius: 0.3em;color:#FFF;padding:0 3px"><i style="font-size:1em" class="icon ion-android-person"></i><span>{{group.number}}</span></div>
+                    <span class="mg-top10 defa-bg  padding-5"><i class="iconfont icon-ren">{{group.number}}</i></span>
                 </div>
             </ion-item>
         </ion-list>
         <div class="list margin-list">
-            <div class="item item-icon-left my-icon-item" href="#">
-                <i class="icon ion-android-pin"></i> 创建者
+            <div class="item" href="#">
+                创建者
                 <div class="item-span">{{group.sponsorName}} </div>
             </div>
         </div>
         <div class="list margin-list">
-           <!--  <div class="item item-icon-left my-icon-item" href="#">
-                <i class="icon ion-android-pin"></i> 群地点
-                <div class="item-span">{{group.locale}} </div>
-            </div> -->
-            <div class="item item-icon-left my-icon-item" href="#">
-                <i class="icon ion-android-pin"></i> 创建时间
+
+            <div class="item" href="#">
+                创建时间
                 <div class="item-span">{{group.time.substr(0,10)}} </div>
             </div>
-            <div class="item item-icon-left item-icon-right my-icon-item" href="#">
-                <i class="icon ion-android-pin"></i> 团队简介
-                <div class="item-span">{{group.description | limitTo:10}}{{group.description.length>10?'&hellip;':''}} </div>
-                <!-- <button class="button button-positive"> -->
-                <!-- <i class="icon ion-ios-arrow-forward"></i> -->
-                <!-- </button> -->
+            <div class="item" href="#">
+                团队简介
+                <div class="item-span">{{group.description | limitTo:10}}{{group.description.length>12?'&hellip;':''}} </div>
             </div>
         </div>
-				<div class="list margin-list">
-				    <div class="item item-icon-left my-icon-item my-photo-item" href="#">
-				        <i class="icon ion-android-pin"></i>团队成员
-
-							    <div class="avatar-item" ng-repeat="member in group.members" ng-click="">
-                                   <img src="{{member.photoUrl || 'img/DefaultAvatar.jpg'}}" />
-                                       <div>{{member.name}}</div>
-                                 </div>
-						   <!--  <span style="margin-top:16px" class="item-note">
-						      {{group.number}} 人
-						    </span> -->
-				    </div>
-				</div>
-
+        <div class="list margin-list" style="padding-top:0">
+            <div class="item my-photo-item" href="#" style="padding-top:0 !important;line-height:60px">
+                <span>团队成员</span>
+                <img ng-repeat="member in group.members |limitTo:3" ng-src="{{member.photoUrl || 'img/DefaultAvatar.jpg'}}" />
+            </div>
+        </div>
         <a style="width:120px;text-align:center;box-shadow: 1px 1.5px 3px #aaa;font-size:1.1em;padding:10px 16px;margin:20px auto" class="item ng-hide" ng-click="request()" ng-show="imnotin">
             立即加入
         </a>

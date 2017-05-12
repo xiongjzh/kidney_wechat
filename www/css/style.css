@@ -725,11 +725,11 @@ display: inline-block;
     background: #FFF;
 }
 .media-card .title{
-    font-size: 1.25em;
+    font-size: 1.1em;
     padding:0.2em;
 }
 .media-card .title span{
-    font-size: 0.8em;
+    font-size: 0.75em;
     padding-left:0.2em;
     color:#aaa;
 }

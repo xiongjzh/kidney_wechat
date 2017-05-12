@@ -1092,12 +1092,13 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         if(msg.contentType=='image') {
             msg.content.thumb=CONFIG.mediaUrl+msg.content['src_thumb'];
             $http.get(msg.content.thumb).then(function(data){
-                    $scope.msgs.push(msg);
+                $scope.msgs.push(msg);
+                toBottom(true,250);
             })
         }else{
             $scope.msgs.push(msg);
+            toBottom(true,200);
         }
-        toBottom(true,250);
     }
     // send message--------------------------------------------------------------------------------
 
@@ -1997,16 +1998,12 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             msg.content.thumb=CONFIG.mediaUrl+msg.content['src_thumb'];
             $http.get(msg.content.thumb).then(function(data){
                 $scope.msgs.push(msg);
+                toBottom(true,250);
             })
         }else{
             $scope.msgs.push(msg);
+            toBottom(true,200);
         }
-        toBottom(true,250);
-        // $scope.$apply(function(){
-            // $scope.msgs.push(msg);
-
-        // });
-        // $scope.msgs=$scope.msgs;
     }
     function sendmsg(content,type){
         var data={};
