@@ -58,6 +58,7 @@ angular.module('kidney',[
                                         onTap: function(e) {
                                             $state.go('signin')
                                         }
+                                    },
                                    {
                                         text: '<b>確定</b>',
                                         type: 'button-positive',
