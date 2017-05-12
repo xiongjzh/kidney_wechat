@@ -126,6 +126,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
     $scope.Verify={Phone:"",Code:""};
     $scope.veritext="获取验证码";
     $scope.isable=false;
+    var tempuserId = "";
     var validMode=Storage.get('validMode');//0->set;1->reset
     var unablebutton = function(){      
      //验证码BUTTON效果
@@ -186,7 +187,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
                         {
                             User.getUserId({phoneNo:Verify.Phone}).then(function(data){
                                 if(data.results == 0){
-                                    var tempuserId = data.UserId
+                                    tempuserId = data.UserId
                                     Doctor.getDoctorInfo({userId:data.UserId}).then(function(data){
                                         if(data.results == "不存在的医生ID！"){
                                             $scope.logStatus = "该手机号码没有医生权限,请确认手机号码或转移到肾事管家进行操作";
