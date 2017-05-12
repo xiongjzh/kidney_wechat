@@ -653,10 +653,22 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
 }])
 
 //首页
-.controller('homeCtrl', ['Communication','$scope','$state','$interval','$rootScope', 'Storage','$http','$sce','$timeout','Doctor',function(Communication,$scope, $state,$interval,$rootScope,Storage,$http,$sce,$timeout,Doctor) {
+.controller('homeCtrl', ['Communication','$scope','$state','$interval','$rootScope', 'Storage','$http','$sce','$timeout','Doctor','New',function(Communication,$scope, $state,$interval,$rootScope,Storage,$http,$sce,$timeout,Doctor,New) {
     $scope.barwidth="width:0%";
-
-    console.log(Storage.get('USERNAME'));
+    $scope.hasUnreadMessages = false;
+    var RefreshUnread;
+    var GetUnread = function(){
+        New.getNewsByReadOrNot({userId:Storage.get('UID'),readOrNot:0}).then(//
+            function(data){
+                if(data.results.length){
+                    $scope.HasUnreadMessages = true;
+                    // console.log($scope.HasUnreadMessages);
+                }
+            },function(err){
+                    console.log(err);
+            });
+    }
+    GetUnread();
     $scope.isWriting={'margin-top': '100px'};
     if(!sessionStorage.addKBEvent)
     {

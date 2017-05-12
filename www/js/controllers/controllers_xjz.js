@@ -634,26 +634,17 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                 $scope.params.realCounselType=data.results.type;
                 Account.getCounts({doctorId:Storage.get('UID'),patientId:$scope.params.chatId})
                 .then(function(res){
-                    
-
 
                     if($scope.params.connect){
-                        console.info('first');
-                        return sendCnNotice($scope.counseltype,$scope.counselstatus,res.result.count);
+                        return sendNotice($scope.counseltype,$scope.counselstatus,res.result.count);
                     }else{
                         var connectWatcher = $scope.$watch('params.connect',function(newv,oldv){
-                            console.info('222222222222222222');
-                            console.log(oldv,newv);
                             if(newv) {
                                 connectWatcher();
-                                return sendCnNotice($scope.counseltype,$scope.counselstatus,res.result.count);
+                                return sendNotice($scope.counseltype,$scope.counselstatus,res.result.count);
                             }
                         });
                     }
-                    // var alertPopup = $ionicPopup.alert({
-                    //     title: head,
-                    //     template: body
-                    // });
                 })
             
             },function(err){
@@ -782,9 +773,14 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         $rootScope.conversation.type = null;
         $rootScope.conversation.id = '';
     })
+    function sendNotice(type,status,cnt){
+        return setTimeout(function(){
+            return sendCnNotice(type,status,cnt);
+        },2000);
+    }
     function sendCnNotice(type,status,cnt){
         var len=$scope.msgs.length;
-        if(len==0 || !($scope.msgs[len-1].content.type!='count-notice' && $scope.msgs[len-1].content.count==cnt)){
+        if(len==0 || !($scope.msgs[len-1].content.type=='count-notice' && $scope.msgs[len-1].content.count==cnt)){
             var bodyDoc='';
             if(type!='1'){
                 if(status=='0'){

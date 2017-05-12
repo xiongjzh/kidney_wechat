@@ -1016,3 +1016,25 @@ display: inline-block;
   width: 100%;
 
 }
+
+/*消息小红点*/
+.head-red-point {
+  position: absolute;
+  top: 12%;
+  right: calc(50% - 20px);
+  height: 6px;
+  width: 6px;
+  border-radius: 5px;
+  background-color: red
+}
+
+
+.image-red-point {
+  position: absolute;
+  top: 8%;
+  right: calc(85% - 35px);
+  height: 8px;
+  width: 8px;
+  border-radius: 5px;
+  background-color: red
+}
