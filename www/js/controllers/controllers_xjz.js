@@ -1068,7 +1068,12 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         });
         confirmPopup.then(function(res) {
             if (res) {
-                endCounsel($scope.params.realCounselType);
+                Account.modifyCounts({doctorId:Storage.get('UID'),patientId:$scope.params.chatId,modify:'900'})
+                .then(function(){
+                    endCounsel($scope.params.realCounselType);
+                },function(err){
+                    console.error(err);
+                })
             } else {
             }
         });
