@@ -1941,13 +1941,6 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         $scope.imageHandle.zoomTo(1, true);
         $scope.imageUrl = CONFIG.mediaUrl + (args[2].src_thumb || args[2].localId_thumb);
         $scope.modal.show();
-        // $scope.imageUrl = args[2];
-        // $scope.modal.show();
-        // if (args[1] == 'img') {
-        // window.JMessage.getOriginImageInSingleConversation($state.params.chatId, args[3], onImageLoad, onImageLoadFail);
-        // } else {
-        // $scope.imageUrl = args[3];
-        // }
     })
     $scope.$on('profile', function(event, args) {
         console.log(args)
@@ -1957,30 +1950,18 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
     $scope.$on('viewcard', function(event, args) {
         console.log(args[1]);
         event.stopPropagation();
-        // if (args[2].target.tagName == "IMG") {
-        //     $scope.imageHandle.zoomTo(1, true);
-        //     $scope.imageUrl = args[2].target.currentSrc;
-        //     console.log(args[2].target.attributes.hires.nodeValue);
-        //     $scope.modal.show();
-        // }
-        // else{
-        //     $state.go('tab.consult-detail',{consultId:args[1]});
-        // }
+
         if($scope.params.type=='0'){
             Communication.getConsultation({ consultationId: args[1].content.consultationId})
                 .then(function(data) {
+                    var ctype = data.result.status;
+                    if(ctype=='0') ctype='2';
                     $state.go('tab.group-chat',{'type':data.result.status,'teamId':$scope.params.teamId,'groupId':args[1].content.consultationId});
-                    // $scope.params.title+= '-'+data.result.patientId.name;
-                    // console.log(data)
-                    // $rootScope.patient = data.result;
-                    
                 })
         }
-        // $state.go('tab.consult-detail',{consultId:args[1]});
     })
 
     $scope.toolChoose = function(data) {
-        // console.log(data);
         if (data == 0) $state.go('tab.selectDoc');
         if (data == 1) $state.go('tab.selectTeam');
     }
