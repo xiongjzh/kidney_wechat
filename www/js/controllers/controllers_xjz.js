@@ -670,7 +670,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         New.insertNews({userId:$scope.params.UID,sendBy:$scope.params.chatId,type:$scope.params.newsType,readOrNot:1});
         $scope.getMsg(15).then(function(data){
             $scope.msgs=data;
-            toBottom(true,250);
+            toBottom(true,400);
         });
     });
 
@@ -837,8 +837,8 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         },5000);
     }
     $scope.scrollBottom = function() {
-        $scope.showVoice = false;
-        $scope.showMore = false;
+        // $scope.showVoice = false;
+        // $scope.showMore = false;
         toBottom(true);
     }
     $scope.getMsg = function(num) {
@@ -1099,7 +1099,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             msg.content.thumb=CONFIG.mediaUrl+msg.content['src_thumb'];
             $http.get(msg.content.thumb).then(function(data){
                 $scope.msgs.push(msg);
-                toBottom(true,200);
+                toBottom(true,300);
             })
         }else{
             $scope.msgs.push(msg);
@@ -1713,7 +1713,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             // })
             $scope.getMsg(15).then(function(data){
                 $scope.msgs=data;
-                toBottom(true,250);
+                toBottom(true,400);
             });
 
             // var t=$scope.params.title;
@@ -2013,7 +2013,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             msg.content.thumb=CONFIG.mediaUrl+msg.content['src_thumb'];
             $http.get(msg.content.thumb).then(function(data){
                 $scope.msgs.push(msg);
-                toBottom(true,200);
+                toBottom(true,300);
             })
         }else{
             $scope.msgs.push(msg);
