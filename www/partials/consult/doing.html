@@ -31,6 +31,7 @@
                 <span style="float: right">{{p.time|dateFormat:"YYYY-MM-DD h:m"}}</span>
                 </div>
                 <em class="m-em">{{p.symptom}}</em>  
+                <p><span style="color:#ea4335" ng-show="p.lastMsg.readOrNot===0" class="ng-hide">[新消息]</span>{{p.lastMsg.description}}<span style="color:#FFF">.</span></p>
             </a>
         </div>
     </ion-content>

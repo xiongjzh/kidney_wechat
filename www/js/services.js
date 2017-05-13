@@ -1703,7 +1703,7 @@ angular.module('kidney.services', ['ionic','ngResource'])
             if(type!='11' && type!='12' && msg.url.fromID!=userId) {
                 msg.description=msg.url.fromName + ':' + msg.description;
             }
-            if(type!='13') msg.readOrNot = msg.readOrNot || userId==msg.url.fromID;
+            if(type=='11' && type=='12') msg.readOrNot = msg.readOrNot || (userId==msg.url.fromID?1:0);
         }catch(e){}
         return msg;
     }
