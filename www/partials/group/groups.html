@@ -39,7 +39,7 @@
                 <h3 class="mg-top5"><span>{{d.doctorId.workUnit}}</span></h3>
                 <h3 class="mg-top5"><span>{{d.doctorId.department}}</span></h3>
                 <p class="mg-top5 p-dordes"><i style="color:#FFD600;font-size: 16px" class="icon ion-android-star"></i>{{d.doctorId.score}} 咨询:{{d.doctorId.count1}} 问诊:{{d.doctorId.count2}}</p>
-                <p><span style="color:#ea4335" ng-show="team.lastMsg.readOrNot===0" class="ng-hide">[新消息]</span>{{d.lastMsg.description}}<span style="color:#FFF">.</span></p>
+                <p><span style="color:#ea4335" ng-show="d.lastMsg.readOrNot===0" class="ng-hide">[新消息]</span>{{d.lastMsg.description}}<span style="color:#FFF">.</span></p>
                 <div id="profile" style="display:inline-block;width:auto;background-color: #11c1f3;float:right;padding:0.3em 0.5em;margin-top:10px;border-radius: 0.1em;color:#FFF;position: absolute;right: 15px;top:25px;border-radius: 5px">详情</div>
             </div>
         </div>

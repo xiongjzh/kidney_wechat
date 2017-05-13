@@ -1,4 +1,4 @@
-<ion-view title="团队病例" hide-tabs>
+<ion-view title="团队病历" hide-tabs>
     <ion-nav-bar class="bar-positive">
         <ion-nav-buttons side="left">
             <button class="button button-icon icon ion-chevron-left" ng-click="backToGroups()"></button>
@@ -20,7 +20,8 @@
                     <!-- <span class="mgleft-10 patient-title">{{grouppatient.time|dateFormat:"YYYY/MM/DD h:m"}}</span> -->
                 </div>
                 <p class=" mg-top5 patient-content">{{grouppatient.time|dateFormat:"YYYY-MM-DD h:m"}}</p>
-                <p class=" mg-top5 patient-content">主题: {{grouppatient.diseaseInfo.symptom}}</p>
+                    <p><span style="color:#ea4335" ng-show="grouppatient.lastMsg.readOrNot===0" class="ng-hide">[新消息]</span>{{grouppatient.lastMsg.description}}<span style="color:#FFF">.</span></p>
+                <!-- <p class=" mg-top5 patient-content">主题: {{grouppatient.diseaseInfo.symptom}}</p> -->
             </a>
             <div style="width:100%;margin-top: 20px;background-color: #FFF;height:2.4em;line-height: 2.4em;font-size:1.2em;padding:0 1.5em">
                 <div>
@@ -34,7 +35,8 @@
                     <span class="mgleft-10 patient-title">{{grouppatient.patientId.birthday|filterAge}}岁</span>
                 </div>
                 <p class=" mg-top5 patient-content">{{grouppatient.time|dateFormat:"YYYY-MM-DD h:m"}}</p>
-                <p class=" mg-top5 patient-content">问题描述: {{grouppatient.diseaseInfo.symptom}}</p>
+                    <p><span style="color:#ea4335" ng-show="grouppatient.lastMsg.readOrNot===0" class="ng-hide">[新消息]</span>{{grouppatient.lastMsg.description}}<span style="color:#FFF">.</span></p>
+                <!-- <p class=" mg-top5 patient-content">问题描述: {{grouppatient.diseaseInfo.symptom}}</p> -->
             </a>
         </div>
     </ion-content>
