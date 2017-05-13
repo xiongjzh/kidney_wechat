@@ -1346,9 +1346,33 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
 
     // var patient = DoctorsInfo.searchdoc($stateParams.doctorId);
     // $scope.doctor = doc;
-    $scope.goback=function(){
-        $ionicHistory.goBack();
-    }
+    $scope.backview=$ionicHistory.viewHistory().backView
+        $scope.backstateId=null;
+        if($scope.backview!=null){
+            $scope.backstateId=$scope.backview.stateId
+            //console.log($scope.backstateId)
+            if($scope.backstateId=="tab.doing"){
+                Storage.set('backId',$scope.backstateId);
+            }else if($scope.backstateId=="tab.did"){
+                Storage.set('backId',$scope.backstateId);
+            }else if($scope.backstateId=="tab.patient"){
+                Storage.set('backId',$scope.backstateId)
+                //console.log(Storage.get('backId'))
+            }            
+        }
+        console.log(Storage.get('backId'))
+        $scope.goback = function() {           
+            var backId = Storage.get('backId')
+            console.log(backId)
+            if(backId=="tab.doing"){
+              $state.go("tab.doing")
+            }
+            else if(backId=="tab.did"){
+                $state.go('tab.did');
+            }else{
+              $state.go('tab.patient');
+            }
+        }
     $scope.gototestrecord=function(){
         $state.go('tab.TestRecord',{PatinetId:Storage.get('getpatientId')});
     }
