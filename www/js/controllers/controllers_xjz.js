@@ -667,7 +667,15 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         //     window.JMessage.enterSingleConversation($state.params.chatId, $scope.params.key);
         //     getMsg(15);
         // }
-        New.insertNews({userId:$scope.params.UID,sendBy:$scope.params.chatId,type:$scope.params.newsType,readOrNot:1});
+        var loadWatcher = $scope.$watch('msgs.length',function(newv,oldv){
+            if(newv) {
+                loadWatcher();
+                var lastMsg=$scope.msgs[$scope.msgs.length-1];
+                if(lastMsg.fromID==$scope.params.UID) return;
+                return New.insertNews({userId:lastMsg.targetID,sendBy:lastMsg.fromID,type:$scope.params.newsType,readOrNot:1});
+            }
+        });
+        // New.insertNews({userId:$scope.params.UID,sendBy:$scope.params.chatId,type:$scope.params.newsType,readOrNot:1});
         $scope.getMsg(15).then(function(data){
             $scope.msgs=data;
             toBottom(true,400);
@@ -1625,7 +1633,14 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         $scope.params.teamId = $state.params.teamId;
         //
         
-        
+        var loadWatcher = $scope.$watch('msgs.length',function(newv,oldv){
+            if(newv) {
+                loadWatcher();
+                var lastMsg=$scope.msgs[$scope.msgs.length-1];
+                if(lastMsg.fromID==$scope.params.UID) return;
+                return New.insertNews({userId:lastMsg.targetID,sendBy:lastMsg.targetID,type:$scope.params.newsType,readOrNot:1});
+            }
+        });
         Doctor.getDoctorInfo({userId:Storage.get('UID')})
             .then(function(data){
                 thisDoctor=data.results;
@@ -1683,7 +1698,6 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             $rootScope.patient.undergo = false;
             $scope.params.isOver = true;
         }
-        New.insertNews({userId:$scope.params.UID,sendBy:$scope.params.groupId,type:$scope.params.newsType,readOrNot:1});
     })
     $scope.$on('$ionicView.enter', function() {
             wechat.settingConfig({ url: path }).then(function(data) {
