@@ -1,24 +1,24 @@
-<ion-view view-title='治疗方案'>  
-<!--   <div  style="position: absolute;top: 43px;z-index:100;display: block;height: 2.5px;background-color: #33cd5f;{{barwidth}}" ></div> -->  
+<ion-view view-title='治疗方案'>
+<!--   <div  style="position: absolute;top: 43px;z-index:100;display: block;height: 2.5px;background-color: #33cd5f;{{barwidth}}" ></div> -->
     <ion-nav-bar class="bar-positive " align-title="center">
         <ion-nav-buttons side="left">
-          <button class="button button-icon icon ion-ios-arrow-left fc-ff" ng-click="$ionicGoBack()"></button>
+          <button class="button button-icon icon ion-ios-arrow-left fc-ff" ng-click="BacktoPD()"></button>
         </ion-nav-buttons>
     </ion-nav-bar>
-    <div class="button-bar bar-positive tast-bar patient-bar" style="margin-top: 40px;">
-        <a class="button" href="#/tab/DoctorDiagnose">
-          <span class="br-e9" style="vertical-align: sub">医生诊断</span>
-        </a>
-        <a class="button  tast-active" href="#/tab/TaskSet">
-          <span class="br-e9" style="vertical-align: sub">治疗方案</span>
-        </a>
-        <a class="button" href="#/tab/TestRecord">
-          <span class="br-e9" style="vertical-align: sub">测量记录</span>
-        </a>
-        <a class="button" href="#/tab/health">
-          <span class="br-e9" style="vertical-align: sub">健康信息</span>
-        </a>
-    </div>
+    <div class="button-bar bar-positive" style="margin-top: 40px">
+    <a class="button" href="#/tab/DoctorDiagnose">
+      <span class="br-e9" style="vertical-align: sub">医生诊断</span>
+    </a>
+    <a class="button" href="#/tab/TaskSet">
+      <span class="br-e9" style="vertical-align: sub">治疗方案</span>
+    </a>
+    <a class="button" href="#/tab/TestRecord" >
+      <span class="br-e9" style="vertical-align: sub">测量记录</span>
+    </a>
+    <a class="button" href="#/tab/HealthInfo">
+        <span class="br-e9" style="vertical-align: sub">健康信息</span>
+    </a>
+  </div>
       <ion-content class="has-header" style="margin-top: 42px;">
         <div class="list task-list">
             <a class="task-item fc-33" ng-repeat="item in Tasks.Measure">
@@ -34,7 +34,7 @@
               <i class="icon ion-edit" style="font-size:20px;margin-left: 10px" ng-click="showPopup(item)"></i>
             </section>
             <p>{{item.content}}</p>
-          </a> 
+          </a>
           <a class="task-item fc-33" ng-repeat="item in Tasks.Other">
             <img ng-src="{{item.Name | icon_filter}}" alt="">
             <span>{{item.Name}}</span>
@@ -50,9 +50,9 @@
 
             </section>
             <p>{{item.content}}</p>
-          </a>  
+          </a>
         </div>
         <button style="margin:0 auto;width: 80%" class="button button-block button-balanced bg-6a" class="button button-clear" ng-click="OkClick()">确定
         </button>
-    </ion-content> 
+    </ion-content>
 </ion-view>

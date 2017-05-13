@@ -1,25 +1,27 @@
 <ion-view title="医生诊断">
-<ion-nav-bar class="bar-positive " align-title="center">
-    <ion-nav-buttons side="left">
-      <button class="button button-icon icon ion-ios-arrow-left fc-ff" ng-click="$ionicGoBack()"></button>
-    </ion-nav-buttons>
-  </ion-nav-bar>
-  <ion-nav-buttons side="primary">
-      <button class="button button-clear icon ion-compose" ng-click="canEdit()"></button>
-    </ion-nav-buttons>
+  <ion-nav-bar class="bar-positive " align-title="center">
+  <ion-nav-buttons side="left">
+    <button class="button button-icon icon ion-ios-arrow-left fc-ff" ng-click="BacktoPD()"></button>
+  </ion-nav-buttons>
+  <ion-nav-buttons side="right">
+    <button class="button button-clear icon ion-compose" ng-click="canEdit()"></button>
+  </ion-nav-buttons>
+</ion-nav-bar>
+
+
 <!--   <div  style="position: absolute;top: 43px;z-index:100;display: block;height: 2.5px;background-color: #33cd5f;{{barwidth}}" ></div> -->
-  <div class="button-bar bar-positive tast-bar patient-bar" style="margin-top: 40px;">
-    <a class="button  tast-active" href="#/tab/DoctorDiagnose">
+    <div class="button-bar bar-positive" style="margin-top: 40px">
+    <a class="button" href="#/tab/DoctorDiagnose">
       <span class="br-e9" style="vertical-align: sub">医生诊断</span>
     </a>
-    <a class="button  " href="#/tab/TaskSet">
+    <a class="button" href="#/tab/TaskSet">
       <span class="br-e9" style="vertical-align: sub">治疗方案</span>
     </a>
-    <a class="button" href="#/tab/TestRecord">
+    <a class="button" href="#/tab/TestRecord" >
       <span class="br-e9" style="vertical-align: sub">测量记录</span>
     </a>
-    <a class="button" href="#/tab/health">
-      <span class="br-e9" style="vertical-align: sub">健康信息</span>
+    <a class="button" href="#/tab/HealthInfo">
+        <span class="br-e9" style="vertical-align: sub">健康信息</span>
     </a>
   </div>
   <ion-content  style="margin-top: 42px;">
@@ -45,7 +47,7 @@
         <div class="input-label"><i class="icon ion-asterisk" style="color:red;font-size:6px">
           </i>肾病类型</div>
         <select ng-model="Diagnose.diagname">
-          <option ng-repeat="x in Diseases" value="{{x.Type}}">{{x.Name}}</option> 
+          <option ng-repeat="x in Diseases" value="{{x.Type}}">{{x.Name}}</option>
         </select>
       </label>
 
@@ -65,7 +67,7 @@
           疾病进程
         </div>
         <select ng-model="Diagnose.diagprogress">
-          <option ng-repeat="x in progressSelect[0]" value="{{x}}">{{x}}</option> 
+          <option ng-repeat="x in progressSelect[0]" value="{{x}}">{{x}}</option>
         </select>
       </label>
       <!-- cdk3-4 -->
@@ -75,7 +77,7 @@
           疾病进程
         </div>
         <select ng-model="Diagnose.diagprogress">
-          <option ng-repeat="x in progressSelect[1]" value="{{x}}">{{x}}</option> 
+          <option ng-repeat="x in progressSelect[1]" value="{{x}}">{{x}}</option>
         </select>
       </label>
 
@@ -83,7 +85,7 @@
         <div class="input-label"><i class="icon ion-asterisk" style="color:red;font-size:6px">
           </i>是否高血压</div>
         <select ng-model="Diagnose.diaghypertension">
-          <option ng-repeat="x in Hypers" value="{{x.Type}}">{{x.Name}}</option> 
+          <option ng-repeat="x in Hypers" value="{{x.Type}}">{{x.Name}}</option>
         </select>
       </label>
 
@@ -96,7 +98,7 @@
             提交
       </button>
     </div>
-           
+
   </ion-content>
-          
+
 </ion-view>

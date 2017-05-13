@@ -21,24 +21,37 @@
     <ion-content class="has-header" style="margin-top: 42px;">
         <div class="list">  
             <ion-item class="item item-avatar pati-message">
+	        <div class="patient-active img-cen">
+	          <div>            
 				<img ng-src="{{patient.photoUrl||'img/patient.png'}}">
+			  </div>
+			</div>
 				<button class="button button-small button-positive pat-ts bg-f7" ng-click="SendInsMsg()">推送保险</button>
-				<span>{{patient.name}}</span><span>&nbsp;&nbsp;&nbsp;{{patient.gender | filterGender}}</span>&nbsp;&nbsp;&nbsp;<span>{{patient.birthday | filterAge}}岁</span>
+	        <div class="row pd-0">
+	          <div class="col pd-0">				
+				<p class="m-b10 "><span class="f16 fc-33 f-w-5">{{patient.name}}</span><span class="f16 fc-33 f-w-5">&nbsp;&nbsp;&nbsp;{{patient.gender | filterGender}}</span>&nbsp;&nbsp;&nbsp;<span class="f16 fc-33 f-w-5">{{patient.birthday | filterAge}}岁</span>
 				<p>身份证号：{{patient.IDNo}}</p>
 				<p>地区：{{patient.address.province}} {{patient.address.city}}</p>
 				<p>是否VIP：{{patient.VIP | filterVIP}}</p>
 				<p>是否有高血压：{{patient.hypertension | filterhypertension}}</p>
-				<p>保险推送次数：{{Ins.count}}</p>				
+				<p>保险推送次数：{{Ins.count}}</p>
+			  </div>
+			</div>				
 			</ion-item>
 				
-            <ion-item>
+            <ion-item class="bg-f5 f-18 fc-33">
 			     最近就诊信息
-			</ion-item>		
-			<ion-item ng-repeat="di in diagnosisInfo">
-			     <h2>{{di.time | dateFormat:"YYYY-MM-DD"}}</h2>
-				 <p>就诊医院 {{di.doctor.workUnit}}</p>
-				 <p>就诊科室 {{di.doctor.department}}</p>
-				 <p>就诊诊断 {{di.content}}</p>
+			</ion-item>
+		    <div class="card" ng-if="!(diagnosisInfo.length)">
+		        <div class="item item-text-wrap">
+		            暂无就诊信息
+		        </div>
+		    </div>					
+			<ion-item ng-repeat="di in diagnosisInfo" class="diagnosisInfo">
+			     <p class="fc-6b ">{{di.time | dateFormat:"YYYY-MM-DD"}}</p>
+				 <p class="fc-6b ">就诊医院 {{di.doctor.workUnit}}</p>
+				 <p class="fc-6b ">就诊科室 {{di.doctor.department}}</p>
+				 <p class="fc-6b ">就诊诊断 {{di.content}}</p>
 			</ion-item>				
         </div>
     </ion-content>

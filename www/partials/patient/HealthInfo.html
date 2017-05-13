@@ -1,34 +1,41 @@
 <ion-view cache-view="false" title="健康信息" >
-
-  <ion-nav-bar class="bar-dark nav-title-slide-ios7" style="" >
-      <ion-nav-buttons side="left">
-      <button class="button button-icon icon ion-ios-arrow-left fc-ff" ng-click="Goback()"></button>
+  <ion-nav-bar class="bar-positive " align-title="center">
+    <ion-nav-buttons side="left">
+      <button class="button button-icon icon ion-ios-arrow-left fc-ff" ng-click="BacktoPD()"></button>
     </ion-nav-buttons>
-      <ion-nav-buttons class="bar-dark nav-title-slide-ios7" side="right" >
-         <button class="button button-clear" ng-click="newHealth()"><i class="icon ion-plus-round"></i></button>
-      </ion-nav-buttons>
-    </ion-nav-bar>
 
-
+    <ion-nav-buttons side="right">
+      <button class="button button-icon icon ion-ios-plus-empty fc-ff" ng-click="newHealth()"></button>
+    </ion-nav-buttons>
+  </ion-nav-bar>
 <!--   <div  style="position: absolute;top: 43px;z-index:100;display: block;height: 2.5px;background-color: #33cd5f;{{barwidth}}" ></div> -->
-  <div class="button-bar bar-positive tast-bar patient-bar" style="margin-top: 40px;">
+    <div class="button-bar bar-positive" style="margin-top: 40px">
     <a class="button" href="#/tab/DoctorDiagnose">
       <span class="br-e9" style="vertical-align: sub">医生诊断</span>
     </a>
-    <a class="button  " href="#/tab/TaskSet">
+    <a class="button" href="#/tab/TaskSet">
       <span class="br-e9" style="vertical-align: sub">治疗方案</span>
     </a>
-    <a class="button" href="#/tab/TestRecord">
+    <a class="button" href="#/tab/TestRecord" >
       <span class="br-e9" style="vertical-align: sub">测量记录</span>
     </a>
-    <a class="button tast-active" href="#/tab/health">
-      <span class="br-e9" style="vertical-align: sub">健康信息</span>
+    <a class="button" href="#/tab/HealthInfo">
+        <span class="br-e9" style="vertical-align: sub">健康信息</span>
     </a>
   </div>
-  
-  <ion-content class="has-header" padding="true" style="">
+  <ion-content class="has-header"  style="margin-top: 42px;">
+    <div class="list">
+      <div class="item" ng-repeat="item in items | orderBy:'-time'" ng-click="gotoHealthDetail($event,item)">
+        <div class="clearfix"><span class="f-fl f-w-5">{{item.label}}</span><span class="f-fr f-w-5">{{item.time|dateFormat:"YYYY-MM-DD"}}</span></div>
+        <p class="mt-5 fc-6c">{{item.description}}</p>
+        <div class="health-img-box clearfix">
+          <div class="health-img" ng-repeat = "img in item.url"><img ng-src="{{img}}"></div>
+        </div>
+        <div class="text-right "> <i class="iconfont icon-del f-24"></i> <i class="iconfont icon-bianji f-32 ml-10"></i></div>
+      </div>
 
-    <ion-list>
+    </div>
+    <!--<ion-list>
       <ion-item ng-repeat="item in items | orderBy:'-time'" ng-click="gotoHealthDetail($event,item)">
         <div class="row">
           <div class="col-25">
@@ -45,21 +52,13 @@
               <p style="margin-left:3%">{{item.description}}</p>
             </div>
           </div>
-        </div>  
-        
+        </div>
         <div style="text-align: right">
           <i class="icon ion-trash-a" style="font-size: 2em;"></i>
-          <!-- <button class="button button-clear" style="color:#666" ng-click="EditHealth(item)"><i class="icon ion-edit"></i></button> -->
+          &lt;!&ndash; <button class="button button-clear" style="color:#666" ng-click="EditHealth(item)"><i class="icon ion-edit"></i></button> &ndash;&gt;
         </div>
-
       </ion-item>
-    </ion-list>
-    
-    
-    
-
-
-           
+    </ion-list>-->
   </ion-content>
-          
 </ion-view>
+

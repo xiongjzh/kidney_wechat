@@ -2,7 +2,9 @@ angular.module('tdy.controllers', ['ionic','kidney.services','ionic-datepicker']
 
 /////////////////////////tongdanyang/////////////////
 .controller('DoctorDiagnoseCtrl', ['$scope', 'Storage','ionicDatePicker','Patient','$state', function ($scope, Storage,ionicDatePicker,Patient,$state) {
-  
+  $scope.BacktoPD = function(){
+    $state.go('tab.patientDetail');
+  }
   var decodeDiseases=function(type)
   {
     var dict;
@@ -212,19 +214,24 @@ angular.module('tdy.controllers', ['ionic','kidney.services','ionic-datepicker']
 }])
 //测量记录
 .controller('TestRecordCtrl', ['$scope', '$http','$stateParams','Storage','VitalSign', function ($scope,$http,$stateParams,Storage,VitalSign) {
-  
+    $scope.BacktoPD = function(){
+      $state.go('tab.patientDetail');
+    }  
 
       console.log($stateParams.PatinetId)
       console.log(Storage.get("getpatientId"))
       VitalSign.getVitalSigns({userId:Storage.get("getpatientId"),type:'血压'}).then(
       function(Data){
+        $scope.ChartData5=[];
         $scope.ChartData1=[];
         $scope.ChartData2=[];
         console.log(Data.results.length)
         for(var i=0;i<Data.results.length;i++){
           if(Data.results[i].code=="血压"){
             for(var j=0;j<Data.results[i].data.length;j++){
-
+              if(Data.results[i].data[j].value||Data.results[i].data[j].value2){
+                $scope.ChartData5.push([new Date(new Date(Data.results[i].data[j].time)-8*3600*1000),Data.results[i].data[j].value,Data.results[i].data[j].value2])
+              }
               if(Data.results[i].data[j].value){
                 $scope.ChartData1.push([new Date(new Date(Data.results[i].data[j].time)-8*3600*1000),Data.results[i].data[j].value])
               }
@@ -235,13 +242,12 @@ angular.module('tdy.controllers', ['ionic','kidney.services','ionic-datepicker']
             }
           }
         }
-
         if($scope.ChartData1.length||$scope.ChartData2.length){
-          console.log(1111)
-          $scope.chartdiv1=true;
+          
+        // $scope.chartdiv1=true;
         }else{
           console.log(222)
-          $scope.chartdiv1=false;
+          // $scope.chartdiv1=false;
         }
         var option1 = {
           title : {
@@ -263,8 +269,8 @@ angular.module('tdy.controllers', ['ionic','kidney.services','ionic-datepicker']
               // }
           },
           dataZoom: {
-              show: true
-              // start : 50
+              show: true,
+              start : 50
           },
           legend : {
               data : ['收缩压','舒张压']
@@ -274,8 +280,8 @@ angular.module('tdy.controllers', ['ionic','kidney.services','ionic-datepicker']
           },
           xAxis : [
               {
-                  type : 'time',
-                  splitNumber:8//分割的个数
+                  type : 'time'
+                  // splitNumber:8//分割的个数
               }
           ],
           yAxis : [
@@ -285,6 +291,44 @@ angular.module('tdy.controllers', ['ionic','kidney.services','ionic-datepicker']
                   max:250
               }
           ],
+          //new date(axisData[i]).getFullYear()+'-'+(new date(axisData[i]).getMonth()+1)+'-'+new date(axisData[i]).getDate()+' '+new date(axisData[i]).getHours()+':'+new date(axisData[i]).getMinutes()
+          toolbox: {
+              show : true,
+              feature : {
+                  // mark : {show: true},
+                  dataView : {
+                    show: true, 
+                    readOnly: true,
+                    optionToContent: function(opt) {
+                      var axisData = $scope.ChartData5;
+                      console.log(axisData)
+                      var series = opt.series;
+                      var table = '<table style="width:100%;text-align:center"><tbody><tr>'
+                                   + '<td>时间</td>'
+                                   + '<td>' + series[0].name + '</td>'
+                                   + '<td>' + series[1].name + '</td>'
+                                   + '</tr>';
+                      for (var i = 0, l = axisData.length; i < l; i++) {
+                        var td1,td2;
+                        td1=(axisData[i][1]==undefined?"空":axisData[i][1])
+                        td2=(axisData[i][2]==undefined?"空":axisData[i][2])
+                        console.log(td1)
+                          table += '<tr>'
+                                   + '<td>' + (new Date(axisData[i][0]).getMonth()+1)+'-'+new Date(axisData[i][0]).getDate()+' '+new Date(axisData[i][0]).getHours()+':'+new Date(axisData[i][0]).getMinutes() + '</td>' //axisData[i].getFullYear()+'-'+(axisData[i].getMonth()+1)+'-'+axisData[i].getDate()+' '+axisData[i].getHours()+':'+axisData[i].getMinutes();
+                                   + '<td>' + td1 + '</td>'
+                                   + '<td>' + td2 + '</td>'
+                                   + '</tr>';
+                      }
+                      table += '</tbody></table>';
+                      return table;
+                  }
+                  },
+
+                  // magicType : {show: true, type: ['line', 'bar']},
+                  // restore : {show: true},
+                  saveAsImage : {show: true}
+              }
+          },
           series : [
               {
                   name: '收缩压',
@@ -311,7 +355,6 @@ angular.module('tdy.controllers', ['ionic','kidney.services','ionic-datepicker']
       };
         var myChart = echarts.init(document.getElementById('chartdiv1'));
         myChart.setOption(option1);
-
         
       }, function(e) {  
       });
@@ -319,154 +362,228 @@ angular.module('tdy.controllers', ['ionic','kidney.services','ionic-datepicker']
 
       VitalSign.getVitalSigns({userId:Storage.get("getpatientId"),type:'体温'}).then(
       function(Data){
-        $scope.ChartData=[];
+        $scope.ChartData3=[];
         console.log(Data.results.length)
         for(var i=0;i<Data.results.length;i++){
           if(Data.results[i].code=="体温"){
             for(var j=0;j<Data.results[i].data.length;j++){
-              $scope.ChartData.push([new Date(new Date(Data.results[i].data[j].time)-8*3600*1000),Data.results[i].data[j].value])
+              $scope.ChartData3.push([new Date(new Date(Data.results[i].data[j].time)-8*3600*1000),Data.results[i].data[j].value])
             }
           }
         }
 
-        if($scope.ChartData.length){
-          $scope.chartdiv=true;
+        if($scope.ChartData3.length){
+              
+          // $scope.chartdiv2=true;
         }else{
-          $scope.chartdiv=false;
+          // $scope.chartdiv2=false;
         }
         var option1 = {
-          title : {
-              text : '体温',
-              subtext : '℃'
-          },
-          tooltip : {
-              trigger: 'axis'
-              // formatter : function (params) {
-              //     var date = new Date(params.value[0]);
-              //     data = date.getFullYear() + '-'
-              //            + (date.getMonth() + 1) + '-'
-              //            + date.getDate() + ' '
-              //            + date.getHours() + ':'
-              //            + date.getMinutes();
-              //     return data + '<br/>'
-              //            + params.value[1] + ', ' 
-              //            + params.value[2];
-              // }
-          },
-          dataZoom: {
-              show: true
-              // start : 50
-          },
-          legend : {
-              data : ['体温']
-          },
-          grid: {
-              y2: 80
-          },
-          xAxis : [
-              {
-                  type : 'time',
-                  splitNumber:8//分割的个数
-              }
-          ],
-          yAxis : [
-              {
-                  type : 'value',
-                  min:32,
-                  max:50
-              }
-          ],
-          series : [
-              {
-                  name: '体温',
-                  type: 'line',
-                  symbol:'roundRect',
-                  symbolSize :8,
-                  // showAllSymbol: true,
-                  // symbolSize: function (value){
-                  //     return Math.round(value[2]/10) + 2;
-                  // },
-                  data: $scope.ChartData
-              }
-          ]
-      };
+              title : {
+                  text : '体温',
+                  subtext : '℃'
+              },
+              tooltip : {
+                  trigger: 'axis'
+                  // formatter : function (params) {
+                  //     var date = new Date(params.value[0]);
+                  //     data = date.getFullYear() + '-'
+                  //            + (date.getMonth() + 1) + '-'
+                  //            + date.getDate() + ' '
+                  //            + date.getHours() + ':'
+                  //            + date.getMinutes();
+                  //     return data + '<br/>'
+                  //            + params.value[1] + ', ' 
+                  //            + params.value[2];
+                  // }
+              },
+              dataZoom: {
+                  show: true
+                  // start : 50
+              },
+              legend : {
+                  data : ['体温']
+              },
+              grid: {
+                  y2: 80
+              },
+              xAxis : [
+                  {
+                      type : 'time'
+                      // splitNumber:8//分割的个数
+                  }
+              ],
+              yAxis : [
+                  {
+                      type : 'value',
+                      min:32,
+                      max:50
+                  }
+              ],
+              toolbox: {
+                  show : true,
+                  feature : {
+                      // mark : {show: true},
+                      dataView : {
+                        show: true, 
+                        readOnly: true,
+                        optionToContent: function(opt) {
+                          var axisData = $scope.ChartData3;
+                          console.log(axisData)
+                          var series = opt.series;
+                          var table = '<table style="width:100%;text-align:center"><tbody><tr>'
+                                       + '<td>时间</td>'
+                                       + '<td>' + series[0].name + '</td>'
+                                       + '</tr>';
+                          for (var i = 0, l = axisData.length; i < l; i++) {
+                              table += '<tr>'
+                                       + '<td>' + (new Date(axisData[i][0]).getMonth()+1)+'-'+new Date(axisData[i][0]).getDate()+' '+new Date(axisData[i][0]).getHours()+':'+new Date(axisData[i][0]).getMinutes() + '</td>' //axisData[i].getFullYear()+'-'+(axisData[i].getMonth()+1)+'-'+axisData[i].getDate()+' '+axisData[i].getHours()+':'+axisData[i].getMinutes();
+                                       + '<td>' + axisData[i][1] + '</td>'
+                                       + '</tr>';
+                          }
+                          table += '</tbody></table>';
+                          return table;
+                      }
+                      },
+
+                      // magicType : {show: true, type: ['line', 'bar']},
+                      // restore : {show: true},
+                      saveAsImage : {show: true}
+                  }
+              },
+              series : [
+                  {
+                      name: '体温',
+                      type: 'line',
+                      symbol:'emptyCircle',
+                      symbolSize :8,
+                      itemStyle:{
+                        normal:{
+                          color:"#ff6600"
+                        }
+                      },
+                      // showAllSymbol: true,
+                      // symbolSize: function (value){
+                      //     return Math.round(value[2]/10) + 2;
+                      // },
+                      data: $scope.ChartData3
+                  }
+              ]
+          };
         var myChart = echarts.init(document.getElementById('chartdiv2'));
-        myChart.setOption(option1);
+        myChart.setOption(option1);  
 
 
       }, function(e) {  
       });
       VitalSign.getVitalSigns({userId:Storage.get("getpatientId"),type:'体重'}).then(
       function(Data){
-        $scope.ChartData=[];
+        $scope.ChartData4=[];
         console.log(Data.results.length)
         for(var i=0;i<Data.results.length;i++){
           if(Data.results[i].code=="体重"){
             for(var j=0;j<Data.results[i].data.length;j++){
-              $scope.ChartData.push([new Date(new Date(Data.results[i].data[j].time)-8*3600*1000),Data.results[i].data[j].value])
+              $scope.ChartData4.push([new Date(new Date(Data.results[i].data[j].time)-8*3600*1000),Data.results[i].data[j].value])
             }
           }
         }
-        if($scope.ChartData.length){
-          $scope.chartdiv=true;
+        if($scope.ChartData4.length){
+              
+          $scope.chartdiv3=true;
         }else{
-          $scope.chartdiv=false;
+          $scope.chartdiv3=false;
         }
         var option1 = {
-          title : {
-              text : '体重',
-              subtext : 'kg'
-          },
-          tooltip : {
-              trigger: 'axis'
-              // formatter : function (params) {
-              //     var date = new Date(params.value[0]);
-              //     data = date.getFullYear() + '-'
-              //            + (date.getMonth() + 1) + '-'
-              //            + date.getDate() + ' '
-              //            + date.getHours() + ':'
-              //            + date.getMinutes();
-              //     return data + '<br/>'
-              //            + params.value[1] + ', ' 
-              //            + params.value[2];
-              // }
-          },
-          dataZoom: {
-              show: true
-              // start : 50
-          },
-          legend : {
-              data : ['体重']
-          },
-          grid: {
-              y2: 80
-          },
-          xAxis : [
-              {
-                  type : 'time',
-                  splitNumber:8//分割的个数
-              }
-          ],
-          yAxis : [
-              {
-                  type : 'value',
-                  min:30
-              }
-          ],
-          series : [
-              {
-                  name: '体重',
-                  type: 'line',
-                  symbol:'roundRect',
-                  symbolSize :8,
-                  // showAllSymbol: true,
-                  // symbolSize: function (value){
-                  //     return Math.round(value[2]/10) + 2;
-                  // },
-                  data: $scope.ChartData
-              }
-          ]
-      };
+              title : {
+                  text : '体重',
+                  subtext : 'kg'
+              },
+              tooltip : {
+                  trigger: 'axis'
+                  // formatter : function (params) {
+                  //     var date = new Date(params.value[0]);
+                  //     data = date.getFullYear() + '-'
+                  //            + (date.getMonth() + 1) + '-'
+                  //            + date.getDate() + ' '
+                  //            + date.getHours() + ':'
+                  //            + date.getMinutes();
+                  //     return data + '<br/>'
+                  //            + params.value[1] + ', ' 
+                  //            + params.value[2];
+                  // }
+              },
+              dataZoom: {
+                  show: true
+                  // start : 50
+              },
+              legend : {
+                  data : ['体重']
+              },
+              grid: {
+                  y2: 80
+              },
+              xAxis : [
+                  {
+                      type : 'time'
+                      // splitNumber:8//分割的个数
+                  }
+              ],
+              yAxis : [
+                  {
+                      type : 'value',
+                      min:30
+                  }
+              ],
+              toolbox: {
+                  show : true,
+                  feature : {
+                      // mark : {show: true},
+                      dataView : {
+                        show: true, 
+                        readOnly: true,
+                        optionToContent: function(opt) {
+                          var axisData = $scope.ChartData4;
+                          console.log(axisData)
+                          var series = opt.series;
+                          var table = '<table style="width:100%;text-align:center"><tbody><tr>'
+                                       + '<td>时间</td>'
+                                       + '<td>' + series[0].name + '</td>'
+                                       + '</tr>';
+                          for (var i = 0, l = axisData.length; i < l; i++) {
+                              table += '<tr>'
+                                       + '<td>' + (new Date(axisData[i][0]).getMonth()+1)+'-'+new Date(axisData[i][0]).getDate()+' '+new Date(axisData[i][0]).getHours()+':'+new Date(axisData[i][0]).getMinutes() + '</td>' //axisData[i].getFullYear()+'-'+(axisData[i].getMonth()+1)+'-'+axisData[i].getDate()+' '+axisData[i].getHours()+':'+axisData[i].getMinutes();
+                                       + '<td>' + axisData[i][1] + '</td>'
+                                       + '</tr>';
+                          }
+                          table += '</tbody></table>';
+                          return table;
+                      }
+                      },
+
+                      // magicType : {show: true, type: ['line', 'bar']},
+                      // restore : {show: true},
+                      saveAsImage : {show: true}
+                  }
+              },
+              series : [
+                  {
+                      name: '体重',
+                      type: 'line',
+                      symbol:'circle',
+                      symbolSize :8,
+                      itemStyle:{
+                        normal:{
+                          color:"#990033"
+                        }
+                      },
+                      // showAllSymbol: true,
+                      // symbolSize: function (value){
+                      //     return Math.round(value[2]/10) + 2;
+                      // },
+                      data: $scope.ChartData4
+                  }
+              ]
+          };
         var myChart = echarts.init(document.getElementById('chartdiv3'));
         myChart.setOption(option1);
 
@@ -474,19 +591,20 @@ angular.module('tdy.controllers', ['ionic','kidney.services','ionic-datepicker']
       });
       VitalSign.getVitalSigns({userId:Storage.get("getpatientId"),type:'尿量'}).then(
       function(Data){
-        $scope.ChartData=[];
+        $scope.ChartData5=[];
         console.log(Data.results.length)
         for(var i=0;i<Data.results.length;i++){
           if(Data.results[i].code=="尿量"){
             for(var j=0;j<Data.results[i].data.length;j++){
-              $scope.ChartData.push([new Date(new Date(Data.results[i].data[j].time)-8*3600*1000),Data.results[i].data[j].value])
+              $scope.ChartData5.push([new Date(new Date(Data.results[i].data[j].time)-8*3600*1000),Data.results[i].data[j].value])
             }
           }
         }
-        if($scope.ChartData.length){
-          $scope.chartdiv=true;
+        if($scope.ChartData5.length){
+          
+          // $scope.chartdiv4=true;
         }else{
-          $scope.chartdiv=false;
+          // $scope.chartdiv4=false;
         }
         var option1 = {
           title : {
@@ -495,6 +613,17 @@ angular.module('tdy.controllers', ['ionic','kidney.services','ionic-datepicker']
           },
           tooltip : {
               trigger: 'axis'
+              // formatter : function (params) {
+              //     var date = new Date(params.value[0]);
+              //     data = date.getFullYear() + '-'
+              //            + (date.getMonth() + 1) + '-'
+              //            + date.getDate() + ' '
+              //            + date.getHours() + ':'
+              //            + date.getMinutes();
+              //     return data + '<br/>'
+              //            + params.value[1] + ', ' 
+              //            + params.value[2];
+              // }
           },
           dataZoom: {
               show: true
@@ -508,8 +637,8 @@ angular.module('tdy.controllers', ['ionic','kidney.services','ionic-datepicker']
           },
           xAxis : [
               {
-                  type : 'time',
-                  splitNumber:8//分割的个数
+                  type : 'time'
+                  // splitNumber:8//分割的个数
               }
           ],
           yAxis : [
@@ -518,17 +647,53 @@ angular.module('tdy.controllers', ['ionic','kidney.services','ionic-datepicker']
                   min:200
               }
           ],
+          toolbox: {
+              show : true,
+              feature : {
+                  // mark : {show: true},
+                  dataView : {
+                    show: true, 
+                    readOnly: true,
+                    optionToContent: function(opt) {
+                      var axisData = $scope.ChartData5;
+                      console.log(axisData)
+                      var series = opt.series;
+                      var table = '<table style="width:100%;text-align:center"><tbody><tr>'
+                                   + '<td>时间</td>'
+                                   + '<td>' + series[0].name + '</td>'
+                                   + '</tr>';
+                      for (var i = 0, l = axisData.length; i < l; i++) {
+                          table += '<tr>'
+                                   + '<td>' + (new Date(axisData[i][0]).getMonth()+1)+'-'+new Date(axisData[i][0]).getDate()+' '+new Date(axisData[i][0]).getHours()+':'+new Date(axisData[i][0]).getMinutes() + '</td>' //axisData[i].getFullYear()+'-'+(axisData[i].getMonth()+1)+'-'+axisData[i].getDate()+' '+axisData[i].getHours()+':'+axisData[i].getMinutes();
+                                   + '<td>' + axisData[i][1] + '</td>'
+                                   + '</tr>';
+                      }
+                      table += '</tbody></table>';
+                      return table;
+                  }
+                  },
+
+                  // magicType : {show: true, type: ['line', 'bar']},
+                  // restore : {show: true},
+                  saveAsImage : {show: true}
+              }
+          },
           series : [
               {
                   name: '尿量',
                   type: 'line',
-                  symbol:'roundRect',
+                  symbol:'emptyCircle',
                   symbolSize :8,
+                  itemStyle:{
+                    normal:{
+                      color:"#33cccc"
+                    }
+                  },
                   // showAllSymbol: true,
                   // symbolSize: function (value){
                   //     return Math.round(value[2]/10) + 2;
                   // },
-                  data: $scope.ChartData
+                  data: $scope.ChartData5
               }
           ]
       };
@@ -539,134 +704,126 @@ angular.module('tdy.controllers', ['ionic','kidney.services','ionic-datepicker']
       });
       VitalSign.getVitalSigns({userId:Storage.get("getpatientId"),type:'心率'}).then(
       function(Data){
-        $scope.ChartData=[];
+        $scope.ChartData6=[];
         console.log(Data.results.length)
         for(var i=0;i<Data.results.length;i++){
           if(Data.results[i].code=="心率"){
             for(var j=0;j<Data.results[i].data.length;j++){
-              $scope.ChartData.push([new Date(new Date(Data.results[i].data[j].time)-8*3600*1000),Data.results[i].data[j].value])
+              $scope.ChartData6.push([new Date(new Date(Data.results[i].data[j].time)-8*3600*1000),Data.results[i].data[j].value])
             }
           }
         }
-        if($scope.ChartData.length){
-          $scope.chartdiv=true;
+        if($scope.ChartData6.length){
+              
+          $scope.chartdiv5=true;
         }else{
-          $scope.chartdiv=false;
+          $scope.chartdiv5=false;
         }
         var option1 = {
-          title : {
-              text : '心率',
-              subtext : '次/分钟'
-          },
-          tooltip : {
-              trigger: 'axis'
-          },
-          dataZoom: {
-              show: true
-              // start : 50
-          },
-          legend : {
-              data : ['心率']
-          },
-          grid: {
-              y2: 80
-          },
-          xAxis : [
-              {
-                  type : 'time',
-                  splitNumber:8//分割的个数
-              }
-          ],
-          yAxis : [
-              {
-                  type : 'value',
-                  min:30
-              }
-          ],
-          series : [
-              {
-                  name: '心率',
-                  type: 'line',
-                  symbol:'roundRect',
-                  symbolSize :8,
-                  data: $scope.ChartData
-              }
-          ]
-      };
+              title : {
+                  text : '心率',
+                  subtext : '次/分钟'
+              },
+              tooltip : {
+                  trigger: 'axis'
+                  // formatter : function (params) {
+                  //     var date = new Date(params.value[0]);
+                  //     data = date.getFullYear() + '-'
+                  //            + (date.getMonth() + 1) + '-'
+                  //            + date.getDate() + ' '
+                  //            + date.getHours() + ':'
+                  //            + date.getMinutes();
+                  //     return data + '<br/>'
+                  //            + params.value[1] + ', ' 
+                  //            + params.value[2];
+                  // }
+              },
+              dataZoom: {
+                  show: true
+                  // start : 50
+              },
+              legend : {
+                  data : ['心率']
+              },
+              grid: {
+                  y2: 80
+              },
+              xAxis : [
+                  {
+                      type : 'time'
+                      // splitNumber:8//分割的个数
+                  }
+              ],
+              yAxis : [
+                  {
+                      type : 'value',
+                      min:30
+                  }
+              ],
+              toolbox: {
+                  show : true,
+                  feature : {
+                      // mark : {show: true},
+                      dataView : {
+                        show: true, 
+                        readOnly: true,
+                        optionToContent: function(opt) {
+                          var axisData = $scope.ChartData6;
+                          console.log(axisData)
+                          var series = opt.series;
+                          var table = '<table style="width:100%;text-align:center"><tbody><tr>'
+                                       + '<td>时间</td>'
+                                       + '<td>' + series[0].name + '</td>'
+                                       + '</tr>';
+                          for (var i = 0, l = axisData.length; i < l; i++) {
+                              table += '<tr>'
+                                       + '<td>' + (new Date(axisData[i][0]).getMonth()+1)+'-'+new Date(axisData[i][0]).getDate()+' '+new Date(axisData[i][0]).getHours()+':'+new Date(axisData[i][0]).getMinutes() + '</td>' //axisData[i].getFullYear()+'-'+(axisData[i].getMonth()+1)+'-'+axisData[i].getDate()+' '+axisData[i].getHours()+':'+axisData[i].getMinutes();
+                                       + '<td>' + axisData[i][1] + '</td>'
+                                       + '</tr>';
+                          }
+                          table += '</tbody></table>';
+                          return table;
+                      }
+                      },
+
+                      // magicType : {show: true, type: ['line', 'bar']},
+                      // restore : {show: true},
+                      saveAsImage : {show: true}
+                  }
+              },
+              series : [
+                  {
+                      name: '心率',
+                      type: 'line',
+                      symbol:'Circle',
+                      symbolSize :8,
+                      itemStyle:{
+                        normal:{
+                          color:"#cc0033"
+                        }
+                      },
+                      // showAllSymbol: true,
+                      // symbolSize: function (value){
+                      //     return Math.round(value[2]/10) + 2;
+                      // },
+                      data: $scope.ChartData6
+                  }
+              ]
+          };
         var myChart = echarts.init(document.getElementById('chartdiv5'));
         myChart.setOption(option1);
 
       }, function(e) {  
       });
-  
-  //传参绘图
-  function createStockChart(chartname,ChartData,title,unit) {
 
-    chart="";
-    var chart = AmCharts.makeChart("chartname", {
-    "type": "serial",
-    "theme": "light",
-    "marginTop":0,
-    "marginRight": 80,
-    "dataProvider": ChartData,
-    "valueAxes": [{
-        "axisAlpha": 0,
-        "position": "left"
-    }],
-    "graphs": [{
-        "id":"g1",
-        "balloonText": "[[category]]<br><b><span style='font-size:14px;'>[[value]]</span></b>",
-        "bullet": "round",
-        "bulletSize": 8,
-        "lineColor": "#d1655d",
-        "lineThickness": 2,
-        "negativeLineColor": "#637bb6",
-        "type": "smoothedLine",
-        "valueField": "value"
-    }],
-    "chartScrollbar": {
-        "graph":"g1",
-        "gridAlpha":0,
-        "color":"#888888",
-        "scrollbarHeight":55,
-        "backgroundAlpha":0,
-        "selectedBackgroundAlpha":0.1,
-        "selectedBackgroundColor":"#888888",
-        "graphFillAlpha":0,
-        "autoGridCount":true,
-        "selectedGraphFillAlpha":0,
-        "graphLineAlpha":0.2,
-        "graphLineColor":"#c2c2c2",
-        "selectedGraphLineColor":"#888888",
-        "selectedGraphLineAlpha":1
-
-    },
-    "chartCursor": {
-        "categoryBalloonDateFormat": "YYYY-MM-DD",
-        "cursorAlpha": 0,
-        "valueLineEnabled":true,
-        "valueLineBalloonEnabled":true,
-        "valueLineAlpha":0.5,
-        "fullWidth":true
-    },
-    "dataDateFormat": "YYYY-MM-DD",
-    "categoryField": "time",
-    "categoryAxis": {
-        "minPeriod": "mm",
-        "parseDates": true,
-        "minorGridAlpha": 0.1,
-        "minorGridEnabled": true
-    },
-    "export": {
-        "enabled": true
-    }
-  });
-  }
   
 }])
 
 //任务设置--GL
 .controller('TaskSetCtrl', ['$scope', '$state', '$ionicPopup', 'Storage', 'Task', function ($scope, $state, $ionicPopup, Storage, Task) {
+  $scope.BacktoPD = function(){
+    $state.go('tab.patientDetail');
+  }
   //初始化
    var UserId = Storage.get('getpatientId'); 
    //UserId = "Test12";
@@ -897,6 +1054,9 @@ angular.module('tdy.controllers', ['ionic','kidney.services','ionic-datepicker']
 //健康信息--PXY
 .controller('HealthInfoCtrl', ['$scope','$timeout','$state','$ionicHistory','$ionicPopup','Storage','Health','Dict',function($scope, $timeout,$state,$ionicHistory,$ionicPopup,Storage,Health,Dict) {
   $scope.barwidth="width:0%";
+  $scope.BacktoPD = function(){
+    $state.go('tab.patientDetail');
+  }
   var patientId = Storage.get('getpatientId')
   //console.log(Storage.get('getpatientId'))
   // var patientId = 'U201702071766'  //测试ID
