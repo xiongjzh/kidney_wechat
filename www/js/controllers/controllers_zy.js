@@ -188,41 +188,38 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
                             User.getUserId({phoneNo:Verify.Phone}).then(function(data){
                                 if(data.results == 0){
                                     tempuserId = data.UserId
-                                    Doctor.getDoctorInfo({userId:data.UserId}).then(function(data){
-                                        if(data.result == "不存在的医生ID！"){
-                                            $scope.logStatus = "该手机号码没有医生权限,请确认手机号码或转移到肾事管家进行操作";
-                                            return;
-                                        }else {
-                                            $scope.logStatus = "该手机号码已经注册,请验证手机号绑定微信";
-                                            isregisted = true
-                                            User.sendSMS({
-                                                mobile:Verify.Phone,
-                                                smsType:2
-                                            })
-                                            .then(function(validCode)
+                                    if(ata.roles.indexOf('doctor') == -1){
+                                        $scope.logStatus = "该手机号码没有医生权限,请确认手机号码或转移到肾事管家进行操作";
+                                        return;
+                                    }else {
+                                        $scope.logStatus = "该手机号码已经注册,请验证手机号绑定微信";
+                                        isregisted = true
+                                        User.sendSMS({
+                                            mobile:Verify.Phone,
+                                            smsType:2
+                                        })
+                                        .then(function(validCode)
+                                        {
+                                            console.log(validCode)
+                                            if(validCode.results==0)
                                             {
-                                                console.log(validCode)
-                                                if(validCode.results==0)
+                                                unablebutton()
+                                                if(validCode.mesg.match("您的邀请码")=="您的邀请码")
                                                 {
-                                                    unablebutton()
-                                                    if(validCode.mesg.match("您的邀请码")=="您的邀请码")
-                                                    {
-                                                        $scope.logStatus="请稍后获取验证码";
-                                                    }
+                                                    $scope.logStatus="请稍后获取验证码";
                                                 }
-                                                else
-                                                {
-                                                    $scope.logStatus="验证码发送失败！";
-                                                }
-                                            },function(err)
+                                            }
+                                            else
                                             {
                                                 $scope.logStatus="验证码发送失败！";
-                                            })
-                                        }
-                                    },function(){
-                                        $scope.logStatus="连接超时！";
-                                    });
+                                            }
+                                        },function(err)
+                                        {
+                                            $scope.logStatus="验证码发送失败！";
+                                        })
+                                    }
                                 }
+                                
                             },function(){
                                 $scope.logStatus="连接超时！";
                             });
