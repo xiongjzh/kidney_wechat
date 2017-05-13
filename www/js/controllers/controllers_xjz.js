@@ -667,7 +667,15 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         //     window.JMessage.enterSingleConversation($state.params.chatId, $scope.params.key);
         //     getMsg(15);
         // }
-        New.insertNews({userId:$scope.params.UID,sendBy:$scope.params.chatId,type:$scope.params.newsType,readOrNot:1});
+        var loadWatcher = $scope.$watch('msgs.length',function(newv,oldv){
+            if(newv) {
+                loadWatcher();
+                var lastMsg=$scope.msgs[$scope.msgs.length-1];
+                if(lastMsg.fromID==$scope.params.UID) return;
+                return New.insertNews({userId:lastMsg.targetID,sendBy:lastMsg.fromID,type:$scope.params.newsType,readOrNot:1});
+            }
+        });
+        // New.insertNews({userId:$scope.params.UID,sendBy:$scope.params.chatId,type:$scope.params.newsType,readOrNot:1});
         $scope.getMsg(15).then(function(data){
             $scope.msgs=data;
             toBottom(true,400);
@@ -1068,7 +1076,12 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         });
         confirmPopup.then(function(res) {
             if (res) {
-                endCounsel($scope.params.realCounselType);
+                Account.modifyCounts({doctorId:Storage.get('UID'),patientId:$scope.params.chatId,modify:'900'})
+                .then(function(){
+                    endCounsel($scope.params.realCounselType);
+                },function(err){
+                    console.error(err);
+                })
             } else {
             }
         });
@@ -1620,7 +1633,14 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         $scope.params.teamId = $state.params.teamId;
         //
         
-        
+        var loadWatcher = $scope.$watch('msgs.length',function(newv,oldv){
+            if(newv) {
+                loadWatcher();
+                var lastMsg=$scope.msgs[$scope.msgs.length-1];
+                if(lastMsg.fromID==$scope.params.UID) return;
+                return New.insertNews({userId:lastMsg.targetID,sendBy:lastMsg.targetID,type:$scope.params.newsType,readOrNot:1});
+            }
+        });
         Doctor.getDoctorInfo({userId:Storage.get('UID')})
             .then(function(data){
                 thisDoctor=data.results;
@@ -1678,7 +1698,6 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             $rootScope.patient.undergo = false;
             $scope.params.isOver = true;
         }
-        New.insertNews({userId:$scope.params.UID,sendBy:$scope.params.groupId,type:$scope.params.newsType,readOrNot:1});
     })
     $scope.$on('$ionicView.enter', function() {
             wechat.settingConfig({ url: path }).then(function(data) {
@@ -1941,13 +1960,6 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         $scope.imageHandle.zoomTo(1, true);
         $scope.imageUrl = CONFIG.mediaUrl + (args[2].src_thumb || args[2].localId_thumb);
         $scope.modal.show();
-        // $scope.imageUrl = args[2];
-        // $scope.modal.show();
-        // if (args[1] == 'img') {
-        // window.JMessage.getOriginImageInSingleConversation($state.params.chatId, args[3], onImageLoad, onImageLoadFail);
-        // } else {
-        // $scope.imageUrl = args[3];
-        // }
     })
     $scope.$on('profile', function(event, args) {
         console.log(args)
@@ -1957,30 +1969,18 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
     $scope.$on('viewcard', function(event, args) {
         console.log(args[1]);
         event.stopPropagation();
-        // if (args[2].target.tagName == "IMG") {
-        //     $scope.imageHandle.zoomTo(1, true);
-        //     $scope.imageUrl = args[2].target.currentSrc;
-        //     console.log(args[2].target.attributes.hires.nodeValue);
-        //     $scope.modal.show();
-        // }
-        // else{
-        //     $state.go('tab.consult-detail',{consultId:args[1]});
-        // }
+
         if($scope.params.type=='0'){
             Communication.getConsultation({ consultationId: args[1].content.consultationId})
                 .then(function(data) {
+                    var ctype = data.result.status;
+                    if(ctype=='0') ctype='2';
                     $state.go('tab.group-chat',{'type':data.result.status,'teamId':$scope.params.teamId,'groupId':args[1].content.consultationId});
-                    // $scope.params.title+= '-'+data.result.patientId.name;
-                    // console.log(data)
-                    // $rootScope.patient = data.result;
-                    
                 })
         }
-        // $state.go('tab.consult-detail',{consultId:args[1]});
     })
 
     $scope.toolChoose = function(data) {
-        // console.log(data);
         if (data == 0) $state.go('tab.selectDoc');
         if (data == 1) $state.go('tab.selectTeam');
     }
