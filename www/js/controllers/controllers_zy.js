@@ -2274,7 +2274,54 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
         // Stop the ion-refresher from spinning
         $scope.$broadcast('scroll.refreshComplete');
     }
+    $scope.gocommentdetail=function(score,content){
+        console.log(score+content)
+        $state.go('tab.commentdetail',{rating:score,content:content})
+    }
 
+}])
+//"我”的评价详情
+.controller('SetCommentCtrl', ['$scope','$state', '$stateParams','$ionicHistory','Storage',function($scope,$state,$stateParams,$ionicHistory,Storage) {
+      $scope.comment={score:$stateParams.rating, commentContent:$stateParams.content};
+      // console.log($stateParams.rating+$stateParams.content)
+      $scope.editable=true;
+       
+      // //  //评论星星初始化
+      $scope.ratingsObject = {
+        iconOn: 'ion-ios-star',
+        iconOff: 'ion-ios-star-outline',
+        iconOnColor: '#FFD700',//rgb(200, 200, 100)
+        iconOffColor: 'rgb(200, 100, 100)',
+        rating: $scope.comment.score/2, 
+        minRating: 1,
+        readOnly:true
+        // callback: function(rating) {
+        //   $scope.ratingsCallback(rating);
+        // }
+      };
+      //$stateParams.counselId
+       //获取历史评论
+      // if($stateParams.counselId!=undefined&&$stateParams.counselId!=""&&$stateParams.counselId!=null){
+      //   console.log($stateParams.counselId)
+      //   Comment.getCommentsByC({counselId:$stateParams.counselId}).then(function(data){
+      //     if(data.results.length!=0){
+      //       // //初始化
+      //       $scope.comment.score=data.results[0].totalScore/2
+      //       $scope.comment.commentContent=data.results[0].content
+      //        //评论星星初始化
+      //        $scope.$broadcast('changeratingstar',$scope.comment.score,true);
+      //        $scope.editable=true;
+      //     }
+      //   }, function(err){
+      //     console.log(err)
+      //   })
+      // }
+
+      $scope.Goback=function(){
+        $ionicHistory.goBack();
+      }
+
+      
 }])
 
 

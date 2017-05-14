@@ -1,3 +1,26 @@
+angular.module('ionic-datepicker.service', [])
+
+  .service('IonicDatepickerService', function () {
+
+    this.monthsList = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+    this.getYearsList = function (from, to) {
+      console.log(from, to)
+      var yearsList = [];
+      var minYear = 1900;
+      var maxYear = new Date().getFullYear() + 1;
+
+      minYear = from ? new Date(from).getFullYear() : minYear;
+      maxYear = to ? new Date(to).getFullYear() : maxYear;
+
+      for (var i = maxYear; i >= minYear; i--) {
+        yearsList.push(i);
+      }
+
+      return yearsList;
+    };
+});
+
 angular.module('kidney.services', ['ionic','ngResource'])
 //配置图片白名单
 .config(['$compileProvider', function($compileProvider) {

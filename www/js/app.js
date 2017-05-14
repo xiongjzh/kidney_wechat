@@ -828,6 +828,20 @@ angular.module('kidney',[
         }
     })
 
+    //评价展示
+    .state('tab.commentdetail', {
+      url: '/commentdetail',
+      params:{rating:null,content:null},
+      cache:false,
+      views: {
+        'tab-me': {
+          cache:false,
+          templateUrl: 'partials/me/commentDoctor.html',
+          controller: 'SetCommentCtrl'
+        }
+      }
+    })
+    
     //设置
     .state('tab.set', {
         // cache: false,
