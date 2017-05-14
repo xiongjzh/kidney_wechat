@@ -89,7 +89,7 @@ angular.module('kidney.filters', [])
         var g="未知";
         if(hypertension==1)
             g='是'
-        if(hypertension==0)
+        if(hypertension==2)
             g='否'
         return g;
     }
