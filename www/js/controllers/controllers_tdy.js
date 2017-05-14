@@ -269,8 +269,8 @@ angular.module('tdy.controllers', ['ionic','kidney.services','ionic-datepicker']
               // }
           },
           dataZoom: {
-              show: true,
-              start : 50
+              show: true
+              // start : 50
           },
           legend : {
               data : ['收缩压','舒张压']
