@@ -2,11 +2,6 @@ angular.module('kidney.directives', ['kidney.services'])
 //消息模版，用于所有消息类型
 //XJZ
 .directive('myMessage',['Storage','CONFIG',function(Storage,CONFIG){
-    var picArr=[
-                {"src":"img/default_user.png","hiRes":"img/avatar.png"},
-                {"src":"img/ionic.png","hiRes":"img/avatar.jpg"},
-                {"src":"img/max.png","hiRes":"img/avatar.png"}
-            ];
     return {
         template: '<div ng-include="getTemplateUrl()"></div>',
         scope: {
@@ -39,14 +34,11 @@ angular.module('kidney.directives', ['kidney.services'])
                             }else{
                                 $scope.title= "患者使用在线"+ ($scope.counsel.type=='1'?'咨询':'问诊') + "服务"
                             }
-                            // if($scope.counsel.type==1){$scope.counsel.counseltype="咨询服务，医生只有三次回答机会"}
-                            // else if($scope.counsel.type==2){$scope.counsel.counseltype="问诊服务，医生可以不限次回答问题，点击结束按钮结束问诊"};
-                            // $scope.picurl=picArr;
+
                         // }catch(e){
                             // 
                         // }
                     }
-                    // return 'templates/msg/'+ type+'.html';
                 }
                 return 'templates/msg/'+type+'.html';
             }
