@@ -31,7 +31,6 @@
 	          <div class="col pd-0">				
 				<p class="m-b10 "><span class="f16 fc-33 f-w-5">{{patient.name}}</span><span class="f16 fc-33 f-w-5">&nbsp;&nbsp;&nbsp;{{patient.gender | filterGender}}</span>&nbsp;&nbsp;&nbsp;<span class="f16 fc-33 f-w-5">{{patient.birthday | filterAge}}岁</span>
 				<p>身份证号：{{patient.IDNo}}</p>
-				<p>地区：{{patient.address.province}} {{patient.address.city}}</p>
 				<p>是否VIP：{{patient.VIP | filterVIP}}</p>
 				<p>是否有高血压：{{patient.hypertension | filterhypertension}}</p>
 				<p>血型：{{patient.bloodType | filterbloodType}}</p>
