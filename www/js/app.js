@@ -697,12 +697,8 @@ angular.module('kidney',[
                 'tab-groups': {
                     templateUrl: 'partials/group/group-chat.html',
                     controller: 'GroupChatCtrl'
-                    // params:{'group':null,'type':'0','groupId':null}
                 },
-                // params:['group','typr','groupId']
             }
-            // params:{'type':'0','teamId':null,'groupId':null}
-            // params:['group','typr','groupId']
         })
     .state('tab.group-conclusion', {
             url: '/groups/conclusion/:groupId/:teamId',

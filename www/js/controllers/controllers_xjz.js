@@ -2000,6 +2000,18 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         $scope.imageUrl = src;
         $scope.modal.show();
     }
+    $scope.viewPatient = function(pid){
+        Storage.set('getpatientId',pid);
+        var statep={
+            type:$scope.params.type,
+            groupId:$scope.params.groupId,
+            teamId:$scope.params.teamId
+        }
+        Storage.set('backId','tab.group-chat');
+        Storage.set('groupChatParams',JSON.stringify(statep));
+        $state.go('tab.patientDetail');
+
+    }
     $scope.updateMsg = function(msg){
         console.info('updateMsg');
         var pos=arrTool.indexOf($scope.msgs,'createTimeInMillis',msg.createTimeInMillis);
