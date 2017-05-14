@@ -307,6 +307,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
                                     if(res.results.agreement=="0"){
                                         $state.go('tab.home');
                                     }else{
+                                        Storage.set('UID',tempuserId)
                                         $state.go('agreement',{last:'signin'});
                                     }
                                 },function(err){
