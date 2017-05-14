@@ -1650,7 +1650,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                 loadWatcher();
                 var lastMsg=$scope.msgs[$scope.msgs.length-1];
                 if(lastMsg.fromID==$scope.params.UID) return;
-                return New.insertNews({userId:lastMsg.targetID,sendBy:lastMsg.targetID,type:$scope.params.newsType,readOrNot:1});
+                return New.insertNews({userId:$scope.params.UID,sendBy:lastMsg.targetID,type:$scope.params.newsType,readOrNot:1});
             }
         });
         Doctor.getDoctorInfo({userId:Storage.get('UID')})

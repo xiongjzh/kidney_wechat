@@ -1,52 +1,60 @@
 <ion-view hide-tabs view-title="选择医生">
-<ion-nav-buttons side="right">
-      <button class="button button-icon" ng-click="confirmAdd()">添加</button>
-    </ion-nav-buttons>
+  <ion-nav-buttons side="right">
+    <button class="button button-icon" ng-click="confirmAdd()">添加</button>
+  </ion-nav-buttons>
 
-<div class="bar item-input-inset" style="position:absolute;top:44px;z-index:999;margin-top:0">
-        <div class="item-input-wrapper">
-            <i style="color:#3d6399;font-size:1.6em" class="icon ion-android-search placeholder-icon"></i>
-            <input type="search" ng-blur="doResume()" ng-model="search.name" placeholder="搜索医生姓名">
-            <i style="color:#EF473A;font-size:1.6em" class="icon ion-android-close placeholder-icon" ng-click="clearSearch()"></i>
-        </div>
-        <button  class="button button-clear button-positive" ng-click="goSearch()">
-            搜索
-        </button>
-       <!--  <button ng-show="isnotsearching" class="button button-clear button-positive ng-hide" ng-click="closeSearch()">
-            返回
-        </button> -->
+  <div class="bar item-input-inset" style="position:absolute;top:44px;z-index:999;margin-top:0">
+    <div class="item-input-wrapper">
+      <i style="color:#3d6399;font-size:1.6em" class="icon ion-android-search placeholder-icon"></i>
+      <input type="search" ng-blur="doResume()" ng-model="search.name" placeholder="搜索医生姓名">
+      <i style="color:#EF473A;font-size:1.6em" class="icon ion-android-close placeholder-icon" ng-click="clearSearch()"></i>
     </div>
-<div style="padding:3px 16px;position:absolute;top:88px;height:50px;width:100%;margin:0;max-height:30vh;overflow-y: scroll;" ng-hide="params.hidePanel" class="item">
+    <button  class="button button-clear button-positive" ng-click="goSearch()">
+      搜索
+    </button>
+    <!--  <button ng-show="isnotsearching" class="button button-clear button-positive ng-hide" ng-click="closeSearch()">
+      返回
+    </button> -->
+  </div>
+  <div style="padding:3px 16px;position:absolute;top:88px;height:50px;width:100%;margin:0;max-height:30vh;overflow-y: scroll;" ng-hide="params.hidePanel" class="item">
     <!-- <div style="display:block-inline;width:2em;height:2em;position:relative;margin:2px 4px 2px 0" ng-repeat="member in group.members"> -->
-            <img style="object-fit:cover;width:38px;height:38px;margin:2px" ng-repeat="member in group.members" src="{{member.photoUrl|| 'img/doctor.png'}}" />
-        <!-- </div> -->
+      <img style="object-fit:cover;width:38px;height:38px;margin:2px" ng-repeat="member in group.members" src="{{member.photoUrl|| 'img/doctor.png'}}" />
+    <!-- </div> -->
   </div>
 
   <ion-content style="padding-top:64px" class="has-subheader gray-back" >
- 
-<!--   <div class="bar item-input-inset bar-light">
-    <div class="item-input-wrapper">
-      <i style="color:#3d6399;font-size:1.6em" class="icon ion-android-search placeholder-icon"></i>
-      <input type="search" ng-blur="doResume()" ng-model="query.PatientName" ng-change="startSearch(query)" placeholder="搜索医生">
-      <i style="color:#EF473A;font-size:1.6em" class="icon ion-android-close placeholder-icon" ng-hide="clearIt" ng-click="clearSearch()"></i>
-    </div>
-  </div>  -->
-<div class="list">
-
-    <div class="item item-avatar" ng-repeat="d in doctors">
+    <!--<div class="bar item-input-inset bar-light">
+      <div class="item-input-wrapper">
+        <i style="color:#3d6399;font-size:1.6em" class="icon ion-android-search placeholder-icon"></i>
+        <input type="search" ng-blur="doResume()" ng-model="query.PatientName" ng-change="startSearch(query)" placeholder="搜索医生">
+        <i style="color:#EF473A;font-size:1.6em" class="icon ion-android-close placeholder-icon" ng-hide="clearIt" ng-click="clearSearch()"></i>
+      </div>
+    </div>  -->
+    <div class="list">
+      <div class="item item-avatar doctor-list" ng-repeat="d in doctors">
         <img src="{{d.photoUrl || 'img/doctor.png'}}">
         <div class="doctor-msg-left balanced balanced-border">专家团队</div>
         <div style="display:inline-block;width:70%">
-            <span>{{d.name}}</span> {{d.title}}
-            <p><span>{{d.workUnit}}</span> <span>{{d.department}}</span> </p>
-            <p><span>评分{{d.score}}</span> 问诊量：{{d.count2}} </p>
-            <p>擅长：{{d.major}}</p>
+          <span>{{d.name}}</span> {{d.title}}
+          <p><span>{{d.workUnit}}</span> <span>{{d.department}}</span> </p>
+          <p><span>评分{{d.score}}</span> 问诊量：{{d.count2}} </p>
+          <p>擅长：{{d.major}}</p>
         </div>
         <div style="display:inline-block;float:right;width:20%;border:0px">
-            <ion-checkbox  ng-model="d.check" ng-change="update($index)"></ion-checkbox>
+          <ion-checkbox  ng-model="d.check" ng-change="update($index)"></ion-checkbox>
         </div>
+      </div>
     </div>
-</div>
     <ion-infinite-scroll ng-if="moredata" on-infinite="loadMore()" distance="15%" ></ion-infinite-scroll>
   </ion-content>
 </ion-view>
+
+<style type="text/css">
+  /*.item-avatar.doctor-list {
+    min-height: 10px !important;
+  }*/
+  .doctor-list .item.item-checkbox.ng-empty.ng-valid, .doctor-list .item.item-checkbox.ng-not-empty.ng-valid {
+    height: 10px;
+    border: 0px;
+  }
+</style>
