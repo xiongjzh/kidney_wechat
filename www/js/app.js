@@ -39,6 +39,7 @@ angular.module('kidney',[
                 // alert(wechatData.openid)
                 // alert(wechatData.nickname)
                 Storage.set('openid',wechatData.openid)
+                Storage.set('wechathead',wechatData.headimgurl)
                 var logPromise = User.logIn({username:wechatData.openid,password:wechatData.openid,role:"doctor"});
                 logPromise.then(function(data){
                     console.log(data);
@@ -94,11 +95,14 @@ angular.module('kidney',[
                         
                         jmapi.users(data.results.userId);
 
-                        Doctor.getDoctorInfo({userId:data.results.userId})
-                        .then(function(response){
-                            thisDoctor = response.results;
+                        Doctor.getDoctorInfo({userId:Storage.get("UID")})
+                        .then(function(res){
+                            if(res.results.photoUrl==undefined||res.results.photoUrl==""){
+                                Doctor.editDoctorDetail({userId:Storage.get("UID"),photoUrl:wechatData.headimgurl}).then(function(r){
+                                    console.log(r);
+                                })
+                            }
                         },function(err){
-                            thisDoctor=null;
                         }) 
                         User.getAgree({userId:data.results.userId}).then(function(res){
                             if(res.results.agreement=="0"){

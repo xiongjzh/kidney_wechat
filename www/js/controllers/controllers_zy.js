@@ -116,7 +116,28 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
         Storage.set('validMode',1);//修改密码
         $state.go('phonevalid');   
     } 
-  
+    
+    User.getUserIDbyOpenId({openId:Storage.get('openid')}).then(function(data)
+    {
+        if (angular.isDefined(data.UserId) == true)
+        {
+              Doctor.getDoctorInfo({userId:Storage.get("UID")}).then(function(res){
+                console.log(Storage.get("UID"))
+                // console.log(res.results)
+                console.log(res.results.photoUrl)
+                // console.log(angular.fromJson(res.results))
+                if(res.results.photoUrl==undefined||res.results.photoUrl==""){
+                  Doctor.editDoctorDetail({userId:Storage.get("UID"),photoUrl:Storage.get('wechathead')}).then(function(r){
+                    console.log(r);
+                  })
+                }
+              })
+        }
+    },function(err)
+    {
+        console.log(err)
+    })
+
 }])
 
 
