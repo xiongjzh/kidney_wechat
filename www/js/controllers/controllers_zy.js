@@ -1379,6 +1379,9 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
             }
             else if(backId=="tab.did"){
                 $state.go('tab.did');
+            }else if(backId=='tab.group-chat'){
+                var p = JSON.parse(Storage.get('groupChatParams'));
+                $state.go('tab.group-chat',p);
             }else{
               $state.go('tab.patient');
             }
