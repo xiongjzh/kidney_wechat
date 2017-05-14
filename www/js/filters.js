@@ -51,6 +51,48 @@ angular.module('kidney.filters', [])
         return name;
     }
 }])
+.filter('progressname',[function(){
+    return function(type){
+        var name;
+        switch(type)
+        {
+          case "stage_5":
+            name="疾病活跃期";
+            break;
+          case "stage_6":
+            name="稳定期";
+            break;
+          case "stage_7":
+            name=">3年";
+            break;
+        }
+        return name;
+    }
+}])
+.filter('filterbloodType',[function(){
+    return function(type){
+        var name;
+        switch(type)
+        {
+          case 1:
+            name="A型";
+            break;
+          case 2:
+            name="B型";
+            break;
+          case 3:
+            name="AB型";
+            break;
+          case 4:
+            name="O型";
+            break;
+          case 5:
+            name="不确定";
+            break;
+        }
+        return name;
+    }
+}])
 .filter('hypertension',[function(){
     return function(type){
         var name="--";
@@ -112,18 +154,18 @@ angular.module('kidney.filters', [])
         var d=new Date(date)
         var ret=""
         if(date==null)
-        	return "-"
+            return "-"
         switch(format)
         {
-        	case "YYYY-MM-DD":
-        		ret=d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();
-        		break;
-        	case "MM-DD-YYYY":
-        		ret=(d.getMonth()+1)+'-'+d.getDate()+'-'+d.getFullYear();
-        		break;
-        	case "YYYY-MM-DD h:m":
-        		ret=d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()+' '+d.getHours()+':'+d.getMinutes();
-        		break;
+            case "YYYY-MM-DD":
+                ret=d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();
+                break;
+            case "MM-DD-YYYY":
+                ret=(d.getMonth()+1)+'-'+d.getDate()+'-'+d.getFullYear();
+                break;
+            case "YYYY-MM-DD h:m":
+                ret=d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()+' '+d.getHours()+':'+d.getMinutes();
+                break;
         }
         return ret;
     }

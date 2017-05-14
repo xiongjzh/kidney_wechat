@@ -24,6 +24,7 @@
     </a>
   </div>
   <ion-content class="has-header"  style="margin-top: 42px;">
+  <ion-refresher pulling-text="下拉刷新..." on-refresh="doRefresh()"></ion-refresher>
     <div class="list">
       <div class="item" ng-repeat="item in items | orderBy:'-time'" ng-click="gotoHealthDetail($event,item)">
         <div class="clearfix"><span class="f-fl f-w-5">{{item.label}}</span><span class="f-fr f-w-5">{{item.time|dateFormat:"YYYY-MM-DD"}}</span></div>

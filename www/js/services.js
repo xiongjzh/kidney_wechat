@@ -941,7 +941,8 @@ angular.module('kidney.services', ['ionic','ngResource'])
         return $resource(CONFIG.baseUrl + ':path/:route',{path:'wechat'},{
             settingConfig:{method:'GET', params:{route: 'settingConfig'}, timeout: 100000},
             getUserInfo:{method:'GET', params:{route: 'getUserInfo'}, timeout: 100000},
-            download:{method:'GET', params:{route: 'download'}, timeout: 100000}
+            download:{method:'GET', params:{route: 'download'}, timeout: 100000},
+            messageTemplate:{method:'GET', params:{route: 'messageTemplate'}, timeout: 100000}
         })
     }
 
@@ -2439,6 +2440,7 @@ angular.module('kidney.services', ['ionic','ngResource'])
             //  url:'patient_class'
            // }
     self.settingConfig = function(params){
+        params.role = "doctor";
         var deferred = $q.defer();
         Data.wechat.settingConfig(
             params,
@@ -2454,6 +2456,7 @@ angular.module('kidney.services', ['ionic','ngResource'])
             //  code:'3'
             // }
     self.getUserInfo = function(params){
+        params.role = "doctor";;
         var deferred = $q.defer();
         Data.wechat.getUserInfo(
             params,
@@ -2470,6 +2473,7 @@ angular.module('kidney.services', ['ionic','ngResource'])
             //  name:
             // }
     self.download = function(params){
+        params.role = "doctor";
         var deferred = $q.defer();
         Data.wechat.download(
             params,
@@ -2482,6 +2486,20 @@ angular.module('kidney.services', ['ionic','ngResource'])
         return deferred.promise;
     };
 
+    self.messageTemplate = function(params){
+        params.role = "patient";
+        var deferred = $q.defer();
+        Data.wechat.messageTemplate(
+            params,
+            function(data, headers){
+                deferred.resolve(data);
+            },
+            function(err){
+                deferred.reject(err);
+        });
+        return deferred.promise;
+    };
+    
     return self;
 }])
 .factory('jm', ['$q', 'Data', function($q, Data){

@@ -23,7 +23,7 @@
     </a>
   </div>
   <ion-content padding="true" class="has-header" style="margin-top: 42px;">
-
+  <ion-refresher pulling-text="下拉刷新..." on-refresh="doRefresh()"></ion-refresher>
   <!-- <select ng-model="vitalInfo" ng-change="changeVitalInfo(vitalInfo)" ng-controller="TestRecordCtrl">
       <option ng-repeat="option in options" >{{option.SignName}}</option>
   </select>   -->
