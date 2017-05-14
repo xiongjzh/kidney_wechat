@@ -417,6 +417,7 @@ angular.module('kidney',[
         url: '/home',
         views: {
             'tab-home':{
+                cache: false,
                 controller: 'homeCtrl',
                 templateUrl: 'partials/home/homepage.html'
             }
@@ -429,6 +430,7 @@ angular.module('kidney',[
         url: '/consult',
         views: {
             'tab-consult':{
+                cache: false,
                 controller: 'consultCtrl',
                 templateUrl: 'partials/consult/consult.html'
             }
@@ -454,6 +456,7 @@ angular.module('kidney',[
         url: '/groups/type/:type',
         views: {
             'tab-groups':{
+                cache: false,
                 controller: 'groupsCtrl',
                 templateUrl: 'partials/group/groups.html'
             }
@@ -482,6 +485,7 @@ angular.module('kidney',[
         url: '/doing',
         views: {
             'tab-consult':{
+                cache: false,
                 controller: 'doingCtrl',
                 templateUrl: 'partials/consult/doing.html'
             }
@@ -494,6 +498,7 @@ angular.module('kidney',[
         url: '/detail/:type/:chatId/:counselId',
         views: {
             'tab-consult':{
+                cache: false,
                 controller: 'detailCtrl',
                 templateUrl: 'partials/consult/detail.html'
             }
@@ -515,6 +520,7 @@ angular.module('kidney',[
         url: '/selectdoc',
         views: {
             'tab-consult':{
+                cache: false,
                 controller: 'selectDocCtrl',
                 templateUrl: 'partials/consult/select-doctor.html'
             }
@@ -526,6 +532,7 @@ angular.module('kidney',[
         url: '/selectteam',
         views: {
             'tab-consult':{
+                cache: false,
                 controller: 'selectTeamCtrl',
                 templateUrl: 'partials/consult/select-team.html'
             }
@@ -538,6 +545,7 @@ angular.module('kidney',[
         url: '/did',
         views: {
             'tab-consult':{
+                cache: false,
                 controller: 'didCtrl',
                 templateUrl: 'partials/consult/did.html'
             }
@@ -562,6 +570,7 @@ angular.module('kidney',[
         url: '/DoctorDiagnose',
         views: {
             'tab-patient':{
+                cache: false,
                 controller: 'DoctorDiagnoseCtrl',
                 templateUrl: 'partials/patient/DoctorDiagnose.html'
             }
@@ -572,6 +581,7 @@ angular.module('kidney',[
         url: '/TestRecord',
         views: {
             'tab-patient':{
+                cache: false,
                 controller: 'TestRecordCtrl',
                 templateUrl: 'partials/patient/testrecord.html'
             }
@@ -583,6 +593,7 @@ angular.module('kidney',[
         url: '/TaskSet',
         views: {
             'tab-patient':{
+                cache: false,
                 controller: 'TaskSetCtrl',
                 templateUrl: 'partials/patient/TaskSet.html'
             }
@@ -594,6 +605,7 @@ angular.module('kidney',[
         url: '/HealthInfo',
         views: {
             'tab-patient':{
+                cache: false,
                 controller: 'HealthInfoCtrl',
                 templateUrl: 'partials/patient/HealthInfo.html'
             }
@@ -606,6 +618,7 @@ angular.module('kidney',[
         params: {id:null},
         views: {
             'tab-patient':{
+                cache: false,
                 controller: 'HealthDetailCtrl',
                 templateUrl: 'partials/patient/editHealthInfo.html'
             }
@@ -617,6 +630,7 @@ angular.module('kidney',[
         url: '/newgroup',
         views: {
             'tab-groups': {
+                cache: false,
                 templateUrl: 'partials/group/new-group.html',
                 controller: 'NewGroupCtrl'
             }
@@ -626,6 +640,7 @@ angular.module('kidney',[
         url: '/groupsearch',
         views: {
             'tab-groups': {
+                cache: false,
                 templateUrl: 'partials/group/groups-search.html',
                 controller: 'GroupsSearchCtrl'
             }
@@ -635,6 +650,7 @@ angular.module('kidney',[
         url: '/doctorsearch',
         views: {
             'tab-groups': {
+                cache: false,
                 templateUrl: 'partials/group/doctor-search.html',
                 controller: 'DoctorSearchCtrl'
             }
@@ -644,6 +660,7 @@ angular.module('kidney',[
             url: '/groups/add/:teamId',
             views: {
                 'tab-groups': {
+                    cache: false,
                     templateUrl: 'partials/group/group-add.html',
                     controller: 'GroupAddCtrl'
                 }
@@ -653,6 +670,7 @@ angular.module('kidney',[
             url: '/groups/:teamId/kick',
             views: {
                 'tab-groups': {
+                    cache: false,
                     templateUrl: 'partials/group/group-kick.html',
                     controller: 'GroupKickCtrl'
                 }
@@ -664,6 +682,7 @@ angular.module('kidney',[
             url: '/groups/:teamId/addmember/:type/',
             views: {
                 'tab-groups': {
+                    cache: false,
                     templateUrl: 'partials/group/group-add-member.html',
                     controller: 'GroupAddMemberCtrl'
                 }
@@ -674,6 +693,7 @@ angular.module('kidney',[
             url: '/groups/:teamId/detail',
             views: {
                 'tab-groups': {
+                    cache: false,
                     templateUrl: 'partials/group/group-detail.html',
                     controller: 'GroupDetailCtrl'
                 }
@@ -684,6 +704,7 @@ angular.module('kidney',[
             url: '/groups/qrcode',
             views: {
                 'tab-groups': {
+                    cache: false,
                     templateUrl: 'partials/group/group-qrcode.html',
                     controller: 'GroupQrcodeCtrl'
                 }
@@ -695,6 +716,7 @@ angular.module('kidney',[
             url: '/groups/chat/t/:type/:groupId/:teamId',
             views: {
                 'tab-groups': {
+                    cache: false,
                     templateUrl: 'partials/group/group-chat.html',
                     controller: 'GroupChatCtrl'
                     // params:{'group':null,'type':'0','groupId':null}
@@ -708,6 +730,7 @@ angular.module('kidney',[
             url: '/groups/conclusion/:groupId/:teamId',
             views: {
                 'tab-groups': {
+                    cache: false,
                     templateUrl: 'partials/group/conclusion.html',
                     controller: 'GroupConclusionCtrl'
                 }
@@ -719,6 +742,7 @@ angular.module('kidney',[
         url: '/group/patients/:teamId',
         views: {
             'tab-groups':{
+                cache: false,
                 controller: 'groupPatientCtrl',
                 templateUrl: 'partials/group/group-patient.html'
             }
@@ -730,6 +754,7 @@ angular.module('kidney',[
         url: '/group/doctor/:memberId/profile',
         views: {
             'tab-groups':{
+                cache: false,
                 controller: 'doctorProfileCtrl',
                 templateUrl: 'partials/group/profile.html'
             }
@@ -745,6 +770,7 @@ angular.module('kidney',[
         url: '/schedual',
         views: {
             'tab-me':{
+                cache: false,
                 controller: 'schedualCtrl',
                 templateUrl: 'partials/me/schedual.html'
             }
@@ -756,6 +782,7 @@ angular.module('kidney',[
         url: '/qrcode',
         views: {
             'tab-me':{
+                cache: false,
                 controller: 'QRcodeCtrl',
                 templateUrl: 'partials/me/qrcode.html'
             }
@@ -768,6 +795,7 @@ angular.module('kidney',[
         url: '/myinfo',
         views: {
             'tab-me':{
+                cache: false,
                 controller: 'myinfoCtrl',
                 templateUrl: 'partials/me/myinfo.html'
             }
@@ -780,6 +808,7 @@ angular.module('kidney',[
         url: '/myfee',
         views: {
             'tab-me':{
+                cache: false,
                 controller: 'myfeeCtrl',
                 templateUrl: 'partials/me/myfee.html'
             }
@@ -792,6 +821,7 @@ angular.module('kidney',[
         url: '/feedback',
         views: {
             'tab-me':{
+                cache: false,
                 controller: 'feedbackCtrl',
                 templateUrl: 'partials/me/feedback.html'
             }
@@ -804,6 +834,7 @@ angular.module('kidney',[
         url: '/set',
         views: {
             'tab-me':{
+                cache: false,
                 controller: 'setCtrl',
                 templateUrl: 'partials/me/set.html'
             }
@@ -814,6 +845,7 @@ angular.module('kidney',[
         url: '/me/set/set-content/:type',
             views: {
             'tab-me': {
+                cache: false,
                 templateUrl: 'partials/me/set/set-content.html',
                 controller: 'set-contentCtrl'
             }
@@ -825,6 +857,7 @@ angular.module('kidney',[
         url: '/me/set/viewAgree',
         views: {
             'tab-me':{
+                cache: false,
                 controller: 'viewAgreeCtrl',
                 templateUrl: 'partials/me/set/viewAgree.html'
             }
@@ -836,6 +869,7 @@ angular.module('kidney',[
         url: '/about',
         views: {
             'tab-me':{
+                cache: false,
                 controller: 'aboutCtrl',
                 templateUrl: 'partials/me/about.html'
             }
