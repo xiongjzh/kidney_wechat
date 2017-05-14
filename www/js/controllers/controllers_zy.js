@@ -181,7 +181,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
                     User.getUserId({phoneNo:Verify.Phone}).then(function(data){
                         if(data.results == 0){
                             tempuserId = data.UserId
-                            if(ata.roles.indexOf('doctor') == -1){
+                            if(data.roles.indexOf('doctor') == -1){
                                 $scope.logStatus = "该手机号码没有医生权限,请确认手机号码或转移到肾事管家进行操作";
                                 return;
                             }else {
