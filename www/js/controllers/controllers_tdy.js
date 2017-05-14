@@ -1892,9 +1892,9 @@ angular.module('tdy.controllers', ['ionic','kidney.services','ionic-datepicker']
     $scope.getTChatDetail = function(Tchat) {
         var msg = JSON.parse(Tchat.url)
         var teamId = msg.teamId
-        var groupId = msg.targetId
+        var groupId = msg.targetID
         if(teamId == groupId) return $state.go("tab.group-chat",{type:0,teamId:teamId,groupId:groupId});
-        Communication.getConsultation({consultationId:msg.targetId})
+        Communication.getConsultation({consultationId:msg.targetID})
         .then(function(data){
             Storage.set('consultId',data.result.consultId)
             if(data.result.status==1){
