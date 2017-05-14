@@ -21,7 +21,7 @@
         <div class="list">
             <a class="item item-thumbnail-left" ng-repeat="fb in feedbacks" ng-click="gocommentdetail(fb.totalScore,fb.content)">
                 <img class="mgleft-10" ng-src="{{fb.patientId.photoUrl||'img/patient.png'}}">
-                <span class="span-text" style="margin-left: 10px">{{fb.patientId.name}}</span>
+                <span class="span-text" style="margin-left: 10px">用户</span>
                 <span style="text-align: right;float: right;font-size: 15px;color: #333333" >{{fb.time|dateFormat:"YYYY-MM-DD h:m"}}</span>
                 <p class="friend-detail-p mg-top10">评分:{{fb.totalScore}}</p>
                 <p class="friend-detail-p">描述：{{fb.content}}</p>
