@@ -214,6 +214,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
                         }
                         else{
                             $scope.logStatus = "该用户不存在！请返回登录页面进行注册！"
+                            return;
                         }
                         
                     },function(){
