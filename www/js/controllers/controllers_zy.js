@@ -652,7 +652,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
     }
     GetUnread();
     RefreshUnread = $interval(GetUnread,2000);
-    $scope.isWriting={'margin-top': '100px'};
+    $scope.isWriting={'margin-top': '165px'};
     if(!sessionStorage.addKBEvent)
     {
         // console.log("true")
@@ -667,7 +667,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
     }
     function keyboardHideHandler(e){
         $scope.$apply(function(){
-            $scope.isWriting={'margin-top': '100px'};
+            $scope.isWriting={'margin-top': '165px'};
         })
     }
     Doctor.getDoctorInfo({
