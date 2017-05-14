@@ -1112,7 +1112,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             msg.content.thumb=CONFIG.mediaUrl+msg.content['src_thumb'];
             $http.get(msg.content.thumb).then(function(data){
                 $scope.msgs.push(msg);
-                toBottom(true,300);
+                toBottom(true,400);
             })
         }else{
             $scope.msgs.push(msg);
@@ -1975,7 +1975,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                 .then(function(data) {
                     var ctype = data.result.status;
                     if(ctype=='0') ctype='2';
-                    $state.go('tab.group-chat',{'type':data.result.status,'teamId':$scope.params.teamId,'groupId':args[1].content.consultationId});
+                    $state.go('tab.group-chat',{'type':ctype,'teamId':$scope.params.teamId,'groupId':args[1].content.consultationId});
                 })
         }
     })
@@ -2013,7 +2013,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             msg.content.thumb=CONFIG.mediaUrl+msg.content['src_thumb'];
             $http.get(msg.content.thumb).then(function(data){
                 $scope.msgs.push(msg);
-                toBottom(true,300);
+                toBottom(true,400);
             })
         }else{
             $scope.msgs.push(msg);
