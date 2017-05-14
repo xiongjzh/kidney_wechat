@@ -775,6 +775,7 @@ angular.module('kidney.services', ['ionic','ngResource'])
         return $resource(CONFIG.baseUrl + ':path/:route',{path:'tasks'},{
             changeTaskstatus:{method:'GET', params:{route: 'status'}, timeout: 100000},
             changeTasktime:{method:'GET', params:{route: 'time'}, timeout: 100000},
+            insertTask:{method:'POST', params:{route: 'insertTaskModel'}, timeout: 100000},
             getUserTask:{method:'GET', params:{route: 'getUserTask'}, timeout: 100000},
             updateUserTask:{method:'POST', params:{route: 'updateUserTask'}, timeout: 100000}
         });
@@ -1094,6 +1095,22 @@ angular.module('kidney.services', ['ionic','ngResource'])
         });
         return deferred.promise;
     };
+    //params->{
+            //  userId:'U201704050002',//unique
+            //  sortNo:1,
+           // }
+    self.insertTask = function(params){
+        var deferred = $q.defer();
+        Data.Task2.insertTask(
+            params,
+            function(data, headers){
+                deferred.resolve(data);
+            },
+            function(err){
+                deferred.reject(err);
+        });
+        return deferred.promise;
+    };  
     //params->{
             //  userId:'U201704050002',//unique
             //  sortNo:1,

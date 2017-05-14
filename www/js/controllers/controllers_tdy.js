@@ -1,7 +1,7 @@
 angular.module('tdy.controllers', ['ionic','kidney.services','ionic-datepicker'])
 
 /////////////////////////tongdanyang/////////////////
-.controller('DoctorDiagnoseCtrl', ['$scope', 'Storage','ionicDatePicker','Patient','$state', function ($scope, Storage,ionicDatePicker,Patient,$state) {
+.controller('DoctorDiagnoseCtrl', ['Task','$scope', 'Storage','ionicDatePicker','Patient','$state', function (Task,$scope, Storage,ionicDatePicker,Patient,$state) {
   $scope.BacktoPD = function(){
     $state.go('tab.patientDetail');
   }
@@ -155,7 +155,7 @@ angular.module('tdy.controllers', ['ionic','kidney.services','ionic-datepicker']
     "diagprogress": encodeprogress(latestDiagnose.progress),
     "diagcontent":latestDiagnose.content
   }
-  console.log($scope.Diagnose)
+  //console.log($scope.Diagnose)
   var datepickerD = {
         callback: function (val) {  //Mandatory
             console.log('Return value from the datepicker popup is : ' + val, new Date(val));
@@ -177,18 +177,105 @@ angular.module('tdy.controllers', ['ionic','kidney.services','ionic-datepicker']
     $scope.openDatePicker = function(){
         ionicDatePicker.openDatePicker(datepickerD);
     };
+    var MonthInterval = function(usertime){
+        interval = new Date().getTime() - Date.parse(usertime);
+        return(Math.floor(interval/(24*3600*1000*30)));
+    }
 
+    var distinctTask = function(kidneyType,kidneyTime,kidneyDetail){
+        var sortNo = 1;
+        //console.log(kidneyType);
+        //console.log(kidneyDetail);
+        // if(kidneyTime){
+        //     kidneyTime = kidneyTime.substr(0,10);
+        // }
+        if(kidneyDetail){
+            var kidneyDetail = kidneyDetail[0];
+        }
+        switch(kidneyType)
+        {
+            case "class_1":
+                //肾移植
+                if(kidneyTime!=undefined && kidneyTime!=null && kidneyTime!=""){
+                    var month = MonthInterval(kidneyTime);
+                    console.log("month"+month);
+                    if(month>=0 && month<3){
+                        sortNo = 1;//0-3月
+                    }else if(month>=3 && month<6){
+                        sortNo = 2; //3-6个月
+                    }else if(month>=6 && month<36){
+                        sortNo = 3; //6个月到3年
+                    }else if(month>=36){
+                        sortNo = 4;//对应肾移植大于3年
+                    }
+
+                }
+                else{
+                    sortNo = 4;
+                }
+                break;
+            case "class_2": case "class_3"://慢性1-4期
+                if(kidneyDetail!=undefined && kidneyDetail!=null && kidneyDetail!=""){
+                    if(kidneyDetail=="stage_5"){//"疾病活跃期"
+                        sortNo = 5;
+                    }else if(kidneyDetail=="stage_6"){//"稳定期
+                        sortNo = 6;
+                    }else if(kidneyDetail == "stage_7"){//>3年
+                        sortNo = 7;
+
+                    }
+                }
+                else{
+                    sortNo = 6;
+                }
+                break;
+                
+            case "class_4"://慢性5期
+                sortNo = 8;
+                break;
+            case "class_5"://血透
+                sortNo = 9;
+                break;
+
+            case "class_6"://腹透
+                if(kidneyTime!=undefined && kidneyTime!=null && kidneyTime!=""){
+                    var month = MonthInterval(kidneyTime);
+                    //console.log("month"+month);
+                    if(month<6){
+                        sortNo = 10;
+                    }
+                    else{
+                        sortNo = 11;
+                    }
+                }
+                break;
+        }
+        return sortNo;
+
+    }
   $scope.saveDiagnose=function()
   {
     $scope.Diagnose.patientId=Storage.get('getpatientId');
     $scope.Diagnose.doctorId=Storage.get('UID');
     $scope.Diagnose.diagname=decodeDiseases($scope.Diagnose.diagname);
     $scope.Diagnose.diagprogress=decodeprogress($scope.Diagnose.diagprogress);
-    // console.log($scope.Diagnose)
+    //console.log($scope.Diagnose)
+    var D = angular.copy($scope.Diagnose)
+    //console.log(D)
 
     Patient.insertDiagnosis($scope.Diagnose)
     .then(function(data){
-      // console.log(data)
+        var task = distinctTask(D.diagname,D.diagoperationTime,D.diagprogress);
+        var patientId = Storage.get('getpatientId')
+        //console.log(task)
+        Task.insertTask({userId:patientId,sortNo:task}).then(
+            function(data){
+                //console.log(data)
+            },function(err){
+                //console.log("err" + err);
+            });
+        //console.log($scope.Diagnose)
+
       var lD={
           content:$scope.Diagnose.diagcontent,
           hypertension:$scope.Diagnose.diaghypertension,
