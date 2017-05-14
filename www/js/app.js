@@ -55,13 +55,13 @@ angular.module('kidney',[
                                  buttons: [
                                    { 
                                         text: '取消',
-                                        type: 'button-positive',
+                                        type: 'button',
                                         onTap: function(e) {
                                             $state.go('signin')
                                         }
                                     },
                                    {
-                                        text: '<b>確定</b>',
+                                        text: '確定',
                                         type: 'button-positive',
                                         onTap: function(e) {
                                             Storage.set('validMode',0)

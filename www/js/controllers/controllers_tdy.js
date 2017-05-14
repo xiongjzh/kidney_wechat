@@ -1067,7 +1067,7 @@ angular.module('tdy.controllers', ['ionic','kidney.services','ionic-datepicker']
          buttons: [
            { text: '取消' },
            {
-             text: '<b>保存</b>',
+             text: '保存',
              type: 'button-positive',
              onTap: function(e) {
                if (!$scope.data.value) {
