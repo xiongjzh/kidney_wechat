@@ -178,81 +178,48 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
             {
                 console.log(succ)
                 if($stateParams.phonevalidType=='wechat'){
-                        if (succ.mesg=="No authority!")
-                        {
-                            $scope.logStatus = "该手机号码没有医生权限,请确认手机号码或转移到肾事管家进行操作";
-                            return;
-                        }
-                        else if (succ.mesg=="User password isn't correct!")
-                        {
-                            User.getUserId({phoneNo:Verify.Phone}).then(function(data){
-                                if(data.results == 0){
-                                    tempuserId = data.UserId
-                                    if(ata.roles.indexOf('doctor') == -1){
-                                        $scope.logStatus = "该手机号码没有医生权限,请确认手机号码或转移到肾事管家进行操作";
-                                        return;
-                                    }else {
-                                        $scope.logStatus = "该手机号码已经注册,请验证手机号绑定微信";
-                                        isregisted = true
-                                        User.sendSMS({
-                                            mobile:Verify.Phone,
-                                            smsType:2
-                                        })
-                                        .then(function(validCode)
-                                        {
-                                            console.log(validCode)
-                                            if(validCode.results==0)
-                                            {
-                                                unablebutton()
-                                                if(validCode.mesg.match("您的邀请码")=="您的邀请码")
-                                                {
-                                                    $scope.logStatus="请稍后获取验证码";
-                                                }
-                                            }
-                                            else
-                                            {
-                                                $scope.logStatus="验证码发送失败！";
-                                            }
-                                        },function(err)
-                                        {
-                                            $scope.logStatus="验证码发送失败！";
-                                        })
-                                    }
-                                }
-                                
-                            },function(){
-                                $scope.logStatus="连接超时！";
-                            });
-                            
-                        }
-                        else
-                        {
-                            Storage.set('validMode',0)
-                            validMode = 0
-                            User.sendSMS({
-                                mobile:Verify.Phone,
-                                smsType:2
-                            })
-                            .then(function(validCode)
-                            {
-                                console.log(validCode)
-                                if(validCode.results==0)
+                    User.getUserId({phoneNo:Verify.Phone}).then(function(data){
+                        if(data.results == 0){
+                            tempuserId = data.UserId
+                            if(data.roles.indexOf('doctor') == -1){
+                                $scope.logStatus = "该手机号码没有医生权限,请确认手机号码或转移到肾事管家进行操作";
+                                return;
+                            }else {
+                                $scope.logStatus = "该手机号码已经注册,请验证手机号绑定微信";
+                                isregisted = true
+                                User.sendSMS({
+                                    mobile:Verify.Phone,
+                                    smsType:2
+                                })
+                                .then(function(validCode)
                                 {
-                                    unablebutton()
-                                    if(validCode.mesg.match("您的邀请码")=="您的邀请码")
+                                    console.log(validCode)
+                                    if(validCode.results==0)
                                     {
-                                        $scope.logStatus="请稍后获取验证码";
+                                        unablebutton()
+                                        if(validCode.mesg.match("您的邀请码")=="您的邀请码")
+                                        {
+                                            $scope.logStatus="请稍后获取验证码";
+                                        }
                                     }
-                                }
-                                else
+                                    else
+                                    {
+                                        $scope.logStatus="验证码发送失败！";
+                                    }
+                                },function(err)
                                 {
                                     $scope.logStatus="验证码发送失败！";
-                                }
-                            },function(err)
-                            {
-                                $scope.logStatus="验证码发送失败！";
-                            })
+                                })
+                            }
                         }
+                        else{
+                            $scope.logStatus = "该用户不存在！请返回登录页面进行注册！"
+                            return;
+                        }
+                        
+                    },function(){
+                        $scope.logStatus="连接超时！";
+                    });
                 }
                 else if(validMode==0&&succ.mesg=="User password isn't correct!")
                 {
@@ -340,6 +307,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
                                     if(res.results.agreement=="0"){
                                         $state.go('tab.home');
                                     }else{
+                                        Storage.set('UID',tempuserId)
                                         $state.go('agreement',{last:'signin'});
                                     }
                                 },function(err){
