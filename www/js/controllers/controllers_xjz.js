@@ -110,7 +110,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
      $scope.QRscan = function(){
         // alert(1)
         var config = "";
-        var path = "http://doctor.haihonghospitalmanagement.com/?code=" + Storage.get('code');
+        var path = $location.absUrl().split('#')[0]
         wechat.settingConfig({url:path}).then(function(data){
           // alert(data.results.timestamp)
           config = data.results;
@@ -575,7 +575,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         text: ''
     }
 
-    var path = "http://doctor.haihonghospitalmanagement.com/?code=" + Storage.get('code');
+    var path = $location.absUrl().split('#')[0]
     $scope.params = {
             //[type]:0=已结束;1=进行中;2=医生
             type: '',
@@ -1590,7 +1590,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
     $scope.input = {
         text: ''
     }
-    var path = "http://doctor.haihonghospitalmanagement.com/?code=" + Storage.get('code');
+    var path = $location.absUrl().split('#')[0]
     $scope.params = {
         type: '', //'0':团队交流  '1': 未结束病历  '2':已结束病历
         groupId: '',
