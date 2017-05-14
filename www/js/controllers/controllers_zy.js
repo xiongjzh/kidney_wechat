@@ -121,7 +121,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
 
 
 //手机号码验证
-.controller('phonevalidCtrl', ['$scope','$state','$interval', '$stateParams','Storage','User','$timeout', 'Doctor', function($scope, $state,$interval,$stateParams,Storage,User,$timeout,Doctor) {
+.controller('phonevalidCtrl', ['$scope','$state','$interval', '$stateParams','Storage','User','$timeout', 'Doctor', '$ionicPopup',function($scope, $state,$interval,$stateParams,Storage,User,$timeout,Doctor,$ionicPopup) {
     $scope.barwidth="width:0%";
     $scope.Verify={Phone:"",Code:""};
     $scope.veritext="获取验证码";
@@ -313,8 +313,25 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
                                 // },function(err){
                                 //     console.log(err);
                                 // })
-                                $scope.logStatus = "绑定成功，请重新登录！";
-                                $timeout(function(){$state.go('signin')},1000);
+                                $ionicPopup.show({   
+                                     title: '微信账号绑定手机账号成功，您的初试密码是123456，是否重置密码？',
+                                     buttons: [
+                                       { 
+                                            text: '取消',
+                                            type: 'button-positive',
+                                            onTap: function(e) {
+                                                $state.go('signin')
+                                            }
+                                          },
+                                       {
+                                            text: '<b>確定</b>',
+                                            type: 'button-positive',
+                                            onTap: function(e) {
+                                                $state.go('setpassword')
+                                            }
+                                       },
+                                       ]
+                                })
 
                               }
                           },function(){
