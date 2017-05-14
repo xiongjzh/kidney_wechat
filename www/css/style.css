@@ -1546,3 +1546,8 @@ display: inline-block;
   border-radius: 5px;
   background-color: red
 }
+
+.doctor-list .item.item-checkbox.ng-empty.ng-valid, .doctor-list .item.item-checkbox.ng-not-empty.ng-valid {
+  height: 10px;
+  border: 0px;
+}
