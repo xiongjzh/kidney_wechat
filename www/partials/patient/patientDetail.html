@@ -31,10 +31,12 @@
 	          <div class="col pd-0">				
 				<p class="m-b10 "><span class="f16 fc-33 f-w-5">{{patient.name}}</span><span class="f16 fc-33 f-w-5">&nbsp;&nbsp;&nbsp;{{patient.gender | filterGender}}</span>&nbsp;&nbsp;&nbsp;<span class="f16 fc-33 f-w-5">{{patient.birthday | filterAge}}岁</span>
 				<p>身份证号：{{patient.IDNo}}</p>
+<!-- 				<p>地区：{{patient.address.province}} {{patient.address.city}}</p> -->
 				<p>是否VIP：{{patient.VIP | filterVIP}}</p>
 				<p>是否有高血压：{{patient.hypertension | filterhypertension}}</p>
 				<p>血型：{{patient.bloodType | filterbloodType}}</p>
 				<p>过敏信息：{{patient.allergic}}</p>
+				<p>保险推送次数：{{Ins.count}}</p>
 			  </div>
 			</div>				
 			</ion-item>
@@ -49,8 +51,9 @@
 		    </div>					
 			<ion-item ng-if = "(RecentDiagnosis)">
 			     <p class="fc-6b ">肾病类型 {{RecentDiagnosis.name | classname}}</p>
-				 <p class="fc-6b ">疾病进程 {{RecentDiagnosis.progress | progressname}}</p>
-				 <p class="fc-6b ">开始日期 {{RecentDiagnosis.time |dateFormat:"YYYY-MM-DD"}}</p>
+				 <p class="fc-6b " ng-if ="(RecentDiagnosis.progress)">疾病进程 {{RecentDiagnosis.progress | progressname}}</p>
+				 <p class="fc-6b " ng-if ="(RecentDiagnosis.content)">诊断内容 {{RecentDiagnosis.content}}</p>
+				 <p class="fc-6b " ng-if ="(RecentDiagnosis.time)">开始日期 {{RecentDiagnosis.time |dateFormat:"YYYY-MM-DD"}}</p>
 			</ion-item>				
         </div>
     </ion-content>
