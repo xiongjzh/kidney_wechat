@@ -719,7 +719,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                         console.log(err);
                     })
                 }
-                if(data.msg.targetType=='custom' && data.msg.content.type=='counsel-upgrade'){
+                if(data.msg.contentType=='custom' && data.msg.content.type=='counsel-upgrade'){
                     $scope.$apply(function(){
                         $scope.counseltype='2';
                     });
