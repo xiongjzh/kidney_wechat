@@ -348,6 +348,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
                                             text: '確定',
                                             type: 'button-positive',
                                             onTap: function(e) {
+                                                Storage.set('validMode',1)
                                                 $state.go('setpassword')
                                             }
                                        },
