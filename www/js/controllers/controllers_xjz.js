@@ -707,7 +707,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                         $scope.pushMsg(data.msg);
                     });
                 }
-                if($scope.params.type != '2' && data.msg.targetType=='custom' && data.msg.content.type=='card'){
+                if($scope.params.type != '2' && data.msg.targetType=='custom' && (data.msg.content.type=='card' || data.msg.content.type=='counsel-payment')){
                     Communication.getCounselReport({counselId:data.msg.content.counselId})
                     .then(function(data){
                         console.log(data)
@@ -718,6 +718,12 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                     },function(err){
                         console.log(err);
                     })
+                }
+                if(data.msg.contentType=='custom' && data.msg.content.type=='counsel-upgrade'){
+                    $scope.$apply(function(){
+                        $scope.counseltype='2';
+                    });
+                    $scope.counselstatus=1;
                 }
                 New.insertNews({userId:$scope.params.UID,sendBy:$scope.params.chatId,type:$scope.params.newsType,readOrNot:1});
                                 // $rootScope.$broadcast('receiveMessage',data);
