@@ -225,74 +225,6 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         updateTime: 0
     }
 
-    // function msgNoteGen(msg){
-    //     var fromName='',note='';
-    //     if(msg.targetType=='group') fromName=msg.fromName+ ':';
-
-    //     if(msg.contentType=='text'){
-    //         note=msg.content.text;
-    //     }else if(msg.contentType=='image'){
-    //         note='[图片]';
-    //     }else if(msg.contentType=='voice'){
-    //         note='[语音]';
-    //     }else if(msg.contentType=='custom'){
-    //         if(msg.content.contentStringMap.type='card') note='[患者病历]';
-    //         else if(msg.content.contentStringMap.type='contact') note='[联系人名片]';
-    //     }
-    //     return fromName +note;
-    // }
-    // function setSingleUnread(doctors){
-    //     return $q(function(resolve,reject){
-    //         if(window.JMessage){
-    //             window.JMessage.getAllSingleConversation(
-    //             function(data){
-    //                 if(data!=''){
-    //                     var conversations = JSON.parse(data);
-    //                     for(var i in doctors){
-    //                         var index=arrTool.indexOf(conversations,'targetId',doctors[i].doctorId.userId);
-    //                         if(index!=-1){
-    //                             doctors[i].unRead=conversations[index].unReadMsgCnt;
-    //                             doctors[i].latestMsg = msgNoteGen(conversations[index].latestMessage);
-    //                             doctors[i].lastMsgDate = conversations[index].lastMsgDate;
-    //                         }
-    //                     }
-    //                 }
-    //                 resolve(doctors);
-    //             },function(err){
-    //                 $scope.doctors = doctors;
-    //                 resolve(doctors);
-    //             });
-    //         }else{
-    //             resolve(doctors);
-    //         }
-    //     });
-    // }
-    // function setGroupUnread(teams){
-    //     return $q(function(resolve,reject){
-    //         if(window.JMessage){
-    //             window.JMessage.getAllGroupConversation(
-    //             function(data){
-    //                 if(data!=''){
-    //                    var conversations = JSON.parse(data);
-    //                     for(var i in teams){
-    //                         var index=arrTool.indexOf(conversations,'targetId',teams[i].teamId);
-    //                         if(index!=-1) {
-    //                             teams[i].unRead=conversations[index].unReadMsgCnt;
-    //                             teams[i].latestMsg = msgNoteGen(conversations[index].latestMessage);
-    //                             teams[i].lastMsgDate = conversations[index].lastMsgDate;
-    //                         }
-    //                     }
-    //                 }
-    //                 resolve(teams);
-    //             },function(err){
-    //                 resolve(teams);
-    //             });
-    //         }else{
-    //             resolve(teams);
-    //         }
-    //     });
-    // }
-
     $scope.load = function(force) {
         var time = Date.now();
         if (!force && time - $scope.params.updateTime < 60000){
@@ -342,54 +274,8 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         $scope.params.isTeam = $state.params.type == '0';
         $scope.params.showSearch = false;
     })
-    // $scope.$on('receiveMessage',function(event, msg) {
-        // $scope.load();
-    // });
     $scope.$on('$ionicView.enter', function() {
         $scope.load(true);
-        // wechat.settingConfig({ url: $location.absUrl() }).then(function(data) {
-        //     // alert(data.results.timestamp)
-        //     config = data.results;
-        //     config.jsApiList = ['chooseImage', 'uploadImage']
-        //         // alert(config.jsApiList)
-        //         // alert(config.debug)
-        //     wx.config({
-        //         debug: true,
-        //         appId: config.appId,
-        //         timestamp: config.timestamp,
-        //         nonceStr: config.nonceStr,
-        //         signature: config.signature,
-        //         jsApiList: config.jsApiList
-        //     })
-            // wx.ready(function() {
-            //     wx.checkJsApi({
-            //         jsApiList: ['chooseImage', 'uploadImage'],
-            //         success: function(res) {
-            //             wx.chooseImage({
-            //                 count: 1,
-            //                 sizeType: ['original', 'compressed'],
-            //                 sourceType: ['album'],
-            //                 success: function(res) {
-            //                     var localIds = res.localIds;
-            //                     wx.uploadImage({
-            //                         localId: localIds[0],
-            //                         isShowProgressTips: 1, // 默认为1，显示进度提示
-            //                         success: function(res) {
-            //                             var serverId = res.serverId; // 返回图片的服务器端ID
-            //                             wechat.
-            //                         }
-            //                     })
-            //                 }
-            //             })
-            //         }
-            //     });
-            // })
-        //     wx.error(function(res) {
-        //         console.error(res);
-        //         alert(res.errMsg)
-        //     })
-        // });
-
     })
     $scope.doRefresh = function(){
         $scope.load();
@@ -944,35 +830,21 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         });
     }
 
-    function onImageLoad(path) {
-        $scope.$apply(function() {
-            $scope.imageUrl = path;
-        })
-            // window.JMessage.getConversationList(function(data){console.log(JSON.parse(data));},
-            //   function(err){console.log(err)});
-            // window.JMessage.getSingleConversation(function(data){console.log(JSON.parse(data));},
-            //   function(err){console.log(err)});
-    }
+    // function onImageLoad(path) {
+    //     $scope.$apply(function() {
+    //         $scope.imageUrl = path;
+    //     })
+    // }
 
-    function onImageLoadFail(err) {
+    // function onImageLoadFail(err) {
 
-    }
+    // }
     $scope.$on('image', function(event, args) {
         console.log(args)
         event.stopPropagation();
         $scope.imageHandle.zoomTo(1, true);
         $scope.imageUrl = CONFIG.mediaUrl + (args[2].src_thumb || args[2].localId_thumb);
         $scope.modal.show();
-        // if (args[1] == 'img') {
-        // window.JMessage.getOriginImageInSingleConversation($state.params.chatId, args[3], onImageLoad, onImageLoadFail);
-        // } else {
-        // getImage(url,onImageLoad,onImageLoadFail)
-        // $scope.imageUrl = args[3];
-        // }
-        // $scope.image={src:$scope.msgs[msgIndex].content.localThumbnailPath +'.'+ $scope.msgs[msgIndex].content.format};
-        // console.log($scope.allImage);
-        // $scope.imageUrl=imageUrl;
-        // $scope.showModal('templates/msg/imageViewer.html');
     })
     $scope.closeModal = function() {
         $scope.imageHandle.zoomTo(1, true);
@@ -1032,7 +904,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         if (data == 1) $state.go('tab.selectTeam', { msg: content });
     }
     $scope.$on('profile', function(event, args) {
-        console.log(args[1])
+        event.stopPropagation();
         if(args[1].direct=='receive'){
             if($scope.params.type=='2'){
                 return $state.go('tab.group-profile', { memberId: args[1].fromID });
@@ -1042,19 +914,10 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             }
 
         }
-
-        // if($scope.params.type=='2'){
-        //医生
-        // $state.go('tab.group-profile', { memberId: args[1].fromName });
-        // }else{
-            // $state.go('tab.patientDetail', { memberId: args[1] });
-        // }
-        event.stopPropagation();
     })
     function endCounsel(type){
         Counsel.changeStatus({doctorId:Storage.get('UID'),patientId:$scope.params.chatId,type:type,status:0})
         .then(function(data){
-
             var endlMsg={
                 type:'endl',
                 info:"咨询已结束",
@@ -1234,6 +1097,36 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         toBottom(true);
     }
     $scope.submitMsg = function() {
+        var template = {
+            "userId": $scope.params.chatId, //患者的UID
+            "role": "patient",
+            "postdata": {
+                "template_id": "N_0kYsmxrQq-tfJhGUo746G8Uem6uHZgK138HIBKI2I",
+                "data": {
+                    "first": {
+                        "value": "您的"+($scope.counseltype==1?'咨询':'问诊') +$scope.params.counsel.symptom+"已被回复！", //XXX取那个咨询或问诊的标题
+                        "color": "#173177"
+                    },
+                    "keyword1": {
+                        "value": $scope.params.counsel.help, //咨询的问题
+                        "color": "#173177"
+                    },
+                    "keyword2": {
+                        "value": $scope.input.text, //医生的回复
+                        "color": "#173177"
+                    },
+                    "keyword3": {
+                        "value": thisDoctor.name, //回复医生的姓名
+                        "color": "#173177"
+                    },
+                    "remark": {
+                        "value": "感谢您的使用！",
+                        "color": "#173177"
+                    }
+                }
+            }
+        }
+        wechat.messageTemplate(template);
         sendmsg($scope.input.text,'text');
         $scope.input.text = '';
     }
@@ -1859,37 +1752,12 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         })
     }
 
-
-    // function msgsRender(first,last){
-    //     while(first!=last){
-    //         $scope.msgs[first+1].diff=($scope.msgs[first+1].createTimeInMillis-$scope.msgs[first].createTimeInMillis)>300000?true:false;
-    //         first++;
-    //     }
-    // }
-    // $http.get("data/sampleMsgs.json").success(function(data) {
-    //     $scope.msgs = data;
-    //     // $scope.$apply(function(){
-    //         msgsRender(0,data.length-1);
-    //     // });
-    //     //
-
-    // });
-
-
     $scope.togglePanel = function() {
         $scope.params.hidePanel = !$scope.params.hidePanel;
     }
     $scope.viewGroup = function(){
         $state.go('tab.group-detail',{teamId:$scope.params.teamId});
     }
-
-    $scope.content = {
-            pics: [
-                'img/avatar.png',
-                'img/ben.png',
-                'img/mike.png'
-            ]
-        }
         //长按工具条
     // var options = [{
     //     name: '转发医生',
@@ -1934,15 +1802,15 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         }
     }
 
-    function onImageLoad(path) {
-        $scope.$apply(function() {
-            $scope.imageUrl = path;
-        })
-    }
+    // function onImageLoad(path) {
+    //     $scope.$apply(function() {
+    //         $scope.imageUrl = path;
+    //     })
+    // }
 
-    function onImageLoadFail(err) {
+    // function onImageLoadFail(err) {
 
-    }
+    // }
     $scope.$on('voice', function(event, args) {
         console.log(args)
         event.stopPropagation();
