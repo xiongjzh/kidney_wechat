@@ -11,7 +11,7 @@
                 <div>
                     <div style="display:inline-block;margin-right:1.2em;font-size:1.25em">{{patient.patientId.name}} </div>
                     <div style="display:inline-block">{{patient.patientId.gender | filterGender}} {{patient.patientId.birthday | filterAge}}</div>
-                    <div style="display:inline-block;float:right">{{patient.time |msgdate}}</div>
+                    <div style="display:inline-block;float:right">{{patient.time |date : 'yyyy-M-d H:m'}}</div>
                 </div>
                 <p style="width:60%;display:inline-block;">主题:{{patient.diseaseInfo.symptom}}</p>
             </div>
