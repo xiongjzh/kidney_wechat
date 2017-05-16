@@ -2,9 +2,14 @@
     <!--     <ion-nav-buttons side="left">
       <button class="button button-icon icon ion-qr-scanner " ng-click="QRscan()"></button>
     </ion-nav-buttons> -->
-    <ion-nav-buttons side="right">
-        <a class="button button-icon icon ion-qr-scanner" ng-click="QRscan()"></a>
-    </ion-nav-buttons>
+    <ion-nav-bar class="bar-positive " align-title="center">
+        <ion-nav-buttons side="left">
+          <button class="button button-icon icon ion-ios-arrow-left fc-ff" ng-click="$ionicGoBack()"></button>
+        </ion-nav-buttons>
+        <ion-nav-buttons side="right">
+            <a class="button button-icon icon ion-qr-scanner" href="#/tab/groups/search" ng-click="popover.show($event)"></a>
+        </ion-nav-buttons>
+    </ion-nav-bar>
    
         <div class="bar item-input-inset bar-light" style="position:absolute;top:44px;z-index:999">
             <div class="item-input-wrapper">

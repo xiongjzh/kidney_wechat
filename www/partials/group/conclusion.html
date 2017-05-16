@@ -1,8 +1,13 @@
 <ion-view hide-tabs view-title="病历结论">
     <!-- <ion-nav-bar class="bar-positive"> -->
-    <ion-nav-buttons side="right">
-        <button class="button button-icon" ng-click="save()"> 发送</button>
-    </ion-nav-buttons>
+    <ion-nav-bar class="bar-positive " align-title="center">
+        <ion-nav-buttons side="left">
+          <button class="button button-icon icon ion-ios-arrow-left fc-ff" ng-click="$ionicGoBack()"></button>      
+        </ion-nav-buttons>
+          <ion-nav-buttons side="right">
+            <button class="button button-icon" ng-click="save()"> 保存</button>
+        </ion-nav-buttons>
+      </ion-nav-bar>
     <!-- </ion-nav-bar> -->
     <ion-content class="gray-back" scroll="false">
         <div style="width:100%;margin:0;max-height:65vh;overflow-y: scroll;" class="list">
