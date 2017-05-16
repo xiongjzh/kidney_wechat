@@ -137,9 +137,12 @@ angular.module('kidney.filters', [])
 }])
 .filter('filterAge',[function(){
     return function(date){
-        var d=new Date(date)
-        var dateNow=new Date()
-        return dateNow.getFullYear()-d.getFullYear();
+        if(date===undefined) return '';
+        var d=new Date(date),
+            dateNow=new Date(),
+            age=dateNow.getFullYear()-d.getFullYear();
+        if(age>=0 && age<200) return age+'岁';
+        return '';
     }
 }])
 

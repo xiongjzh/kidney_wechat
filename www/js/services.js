@@ -942,7 +942,7 @@ angular.module('kidney.services', ['ionic','ngResource'])
             settingConfig:{method:'GET', params:{route: 'settingConfig'}, timeout: 100000},
             getUserInfo:{method:'GET', params:{route: 'getUserInfo'}, timeout: 100000},
             download:{method:'GET', params:{route: 'download'}, timeout: 100000},
-            messageTemplate:{method:'GET', params:{route: 'messageTemplate'}, timeout: 100000}
+            messageTemplate:{method:'POST', params:{route: 'messageTemplate'}, timeout: 100000}
         })
     }
 
@@ -2487,7 +2487,6 @@ angular.module('kidney.services', ['ionic','ngResource'])
     };
 
     self.messageTemplate = function(params){
-        params.role = "patient";
         var deferred = $q.defer();
         Data.wechat.messageTemplate(
             params,
