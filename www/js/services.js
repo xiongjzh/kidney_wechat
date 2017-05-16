@@ -2501,7 +2501,7 @@ angular.module('kidney.services', ['ionic','ngResource'])
     };
     
     self.createTDCticket = function(params){
-        params.role = "doctor";
+        params.role = "patient";
         var deferred = $q.defer();
         Data.wechat.createTDCticket(
             params,
@@ -2513,7 +2513,7 @@ angular.module('kidney.services', ['ionic','ngResource'])
         });
         return deferred.promise;
     };
-    
+
     return self;
 }])
 .factory('jm', ['$q', 'Data', function($q, Data){
