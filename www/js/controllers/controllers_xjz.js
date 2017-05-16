@@ -2164,7 +2164,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         if ($scope.modal) $scope.modal.remove();
     })
 }])
-.controller('selectDocCtrl', ['$state', '$scope', 'JM', '$ionicPopup','$ionicLoading','$ionicScrollDelegate','Patient', 'Storage','CONFIG', function($state, $scope, JM, $ionicPopup,$ionicLoading,$ionicScrollDelegate,Patient, Storage,CONFIG) {
+.controller('selectDocCtrl', ['$state', '$scope', 'JM', '$ionicPopup','$ionicLoading','$ionicScrollDelegate','Patient', 'Storage','CONFIG','wechat', function($state, $scope, JM, $ionicPopup,$ionicLoading,$ionicScrollDelegate,Patient, Storage,CONFIG,wechat) {
     $scope.params={
         moredata:true,
         skip:0,
@@ -2271,9 +2271,46 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                 }
                 socket.emit('newUser',{user_name:thisDoctor.name,user_id:thisDoctor.userId});
                 socket.emit('message',{msg:msgJson,to:doc.userId,role:'doctor'});
-                socket.on('messageRes',function(data){
+                socket.on('messageRes',function(messageRes){
+                    if(messageRes.msg.createTimeInMillis!=msgJson.createTimeInMillis) return;
+                    var csl = messageRes.msg.content.counsel;
                     socket.off('messageRes');
                     socket.emit('disconnect');
+                    var template = {
+                        "userId": doc.userId, //医生的UID
+                        "role": "doctor",
+                        "postdata": {
+                            "template_id": "DWrM__2UuaLxYf5da6sKOQA_hlmYhlsazsaxYX59DtE",
+                            "data": {
+                                "first": {
+                                    "value": thisDoctor.name+"向您转发了一个"+(csl.type==1?'咨询':'问诊')+"消息，请及时查看",
+                                    "color": "#173177"
+                                },
+                                "keyword1": {
+                                    "value": csl.counselId, //咨询ID
+                                    "color": "#173177"
+                                },
+                                "keyword2": {
+                                    "value": doc.name, //患者信息（姓名，性别，年龄）
+                                    "color": "#173177"
+                                },
+                                "keyword3": {
+                                    "value": csl.help, //问题描述
+                                    "color": "#173177"
+                                },
+                                "keyword4": {
+                                    "value": csl.time.substr(0,10), //提交时间
+                                    "color": "#173177"
+                                },
+
+                                "remark": {
+                                    "value": "感谢您的使用！",
+                                    "color": "#173177"
+                                }
+                            }
+                        }
+                    }
+                    wechat.messageTemplate(template);
                     $state.go('tab.detail', { type: '2', chatId: doc.userId,counselId:msgdata.counselId});
                 })
 
@@ -2366,7 +2403,8 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                             console.log(data);
                             socket.emit('newUser',{user_name:thisDoctor.name,user_id:thisDoctor.userId});
                             socket.emit('message',{msg:msgJson,to:team.teamId,role:'doctor'});
-                            socket.on('messageRes',function(data){
+                            socket.on('messageRes',function(messageRes){
+                                if(messageRes.msg.createTimeInMillis!=msgJson.createTimeInMillis) return;
                                 socket.off('messageRes');
                                 socket.emit('disconnect');
                                 $state.go('tab.group-chat', { type: '0', groupId:team.teamId, teamId: team.teamId });
