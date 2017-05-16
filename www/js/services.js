@@ -942,7 +942,8 @@ angular.module('kidney.services', ['ionic','ngResource'])
             settingConfig:{method:'GET', params:{route: 'settingConfig'}, timeout: 100000},
             getUserInfo:{method:'GET', params:{route: 'getUserInfo'}, timeout: 100000},
             download:{method:'GET', params:{route: 'download'}, timeout: 100000},
-            messageTemplate:{method:'POST', params:{route: 'messageTemplate'}, timeout: 100000}
+            messageTemplate:{method:'POST', params:{route: 'messageTemplate'}, timeout: 100000},
+            createTDCticket:{method:'POST', params:{route: 'createTDCticket'}, timeout: 100000}
         })
     }
 
@@ -2489,6 +2490,20 @@ angular.module('kidney.services', ['ionic','ngResource'])
     self.messageTemplate = function(params){
         var deferred = $q.defer();
         Data.wechat.messageTemplate(
+            params,
+            function(data, headers){
+                deferred.resolve(data);
+            },
+            function(err){
+                deferred.reject(err);
+        });
+        return deferred.promise;
+    };
+    
+    self.createTDCticket = function(params){
+        params.role = "doctor";
+        var deferred = $q.defer();
+        Data.wechat.createTDCticket(
             params,
             function(data, headers){
                 deferred.resolve(data);

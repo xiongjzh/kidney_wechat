@@ -7,7 +7,7 @@
     <ion-content has-bouncing="true" overflow-scroll="false">
         <div style="width:100%;height:100px;"></div>
         <div style="width:280px;height:350px;display:block;margin:auto;padding-top:20px;padding-left:20px;border:solid lightblue">
-         <div style="width:100px;height:90px;float:left;padding-top:10px;padding-left:10px;"><img style="width:60px;height:60px;" ng-src="img/doctor.png"></div>
+         <div style="width:100px;height:90px;float:left;padding-top:10px;padding-left:10px;"><img style="width:60px;height:60px;" ng-src="{{doctor.photoUrl||'img/doctor.png'}}"></div>
          <div style="width:150px;height:90px;float:left;padding-top:20px;">
                 <span>{{doctor.name}}</span> <span>{{doctor.title}}</span>
                 <p>{{doctor.workUnit}}&nbsp;&nbsp;&nbsp;
@@ -16,7 +16,8 @@
          </div>
 <!--         <div style="width:100%;padding-left:60px;"><img ng-src="img/default_user.png"></div> -->
          <div>
-         <qrcode  version=3 error-correction-level="M" size="225" data="{{params.userId}}"></qrcode>
+         <img style="width:250px;height:250px;" ng-src="{{doctor.qrcode||'img/doctor.png'}}">
+         <!-- <qrcode  version=3 error-correction-level="M" size="225" data="{{params.userId}}"></qrcode> -->
 <!--          <div style="color:#888;margin-top:10px">长按扫一扫我的二维码，关注我</div> -->
          </div>
     </ion-content>

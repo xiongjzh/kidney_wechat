@@ -1724,28 +1724,8 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
 }])
 
 //"我”二维码页
-.controller('QRcodeCtrl', ['Doctor','$scope','$state','$interval','$rootScope', 'Storage',  function(Doctor,$scope, $state,$interval,$rootScope,Storage) {
-    //$scope.hideTabs = true;
-    //$scope.userid=Storage.get('userid');
-    // $scope.doctor=meFactory.GetDoctorInfo($scope.userid);
-  
-
-    //  $scope.qrscan= function(){
-    //   QRScan.getCode({
-    //   userId:Storage.get('UID')
-    // })
-    //   .then(function(data){
-    //     console.log(data);
-    //   },function(err){
-    //     console.log(err);
-    //   })
-    // };
-
-    $scope.params = {
-        // groupId:$state.params.groupId
-        userId:Storage.get('UID')
-    }
-
+.controller('QRcodeCtrl', ['Doctor','$scope','$state','$interval','$rootScope', 'Storage',  'wechat',function(Doctor,$scope, $state,$interval,$rootScope,Storage,wechat) {
+    $scope.doctor = "";
     Doctor.getDoctorInfo({
         userId:Storage.get('UID')
     })
@@ -1754,6 +1734,30 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
         {
             // console.log(data)
             $scope.doctor=data.results;
+            if (angular.isDefined($scope.doctor.TDCticket) != true)
+            {
+                var params = {
+                    "userId":Storage.get('UID'),
+                    "postdata":{
+                        "action_name": "QR_LIMIT_STR_SCENE", 
+                        "action_info": {
+                            "scene": {
+                                "scene_str": Storage.get('UID')
+                            }
+                        }
+                    }
+                }
+                wechat.createTDCticket(params).then(function(data){
+                    $scope.doctor.TDCticket = "https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=" + data.results
+                },
+                function(err)
+                {
+                    console.log(err)
+                })
+            }
+            else{
+                $scope.doctor.TDCticket = "https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=" + $scope.doctor.TDCticket
+            }
         },
         function(err)
         {
