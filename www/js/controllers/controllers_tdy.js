@@ -1712,7 +1712,7 @@ angular.module('tdy.controllers', ['ionic','kidney.services','ionic-datepicker']
       },function(err){
 
       })
-    }; // function结束
+  }; // function结束
 
 
 
