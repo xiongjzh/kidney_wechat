@@ -902,6 +902,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
 //首页
 .controller('homeCtrl', ['Communication','$scope','$state','$interval','$rootScope', 'Storage','$http','$sce','$timeout','Doctor','New',function(Communication,$scope, $state,$interval,$rootScope,Storage,$http,$sce,$timeout,Doctor,New) {
     $scope.barwidth="width:0%";
+    var windowHeight=$(window).height();
     console.log(Storage.get('USERNAME'));    
     $scope.hasUnreadMessages = false;
     var RefreshUnread;
@@ -922,9 +923,12 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
     if(!sessionStorage.addKBEvent)
     {
         // console.log("true")
-        sessionStorage.addKBEvent=true;
-        window.addEventListener('native.keyboardshow', keyboardShowHandler);
-        window.addEventListener('native.keyboardhide', keyboardHideHandler);
+         $(window).resize(function () {          //当浏览器大小变化时
+            if($(window).height()<windowHeight)
+                keyboardShowHandler();
+            else
+                keyboardHideHandler();
+        });
     }
     function keyboardShowHandler(e){
         $scope.$apply(function(){
