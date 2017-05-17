@@ -16,7 +16,8 @@
                 <i style="color:#3d6399;font-size:1.6em" class="icon ion-android-search placeholder-icon"></i>
                 <input type="search" ng-blur="doResume()" ng-model="search" placeholder="搜索群号">
 
-                <i style="color:#EF473A;font-size:1.6em" class="icon ion-android-close placeholder-icon" ng-hide="clearIt" ng-click="clearSearch()"></i>
+                <!-- <i style="color:#EF473A;font-size:1.6em" class="icon ion-android-close placeholder-icon ng-hide" ng-show="search" ng-click="clearSearch()"></i> -->
+                <button-clear-input input = "search" origin = "" curr = ""></button>
             </div>
              <button class="button button-clear button-positive" ng-click="Searchgroup()">
             搜索

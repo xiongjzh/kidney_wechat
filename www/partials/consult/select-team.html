@@ -9,7 +9,8 @@
             <div class="item-input-wrapper">
                 <i style="color:#3d6399;font-size:1.6em" class="icon ion-android-search placeholder-icon"></i>
                 <input type="search" ng-model="query.name" ng-change="startSearch(query)" placeholder="搜索团队">
-                <i style="color:#EF473A;font-size:1.6em" class="icon ion-android-close placeholder-icon ng-hide" ng-hide="clearIt" ng-click="clearSearch()"></i>
+                <!-- <i style="color:#EF473A;font-size:1.6em" class="icon ion-android-close placeholder-icon ng-hide" ng-hide="clearIt" ng-click="clearSearch()"></i> -->
+                <button-clear-input input = "query.name" origin = "" curr = ""></button>
             </div>
         </div>
         <div class="list">

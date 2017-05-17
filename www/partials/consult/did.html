@@ -12,12 +12,13 @@
       </ion-nav-back-button> -->
     </ion-nav-bar>
     <ion-content style="background: #fafafa">
-        <div  class="bar bar-header item-input-inset" style="height:40px;">
-            <label class="item-input-wrapper">
+        <div class="bar bar-header item-input-inset" style="height:40px;">
+            <div class="item-input-wrapper">
                 <i class="icon ion-ios-search placeholder-icon"></i>
                 <input type="search" ng-model="search.name" placeholder="搜索患者姓名">
-                <i style="color:#EF473A;font-size:1.6em" class="icon ion-android-close placeholder-icon" ng-click="clearSearch()"></i>
-            </label>
+                <!-- <i style="color:#EF473A;font-size:1.6em" class="icon ion-android-close placeholder-icon ng-hide" ng-show="search.name" ng-click="clearSearch()"></i> -->
+                <button-clear-input input = "search.name" origin = "allpatients" curr = "patients"></button>
+            </div>
             <button  class="button button-clear button-positive" ng-click="goSearch()">
                 搜索
             </button>

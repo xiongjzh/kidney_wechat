@@ -12,7 +12,8 @@
             <div class="item-input-wrapper">
                 <i class="icon ion-ios-search placeholder-icon"></i>
                 <input type="search" ng-model="search.name" placeholder="搜索患者姓名">
-                <i style="color:#EF473A;font-size:1.6em" class="icon ion-android-close placeholder-icon" ng-click="clearSearch()"></i>
+                <!-- <i style="color:#EF473A;font-size:1.6em" class="icon ion-android-close placeholder-icon ng-hide" ng-show="search.name" ng-click="clearSearch()"></i> -->
+                <button-clear-input input = "search.name" origin = "allpatients" curr = "patients"></button>
             </div>
             <button  class="button button-clear button-positive" ng-click="goSearch()">
                 搜索

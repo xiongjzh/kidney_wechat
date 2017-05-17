@@ -138,6 +138,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
         console.log(err)
     })
 
+
 }])
 
 
@@ -203,7 +204,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
                         if(data.results == 0){
                             tempuserId = data.UserId
                             if(data.roles.indexOf('doctor') == -1){
-                                $scope.logStatus = "该手机号码没有医生权限,请确认手机号码或转移到肾事管家进行操作";
+                                $scope.logStatus = "该手机号码没有医生权限,请确认手机号码或返回登录页面进行注册！";
                                 return;
                             }else {
                                 $scope.logStatus = "该手机号码已经注册,请验证手机号绑定微信";
@@ -212,20 +213,16 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
                                     mobile:Verify.Phone,
                                     smsType:2
                                 })
-                                .then(function(validCode)
+                                .then(function(data)
                                 {
-                                    console.log(validCode)
-                                    if(validCode.results==0)
-                                    {
-                                        unablebutton()
-                                        if(validCode.mesg.match("您的邀请码")=="您的邀请码")
-                                        {
-                                            $scope.logStatus="请稍后获取验证码";
-                                        }
+                                    unablebutton();
+                                    if(data.mesg.substr(0,8)=="您的邀请码已发送"){
+                                        $scope.logStatus = "您的验证码已发送，重新获取请稍后";
+                                    }else if (data.results == 1){
+                                        $scope.logStatus = "验证码发送失败，请稍后再试";
                                     }
-                                    else
-                                    {
-                                        $scope.logStatus="验证码发送失败！";
+                                    else{
+                                        $scope.logStatus ="验证码发送成功！";
                                     }
                                 },function(err)
                                 {
@@ -256,20 +253,16 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
                         mobile:Verify.Phone,
                         smsType:2
                     })
-                    .then(function(validCode)
+                    .then(function(data)
                     {
-                        console.log(validCode)
-                        if(validCode.results==0)
-                        {
-                            unablebutton()
-                            if(validCode.mesg.match("您的邀请码")=="您的邀请码")
-                            {
-                                $scope.logStatus="请稍后获取验证码";
-                            }
+                        unablebutton();
+                        if(data.mesg.substr(0,8)=="您的邀请码已发送"){
+                            $scope.logStatus = "您的验证码已发送，重新获取请稍后";
+                        }else if (data.results == 1){
+                            $scope.logStatus = "验证码发送失败，请稍后再试";
                         }
-                        else
-                        {
-                            $scope.logStatus="验证码发送失败！";
+                        else{
+                            $scope.logStatus ="验证码发送成功！";
                         }
                     },function(err)
                     {
@@ -1155,11 +1148,11 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
         })
     }
 
-    $scope.clearSearch = function() {
-        $scope.search.name = '';
-        $scope.patients = $scope.allpatients;
-        $scope.search.name = '';
-    }
+    // $scope.clearSearch = function() {
+    //     $scope.search.name = '';
+    //     $scope.patients = $scope.allpatients;
+    //     $scope.search.name = '';
+    // }
     //----------------结束搜索患者------------------
     $ionicPopover.fromTemplateUrl('partials/others/sort_popover_consult.html', {
         scope: $scope
@@ -1251,11 +1244,11 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
         })
     }
 
-    $scope.clearSearch = function() {
-        $scope.search.name = '';
-        $scope.patients = $scope.allpatients;
-        $scope.search.name = '';
-    }
+    // $scope.clearSearch = function() {
+    //     $scope.search.name = '';
+    //     $scope.patients = $scope.allpatients;
+    //     $scope.search.name = '';
+    // }
     //----------------结束搜索患者------------------      
     $ionicPopover.fromTemplateUrl('partials/others/sort_popover_consult.html', {
         scope: $scope
@@ -1415,11 +1408,11 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
         })
     }
 
-    $scope.clearSearch = function() {
-        $scope.search.name = '';
-        $scope.patients = $scope.allpatients;
-        $scope.search.name = '';
-    }
+    // $scope.clearSearch = function() {
+    //     $scope.search.name = '';
+    //     $scope.patients = $scope.allpatients;
+    //     $scope.search.name = '';
+    // }
     //----------------结束搜索患者------------------
     $scope.doRefresh = function(){
         load();

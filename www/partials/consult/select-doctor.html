@@ -19,7 +19,8 @@
       <div class="item-input-wrapper">
         <i style="color:#3d6399;font-size:1.6em" class="icon ion-android-search placeholder-icon"></i>
         <input id="searchBox" type="search" ng-model="params.query" placeholder="搜索医生" autofocus>
-        <i style="color:#EF473A;font-size:1.6em" class="icon ion-android-close placeholder-icon  ng-hide" ng-show="params.query" ng-click="clearSearch()"></i>
+        <!-- <i style="color:#EF473A;font-size:1.6em" class="icon ion-android-close placeholder-icon  ng-hide" ng-show="params.query" ng-click="clearSearch()"></i> -->
+        <button-clear-input input = "params.query" origin = "" curr = ""></button>
       </div>
       <button class="button button-clear button-positive" ng-click="docSearch()">
             {{params.isSearch?'取消':'搜索'}}

@@ -12,7 +12,8 @@
     <div class="item-input-wrapper">
       <i style="color:#3d6399;font-size:1.6em" class="icon ion-android-search placeholder-icon"></i>
       <input type="search" ng-blur="doResume()" ng-model="search.name" placeholder="搜索医生姓名">
-      <i style="color:#EF473A;font-size:1.6em" class="icon ion-android-close placeholder-icon" ng-click="clearSearch()"></i>
+      <!-- <i style="color:#EF473A;font-size:1.6em" class="icon ion-android-close placeholder-icon" ng-click="clearSearch()"></i> -->
+      <button-clear-input input = "search.name" origin = "alldoctors" curr = "doctors" ng-click="clearSearch()"></button>
     </div>
     <button  class="button button-clear button-positive" ng-click="goSearch()">
       搜索
