@@ -1,13 +1,13 @@
 <ion-view show-tabs view-title='主页' hide-nav-bar="false">
 	<ion-nav-bar class="bar-positive" align-title="center">
 		<ion-nav-buttons side="left">
-			<!-- <a class="button icon  iconfont icon-saomiaoerweima" ng-click=""></a> -->
+			<a class="button" style="font-size: 32px;" ng-class="{'ion-arrow-expand':!isfullScreen,'ion-arrow-shrink':isfullScreen}" ng-click="fullScreen()"></a>
 	    </ion-nav-buttons>
 		<ion-nav-buttons side="right">
 			<a class="button button-icon icon ion-android-mail" href="#/messages" head-red-point='HasUnreadMessages'></a>
 	    </ion-nav-buttons>
     </ion-nav-bar>
-	<ion-slides  options="options" slider="data.slider" style="margin-top: 45px;height: 165px;">
+	<ion-slides  options="options" slider="data.slider" style="margin-top: 45px;height: 165px;" ng-show="!isfullScreen">
 		<ion-slide-page>
 			<div class="box"><img src="img/banner02@2x.png" style="width: 100%;"></div>
 		</ion-slide-page>

@@ -912,6 +912,21 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
     }
     GetUnread();
     RefreshUnread = $interval(GetUnread,2000);
+    $scope.isfullScreen=false;
+    $scope.fullScreen=function()
+    {
+        // console.log("full")
+        if($scope.isfullScreen)
+        {
+            $scope.isfullScreen=false;
+            $scope.isWriting={'margin-top': '100px'};
+        }
+        else
+        {
+            $scope.isfullScreen=true;
+            $scope.isWriting={'margin-top': '0px','z-index':'20'};
+        }
+    }
     $scope.isWriting={'margin-top': '165px'};
     if(!sessionStorage.addKBEvent)
     {
@@ -930,7 +945,14 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
     }
     function keyboardHideHandler(e){
         $scope.$apply(function(){
-            $scope.isWriting={'margin-top': '165px'};
+            if($scope.isfullScreen)
+            {
+                $scope.isWriting={'margin-top': '0px','z-index':'20'};
+            }
+            else
+            {
+                $scope.isWriting={'margin-top': '100px'};
+            }
         })
     }
     Doctor.getDoctorInfo({
@@ -2686,7 +2708,8 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
 }])
 
 //"我”排班页
-.controller('schedualCtrl', ['$scope','ionicDatePicker','$ionicPopup','Doctor','Storage', function($scope,ionicDatePicker,$ionicPopup,Doctor,Storage) {
+.controller('schedualCtrl', ['$scope','ionicDatePicker','$ionicPopup','Doctor','Storage','$interval', function($scope,ionicDatePicker,$ionicPopup,Doctor,Storage,$interval) {
+    $scope.dateC=new Date();
     var getSchedual=function()
     {
         Doctor.getSchedules({userId:Storage.get('UID')})
@@ -2709,18 +2732,41 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
         Doctor.getSuspendTime({userId:Storage.get('UID')})
         .then(function(data)
         {
-            // console.log(data.results.suspendTime)
+            console.log(data.results.suspendTime)
             if(data.results.suspendTime.length==0)
             {
                 $scope.stausText="接诊中..."
-                $scope.stausButtontText="停诊"
+                $scope.stausButtontText="设置停诊"
             }
             else
             {
-                $scope.stausText="停诊中..."
-                $scope.stausButtontText="接诊"
+                var date=new Date();
+                var dateNow=''+date.getFullYear();
+                (date.getMonth()+1)<10?dateNow+='0'+(date.getMonth()+1):dateNow+=(date.getMonth()+1)
+                date.getDate()<10?dateNow+='0'+date.getDate():dateNow+=date.getDate();
+                console.log(dateNow)
+
                 $scope.begin=data.results.suspendTime[0].start;
                 $scope.end=data.results.suspendTime[0].end;
+
+                date=new Date($scope.begin);
+                var dateB=''+date.getFullYear();
+                (date.getMonth()+1)<10?dateB+='0'+(date.getMonth()+1):dateB+=(date.getMonth()+1)
+                date.getDate()<10?dateB+='0'+date.getDate():dateB+=date.getDate();
+                date=new Date($scope.end);
+                var dateE=''+date.getFullYear();
+                (date.getMonth()+1)<10?dateE+='0'+(date.getMonth()+1):dateE+=(date.getMonth()+1)
+                date.getDate()<10?dateE+='0'+date.getDate():dateE+=date.getDate();
+
+                if(dateNow>=dateB&&dateNow<=dateE)
+                {
+                    $scope.stausText="停诊中..."
+                }
+                else
+                {
+                    $scope.stausText="接诊中..."
+                }
+                $scope.stausButtontText="取消停诊"
             }
         },function(err)
         {
@@ -2747,25 +2793,31 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
     $scope.stausText="接诊中..."
     $scope.showSchedual=true;
     getSchedual();
+    $interval(function(){
+        var getD=new Date();
+        if(getD.getDate()!=$scope.dateC.getDate())
+        {
+            $scope.dateC=new Date();
+            getSchedual();
+        }
+    },1000);
     var ipObj1 = {
         callback: function (val) {  //Mandatory
             // console.log('Return value from the datepicker popup is : ' + val, new Date(val));
             if($scope.flag==1)
             {
                 $scope.begin=val;
-                // console.log(1)
-                // var date=new Date(val)
-                // $scope.begin=date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate();
+                if($scope.end==undefined||$scope.begin>new Date($scope.end))
+                        $scope.end=$scope.begin;
             }
             else
             {
                 $scope.end=val;
-                // console.log(2);
-                // var date=new Date(val)
-                // $scope.end=date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate();
+                if($scope.begin!=undefined&&$scope.begin>new Date($scope.end))
+                    $scope.begin=$scope.end;
             }
         },
-        titleLabel: '停诊开始',
+        titleLabel: '',
         inputDate: new Date(),
         mondayFirst: true,
         closeOnSelect: false,
@@ -2776,17 +2828,29 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
         showTodayButton: true,
         dateFormat: 'yyyy MMMM dd',
         weeksList: ["周日","周一","周二","周三","周四","周五","周六"],
-        monthsList:["一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"]
+        monthsList:["一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"],
+        from:new Date()
     };
 
     $scope.openDatePicker = function(params){
+        ipObj1.titleLabel=params==1?'停诊开始日期':'停诊结束日期';
+        if(params==1)
+        {
+            if($scope.begin!=undefined)
+                ipObj1.inputDate=new Date($scope.begin);
+        }
+        else
+        {
+            if($scope.end!=undefined)
+                ipObj1.inputDate=new Date($scope.end);
+        }
         ionicDatePicker.openDatePicker(ipObj1);
         $scope.flag=params;//标识选定时间用于开始时间还是结束时间
     };
 
     $scope.showSch=function()
     {
-        if($scope.stausButtontText=="停诊")
+        if($scope.stausButtontText=="设置停诊")
         {
             $scope.showSchedual=false;
         }
@@ -2802,7 +2866,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
             .then(function(data)
             {
                 console.log(data)
-                $scope.stausButtontText="停诊"
+                $scope.stausButtontText="设置停诊"
                 $scope.stausText="接诊中..."
             },function(err)
             {
@@ -2828,10 +2892,8 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
             Doctor.insertSuspendTime(param)
             .then(function(data)
             {
-                console.log(data)
-                $scope.stausButtontText="接诊"
-                $scope.stausText="停诊中..."
                 $scope.showSchedual=true;
+                getSchedual();
             },function(err)
             {
                 console.log(err)

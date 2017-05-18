@@ -9,12 +9,13 @@
 
 			<div class="item noborder">
 				<h2>
-					状态：{{stausText}}
+					当前状态：{{stausText}}
 					<a class="button button-small button-positive" style="float:right " ng-click="showSch()">
 						{{stausButtontText}}
 					</a>
 				</h2>
-				<div ng-show="stausButtontText=='接诊'">
+				<div ng-show="stausButtontText=='取消停诊'">
+					<p>当前日期：{{dateC|dateFormat:"YYYY-MM-DD"}}</p>
 					<p>停诊开始：{{begin|dateFormat:"YYYY-MM-DD"}}</p>
 					<p>停诊结束：{{end|dateFormat:"YYYY-MM-DD"}}</p>
 				</div>
@@ -46,7 +47,7 @@
 					<div class="col schedual-border-right">日</div>
 				</div>
 				<div class="row">
-					<div class="col schedual-border" >上午</div>
+					<div class="col schedual-border" style="text-align: center;">上午</div>
 					<div class="col schedual-border" ng-click="changeWorkStatus(0)" ng-style="workStatus[0].style" ></div>
 					<div class="col schedual-border" ng-click="changeWorkStatus(1)" ng-style="workStatus[1].style" ></div>
 					<div class="col schedual-border" ng-click="changeWorkStatus(2)" ng-style="workStatus[2].style" ></div>
@@ -56,7 +57,7 @@
 					<div class="col schedual-border-right" ng-click="changeWorkStatus(6)" ng-style="workStatus[6].style" ></div>
 				</div>
 				<div class="row">
-					<div class="col schedual-border-bottom" >下午</div>
+					<div class="col schedual-border-bottom" style="text-align: center;">下午</div>
 					<div class="col schedual-border-bottom" ng-click="changeWorkStatus(7)" ng-style="workStatus[7].style" ></div>
 					<div class="col schedual-border-bottom" ng-click="changeWorkStatus(8)" ng-style="workStatus[8].style" ></div>
 					<div class="col schedual-border-bottom" ng-click="changeWorkStatus(9)" ng-style="workStatus[9].style" ></div>

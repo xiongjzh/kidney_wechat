@@ -160,7 +160,7 @@ margin-bottom:10px!important; ;
   padding: 0;
 }
 /*弹窗*/
-.popup-container .popup{
+/*.popup-container .popup{
   width: 80%;
 }
 .popup-head{
@@ -178,7 +178,7 @@ margin-bottom:10px!important; ;
 }
 .popup-container textarea{
   padding:15px;
-}
+}*/
 /*图片居中*/
 .img-cen{
   display: table;
