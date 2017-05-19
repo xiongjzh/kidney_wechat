@@ -263,7 +263,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
                     }
                     else 
                     {
-                        if (succ.roles.indexOf('doctor') == -1)
+                        if (succ.roles.indexOf('doctor') != -1)
                         {
                             $scope.logStatus="您已经注册过了";
                         }
