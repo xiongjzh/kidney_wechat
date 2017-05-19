@@ -191,10 +191,8 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
             console.log(Verify.Phone)
             Storage.set('RegisterNO',$scope.Verify.Phone)
             //验证手机号是否注册，没有注册的手机号不允许重置密码
-            User.logIn({
-                username:Verify.Phone,
-                password:' ',
-                role:'doctor'
+            User.getUserId({
+                phoneNo:Verify.Phone
             })
             .then(function(succ)
             {
@@ -239,11 +237,11 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
                         $scope.logStatus="连接超时！";
                     });
                 }
-                else if(validMode==0&&succ.mesg=="User password isn't correct!")
+                else if(validMode==0&&succ.role.indexOf('doctor') != -1)
                 {
                     $scope.logStatus="您已经注册过了";
                 }
-                else if(validMode==1&&succ.mesg!="User password isn't correct!")
+                else if(validMode==1&&succ.mesg!="User doesn't Exist!")
                 {
                     $scope.logStatus="您还没有注册呢！";
                 }
