@@ -237,11 +237,61 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
                         $scope.logStatus="连接超时！";
                     });
                 }
-                else if(validMode==0&&succ.role.indexOf('doctor') != -1)
+                else if(validMode==0)
                 {
-                    $scope.logStatus="您已经注册过了";
+                    if (succ.mesg =="User doesn't Exist!")
+                    {
+                        User.sendSMS({
+                            mobile:Verify.Phone,
+                            smsType:2
+                        })
+                        .then(function(data)
+                        {
+                            unablebutton();
+                            if(data.mesg.substr(0,8)=="您的邀请码已发送"){
+                                $scope.logStatus = "您的验证码已发送，重新获取请稍后";
+                            }else if (data.results == 1){
+                                $scope.logStatus = "验证码发送失败，请稍后再试";
+                            }
+                            else{
+                                $scope.logStatus ="验证码发送成功！";
+                            }
+                        },function(err)
+                        {
+                            $scope.logStatus="验证码发送失败！";
+                        })
+                    }
+                    else 
+                    {
+                        if (succ.role.indexOf('doctor') == -1)
+                        {
+                            $scope.logStatus="您已经注册过了";
+                        }
+                        else
+                        {
+                            User.sendSMS({
+                                mobile:Verify.Phone,
+                                smsType:2
+                            })
+                            .then(function(data)
+                            {
+                                unablebutton();
+                                if(data.mesg.substr(0,8)=="您的邀请码已发送"){
+                                    $scope.logStatus = "您的验证码已发送，重新获取请稍后";
+                                }else if (data.results == 1){
+                                    $scope.logStatus = "验证码发送失败，请稍后再试";
+                                }
+                                else{
+                                    $scope.logStatus ="验证码发送成功！";
+                                }
+                            },function(err)
+                            {
+                                $scope.logStatus="验证码发送失败！";
+                            })
+                        }
+                    }
                 }
-                else if(validMode==1&&succ.mesg!="User doesn't Exist!")
+                else if(validMode==1&&succ.mesg =="User doesn't Exist!")
                 {
                     $scope.logStatus="您还没有注册呢！";
                 }
