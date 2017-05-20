@@ -2337,7 +2337,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
     // });
 
       // 上传头像的点击事件----------------------------
-  $scope.onClickCamera = function($event){
+  $scope.onClickCamera = function($event,index){
     $scope.openPopover($event);
     $scope.flag=index;
   };
