@@ -684,7 +684,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
                         .then(
                             function(data)
                             {
-                                if(data.msg == "success!")
+                                if(data.results == "success!")
                                 {
                                     $state.go('uploadcertificate');
                                 }            
