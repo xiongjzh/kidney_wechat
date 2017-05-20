@@ -8,12 +8,13 @@
 
 
     <ion-content>
+       <ion-refresher pulling-text="下拉刷新..." on-refresh="doRefresh()"></ion-refresher>
         <div class="bar bar-header item-input-inset" style="height:60px;">
             <div class="item-input-wrapper">
                 <i class="icon ion-ios-search placeholder-icon f-24"></i>
                 <input type="search" ng-model="search.name" placeholder="搜索患者姓名">
                 <!-- <i style="color:#EF473A;font-size:1.6em" class="icon ion-android-close placeholder-icon ng-hide" ng-show="search.name" ng-click="clearSearch()"></i> -->
-                <button-clear-input input = "search.name" origin = "allpatients" curr = "patients"></button>
+                <button-clear-input input = "search.name" origin = "allpatients" curr = "patients" ng-click="clearSearch()"></button-clear-input>
             </div>
             <button  class="button button-clear button-positive" ng-click="goSearch()">
                 搜索
@@ -37,11 +38,14 @@
                 <img ng-src="{{p.patientId.photoUrl||'img/patient.png'}}">
                     <div style="display:inline-block;width:100%;">
                         <h2>{{p.patientId.name}}</h2>
-                    <!-- <span>{{p.patientId.gender | filterGender}}</span><span>{{p.patientId.birthday | filterAge}}岁</span> -->
-                    <!-- <span class="mine-msg-right">{{p.patientId.diagnosisInfo[p.patientId.diagnosisInfo.length-1].name}}</span> -->
+                        <span>{{p.patientId.gender | filterGender}}</span>
+                        <span>{{p.patientId.birthday | filterAge}}岁</span>
+                        <span class="mine-msg-right">{{p.patientId.diagnosisInfo[p.patientId.diagnosisInfo.length-1].name| classname}}</span>
                         <div style="display:inline-block;color:#d81e06;">
                             <i style="" class="iconfont icon-vip f-24" ng-if="p.patientId.VIP==1"></i>
                         </div>
+                    <!-- <span>{{p.patientId.gender | filterGender}}</span><span>{{p.patientId.birthday | filterAge}}岁</span> -->
+                    <!-- <span class="mine-msg-right">{{p.patientId.diagnosisInfo[p.patientId.diagnosisInfo.length-1].name}}</span> -->
 <!--                         <i class="y-message bg-a2">过敏史</i>
                         <i class="y-message bg-f7">警报</i>
                         <i class="y-message bg-12">血压</i>  -->
