@@ -721,7 +721,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
     $scope.doctor=""
     User.getUserId({phoneNo:Storage.get('RegisterNO')}).then(function(data){
         if(data.mesg=="Get UserId Success!"&&data.roles.indexOf('doctor') != -1){
-            $scope.doctor.userId=data.results.userId
+            $scope.doctor.userId=data.UserId
         }
     },function(err){
         console.log(err);
