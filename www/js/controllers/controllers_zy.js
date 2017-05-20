@@ -98,6 +98,10 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
                         $scope.logStatus = "连接服务器失败！";
                         return;
                     }
+                    else{
+                        $scope.logStatus = "用户不存在或连接服务器失败！";
+                        return;
+                    }
                 });
             }     
         }
