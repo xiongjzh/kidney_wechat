@@ -718,7 +718,11 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
 
 .controller('uploadcertificateCtrl',['Dict','Doctor','$scope','$state','$ionicHistory','$timeout' ,'Storage', '$ionicPopup','$ionicLoading','$ionicPopover','$ionicScrollDelegate','User','$http','Camera','$ionicModal','wechat','$location',function(Dict,Doctor,$scope,$state,$ionicHistory,$timeout,Storage, $ionicPopup,$ionicLoading, $ionicPopover,$ionicScrollDelegate,User,$http,Camera,$ionicModal,wechat,$location){
     
-    $scope.doctor=""
+    $scope.doctor={
+        "userId":null,
+        "certificatePhotoUrl":null,
+        "practisingPhotoUrl":null
+    }
     User.getUserId({phoneNo:Storage.get('RegisterNO')}).then(function(data){
         if(data.mesg=="Get UserId Success!"&&data.roles.indexOf('doctor') != -1){
             $scope.doctor.userId=data.UserId
