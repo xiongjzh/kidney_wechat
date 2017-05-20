@@ -2360,10 +2360,10 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
       $timeout(function(){
             $ionicLoading.hide();
             if($scope.flag==0){
-                $scope.doctor.certificatePhotoUrl="http://121.196.221.44:8052/"+temp_photoaddress
+                $scope.doctor.certificatePhotoUrl="http://121.196.221.44:8052/uploads/photos/"+temp_photoaddress
             }
             else{
-                $scope.doctor.practisingPhotoUrl="http://121.196.221.44:8052/"+temp_photoaddress
+                $scope.doctor.practisingPhotoUrl="http://121.196.221.44:8052/uploads/photos/"+temp_photoaddress
             }
           },1000)
       
