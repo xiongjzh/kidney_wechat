@@ -38,9 +38,19 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
                     if(data.results==1){
                         if(data.mesg== "User doesn't Exist!"){
                             $scope.logStatus="账号不存在！";
+                            return;
                         }
                         else if(data.mesg== "User password isn't correct!"){
                             $scope.logStatus = "账号或密码错误！";
+                            return;
+                        }
+                        else if(data.mesg== "No authority!"){
+                            $scope.logStatus = "没有医生权限，请注册医生或进入肾事管家进行操作！";
+                            return;
+                        }
+                        else{
+                          $scope.logStatus = "账号密码错误！";
+                          return;
                         }
                     }
                     else if(data.results.mesg=="login success!"){

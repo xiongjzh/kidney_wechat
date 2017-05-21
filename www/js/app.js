@@ -44,7 +44,7 @@ angular.module('kidney',[
                 logPromise.then(function(data){
                     console.log(data);
                     if(data.results==1){
-                        if(data.msg == "No authority!")
+                        if(data.mesg == "No authority!")
                         {
                             alert("您没有权限登陆肾病守护者联盟，如您是患者，请登录肾事管家");
                             $state.go('signin')
