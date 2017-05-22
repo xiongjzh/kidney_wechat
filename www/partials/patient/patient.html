@@ -63,11 +63,23 @@
             <div ng-repeat="t in Todays |orderBy:filter.propertyName" collection-item-height="94px" class="item item-avatar" type="item-text-wrap" ng-click="getPatientDetail(t.patientId.userId)" ng-show="t.show">
                 <img ng-src="{{t.patientId.photoUrl||'img/patient.png'}}">
                     <div style="display:inline-block;width:100%;">
-                        <h2>{{t.patientId.name}}</h2>
-
-                        <div style="display:inline-block;background-color: #0288D1;border-radius: 0.3em;color:#FFF;padding:0 3px">
-                            <i style="font-size:1em" class="icon ion-android-star" ng-if="t.patientId.VIP==1"></i>
-                        </div> 
+                        <span>{{p.patientId.name}}</span>
+                        <span>{{p.patientId.gender | filterGender}}</span>
+                        <span ng-if = "(p.patientId.birthday)">{{p.patientId.birthday | filterAge}}</span>
+                        <span ng-if = "!(p.patientId.birthday)">年龄未知</span>
+                        <!-- <span class="mine-msg-right">{{p.patientId.diagnosisInfo[p.patientId.diagnosisInfo.length-1].name| classname}}</span> -->
+                        <div style="display:inline-block;color:#d81e06;">
+                            <i style="" class="iconfont icon-vip f-24" ng-if="p.patientId.VIP==1"></i>
+                        </div>
+                        <p>
+                        <i class="y-message bg-12" ng-if="p.patientId.hypertension==1">高血压</i>
+                        <i class="y-message bg-f7" ng-if="p.patientId.diagnosisInfo[p.patientId.diagnosisInfo.length-1].name=='class_2'">CKD1-2期</i>
+                        <i class="y-message bg-f7" ng-if="p.patientId.diagnosisInfo[p.patientId.diagnosisInfo.length-1].name=='class_3'">CKD3-4期</i>
+                        <i class="y-message bg-f7" ng-if="p.patientId.diagnosisInfo[p.patientId.diagnosisInfo.length-1].name=='class_4'">CDK5期</i>
+                        <i class="y-message bg-f7" ng-if="p.patientId.diagnosisInfo[p.patientId.diagnosisInfo.length-1].name=='class_6'">腹透</i>
+                        <i class="y-message bg-f7" ng-if="p.patientId.diagnosisInfo[p.patientId.diagnosisInfo.length-1].name=='class_5'">血透</i>
+                        <i class="y-message bg-f7" ng-if="p.patientId.diagnosisInfo[p.patientId.diagnosisInfo.length-1].name=='class_1'">肾移植</i>
+                        </p>
                     </div>
             </div>
         </div>        
