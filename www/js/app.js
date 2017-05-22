@@ -1,4 +1,4 @@
-﻿// Ionic Starter App
+// Ionic Starter App
 
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
@@ -52,7 +52,7 @@ angular.module('kidney',[
                                 console.log("连接超时！");
                             })
                             User.getMessageOpenId({type:1,userId:data.UserId}).then(function(res){
-                                if (res == null)
+                                if (res.results == undefined || res.results == null)
                                 {
                                   User.setMessageOpenId({type:1,userId:data.UserId,openId:wechatData.openid}).then(function(res){
                                       console.log("setopenid");
@@ -144,7 +144,7 @@ angular.module('kidney',[
                         },function(err){
                             console.log(err);
                         })
-
+                        
                     }
                 },
                 function(data){
