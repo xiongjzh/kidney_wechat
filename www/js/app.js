@@ -1,4 +1,4 @@
-﻿// Ionic Starter App
+// Ionic Starter App
 
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
@@ -38,13 +38,44 @@ angular.module('kidney',[
                 console.log(wechatData)
                 // alert(wechatData.openid)
                 // alert(wechatData.nickname)
-                Storage.set('openid',wechatData.openid)
+                Storage.set('openid',wechatData.unionid)
+                Storage.set('messageopenid',wechatData.openid)
+                if (wechatData.unionid&&wechatData.openid)
+                {
+                    User.getUserIDbyOpenId({openId:wechatData.openid}).then(function(data)
+                    {
+                        if (angular.isDefined(data.phoneNo) == true)
+                        {
+                            User.setOpenId({phoneNo:data.phoneNo,openId:Storage.get('openid')}).then(function(res){
+                                console.log("替换openid");
+                            },function(){
+                                console.log("连接超时！");
+                            })
+                            User.getMessageOpenId({type:1,userId:data.UserId}).then(function(res){
+                                if (res.results == undefined || res.results == null)
+                                {
+                                  User.setMessageOpenId({type:1,userId:data.UserId,openId:wechatData.openid}).then(function(res){
+                                      console.log("setopenid");
+                                  },function(){
+                                      console.log("连接超时！");
+                                  })
+                                }
+                            },function(){
+                                console.log("连接超时！");
+                            })
+                        }
+                    },function(err)
+                    {
+                        console.log(err)
+                    })
+                    
+                }
                 Storage.set('wechathead',wechatData.headimgurl)
-                var logPromise = User.logIn({username:wechatData.openid,password:wechatData.openid,role:"doctor"});
+                var logPromise = User.logIn({username:Storage.get('openid'),password:Storage.get('openid'),role:"doctor"});
                 logPromise.then(function(data){
                     console.log(data);
                     if(data.results==1){
-                        if(data.msg == "No authority!")
+                        if(data.mesg == "No authority!")
                         {
                             alert("您没有权限登陆肾病守护者联盟，如您是患者，请登录肾事管家");
                             $state.go('signin')
@@ -104,6 +135,18 @@ angular.module('kidney',[
                             }
                         },function(err){
                         }) 
+                        User.getMessageOpenId({type:1,userId:Storage.get("UID")}).then(function(res){
+                            if (res.results == undefined || res.results == null)
+                            {
+                              User.setMessageOpenId({type:1,userId:Storage.get("UID"),openId:Storage.get('messageopenid')}).then(function(res){
+                                  console.log("setopenid");
+                              },function(){
+                                  console.log("连接超时！");
+                              })
+                            }
+                        },function(){
+                            console.log("连接超时！");
+                        })
                         User.getAgree({userId:data.results.userId}).then(function(res){
                             if(res.results.agreement=="0"){
                                 $state.go('tab.home');
@@ -113,7 +156,7 @@ angular.module('kidney',[
                         },function(err){
                             console.log(err);
                         })
-
+                        
                     }
                 },
                 function(data){
@@ -392,7 +435,12 @@ angular.module('kidney',[
       templateUrl:'partials/others/userDetail.html',
       controller:'userdetailCtrl'
     })
-
+    .state('uploadcertificate',{
+      cache:false,
+      url:'/uploadcertificate',
+      templateUrl:'partials/others/uploadcertificate.html',
+      controller:'uploadcertificateCtrl'
+    })
     .state('messages',{
       cache:false,
       url:'/messages',

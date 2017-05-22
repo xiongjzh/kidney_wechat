@@ -2258,7 +2258,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                         "userId": doc.userId, //医生的UID
                         "role": "doctor",
                         "postdata": {
-                            "template_id": "DWrM__2UuaLxYf5da6sKOQA_hlmYhlsazsaxYX59DtE",
+                            "template_id": "cVLIgOb_JvtFGQUA2KvwAmbT5B3ZB79cRsAM4ZKKK0k",
                             "data": {
                                 "first": {
                                     "value": thisDoctor.name+"向您转发了一个"+(csl.type==1?'咨询':'问诊')+"消息，请及时查看",

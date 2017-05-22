@@ -1,0 +1,57 @@
+<ion-view view-title="上传证书" >
+
+  <ion-nav-bar class="bar-positive " align-title="center">
+    <ion-nav-buttons side="left">
+      <button class="button button-icon icon ion-ios-arrow-left fc-ff" ng-click="$ionicGoBack()"></button>
+    </ion-nav-buttons>
+  </ion-nav-bar>
+
+
+    <ion-content>
+        
+        <i class="icon ion-asterisk" style="color:red;font-size:6px"></i>
+        <button class="button button-clear" style="color:#666" ng-click="onClickCamera($event,0)" ><i class="icon ion-camera"></i>上传医师资格证书</button>
+        <ion-item style="height:100px,width=100px" >
+            <img ng-src="{{doctor.certificatePhotoUrl}}"  name="Photo1" ng-click="showoriginal(doctor.certificatePhotoUrl)"  style="height:30%; width:30%"  />
+        </ion-item>
+
+        <!-- </div> -->
+    </br>
+
+        <i class="icon ion-asterisk" style="color:red;font-size:6px"></i>
+        <button class="button button-clear" style="color:#666" ng-click="onClickCamera($event,1)" ><i class="icon ion-camera"></i>上传医师执业证书</button>
+        <ion-item  style="height:100px,width=100px">
+            <img ng-src="{{doctor.practisingPhotoUrl}}"  name="Photo2" ng-click="showoriginal(doctor.practisingPhotoUrl)"  style="height:30%; width:30%"  />
+        </ion-item>
+
+
+        <script id="my-popover1.html" type="text/ng-template">
+            <ion-popover-view>
+              <ion-header-bar class="bar-calm">
+                  <h1 class="title">上传图片</h1>
+              </ion-header-bar>
+            <ion-content>
+              <ion-list> 
+                <div class = "padding">
+                  <button class="button button-block button-primary " ng-click="getPhoto()"><i class="icon ion-camera"></i>
+                      拍照
+                  </button>
+                
+                  <button class="button button-block button-primary " ng-click="onClickCameraPhotos()"><i class="icon ion-image"></i>
+                      相册
+                  </button>
+                 
+                </div>
+              </ion-list>
+            </ion-content>
+          </ion-popover-view>
+        </script>
+
+
+        <button  style="margin-top:20px" class="button button-block button-positive" ng-click ="uploadcetify()">
+        保存信息
+        </button>
+
+    </ion-content>
+
+</ion-view>
