@@ -39,7 +39,7 @@
                     <div style="display:inline-block;width:100%;">
                         <span>{{p.patientId.name}}</span>
                         <span>{{p.patientId.gender | filterGender}}</span>
-                        <span ng-if = "(p.patientId.birthday)">{{p.patientId.birthday | filterAge}}岁</span>
+                        <span ng-if = "(p.patientId.birthday)">{{p.patientId.birthday | filterAge}}</span>
                         <span ng-if = "!(p.patientId.birthday)">年龄未知</span>
                         <!-- <span class="mine-msg-right">{{p.patientId.diagnosisInfo[p.patientId.diagnosisInfo.length-1].name| classname}}</span> -->
                         <div style="display:inline-block;color:#d81e06;">

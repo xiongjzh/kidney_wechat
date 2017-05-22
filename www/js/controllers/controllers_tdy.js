@@ -1743,7 +1743,7 @@ angular.module('tdy.controllers', ['ionic','kidney.services','ionic-datepicker']
   //   $scope.modal.hide();
   // };
   $scope.showoriginal=function(resizedpath){
-    $scope.openModal();
+    // $scope.openModal();
     console.log(resizedpath)
     var originalfilepath=resizedpath
     // console.log(originalfilepath)
