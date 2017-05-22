@@ -374,17 +374,11 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
                           User.setOpenId({phoneNo:Verify.Phone,openId:Storage.get('openid')}).then(function(data){
                               if(data.results == "success!")
                               {
-                                // console.log(tempuserId)
-                                // User.getAgree({userId:tempuserId}).then(function(res){
-                                //     if(res.results.agreement=="0"){
-                                //         $state.go('tab.home');
-                                //     }else{
-                                //         Storage.set('UID',tempuserId)
-                                //         $state.go('agreement',{last:'signin'});
-                                //     }
-                                // },function(err){
-                                //     console.log(err);
-                                // })
+                                User.setMessageOpenId({type:1,userId:tempuserId,openId:Storage.get('messageopenid')}).then(function(res){
+                                    console.log("setopenid");
+                                },function(){
+                                    console.log("连接超时！");
+                                })
                                 $ionicPopup.show({   
                                      title: '微信账号绑定手机账号成功，您的初试密码是123456，是否重置密码？',
                                      buttons: [
@@ -696,6 +690,11 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
                             {
                                 if(data.results == "success!")
                                 {
+                                    User.setMessageOpenId({type:1,userId:Storage.get('UID'),openId:Storage.get('messageopenid')}).then(function(res){
+                                        console.log("setopenid");
+                                    },function(){
+                                        console.log("连接超时！");
+                                    })
                                     $state.go('uploadcertificate');
                                 }            
                             },

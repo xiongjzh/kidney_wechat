@@ -38,9 +38,32 @@ angular.module('kidney',[
                 console.log(wechatData)
                 // alert(wechatData.openid)
                 // alert(wechatData.nickname)
-                Storage.set('openid',wechatData.openid)
+                Storage.set('openid',wechatData.unionid)
+                Storage.set('messageopenid',wechatData.openid)
+                if (wechatData.unionid&&wechatData.openid)
+                {
+                    User.getUserIDbyOpenId({openId:wechatData.openid}).then(function(data)
+                    {
+                        if (angular.isDefined(data.phoneNo) == true)
+                        {
+                            User.setOpenId({phoneNo:data.phoneNo,openId:Storage.get('openid')}).then(function(res){
+                                console.log("替换openid");
+                            },function(){
+                                console.log("连接超时！");
+                            })
+                            User.setMessageOpenId({type:1,userId:data.UserId,openId:wechatData.openid}).then(function(res){
+                                console.log("setopenid");
+                            },function(){
+                                console.log("连接超时！");
+                            })
+                        }
+                    },function(err)
+                    {
+                        console.log(err)
+                    })
+                }
                 Storage.set('wechathead',wechatData.headimgurl)
-                var logPromise = User.logIn({username:wechatData.openid,password:wechatData.openid,role:"doctor"});
+                var logPromise = User.logIn({username:Storage.get('openid'),password:Storage.get('openid'),role:"doctor"});
                 logPromise.then(function(data){
                     console.log(data);
                     if(data.results==1){
