@@ -51,23 +51,24 @@ angular.module('kidney',[
                             },function(){
                                 console.log("连接超时！");
                             })
+                            User.getMessageOpenId({type:1,userId:data.UserId}).then(function(res){
+                                if (res == null)
+                                {
+                                  User.setMessageOpenId({type:1,userId:data.UserId,openId:wechatData.openid}).then(function(res){
+                                      console.log("setopenid");
+                                  },function(){
+                                      console.log("连接超时！");
+                                  })
+                                }
+                            },function(){
+                                console.log("连接超时！");
+                            })
                         }
                     },function(err)
                     {
                         console.log(err)
                     })
-                    User.getMessageOpenId({type:1,userId:tempuserId}).then(function(res){
-                        if (res == null)
-                        {
-                          User.setMessageOpenId({type:1,userId:tempuserId,openId:wechatData.openid}).then(function(res){
-                              console.log("setopenid");
-                          },function(){
-                              console.log("连接超时！");
-                          })
-                        }
-                    },function(){
-                        console.log("连接超时！");
-                    })
+                    
                 }
                 Storage.set('wechathead',wechatData.headimgurl)
                 var logPromise = User.logIn({username:Storage.get('openid'),password:Storage.get('openid'),role:"doctor"});
