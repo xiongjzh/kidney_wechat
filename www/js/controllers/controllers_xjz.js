@@ -216,6 +216,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
 .controller('groupsCtrl', ['$scope', '$http', '$state', '$ionicPopover', 'Doctor', 'Storage', 'Patient','arrTool','$q','wechat','$location','New',function($scope, $http, $state, $ionicPopover, Doctor, Storage, Patient,arrTool,$q,wechat,$location,New) {
     // $scope.teams=[];
     // $scope.doctors=[];
+    $scope.countAllDoc='?';
     $scope.query = {
         name: ''
     }
@@ -224,7 +225,19 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         showSearch: false,
         updateTime: 0
     }
-
+    var countDocs=function()
+    {
+        Doctor.getDocNum()
+        .then(function(data)
+        {
+            console.log(data)
+            $scope.countAllDoc=data.results;
+        },function(err)
+        {
+            console.log(err)
+        })
+    }
+    countDocs();
     $scope.load = function(force) {
         var time = Date.now();
         if (!force && time - $scope.params.updateTime < 60000){

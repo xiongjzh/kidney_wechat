@@ -2625,7 +2625,11 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
         $state.go('tab.me');  
     };
   
-
+    $scope.getBill=function()
+    {
+        // console.log("bill");
+        $state.go("tab.bill")
+    }
 
   
 }])
@@ -3083,4 +3087,55 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
 
 .controller('aboutCtrl', ['$scope','$state','Storage','$ionicHistory', function($scope,$state,Storage,$ionicHistory) {
      
+}])
+
+.controller('billCtrl', ['$scope','Storage','$http','$ionicScrollDelegate','Expense', function($scope,Storage,$http,$ionicScrollDelegate,Expense) {
+    var doc={
+        doctorId:Storage.get('UID'),
+        skip:0,
+        limit:15
+    }
+    $scope.doc={
+        preGet:[],
+        bills:[]
+    }
+    var getBill=function(param)
+    {
+        // console.log("getBill!")
+        Expense.getDocRecords(param)
+        .then(function(data)
+        {
+            // console.log(data)
+            $scope.$broadcast('scroll.refreshComplete');
+            $scope.$broadcast('scroll.infiniteScrollComplete');
+
+            if(!angular.isArray(data.result)||data.result.length==0)
+                return;
+            $scope.doc.preGet=data.result;
+            doc.skip+=data.result.length;
+            $scope.doc.bills=$scope.doc.bills.concat($scope.doc.preGet);
+
+        },function(err)
+        {
+            console.log(err)
+        })
+    }
+    getBill(doc);
+    $scope.doRefresh=function()
+    {
+        $scope.doc.preGet=[];
+        $scope.doc.bills=[];
+        doc.skip=0;
+        getBill(doc);
+        // $scope.$broadcast('scroll.refreshComplete');
+    }
+    $scope.loadMore=function()
+    {
+        getBill(doc);
+        // $scope.$broadcast('scroll.infiniteScrollComplete');
+    }
+    $scope.scroll2Top=function()
+    {
+        $ionicScrollDelegate.scrollTop(true);
+    }
 }])

@@ -15,6 +15,7 @@
         </div>
     </div>
     <ion-content class="gray-back has-subheader content-item-list">
+        <div style="text-align:center;color:gray;background-color: rgba(106, 196, 248, 0.74);">平台当前共有医生{{countAllDoc}}名</div>
         <ion-refresher pulling-text="下拉刷新..." on-refresh="doRefresh()"></ion-refresher>
         <div ng-if="!params.showSearch && params.isTeam">
             <!-- 团队 -->
