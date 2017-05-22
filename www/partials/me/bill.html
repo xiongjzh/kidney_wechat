@@ -16,19 +16,20 @@
 
         <div class="card" ng-repeat="bill in doc.bills track by $index">
             <div class="item item-text-wrap">
-                <p>交易对象：{{bill.name}}</p>
+                <p>交易对象：{{bill.patientName}}</p>
                 <p>服务类型：{{bill.type}}</p>
-                <p>实际支付：{{bill.pay}} 元</p>
+                <p>实际支付：{{bill.money}} 元</p>
                 <p>交易日期：{{bill.time | dateFormat:'YYYY-MM-DD h:m'}}</p>
             </div>
         </div>
 
         <div style="text-align:center;color:gray;">
-            <span ng-if="doc.preGet.length==0">已经没有更多了</span>
+            <span ng-if="!doc.hasMore">已经没有更多了</span>
         </div>
         <ion-infinite-scroll
-            ng-if="doc.bills.length>=15&&doc.preGet.length>0"
+            ng-if="doc.hasMore"
             on-infinite="loadMore()"
+            immediate-check="false"
             distance="1%">
         </ion-infinite-scroll>
     </ion-content>

@@ -3089,50 +3089,48 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
      
 }])
 
-.controller('billCtrl', ['$scope','Storage','$http','$ionicScrollDelegate','Expense', function($scope,Storage,$http,$ionicScrollDelegate,Expense) {
+.controller('billCtrl', ['$scope','Storage','$http','$ionicScrollDelegate','Expense',function($scope,Storage,$http,$ionicScrollDelegate,Expense) {
     var doc={
         doctorId:Storage.get('UID'),
         skip:0,
-        limit:15
+        limit:10
     }
     $scope.doc={
-        preGet:[],
-        bills:[]
+        bills:[],
+        hasMore:false
     }
-    var getBill=function(param)
+    $scope.doRefresh=function()
     {
-        // console.log("getBill!")
-        Expense.getDocRecords(param)
+        doc.skip=0;
+        $scope.doc.hasMore=false
+        Expense.getDocRecords(doc)
         .then(function(data)
         {
-            // console.log(data)
+            $scope.doc.bills=data.results;
+            doc.skip+=data.results.length;
+            data.results.length==doc.limit?$scope.doc.hasMore=true:$scope.doc.hasMore=false;
             $scope.$broadcast('scroll.refreshComplete');
-            $scope.$broadcast('scroll.infiniteScrollComplete');
-
-            if(!angular.isArray(data.result)||data.result.length==0)
-                return;
-            $scope.doc.preGet=data.result;
-            doc.skip+=data.result.length;
-            $scope.doc.bills=$scope.doc.bills.concat($scope.doc.preGet);
-
         },function(err)
         {
             console.log(err)
+            $scope.$broadcast('scroll.refreshComplete');
         })
     }
-    getBill(doc);
-    $scope.doRefresh=function()
-    {
-        $scope.doc.preGet=[];
-        $scope.doc.bills=[];
-        doc.skip=0;
-        getBill(doc);
-        // $scope.$broadcast('scroll.refreshComplete');
-    }
+    $scope.doRefresh();
     $scope.loadMore=function()
     {
-        getBill(doc);
-        // $scope.$broadcast('scroll.infiniteScrollComplete');
+        Expense.getDocRecords(doc)
+        .then(function(data)
+        {
+            $scope.doc.bills=$scope.doc.bills.concat(data.results);
+            doc.skip+=data.results.length;
+            data.results.length==doc.limit?$scope.doc.hasMore=true:$scope.doc.hasMore=false;
+            $scope.$broadcast('scroll.infiniteScrollComplete');
+        },function(err)
+        {
+            console.log(err)
+            $scope.$broadcast('scroll.infiniteScrollComplete');
+        })
     }
     $scope.scroll2Top=function()
     {
