@@ -37,28 +37,22 @@
             <div ng-repeat="p in patients |orderBy:filter.propertyName" collection-item-height="94px" class="item item-avatar" type="item-text-wrap" ng-click="getPatientDetail(p.patientId.userId)" ng-show="p.show">
                 <img ng-src="{{p.patientId.photoUrl||'img/patient.png'}}">
                     <div style="display:inline-block;width:100%;">
-                        <h2>{{p.patientId.name}}</h2>
+                        <span>{{p.patientId.name}}</span>
                         <span>{{p.patientId.gender | filterGender}}</span>
                         <span>{{p.patientId.birthday | filterAge}}岁</span>
-                        <span class="mine-msg-right">{{p.patientId.diagnosisInfo[p.patientId.diagnosisInfo.length-1].name| classname}}</span>
+                        <!-- <span class="mine-msg-right">{{p.patientId.diagnosisInfo[p.patientId.diagnosisInfo.length-1].name| classname}}</span> -->
                         <div style="display:inline-block;color:#d81e06;">
                             <i style="" class="iconfont icon-vip f-24" ng-if="p.patientId.VIP==1"></i>
                         </div>
-                    <!-- <span>{{p.patientId.gender | filterGender}}</span><span>{{p.patientId.birthday | filterAge}}岁</span> -->
-                    <!-- <span class="mine-msg-right">{{p.patientId.diagnosisInfo[p.patientId.diagnosisInfo.length-1].name}}</span> -->
-<!--                         <i class="y-message bg-a2">过敏史</i>
-                        <i class="y-message bg-f7">警报</i>
-                        <i class="y-message bg-12">血压</i>  -->
-                        <!-- <div style="display:inline-block;background-color: #0288D1;border-radius: 0.3em;color:#FFF;padding:0 3px"><i style="font-size:1em" class="icon ion-ios-flame"></i>
-                        </div>                    
-                        <div style="display:inline-block;background-color: #0288D1;border-radius: 0.3em;color:#FFF;padding:0 3px"><i style="font-size:1em" class="icon ion-android-hand"></i>
-                        </div>
-                        <div style="display:inline-block;background-color:#FFFF66;border-radius: 0.3em;color:#FF0000;padding:0 3px"><i style="font-size:1em" class="icon ion-android-person"></i>
-                        </div>
-                        <div style="display:inline-block;background-color: #FF0000;border-radius: 0.3em;color:#FFF;padding:0 3px"><i style="font-size:1em" class="icon icon ion-android-favorite"></i>
-                        </div>    -->
-
-                        <!-- <p>是否VIP：{{p.patientId.VIP | filterVIP}}</p>  -->
+                        <p>
+                        <i class="y-message bg-12" ng-if="p.patientId.hypertension==1">高血压</i>
+                        <i class="y-message bg-f7" ng-if="p.patientId.diagnosisInfo[p.patientId.diagnosisInfo.length-1].name=='class_2'">CKD1-2期</i>
+                        <i class="y-message bg-f7" ng-if="p.patientId.diagnosisInfo[p.patientId.diagnosisInfo.length-1].name=='class_3'">CKD3-4期</i>
+                        <i class="y-message bg-f7" ng-if="p.patientId.diagnosisInfo[p.patientId.diagnosisInfo.length-1].name=='class_4'">CDK5期</i>
+                        <i class="y-message bg-f7" ng-if="p.patientId.diagnosisInfo[p.patientId.diagnosisInfo.length-1].name=='class_6'">腹透</i>
+                        <i class="y-message bg-f7" ng-if="p.patientId.diagnosisInfo[p.patientId.diagnosisInfo.length-1].name=='class_5'">血透</i>
+                        <i class="y-message bg-f7" ng-if="p.patientId.diagnosisInfo[p.patientId.diagnosisInfo.length-1].name=='class_1'">肾移植</i>
+                        </p>
                     </div>
             </div>
         </div>
