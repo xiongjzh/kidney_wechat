@@ -483,6 +483,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
     }
     //render msgs
     $scope.$on('$ionicView.beforeEnter', function() {
+        $scope.timer=[];
         $scope.photoUrls={};
         $scope.msgs = [];
         $scope.params.key = '';
@@ -665,6 +666,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         $scope.params.helpDivHeight = 0;
     })
     $scope.$on('$ionicView.beforeLeave', function() {
+        for(var i in $scope.timer) clearTimeout($scope.timer[i]);
         socket.off('messageRes');
         socket.off('getMsg');
         socket.off('err');
@@ -681,9 +683,10 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         $rootScope.conversation.id = '';
     })
     function sendNotice(type,status,cnt){
-        return setTimeout(function(){
+        var t = setTimeout(function(){
             return sendCnNotice(type,status,cnt);
         },2000);
+        $scope.timer.push(t);
     }
     function sendCnNotice(type,status,cnt){
         var len=$scope.msgs.length;
@@ -988,10 +991,12 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             $http.get(msg.content.thumb).then(function(data){
                 $scope.msgs.push(msg);
                 toBottom(true,400);
+                $scope.msgCount++;
             })
         }else{
             $scope.msgs.push(msg);
             toBottom(true,100);
+            $scope.msgCount++;
         }
     }
     // send message--------------------------------------------------------------------------------
@@ -1891,10 +1896,12 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             $http.get(msg.content.thumb).then(function(data){
                 $scope.msgs.push(msg);
                 toBottom(true,400);
+                $scope.msgCount++;
             })
         }else{
             $scope.msgs.push(msg);
             toBottom(true,100);
+            $scope.msgCount++;
         }
     }
     function sendmsg(content,type){
