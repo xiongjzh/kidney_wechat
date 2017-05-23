@@ -36,11 +36,12 @@
         <div ng-if="params.isPatients" class="list">
             <div ng-repeat="p in patients |orderBy:filter.propertyName" collection-item-height="94px" class="item item-avatar" type="item-text-wrap" ng-click="getPatientDetail(p.patientId.userId)" ng-show="p.show">
                 <img ng-src="{{p.patientId.photoUrl||'img/patient.png'}}">
-                    <div style="display:inline-block;width:100%;">
+                    <div>
                         <span>{{p.patientId.name}}</span>
                         <span>{{p.patientId.gender | filterGender}}</span>
                         <span ng-if = "(p.patientId.birthday)">{{p.patientId.birthday | filterAge}}</span>
                         <span ng-if = "!(p.patientId.birthday)">年龄未知</span>
+                        <span style="float: right">{{p.dpRelationTime |dateFormat:"YYYY-MM-DD"}}</span>
                         <!-- <span class="mine-msg-right">{{p.patientId.diagnosisInfo[p.patientId.diagnosisInfo.length-1].name| classname}}</span> -->
                         <div style="display:inline-block;color:#d81e06;">
                             <i style="" class="iconfont icon-vip f-24" ng-if="p.patientId.VIP==1"></i>
@@ -62,11 +63,12 @@
         <div ng-if="!params.isPatients" class="list">
             <div ng-repeat="t in Todays |orderBy:filter.propertyName" collection-item-height="94px" class="item item-avatar" type="item-text-wrap" ng-click="getPatientDetail(t.patientId.userId)" ng-show="t.show">
                 <img ng-src="{{t.patientId.photoUrl||'img/patient.png'}}">
-                    <div style="display:inline-block;width:100%;">
+                    <div>
                         <span>{{t.patientId.name}}</span>
                         <span>{{t.patientId.gender | filterGender}}</span>
                         <span ng-if = "(t.patientId.birthday)">{{t.patientId.birthday | filterAge}}</span>
                         <span ng-if = "!(t.patientId.birthday)">年龄未知</span>
+                        <span style="float: right">{{t.dpRelationTime |dateFormat:"YYYY-MM-DD"}}</span>
                         <!-- <span class="mine-msg-right">{{p.patientId.diagnosisInfo[p.patientId.diagnosisInfo.length-1].name| classname}}</span> -->
                         <div style="display:inline-block;color:#d81e06;">
                             <i style="" class="iconfont icon-vip f-24" ng-if="t.patientId.VIP==1"></i>
