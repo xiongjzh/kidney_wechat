@@ -213,7 +213,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
     }
 }])
 //我的团队
-.controller('groupsCtrl', ['$scope', '$http', '$state', '$ionicPopover', 'Doctor', 'Storage', 'Patient','arrTool','$q','wechat','$location','New',function($scope, $http, $state, $ionicPopover, Doctor, Storage, Patient,arrTool,$q,wechat,$location,New) {
+.controller('groupsCtrl', ['$scope', '$http', '$state', '$ionicPopover', 'Doctor', 'Storage', 'Patient','arrTool','$q','wechat','$location','New','$interval',function($scope, $http, $state, $ionicPopover, Doctor, Storage, Patient,arrTool,$q,wechat,$location,New,$interval) {
     // $scope.teams=[];
     // $scope.doctors=[];
     $scope.countAllDoc='?';
@@ -261,16 +261,18 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                 }).then(function(data){
                     console.log(data);
                 });
-            Doctor.getRecentDoctorList({ userId: Storage.get('UID') })
-                .then(function(data) {
-                    console.log(data);
-                    New.addNestNews('12',Storage.get('UID'),data.results,'userId','doctorId')
-                    .then(function(doctors){
-                        $scope.doctors=doctors;
+            $interval(function(){
+                Doctor.getRecentDoctorList({ userId: Storage.get('UID') })
+                    .then(function(data) {
+                        console.log(data);
+                        New.addNestNews('12',Storage.get('UID'),data.results,'userId','doctorId')
+                        .then(function(doctors){
+                            $scope.doctors=doctors;
+                        });
+                    }, function(err) {
+                        console.log(err)
                     });
-                }, function(err) {
-                    console.log(err)
-                });
+            },2000,3);
         }
     }
 
