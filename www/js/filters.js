@@ -200,3 +200,9 @@ angular.module('kidney.filters', [])
         return ret;
     }
 }])
+.filter('numberPrecision',[function(){
+    return function(num){
+        var ret=new Number(num);
+        return ret.toFixed(2);
+    }
+}])

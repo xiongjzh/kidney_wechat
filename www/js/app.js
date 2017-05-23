@@ -110,7 +110,7 @@ angular.module('kidney',[
                         // $scope.logStatus = "登录成功！";
                         $ionicHistory.clearCache();
                         $ionicHistory.clearHistory();
-                        User.getUserIDbyOpenId({openId:wechatData.openid}).then(function(data)
+                        User.getUserIDbyOpenId({openId:Storage.get('openid')}).then(function(data)
                         {
                             if (angular.isDefined(data.phoneNo) == true)
                             {
@@ -801,7 +801,18 @@ angular.module('kidney',[
     })
 
     // views-tab-me
-
+    //账单
+    .state('tab.bill', {
+        // cache: false,
+        url: '/bill',
+        views: {
+            'tab-me':{
+                controller: 'billCtrl',
+                templateUrl: 'partials/me/bill.html'
+            }
+        }
+    })
+    
     //schedual
     .state('tab.schedual', {
         // cache: false,

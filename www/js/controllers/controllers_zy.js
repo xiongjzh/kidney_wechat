@@ -2625,7 +2625,11 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
         $state.go('tab.me');  
     };
   
-
+    $scope.getBill=function()
+    {
+        // console.log("bill");
+        $state.go("tab.bill")
+    }
 
   
 }])
@@ -3083,4 +3087,53 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
 
 .controller('aboutCtrl', ['$scope','$state','Storage','$ionicHistory', function($scope,$state,Storage,$ionicHistory) {
      
+}])
+
+.controller('billCtrl', ['$scope','Storage','$http','$ionicScrollDelegate','Expense',function($scope,Storage,$http,$ionicScrollDelegate,Expense) {
+    var doc={
+        doctorId:Storage.get('UID'),
+        skip:0,
+        limit:10
+    }
+    $scope.doc={
+        bills:[],
+        hasMore:false
+    }
+    $scope.doRefresh=function()
+    {
+        doc.skip=0;
+        $scope.doc.hasMore=false
+        Expense.getDocRecords(doc)
+        .then(function(data)
+        {
+            $scope.doc.bills=data.results;
+            doc.skip+=data.results.length;
+            data.results.length==doc.limit?$scope.doc.hasMore=true:$scope.doc.hasMore=false;
+            $scope.$broadcast('scroll.refreshComplete');
+        },function(err)
+        {
+            console.log(err)
+            $scope.$broadcast('scroll.refreshComplete');
+        })
+    }
+    $scope.doRefresh();
+    $scope.loadMore=function()
+    {
+        Expense.getDocRecords(doc)
+        .then(function(data)
+        {
+            $scope.doc.bills=$scope.doc.bills.concat(data.results);
+            doc.skip+=data.results.length;
+            data.results.length==doc.limit?$scope.doc.hasMore=true:$scope.doc.hasMore=false;
+            $scope.$broadcast('scroll.infiniteScrollComplete');
+        },function(err)
+        {
+            console.log(err)
+            $scope.$broadcast('scroll.infiniteScrollComplete');
+        })
+    }
+    $scope.scroll2Top=function()
+    {
+        $ionicScrollDelegate.scrollTop(true);
+    }
 }])

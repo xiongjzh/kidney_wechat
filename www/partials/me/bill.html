@@ -1,0 +1,36 @@
+<ion-view view-title="详细记录">
+    <ion-nav-title ng-click="scroll2Top()">
+        详细记录
+    </ion-nav-title>
+    <ion-nav-bar class="bar-positive " align-title="center">
+        <ion-nav-buttons side="left">
+            <button class="button button-icon icon ion-ios-arrow-left fc-ff" ng-click="$ionicGoBack()"></button>
+        </ion-nav-buttons>
+    </ion-nav-bar>
+
+    <ion-content>
+        <ion-refresher
+            pulling-text="下拉刷新..."
+            on-refresh="doRefresh()">
+        </ion-refresher>
+
+        <div class="card" ng-repeat="bill in doc.bills track by $index">
+            <div class="item item-text-wrap">
+                <p>交易对象：{{bill.patientName}}</p>
+                <p>服务类型：{{bill.type}}</p>
+                <p>实际支付：{{bill.money}} 元</p>
+                <p>交易日期：{{bill.time | dateFormat:'YYYY-MM-DD h:m'}}</p>
+            </div>
+        </div>
+
+        <div style="text-align:center;color:gray;">
+            <span ng-if="!doc.hasMore">已经没有更多了</span>
+        </div>
+        <ion-infinite-scroll
+            ng-if="doc.hasMore"
+            on-infinite="loadMore()"
+            immediate-check="false"
+            distance="1%">
+        </ion-infinite-scroll>
+    </ion-content>
+</ion-view>
