@@ -213,7 +213,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
     }
 }])
 //我的团队
-.controller('groupsCtrl', ['$scope', '$http', '$state', '$ionicPopover', 'Doctor', 'Storage', 'Patient','arrTool','$q','wechat','$location','New',function($scope, $http, $state, $ionicPopover, Doctor, Storage, Patient,arrTool,$q,wechat,$location,New) {
+.controller('groupsCtrl', ['$scope', '$http', '$state', '$ionicPopover', 'Doctor', 'Storage', 'Patient','arrTool','$q','wechat','$location','New','$interval',function($scope, $http, $state, $ionicPopover, Doctor, Storage, Patient,arrTool,$q,wechat,$location,New,$interval) {
     // $scope.teams=[];
     // $scope.doctors=[];
     $scope.countAllDoc='?';
@@ -241,14 +241,14 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
     $scope.load = function(force) {
         var time = Date.now();
         if (!force && time - $scope.params.updateTime < 60000){
-            // setGroupUnread($scope.teams)
-            // .then(function(teams){
-            //     $scope.teams=teams;
-            // });
-            // setSingleUnread($scope.doctors)
-            // .then(function(doctors){
-            //     $scope.doctors=doctors;
-            // });
+            New.addNews('13',Storage.get('UID'),$scope.teams,'teamId')
+            .then(function(teams){
+                $scope.teams=teams;
+            })
+            New.addNestNews('12',Storage.get('UID'),$scope.doctors,'userId','doctorId')
+            .then(function(doctors){
+                $scope.doctors=doctors;
+            })
         }else{
             $scope.params.updateTime = time;
             Doctor.getMyGroupList({ userId: Storage.get('UID') })
@@ -257,28 +257,22 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                     return New.addNews('13',Storage.get('UID'),data,'teamId')
                     .then(function(teams){
                         return $scope.teams=teams;
-                    })
-                    // setGroupUnread(data)
-                    // .then(function(teams){
-                    //     $scope.teams=teams;
-                    // });
+                    });
                 }).then(function(data){
                     console.log(data);
                 });
-            Doctor.getRecentDoctorList({ userId: Storage.get('UID') })
-                .then(function(data) {
-                    console.log(data);
-                    New.addNestNews('12',Storage.get('UID'),data.results,'userId','doctorId')
-                    .then(function(doctors){
-                        $scope.doctors=doctors;
-                    })
-                    // setSingleUnread(data.results)
-                    // .then(function(doctors){
-                    //     $scope.doctors=doctors;
-                    // });
-                }, function(err) {
-                    console.log(err)
-                });
+            $interval(function(){
+                Doctor.getRecentDoctorList({ userId: Storage.get('UID') })
+                    .then(function(data) {
+                        console.log(data);
+                        New.addNestNews('12',Storage.get('UID'),data.results,'userId','doctorId')
+                        .then(function(doctors){
+                            $scope.doctors=doctors;
+                        });
+                    }, function(err) {
+                        console.log(err)
+                    });
+            },2000,3);
         }
     }
 
@@ -291,7 +285,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         $scope.load(true);
     })
     $scope.doRefresh = function(){
-        $scope.load();
+        $scope.load(true);
         // Stop the ion-refresher from spinning
         $scope.$broadcast('scroll.refreshComplete');
     }
@@ -434,17 +428,6 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             $scope.me[0].name=data.results.name;
             $scope.me[0].photoUrl=data.results.photoUrl;
             var idStr=$scope.me[0].userId;
-             setTimeout(function(){
-                  window.JMessage.addGroupMembersCrossApp($state.params.teamId,CONFIG.appKey,idStr,
-                function(data){
-                    console.log(data);
-
-
-                },function(err){
-
-                    console.log(err);
-                })
-             },500);
                 Communication.insertMember({teamId:$state.params.teamId,members:$scope.me})
                     .then(function(data){
                         console.log(data)
@@ -502,6 +485,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
     }
     //render msgs
     $scope.$on('$ionicView.beforeEnter', function() {
+        $scope.timer=[];
         $scope.photoUrls={};
         $scope.msgs = [];
         $scope.params.key = '';
@@ -684,6 +668,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         $scope.params.helpDivHeight = 0;
     })
     $scope.$on('$ionicView.beforeLeave', function() {
+        for(var i in $scope.timer) clearTimeout($scope.timer[i]);
         socket.off('messageRes');
         socket.off('getMsg');
         socket.off('err');
@@ -700,9 +685,10 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         $rootScope.conversation.id = '';
     })
     function sendNotice(type,status,cnt){
-        return setTimeout(function(){
+        var t = setTimeout(function(){
             return sendCnNotice(type,status,cnt);
         },2000);
+        $scope.timer.push(t);
     }
     function sendCnNotice(type,status,cnt){
         var len=$scope.msgs.length;
@@ -1007,10 +993,12 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             $http.get(msg.content.thumb).then(function(data){
                 $scope.msgs.push(msg);
                 toBottom(true,400);
+                $scope.msgCount++;
             })
         }else{
             $scope.msgs.push(msg);
             toBottom(true,100);
+            $scope.msgCount++;
         }
     }
     // send message--------------------------------------------------------------------------------
@@ -1535,10 +1523,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
     $scope.$on('$ionicView.beforeEnter', function() {
         $scope.photoUrls={};
         $rootScope.patient = {}
-            //发送信息的extra字段，传递teamId
-        $scope.msgExtra = {
-            teamId: $state.params.teamId
-        };
+
         $scope.msgs = [];
         $scope.params.msgCount = 0;
         console.log($state.params);
@@ -1913,10 +1898,12 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             $http.get(msg.content.thumb).then(function(data){
                 $scope.msgs.push(msg);
                 toBottom(true,400);
+                $scope.msgCount++;
             })
         }else{
             $scope.msgs.push(msg);
             toBottom(true,100);
+            $scope.msgCount++;
         }
     }
     function sendmsg(content,type){
