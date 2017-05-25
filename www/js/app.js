@@ -149,7 +149,7 @@ angular.module('kidney',[
                         {
                             $state.go('tab.patient')
                         }
-                        else if(params.length && params[0]=='doctor'){
+                        else if(params.length >1&& params[0]=='doctor'){
                             if(params[1]=='13')
                                 $state.go('tab.group-chat',{type:params[2],groupId:params[3],teamId:params[4]});
                             else
