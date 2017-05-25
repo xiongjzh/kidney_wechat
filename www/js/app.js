@@ -145,7 +145,7 @@ angular.module('kidney',[
                         {
                             $state.go('myqrcode')
                         }
-                        else if (state = "testnewsufferer" || state == "newsufferer")
+                        else if (state == "testnewsufferer" || state == "newsufferer")
                         {
                             $state.go('tab.patient')
                         }
