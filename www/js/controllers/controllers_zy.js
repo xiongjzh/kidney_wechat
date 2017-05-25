@@ -86,7 +86,9 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
                         //     console.log(data);
                         //     $rootScope.$broadcast('receiveMessage',data);
                         // });
-
+                        User.setMessageOpenId({type:1,userId:Storage.get("UID"),openId:Storage.get('messageopenid')}).then(function(res){
+                        },function(err){
+                        })
                         User.getAgree({userId:data.results.userId}).then(function(res){
                             if(res.results.agreement=="0"){
                                 $timeout(function(){$state.go('tab.home');},500);
@@ -983,8 +985,12 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
         New.getNewsByReadOrNot({userId:Storage.get('UID'),readOrNot:0}).then(//
             function(data){
                 if(data.results.length){
-                    $scope.HasUnreadMessages = true;
-                    // console.log($scope.HasUnreadMessages);
+                    $scope.hasUnreadMessages = true;
+                    // console.log($scope.hasUnreadMessages);
+
+                }else{
+                    $scope.hasUnreadMessages = false;
+                    // console.log($scope.hasUnreadMessages);
                 }
             },function(err){
                     console.log(err);
@@ -1080,7 +1086,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
     {
         // console.log(phone.userName+phone.phoneNo.slice(7))
         var un=phone.userName+phone.phoneNo.slice(7);
-        var url='http://121.43.107.106';
+        var url='http://121.196.221.44';
         if(role=='patient')
             url+=':6699/member.php?mod=register&mobile=2&handlekey=registerform&inajax=1'
         else if(role=='doctor')
@@ -1686,7 +1692,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
 }])
 
 //"患者”详情子页
-.controller('patientDetailCtrl', ['Insurance','Storage','Doctor','Patient','$scope','$ionicPopup','$ionicHistory','$state', 'New',function(Insurance,Storage,Doctor,Patient,$scope, $ionicPopup,$ionicHistory,$state,New) {
+.controller('patientDetailCtrl', ['Insurance','Storage','Doctor','Patient','$scope','$ionicPopup','$ionicHistory','$state', 'New','$ionicLoading',function(Insurance,Storage,Doctor,Patient,$scope, $ionicPopup,$ionicHistory,$state,New,$ionicLoading) {
     $scope.hideTabs = true;
 
     // var patient = DoctorsInfo.searchdoc($stateParams.doctorId);
@@ -1752,16 +1758,18 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
             }
             $scope.patient=data.results; 
             if (data.recentDiagnosis != null){
-                $scope.RecentDiagnosis=data.recentDiagnosis[0]; 
-                if ($scope.RecentDiagnosis.name == "class_4"){
-                    $scope.RecentDiagnosis.time = null
-                    $scope.RecentDiagnosis.progress = null
-                }else if ($scope.RecentDiagnosis.name == "class_2"|| $scope.RecentDiagnosis.name == "class_3"){
-                    $scope.RecentDiagnosis.time = null
-                }else if ($scope.RecentDiagnosis.name == "class_5"|| $scope.RecentDiagnosis.name == "class_6" || $scope.RecentDiagnosis.name == "class_1"){
-                    $scope.RecentDiagnosis.progress = null
-                }                
-            }      
+                $scope.RecentDiagnosis=data.recentDiagnosis[0];
+                if($scope.RecentDiagnosis!= null) {
+                    if ($scope.RecentDiagnosis.name == "class_4"){
+                        $scope.RecentDiagnosis.time = null
+                        $scope.RecentDiagnosis.progress = null
+                    }else if ($scope.RecentDiagnosis.name == "class_2"|| $scope.RecentDiagnosis.name == "class_3"){
+                        $scope.RecentDiagnosis.time = null
+                    }else if ($scope.RecentDiagnosis.name == "class_5"|| $scope.RecentDiagnosis.name == "class_6" || $scope.RecentDiagnosis.name == "class_1"){
+                        $scope.RecentDiagnosis.progress = null
+                    }                      
+                }
+            }        
             console.log($scope.RecentDiagnosis)  
         },
         function(err)
@@ -1813,6 +1821,10 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
                 .then(
                     function(data)
                     {
+                        $ionicLoading.show({
+                            template: '推送成功',
+                            duration:1000
+                        });
                         console.log(data)                 
                     },
                     function(err)
@@ -2610,6 +2622,11 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
     }   
 
     $scope.savefee = function() {
+        if($scope.doctor.charge2<$scope.doctor.charge1){
+            $scope.SaveStatus="咨询收费不得低于问诊收费，请重新设置"
+            load()
+            return;
+        }
         Doctor.editDoctorDetail($scope.doctor)
         .then(
             function(data)

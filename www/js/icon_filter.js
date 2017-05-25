@@ -30,6 +30,21 @@ angular.module('kidney.icon_filter', [])
      case '特殊评估':
        _src = 'img/icon_pinggu@2x.png';
        break;
+     case '腹透':
+       _src = 'img/icon_futou@2x.png';
+       break;
+     case '超滤量':
+       _src = 'img/icon_chaolv@2x.png';
+       break;
+     case '浮肿':
+       _src = 'img/icon_fuzhong@2x.png';
+       break;
+     case '引流通畅':
+       _src = 'img/icon_yinliu@2x.png';
+       break; 
+     case '血管通路情况':
+       _src = 'img/icon_xueguan@2x.png';
+       break;        
      }
     return _src;
    }

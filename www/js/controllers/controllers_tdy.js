@@ -1393,7 +1393,7 @@ angular.module('tdy.controllers', ['ionic','kidney.services','ionic-datepicker']
   //angular.toJson fromJson()
   //2017419 zxf
   // var testtt=[];
-  // testtt.push("http://121.43.107.106:8052/uploads/photos/")
+  // testtt.push("http://121.196.221.44:8052/uploads/photos/")
   // testtt.push("http://121.43.107.10da6:8052/uploads/photos/")
   // Storage.set('test',angular.toJson(testtt))
   // console.log(testtt)
@@ -1814,38 +1814,56 @@ angular.module('tdy.controllers', ['ionic','kidney.services','ionic-datepicker']
         Patient.getPatientDetail({userId:sender}).then(
             function(data){
                 if(data.results){
-                    patient.patName = data.results.name;
-                    patient.patPhoto = data.results.photoUrl;
+                    if(data.results.photoUrl){
+                        patient.Name = data.results.name;
+                        patient.Photo = data.results.photoUrl;                        
+                        
+                    }
+                    else {
+                        patient.Name = data.results.name;
+                        patient.Photo = 'img/patient.png'
+                    }
                 }                        
             },function(err){
                 console.log(err);
             });
-    }   
+    }    
 
     var getDocNamePhoto = function(sender,doctor){
         Doctor.getDoctorInfo({userId:sender}).then(
             function(data){
                 if(data.results){
-                    doctor.docName = data.results.name;
-                    doctor.docPhoto = data.results.photoUrl;
+                    console.log(data.results)
+                    if(data.results.photoUrl){
+                        doctor.Name = data.results.name;
+                        doctor.Photo = data.results.photoUrl;                        
+                    }
+                    else {                        
+                        doctor.Name = data.results.name;
+                        doctor.Photo = 'img/doctor.png'
+                    }
                 }                        
             },function(err){
                 console.log(err);
             });
-            // return doctor;
     }
 
     var getTeamNamePhoto = function(sender,team){
         Communication.getTeam({teamId:sender}).then(
             function(data){
                 if(data.results){
-                    team.teamName = data.results.name;
-                    team.teamPhoto = data.results.photoUrl;
+                    if(data.results.photoUrl){
+                        team.Name = data.results.name;
+                        team.Photo = data.results.photoUrl;                                                
+                    }
+                    else {
+                        team.Name = data.results.name;
+                        team.Photo = 'img/doctor_group.png'
+                    }
                 }                        
             },function(err){
                 console.log(err);
             });
-            // return doctor;
     }
 
     var Lastnews = function(){
@@ -1861,45 +1879,31 @@ angular.module('tdy.controllers', ['ionic','kidney.services','ionic-datepicker']
         //         console.log(err);
         //     }
         // );
-        //type11患者-医生；12医生-医生；13团队-医生
-        New.getNewsByReadOrNot({userId:receiver,type:11,readOrNot:0}).then(
-            function(data){
-                if(data.results.length){                    
-                    for(var x in data.results){
-                        getPatNamePhoto(data.results[x].sendBy,data.results[x]);
-                    }
-                }
-                $scope.Pchats=data.results;               
-            },function(err){
-                console.log(err);
-            }
-        );
 
-        New.getNewsByReadOrNot({userId:receiver,type:12,readOrNot:0}).then(
+        //获取所有类别聊天消息 type=chat  分类别type11患者-医生  type12医生-医生  type13团队-医生
+        New.getNewsByReadOrNot({userId:receiver,type:'chat',readOrNot:0}).then(
             function(data){
-                if(data.results.length){                    
-                    for(var x in data.results){
-                        getDocNamePhoto(data.results[x].sendBy,data.results[x]);
-                    }
+                //console.log(data.results)
+                if(data.results.length){
+                    for (var i = 0; i < data.results.length; i++){
+                        //console.log(data.results[i].type)
+                        if(data.results[i].type == 11){
+                            getPatNamePhoto(data.results[i].sendBy,data.results[i]);                    
+                        }
+                        if(data.results[i].type == 12){
+                            getDocNamePhoto(data.results[i].sendBy,data.results[i]);                   
+                        }
+                        if(data.results[i].type == 13){
+                            getTeamNamePhoto(data.results[i].sendBy,data.results[i]);                                                
+                        } 
+                    } 
+                    $scope.chats=data.results;
                 }
-                $scope.Dchats=data.results;               
             },function(err){
                 console.log(err);
             }
-        );
+        );        
 
-        New.getNewsByReadOrNot({userId:receiver,type:13,readOrNot:0}).then(
-            function(data){
-                if(data.results.length){                   
-                    for(var x in data.results){
-                        getTeamNamePhoto(data.results[x].sendBy,data.results[x]);
-                    }
-                }
-                $scope.Tchats=data.results;               
-            },function(err){
-                console.log(err);
-            }
-        );
     }
      $scope.$on('$ionicView.enter', function() {
         Lastnews();
@@ -1916,7 +1920,7 @@ angular.module('tdy.controllers', ['ionic','kidney.services','ionic-datepicker']
     }
 
     //患者-医生  获取咨询状态 [status]：1进行中；0已完成  进入聊天：[type]:1=进行中;0=已结束;
-    $scope.getPChatDetail = function(Pchat) {
+    getPChatDetail = function(Pchat) {
         var patientId = Pchat.sendBy;
         Counsel.getStatus({doctorId:Storage.get('UID'),patientId:patientId})
         .then(function(data){
@@ -1931,13 +1935,13 @@ angular.module('tdy.controllers', ['ionic','kidney.services','ionic-datepicker']
     }
 
     //医生-医生 进入聊天：type：2
-    $scope.getDChatDetail = function(Dchat) {
+    getDChatDetail = function(Dchat) {
         console.log(Dchat.sendBy)
         $state.go("tab.detail",{chatId:Dchat.sendBy,type:2,consultId:'DoctorChat'});
     }
 
     //团队-医生  获取交流状态 [status]：1进行中；0已完成  进入聊天：[type]:1=进行中;2=已结束;
-    $scope.getTChatDetail = function(Tchat) {
+    getTChatDetail = function(Tchat) {
         var msg = JSON.parse(Tchat.url)
         var teamId = msg.teamId
         var groupId = msg.targetID
@@ -1952,5 +1956,18 @@ angular.module('tdy.controllers', ['ionic','kidney.services','ionic-datepicker']
                 $state.go("tab.group-chat",{type:2,teamId:teamId,groupId:groupId});
             }
         })
+    }
+
+    $scope.getChatDetail = function(chat){
+        console.log(chat.type);
+        if(chat.type==11){
+            getPChatDetail(chat)
+        }
+        else if(chat.type==12){
+            getDChatDetail(chat)
+        }
+        else if(chat.type==13){
+            getTChatDetail(chat)
+        }        
     }
 }])

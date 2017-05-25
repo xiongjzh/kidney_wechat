@@ -1539,8 +1539,8 @@ display: inline-block;
 
 .image-red-point {
   position: absolute;
-  top: 8%;
-  right: calc(85% - 35px);
+  top: 20%;
+  right: calc(80.5% - 0px);
   height: 8px;
   width: 8px;
   border-radius: 5px;
@@ -1550,4 +1550,9 @@ display: inline-block;
 .doctor-list .item.item-checkbox.ng-empty.ng-valid, .doctor-list .item.item-checkbox.ng-not-empty.ng-valid {
   height: 10px;
   border: 0px;
+}
+.no-line{
+  background-color:transparent !important;
+  background-image: none !important;
+  border:0px !important;
 }

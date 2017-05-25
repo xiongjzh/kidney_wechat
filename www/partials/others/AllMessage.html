@@ -9,7 +9,7 @@
 
   <div  style="position: absolute;top: 43px;z-index:100;display: block;height: 2.5px;background-color: #33cd5f;{{barwidth}}" ></div>
   <ion-content >
-    <div class="card" ng-if="!(Pchats.length||Dchats.length||Tchats.length)">
+    <div class="card" ng-if="!(chats.length)">
         <div class="item item-text-wrap">
             暂时没有消息
         </div>
@@ -45,7 +45,7 @@
       </ion-item> -->
 
       <!-- 聊天消息 -->
-      <ion-item  ng-repeat="Pchat in Pchats"  class="item-thumbnail-left" ng-click="getPChatDetail(Pchat)">
+<!--       <ion-item  ng-repeat="Pchat in Pchats"  class="item-thumbnail-left" ng-click="getPChatDetail(Pchat)">
         <img ng-src="{{Pchat.patPhoto||'img/patient.png'}}" image-red-point="!chat.readOrNot">
         <div class="row">
             <h2 class="col" style="margin-top: 10px;">{{Pchat.patName}}</h2>
@@ -70,11 +70,27 @@
             <span class="col" style="margin-top: 10px;text-align: right;">{{Tchat.time|dateFormat:"YYYY-MM-DD h:m"}}</span>
         </div>
         <span class="row" style="margin-left:5px;">{{Tchat.description}}</span>
+      </ion-item> -->
+      <!-- <ion-item  ng-repeat="chat in chats"  class="item item-avatar left" ng-click="getChatDetail(chat)">
+        <img ng-src="{{chat.Photo}}" image-red-point="!chat.readOrNot">
+        <div class="row">
+            <h2 class="col" style="margin-top: 10px;">{{chat.Name}}</h2>
+            <span class="col" style="margin-top: 10px;text-align: right;">{{chat.time|dateFormat:"YYYY-MM-DD h:m"}}</span>
+        </div>
+        <span class="row" style="margin-left:5px;">{{chat.description}}</span>
+      </ion-item> -->
+
+      <ion-item  ng-repeat="chat in chats"  class="item item-avatar card" ng-click="getChatDetail(chat)">
+        <img ng-src="{{chat.Photo}}" image-red-point="!chat.readOrNot">
+        <div class="row">
+            <h2 class="col">{{chat.Name}}</h2>
+            <span class="col" style="font-size: 12px">{{chat.time|dateFormat:"YYYY-MM-DD h:m"}}</span>
+        </div>
+        <span class="row" style="margin-left:5px;">{{chat.description}}</span>
       </ion-item>
 
-
     </ion-list>
-    <ion-refresher pulling-text="下拉刷新..." on-refresh="do_refresher()"></ion-refresher>   
+    <ion-refresher pulling-text="下拉刷新..." on-refresh="do_refresher()"></ion-refresher>
   </ion-content>
-          
+
 </ion-view>

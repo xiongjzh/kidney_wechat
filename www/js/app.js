@@ -17,7 +17,7 @@ angular.module('kidney',[
     'kidney.icon_filter'
 ])
 
-.run(['$ionicPlatform', '$state', 'Storage', 'JM','$ionicHistory','$rootScope','CONFIG','Communication', '$location','wechat','$window','User','Doctor','jmapi','$ionicPopup',function($ionicPlatform, $state, Storage, JM,$ionicHistory,$rootScope,CONFIG,Communication,$location,wechat,$window,User,Doctor,jmapi,$ionicPopup) {
+.run(['$ionicPlatform', '$state', 'Storage', 'JM','$ionicHistory','$rootScope','CONFIG','Communication', '$location','wechat','$window','User','Doctor','jmapi','$ionicPopup','$q',function($ionicPlatform, $state, Storage, JM,$ionicHistory,$rootScope,CONFIG,Communication,$location,wechat,$window,User,Doctor,jmapi,$ionicPopup,$q) {
     $ionicPlatform.ready(function() {
         socket = io.connect('ws://121.196.221.44:4050/chat');
         
@@ -26,9 +26,21 @@ angular.module('kidney',[
         // alert(temp)
         if (angular.isDefined(temp[1]) == true)
         {
-            var code = temp[1].split('#')[0]
-            Storage.set('code',code)
+            if (angular.isDefined(temp[2]) == true)
+            {
+                var code = temp[1].split('&')[0]
+                var state = temp[2].split('#')[0]
+                var params = state.split('_');
+                Storage.set('code',code)
+            }
+            else
+            {
+                var code = temp[1].split('#')[0]
+                Storage.set('code',code)
+            }
+            
         }
+
         var wechatData = ""
         if (code != '' && code != undefined)
         {
@@ -126,53 +138,112 @@ angular.module('kidney',[
                         
                         jmapi.users(data.results.userId);
 
-                        Doctor.getDoctorInfo({userId:Storage.get("UID")})
-                        .then(function(res){
-                            if(res.results.photoUrl==undefined||res.results.photoUrl==""){
-                                Doctor.editDoctorDetail({userId:Storage.get("UID"),photoUrl:wechatData.headimgurl}).then(function(r){
-                                    console.log(r);
-                                })
-                            }
-                        },function(err){
-                        }) 
-                        User.getMessageOpenId({type:1,userId:Storage.get("UID")}).then(function(res){
-                            if (res.results == undefined || res.results == null)
-                            {
-                              User.setMessageOpenId({type:1,userId:Storage.get("UID"),openId:Storage.get('messageopenid')}).then(function(res){
-                                  console.log("setopenid");
-                              },function(){
-                                  console.log("连接超时！");
-                              })
-                            }
-                        },function(){
-                            console.log("连接超时！");
-                        })
-                        User.getAgree({userId:data.results.userId}).then(function(res){
-                            if(res.results.agreement=="0"){
-                                $state.go('tab.home');
-                            }else{
-                                $state.go('agreement',{last:'signin'});
-                            }
-                        },function(err){
-                            console.log(err);
-                        })
+                        var results = []
+                        var errs = []
                         
+                        if (state == "testqrcode" || state == "qrcode")
+                        {
+                            $state.go('myqrcode')
+                        }
+                        else if (state = "testnewsufferer" || state == "newsufferer")
+                        {
+                            $state.go('tab.patient')
+                        }
+                        else if(params.length && params[0]=='doctor'){
+                            if(params[1]=='13')
+                                $state.go('tab.group-chat',{type:params[2],groupId:params[3],teamId:params[4]});
+                            else
+                                $state.go('tab.detail',{type:params[2],chatId:params[3],counselId:params[4]});
+                        }
+                        else
+                        {
+                            $q.all([
+                            User.getAgree({userId:data.results.userId}).then(function(res){
+                                results.push(res)
+                            },function(err){
+                                errs.push(err)
+                            }),
+                            User.setMessageOpenId({type:1,userId:Storage.get("UID"),openId:Storage.get('messageopenid')}).then(function(res){
+                                results.push(res)
+                            },function(err){
+                                errs.push(err)
+                            }),
+                            Doctor.getDoctorInfo({userId:Storage.get("UID")}).then(function(res){
+                                results.push(res)
+                            },function(err){
+                                errs.push(err)
+                            })
+                            ]).then(function(){
+                              console.log(results)
+                              var a,b,c;
+                              for(var i in results)
+                              {
+                                if (results[i].results.agreement != undefined)
+                                {
+                                  a=i;
+                                }
+                                else if (results[i].results.userId != undefined)
+                                {   
+                                  b=i;
+                                }
+                                else
+                                {
+                                  c=i;
+                                }
+                              }
+                              if(results[a].results.agreement=="0")
+                              {
+                                if (results[b].results != null)
+                                {
+                                  if(results[b].results.photoUrl==undefined||results[b].results.photoUrl==""){
+                                    Doctor.editDoctorDetail({userId:Storage.get("UID"),photoUrl:wechatData.headimgurl}).then(function(r){
+                                      $state.go('tab.home');
+                                    })
+                                  }
+                                  else
+                                  {
+                                    $state.go('tab.home');
+                                  }
+                                }
+                                else
+                                {
+                                  $state.go('tab.home');
+                                }
+                              }
+                              else
+                              {
+                                $state.go('agreement',{last:'signin'});
+                              }
+                            })
+                        }
+                    }
+                    else
+                    {
+                        $state.go('signin')
                     }
                 },
                 function(data){
                     if(data.results==null && data.status==0){
                         $scope.logStatus = "网络错误！";
+                        $state.go('signin')
                         return;
                     }
                     if(data.status==404){
                         $scope.logStatus = "连接服务器失败！";
+                        $state.go('signin')
                         return;
                     }
+                    $state.go('signin')
                 });
             },function(err){
               console.log(err)
+              $state.go('signin')
               // alert(2);
             })
+        }
+        else
+        {
+            $state.go('signin')
         }
 
         //是否登陆
@@ -452,8 +523,14 @@ angular.module('kidney',[
       url:'/messagesDetail',
       templateUrl:'partials/others/VaryMessage.html',
       controller:'VaryMessageCtrl'
+    })    
+    //我的二维码(独立页面)
+    .state('myqrcode', {
+        cache:false,
+        url:'/myqrcode',
+        templateUrl:'partials/others/myqrcode.html',
+        controller:'QRcodeCtrl'
     })
-    
     
     //选项卡
     .state('tab', {
@@ -717,7 +794,6 @@ angular.module('kidney',[
                     controller: 'GroupKickCtrl'
                 }
             }
-            // params:{teamId:null}
         })
     .state('tab.group-add-member', {
             //type : 'new'表示从新建组进来的，不是'new'就是已有team加成员
@@ -729,7 +805,6 @@ angular.module('kidney',[
                     controller: 'GroupAddMemberCtrl'
                 }
             }
-            // params:{teamId:null}
         })
     .state('tab.group-detail', {
             url: '/groups/:teamId/detail',
@@ -740,7 +815,6 @@ angular.module('kidney',[
                     controller: 'GroupDetailCtrl'
                 }
             }
-            // params:{teamId:null}
         })
     .state('tab.group-qrcode', {
             url: '/groups/qrcode',
@@ -773,7 +847,6 @@ angular.module('kidney',[
                     controller: 'GroupConclusionCtrl'
                 }
             }
-            // params:{groupId:null,teamId:null}
         })
     .state('tab.group-patient', {
         // cache: false,
@@ -797,7 +870,6 @@ angular.module('kidney',[
                 templateUrl: 'partials/group/profile.html'
             }
         }
-        // params:{memberId:null}
     })
 
     // views-tab-me
@@ -807,6 +879,7 @@ angular.module('kidney',[
         url: '/bill',
         views: {
             'tab-me':{
+                cache: false,
                 controller: 'billCtrl',
                 templateUrl: 'partials/me/bill.html'
             }
@@ -837,7 +910,7 @@ angular.module('kidney',[
             }
         }
     })
-            
+
     //我的信息
     .state('tab.myinfo', {
         // cache: false,
@@ -940,10 +1013,15 @@ angular.module('kidney',[
     })
 
 
-    $urlRouterProvider.otherwise('/signin');
+    // $urlRouterProvider.otherwise('/signin');
 
 })
 .controller('tabCtrl',['$state','$scope',function($state,$scope){
+    $scope.goHome = function(){
+        setTimeout(function() {
+        $state.go('tab.home', {});
+      },20);
+    }    
     $scope.goConsult = function(){
         setTimeout(function() {
         $state.go('tab.consult', {});
