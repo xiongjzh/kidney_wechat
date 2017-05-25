@@ -48,10 +48,10 @@ angular.module('kidney.services', ['ionic','ngResource'])
 .constant('CONFIG', {
     crossKey:'fe7b9ba069b80316653274e4',
     appKey: 'cf32b94444c4eaacef86903e',
-    baseUrl: 'http://121.43.107.106:4050/',
-    mediaUrl: 'http://121.43.107.106:8052/',
-    imgThumbUrl: 'http://121.43.107.106:8052/uploads/photos/resize',
-    imgLargeUrl: 'http://121.43.107.106:8052/uploads/photos/',
+    baseUrl: 'http://121.196.221.44:4050/',
+    mediaUrl: 'http://121.196.221.44:8052/',
+    imgThumbUrl: 'http://121.196.221.44:8052/uploads/photos/resize',
+    imgLargeUrl: 'http://121.196.221.44:8052/uploads/photos/',
     cameraOptions: {
         cam: {
             quality: 60,
