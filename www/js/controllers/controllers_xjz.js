@@ -1627,7 +1627,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             .then(function(res) {
                 $scope.params.team = res.results;
                 $scope.params.targetName = '['+data.result.patientId.name+']'+$scope.params.team.name;
-                for(i=0;i<data.results.members.length;i++){
+                for(i=0;i<res.results.members.length;i++){
                     $scope.photoUrls[res.results.members[i].userId]=res.results.members[i].photoUrl;
                 }
             });
