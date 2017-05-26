@@ -976,12 +976,12 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                 $scope.msgs.push(msg);
                 toBottom(true,400);
                 toBottom(true,800);
-                $scope.msgCount++;
+                $scope.params.msgCount++;
             })
         }else{
             $scope.msgs.push(msg);
             toBottom(true,100);
-            $scope.msgCount++;
+            $scope.params.msgCount++;
         }
     }
     // send message--------------------------------------------------------------------------------
@@ -1846,12 +1846,12 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                 $scope.msgs.push(msg);
                 toBottom(true,400);
                 toBottom(true,800);
-                $scope.msgCount++;
+                $scope.params.msgCount++;
             })
         }else{
             $scope.msgs.push(msg);
             toBottom(true,100);
-            $scope.msgCount++;
+            $scope.params.msgCount++;
         }
     }
     function sendmsg(content,type){
