@@ -52,29 +52,195 @@ angular.module('kidney',[
                 // alert(wechatData.nickname)
                 Storage.set('openid',wechatData.unionid)
                 Storage.set('messageopenid',wechatData.openid)
+                Storage.set('wechathead',wechatData.headimgurl)
                 if (wechatData.unionid&&wechatData.openid)
                 {
                     User.getUserIDbyOpenId({openId:wechatData.openid}).then(function(data)
                     {
                         if (angular.isDefined(data.phoneNo) == true)
                         {
+                            var tempresult = []
+                            var temperr = []
+                            $q.all([
                             User.setOpenId({phoneNo:data.phoneNo,openId:Storage.get('openid')}).then(function(res){
                                 console.log("替换openid");
-                            },function(){
-                                console.log("连接超时！");
-                            })
+                            },function(err){
+                                temperr.push(err)
+                            }),
                             User.getMessageOpenId({type:1,userId:data.UserId}).then(function(res){
-                                if (res.results == undefined || res.results == null)
+                                tempresult.push(res)
+                            },function(err){
+                                temperr.push(err)
+                            })
+                            ]).then(function(){
+                                if (tempresult[0].results == undefined || tempresult[0].results == null)
                                 {
                                   User.setMessageOpenId({type:1,userId:data.UserId,openId:wechatData.openid}).then(function(res){
                                       console.log("setopenid");
+                                      $state.go('signin')
                                   },function(){
                                       console.log("连接超时！");
                                   })
                                 }
-                            },function(){
-                                console.log("连接超时！");
+                                else
+                                {
+                                    $state.go('signin')
+                                }
                             })
+                        }
+                        else
+                        {
+                            User.logIn({username:Storage.get('openid'),password:Storage.get('openid'),role:"doctor"}).then(function(data){
+                                console.log(data);
+                                if(data.results==1){
+                                    if(data.mesg == "No authority!")
+                                    {
+                                        alert("您没有权限登陆肾病守护者联盟，如您是患者，请登录肾事管家");
+                                        $state.go('signin')
+                                    }
+                                    else
+                                    {
+                                        $ionicPopup.show({   
+                                             title: '由于系统更新，如您已拥有手机账号，请重新进行验证并绑定微信账号。如果您是首次使用，请点击取消后进行注册！',
+                                             buttons: [
+                                               { 
+                                                    text: '取消',
+                                                    type: 'button',
+                                                    onTap: function(e) {
+                                                        $state.go('signin')
+                                                    }
+                                                },
+                                               {
+                                                    text: '確定',
+                                                    type: 'button-positive',
+                                                    onTap: function(e) {
+                                                        Storage.set('validMode',0)
+                                                        $state.go('phonevalid',{phonevalidType:"wechat"})
+                                                    }
+                                               },
+                                               ]
+                                        })
+                                        
+                                    }
+                                }
+                                else if(data.results.mesg=="login success!"){
+
+                                    // $scope.logStatus = "登录成功！";
+                                    $ionicHistory.clearCache();
+                                    $ionicHistory.clearHistory();
+                                    User.getUserIDbyOpenId({openId:Storage.get('openid')}).then(function(data)
+                                    {
+                                        if (angular.isDefined(data.phoneNo) == true)
+                                        {
+                                            Storage.set('USERNAME',data.phoneNo);
+                                        }
+                                    },function(err)
+                                    {
+                                        console.log(err)
+                                    })
+                                    Storage.set('TOKEN',data.results.token);//token作用目前还不明确
+                                    Storage.set('isSignIn',true);
+                                    Storage.set('UID',data.results.userId);
+                                    
+                                    jmapi.users(data.results.userId);
+
+                                    var results = []
+                                    var errs = []
+                                    
+                                    if (state == "testqrcode" || state == "qrcode")
+                                    {
+                                        $state.go('myqrcode')
+                                    }
+                                    else if (state == "testnewsufferer" || state == "newsufferer")
+                                    {
+                                        $state.go('tab.patient')
+                                    }
+                                    else if(params.length >1 && params[0]=='doctor'){
+                                        if(params[1]=='13')
+                                            $state.go('tab.group-chat',{type:params[2],groupId:params[3],teamId:params[4]});
+                                        else
+                                            $state.go('tab.detail',{type:params[2],chatId:params[3],counselId:params[4]});
+                                    }
+                                    else
+                                    {
+                                        $q.all([
+                                        User.getAgree({userId:data.results.userId}).then(function(res){
+                                            results.push(res)
+                                        },function(err){
+                                            errs.push(err)
+                                        }),
+                                        User.setMessageOpenId({type:1,userId:Storage.get("UID"),openId:Storage.get('messageopenid')}).then(function(res){
+                                            results.push(res)
+                                        },function(err){
+                                            errs.push(err)
+                                        }),
+                                        Doctor.getDoctorInfo({userId:Storage.get("UID")}).then(function(res){
+                                            results.push(res)
+                                        },function(err){
+                                            errs.push(err)
+                                        })
+                                        ]).then(function(){
+                                          console.log(results)
+                                          var a,b,c;
+                                          for(var i in results)
+                                          {
+                                            if (results[i].results.agreement != undefined)
+                                            {
+                                              a=i;
+                                            }
+                                            else if (results[i].results.userId != undefined)
+                                            {   
+                                              b=i;
+                                            }
+                                            else
+                                            {
+                                              c=i;
+                                            }
+                                          }
+                                          if(results[a].results.agreement=="0")
+                                          {
+                                            if (results[b].results != null)
+                                            {
+                                              if(results[b].results.photoUrl==undefined||results[b].results.photoUrl==""){
+                                                Doctor.editDoctorDetail({userId:Storage.get("UID"),photoUrl:wechatData.headimgurl}).then(function(r){
+                                                  $state.go('tab.home');
+                                                })
+                                              }
+                                              else
+                                              {
+                                                $state.go('tab.home');
+                                              }
+                                            }
+                                            else
+                                            {
+                                              $state.go('tab.home');
+                                            }
+                                          }
+                                          else
+                                          {
+                                            $state.go('agreement',{last:'signin'});
+                                          }
+                                        })
+                                    }
+                                }
+                                else
+                                {
+                                    $state.go('signin')
+                                }
+                            },
+                            function(data){
+                                if(data.results==null && data.status==0){
+                                    $scope.logStatus = "网络错误！";
+                                    $state.go('signin')
+                                    return;
+                                }
+                                if(data.status==404){
+                                    $scope.logStatus = "连接服务器失败！";
+                                    $state.go('signin')
+                                    return;
+                                }
+                                $state.go('signin')
+                            });
                         }
                     },function(err)
                     {
@@ -82,159 +248,8 @@ angular.module('kidney',[
                     })
                     
                 }
-                Storage.set('wechathead',wechatData.headimgurl)
-                var logPromise = User.logIn({username:Storage.get('openid'),password:Storage.get('openid'),role:"doctor"});
-                logPromise.then(function(data){
-                    console.log(data);
-                    if(data.results==1){
-                        if(data.mesg == "No authority!")
-                        {
-                            alert("您没有权限登陆肾病守护者联盟，如您是患者，请登录肾事管家");
-                            $state.go('signin')
-                        }
-                        else
-                        {
-                            $ionicPopup.show({   
-                                 title: '由于系统更新，如您已拥有手机账号，请重新进行验证并绑定微信账号。如果您是首次使用，请点击取消后进行注册！',
-                                 buttons: [
-                                   { 
-                                        text: '取消',
-                                        type: 'button',
-                                        onTap: function(e) {
-                                            $state.go('signin')
-                                        }
-                                    },
-                                   {
-                                        text: '確定',
-                                        type: 'button-positive',
-                                        onTap: function(e) {
-                                            Storage.set('validMode',0)
-                                            $state.go('phonevalid',{phonevalidType:"wechat"})
-                                        }
-                                   },
-                                   ]
-                            })
-                            
-                        }
-                    }
-                    else if(data.results.mesg=="login success!"){
-
-                        // $scope.logStatus = "登录成功！";
-                        $ionicHistory.clearCache();
-                        $ionicHistory.clearHistory();
-                        User.getUserIDbyOpenId({openId:Storage.get('openid')}).then(function(data)
-                        {
-                            if (angular.isDefined(data.phoneNo) == true)
-                            {
-                                Storage.set('USERNAME',data.phoneNo);
-                            }
-                        },function(err)
-                        {
-                            console.log(err)
-                        })
-                        Storage.set('TOKEN',data.results.token);//token作用目前还不明确
-                        Storage.set('isSignIn',true);
-                        Storage.set('UID',data.results.userId);
-                        
-                        jmapi.users(data.results.userId);
-
-                        var results = []
-                        var errs = []
-                        
-                        if (state == "testqrcode" || state == "qrcode")
-                        {
-                            $state.go('myqrcode')
-                        }
-                        else if (state == "testnewsufferer" || state == "newsufferer")
-                        {
-                            $state.go('tab.patient')
-                        }
-                        else if(params.length >1&& params[0]=='doctor'){
-                            if(params[1]=='13')
-                                $state.go('tab.group-chat',{type:params[2],groupId:params[3],teamId:params[4]});
-                            else
-                                $state.go('tab.detail',{type:params[2],chatId:params[3],counselId:params[4]});
-                        }
-                        else
-                        {
-                            $q.all([
-                            User.getAgree({userId:data.results.userId}).then(function(res){
-                                results.push(res)
-                            },function(err){
-                                errs.push(err)
-                            }),
-                            User.setMessageOpenId({type:1,userId:Storage.get("UID"),openId:Storage.get('messageopenid')}).then(function(res){
-                                results.push(res)
-                            },function(err){
-                                errs.push(err)
-                            }),
-                            Doctor.getDoctorInfo({userId:Storage.get("UID")}).then(function(res){
-                                results.push(res)
-                            },function(err){
-                                errs.push(err)
-                            })
-                            ]).then(function(){
-                              console.log(results)
-                              var a,b,c;
-                              for(var i in results)
-                              {
-                                if (results[i].results.agreement != undefined)
-                                {
-                                  a=i;
-                                }
-                                else if (results[i].results.userId != undefined)
-                                {   
-                                  b=i;
-                                }
-                                else
-                                {
-                                  c=i;
-                                }
-                              }
-                              if(results[a].results.agreement=="0")
-                              {
-                                if (results[b].results != null)
-                                {
-                                  if(results[b].results.photoUrl==undefined||results[b].results.photoUrl==""){
-                                    Doctor.editDoctorDetail({userId:Storage.get("UID"),photoUrl:wechatData.headimgurl}).then(function(r){
-                                      $state.go('tab.home');
-                                    })
-                                  }
-                                  else
-                                  {
-                                    $state.go('tab.home');
-                                  }
-                                }
-                                else
-                                {
-                                  $state.go('tab.home');
-                                }
-                              }
-                              else
-                              {
-                                $state.go('agreement',{last:'signin'});
-                              }
-                            })
-                        }
-                    }
-                    else
-                    {
-                        $state.go('signin')
-                    }
-                },
-                function(data){
-                    if(data.results==null && data.status==0){
-                        $scope.logStatus = "网络错误！";
-                        $state.go('signin')
-                        return;
-                    }
-                    if(data.status==404){
-                        $scope.logStatus = "连接服务器失败！";
-                        $state.go('signin')
-                        return;
-                    }
-                    $state.go('signin')
-                });
+                
+                
             },function(err){
               console.log(err)
               $state.go('signin')
