@@ -2094,7 +2094,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
                     }
                 }
                 wechat.createTDCticket(params).then(function(data){
-                    $scope.doctor.TDCticket = "https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=" + data.results.TDCticket
+                    $scope.doctor.TDCticket = "https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=" + data.results
                 },
                 function(err)
                 {
