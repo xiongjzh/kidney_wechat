@@ -445,7 +445,6 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
     $scope.params = {
             //[type]:0=已结束;1=进行中;2=医生
             type: '',
-            key: '',
             title: '',
             msgCount: 0,
             helpDivHeight: 0,
@@ -453,13 +452,12 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             UID:Storage.get('UID'),
             realCounselType:'',
             newsType:'',
+            targetRole:'',
             counsel:{},
-            connect:false,
+            loaded:false,
             recording:false
         }
-        // var audio = new Audio('http://121.43.107.106:8088/PersonalPhoto/Emotions.mp3');
-        // audio.play();
-        // $scope.msgs = [];
+
     $scope.scrollHandle = $ionicScrollDelegate.$getByHandle('myContentScroll');
     function toBottom(animate,delay){
         if(!delay) delay=100;
@@ -472,10 +470,9 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         $scope.timer=[];
         $scope.photoUrls={};
         $scope.msgs = [];
-        $scope.params.key = '';
         $scope.params.chatId = $state.params.chatId;
         $scope.params.type = $state.params.type;
-        $scope.params.connect = false;
+        $scope.params.loaded = false;
         $scope.params.msgCount = 0;
         $scope.params.newsType = $scope.params.type=='2'?'12':'11';
         console.log($scope.params)
@@ -485,7 +482,52 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         //         thisDoctor=data.results;
         //         $scope.photoUrls[data.results.userId]=data.results.photoUrl;
         //     });
-        if ($scope.params.type != '2') {
+        // if ($scope.params.type != '2') {
+        //     Patient.getPatientDetail({userId:$state.params.chatId})
+        //      .then(function(data){
+        //         $scope.params.targetName = data.results.name;
+        //         $scope.photoUrls[data.results.userId]=data.results.photoUrl;
+        //     });
+        //     $scope.params.key = CONFIG.crossKey;
+        //     //获取counsel信息
+        //     Communication.getCounselReport({counselId:$state.params.counselId})
+        //     .then(function(data){
+        //         console.log(data)
+        //         $scope.params.counsel = data.results;
+        //         $scope.counseltype= data.results.type=='3'?'2':data.results.type;
+        //         $scope.counselstatus=data.results.status;
+        //         $scope.params.type = data.results.status;
+        //         if ($scope.counselstatus == '1') $scope.params.title += "-进行中";
+        //         $scope.params.realCounselType=data.results.type;
+        //         Account.getCounts({doctorId:Storage.get('UID'),patientId:$scope.params.chatId})
+        //         .then(function(res){
+        //             if($scope.params.connect){
+        //                 return sendNotice($scope.counseltype,$scope.counselstatus,res.result.count);
+        //             }else{
+        //                 var connectWatcher = $scope.$watch('params.connect',function(newv,oldv){
+        //                     if(newv) {
+        //                         connectWatcher();
+        //                         return sendNotice($scope.counseltype,$scope.counselstatus,res.result.count);
+        //                     }
+        //                 });
+        //             }
+        //         });
+
+        //     },function(err){
+        //         console.log(err);
+        //     })
+        // }
+        if ($scope.params.type == '2') {
+            $scope.params.title = "医生交流";
+            $scope.params.targetRole = 'doctor';
+            Doctor.getDoctorInfo({ userId: $scope.params.chatId })
+                .then(function(data) {
+                    $scope.params.targetName = data.results.name;
+                    $scope.photoUrls[data.results.userId] = data.results.photoUrl;
+                });
+        } else {
+            $scope.params.title = "咨询";
+            $scope.params.targetRole = 'patient';
             Patient.getPatientDetail({userId:$state.params.chatId})
              .then(function(data){
                 $scope.params.targetName = data.results.name;
@@ -504,10 +546,10 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                 $scope.params.realCounselType=data.results.type;
                 Account.getCounts({doctorId:Storage.get('UID'),patientId:$scope.params.chatId})
                 .then(function(res){
-                    if($scope.params.connect){
+                    if($scope.params.loaded){
                         return sendNotice($scope.counseltype,$scope.counselstatus,res.result.count);
                     }else{
-                        var connectWatcher = $scope.$watch('params.connect',function(newv,oldv){
+                        var connectWatcher = $scope.$watch('params.loaded',function(newv,oldv){
                             if(newv) {
                                 connectWatcher();
                                 return sendNotice($scope.counseltype,$scope.counselstatus,res.result.count);
@@ -520,24 +562,12 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                 console.log(err);
             })
         }
-        if ($scope.params.type == '2') {
-            $scope.params.title = "医生交流";
-            Doctor.getDoctorInfo({ userId: $scope.params.chatId })
-                .then(function(data) {
-                    $scope.params.targetName = data.results.name;
-                    $scope.photoUrls[data.results.userId] = data.results.photoUrl;
-                });
-        } else {
-            $scope.params.title = "咨询";
-        }
 
-        // if (window.JMessage) {
-        //     window.JMessage.enterSingleConversation($state.params.chatId, $scope.params.key);
-        //     getMsg(15);
-        // }
-        var loadWatcher = $scope.$watch('msgs.length',function(newv,oldv){
+ 
+        var loadWatcher = $scope.$watch('params.loaded',function(newv,oldv){
             if(newv) {
                 loadWatcher();
+                if($scope.msgs.length==0) return;
                 var lastMsg=$scope.msgs[$scope.msgs.length-1];
                 if(lastMsg.fromID==$scope.params.UID) return;
                 return New.insertNews({userId:lastMsg.targetID,sendBy:lastMsg.fromID,type:$scope.params.newsType,readOrNot:1});
@@ -547,6 +577,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         $scope.getMsg(15).then(function(data){
             $scope.msgs=data;
             toBottom(true,400);
+            $scope.params.loaded = true;
         });
     });
 
@@ -561,7 +592,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             thisDoctor=response.results;
             $scope.photoUrls[response.results.userId]=response.results.photoUrl;
 
-            socket.emit('newUser',{user_name:response.results.name,user_id:$scope.params.UID});
+            socket.emit('newUser',{user_name:response.results.name,user_id:$scope.params.UID,client:'wechatdoctor'});
 
             socket.on('err',function(data){
                 console.error(data)
@@ -617,7 +648,6 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                     }
                 }
             });
-            $scope.params.connect=true;
         },function(err){
             console.log(err);
         })
@@ -668,10 +698,10 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         $rootScope.conversation.id = '';
     })
     function sendNotice(type,status,cnt){
-        var t = setTimeout(function(){
+        // var t = setTimeout(function(){
             return sendCnNotice(type,status,cnt);
-        },2000);
-        $scope.timer.push(t);
+        // },2000);
+        // $scope.timer.push(t);
     }
     function sendCnNotice(type,status,cnt){
         var len=$scope.msgs.length;
@@ -705,11 +735,12 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                 counseltype:$scope.counseltype
             }
             var msgJson={
+                clientType:'wechatdoctor',
                 contentType:'custom',
                 fromID:thisDoctor.userId,
                 fromName:thisDoctor.name,
                 fromUser:{
-                    avatarPath:CONFIG.mediaUrl+'uploads/photos/resized'+thisDoctor.userId+'_myAvatar.jpg'
+                    // avatarPath:CONFIG.mediaUrl+'uploads/photos/resized'+thisDoctor.userId+'_myAvatar.jpg'
                 },
                 targetID:$scope.params.chatId,
                 targetName:$scope.params.targetName,
@@ -717,9 +748,11 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                 status:'send_going',
                 createTimeInMillis: Date.now(),
                 newsType:$scope.params.newsType,
+                targetRole:$scope.params.targetRole,
                 content:notice
             }
-            socket.emit('message',{msg:msgJson,to:$scope.params.chatId,role:'doctor'});
+            $scope.msgs.push(msgJson);
+            // socket.emit('message',{msg:msgJson,to:$scope.params.chatId,role:'doctor'});
         }
     }
     function noMore(){
@@ -740,6 +773,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
         return $q(function(resolve,reject){
             var q={
                 messageType:'1',
+                newsType:$scope.params.newsType,
                 id1:Storage.get('UID'),
                 id2:$scope.params.chatId,
                 skip:$scope.params.msgCount,
@@ -911,6 +945,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                 endlMsg.counseltype=2;
             }
             var msgJson={
+                clientType:'wechatdoctor',
                 contentType:'custom',
                 fromID:thisDoctor.userId,
                 fromName:thisDoctor.name,
@@ -923,6 +958,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                 status:'send_going',
                 createTimeInMillis: Date.now(),
                 newsType:$scope.params.newsType,
+                targetRole:'patient',
                 content:endlMsg
             }
             socket.emit('message',{msg:msgJson,to:$scope.params.chatId,role:'doctor'});
@@ -1007,6 +1043,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             };
         }
         var msgJson={
+            clientType:'wechatdoctor',
             contentType:type,
             fromID:$scope.params.UID,
             fromName:thisDoctor.name,
@@ -1019,7 +1056,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             status:'send_going',
             createTimeInMillis: Date.now(),
             newsType:$scope.params.newsType,
-            // _id:'',
+            targetRole:$scope.params.targetRole,
             content:data
         }
         if(local){
@@ -1534,7 +1571,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             Doctor.getDoctorInfo({userId:Storage.get('UID')})
                 .then(function(data){
                     thisDoctor=data.results;
-                    socket.emit('newUser',{user_name:thisDoctor.name,user_id:$scope.params.UID});
+                    socket.emit('newUser',{user_name:thisDoctor.name,user_id:$scope.params.UID,client:'wechatdoctor'});
                     socket.on('err',function(data){
                         console.error(data)
                     });
@@ -1867,6 +1904,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             };
         }
         var msgJson={
+            clientType:'wechatdoctor',
             contentType:type,
             fromID:$scope.params.UID,
             fromName:thisDoctor.name,
@@ -1880,7 +1918,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
             status:'send_going',
             createTimeInMillis: Date.now(),
             newsType:$scope.params.newsType,
-            // _id:'',
+            targetRole:'doctor',
             content:data
         }
         console.info('socket.connected'+socket.connected);
@@ -2061,6 +2099,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                     .then(function(res) {
                         var DID=res.results.doctorId.userId,PID=res.results.patientId.userId
                         var msgJson = {
+                            clientType:'wechatdoctor',
                             contentType: 'text',
                             fromID: DID,
                             fromName:res.results.doctorId.name,
@@ -2072,6 +2111,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                             targetType: 'single',
                             status: 'send_going',
                             newsType:'11',
+                            targetRole:'patient',
                             createTimeInMillis: Date.now(),
                             content: {
                                 text: $scope.input.text
@@ -2079,7 +2119,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                             }
                         }
                         if(res.results.type!='1' || res.results.status==0){
-                            socket.emit('newUser', { user_name: res.results.doctorId.name, user_id: DID });
+                            socket.emit('newUser', { user_name: res.results.doctorId.name, user_id: DID ,client:'wechatdoctor'});
                             socket.emit('message', { msg: msgJson, to: PID ,role:'doctor'});
                             // socket.on('messageRes', function(data) {
                             // socket.off('messageRes');
@@ -2093,7 +2133,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                             .then(function(){
                                 Account.getCounts({doctorId:DID,patientId:PID})
                                 .then(function(response){
-                                    socket.emit('newUser', { user_name: res.results.doctorId.name, user_id: DID });
+                                    socket.emit('newUser', { user_name: res.results.doctorId.name, user_id: DID ,client:'wechatdoctor'});
                                     socket.emit('message', { msg: msgJson, to: PID ,role:'doctor'});
                                     // socket.on('messageRes', function(data) {
                                     // socket.off('messageRes');
@@ -2106,6 +2146,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                                             counseltype:1
                                         }
                                         var endJson={
+                                            clientType:'wechatdoctor',
                                             contentType:'custom',
                                             fromID:DID,
                                             fromName:res.results.doctorId.name,
@@ -2117,6 +2158,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                                             targetType:'single',
                                             status:'send_going',
                                             createTimeInMillis: Date.now(),
+                                            targetRole:'patient',
                                             newsType:'11',
                                             content:endlMsg
                                         }
@@ -2239,6 +2281,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                 //         console.error(err);
                 //     });
                 var msgJson={
+                    clientType:'wechatdoctor',
                     contentType:'custom',
                     fromID:thisDoctor.userId,
                     fromName:thisDoctor.name,
@@ -2251,9 +2294,10 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                     status:'send_going',
                     createTimeInMillis: Date.now(),
                     newsType:'12',
+                    targetRole:'doctor',
                     content:msgdata
                 }
-                socket.emit('newUser',{user_name:thisDoctor.name,user_id:thisDoctor.userId});
+                socket.emit('newUser',{user_name:thisDoctor.name,user_id:thisDoctor.userId,client:'wechatdoctor'});
                 socket.emit('message',{msg:msgJson,to:doc.userId,role:'doctor'});
                 socket.on('messageRes',function(messageRes){
                     if(messageRes.msg.createTimeInMillis!=msgJson.createTimeInMillis) return;
@@ -2354,6 +2398,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                     msgdata.targetId=team.teamId;
                     msgdata.fromId=thisDoctor.userId;
                     var msgJson={
+                        clientType:'wechatdoctor',
                         contentType:'custom',
                         fromID:thisDoctor.userId,
                         fromName:thisDoctor.name,
@@ -2366,6 +2411,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                         targetType:'group',
                         status:'send_going',
                         newsType:'13',
+                        targetRole:'doctor',
                         createTimeInMillis: Date.now(),
                         content:msgdata
                     };
@@ -2373,7 +2419,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                     Communication.newConsultation(d)
                     .then(function(data){
                         console.log(data);
-                        socket.emit('newUser',{user_name:thisDoctor.name,user_id:thisDoctor.userId});
+                        socket.emit('newUser',{user_name:thisDoctor.name,user_id:thisDoctor.userId,client:'wechatdoctor'});
                         socket.emit('message',{msg:msgJson,to:team.teamId,role:'doctor'});
                         socket.on('messageRes',function(messageRes){
                             if(messageRes.msg.createTimeInMillis!=msgJson.createTimeInMillis) return;

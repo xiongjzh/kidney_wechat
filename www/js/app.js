@@ -287,86 +287,6 @@ angular.module('kidney',[
         if (window.StatusBar) {
             StatusBar.styleDefault();
         }
-        if (window.JPush) {
-            window.JPush.init();
-        }
-        if (window.JMessage) {
-            // window.Jmessage.init();
-            JM.init();
-            document.addEventListener('jmessage.onUserLogout',function(data){
-              console.error(Storage.get(UID) +' log out');
-              alert('jmessage user log out: '+Storage.get(UID));
-            })
-            //打开通知栏消息，属于jmessage
-            document.addEventListener('jmessage.onOpenMessage', function(msg) {
-                console.info('[jmessage.onOpenMessage]:');
-                console.log(msg);
-                if(msg.targetType=='group'){
-                    window.JMessage.getGroupInfo(msg.targetID,
-                        function(response){
-                            //'0':团队交流  '1': 未结束病历  '2':已结束病历
-                            var res=JSON.stringify(response);
-                            if(res.groupDescription=="consultation_open"){
-                                $state.go('tab.group-chat', { type:'1',groupId: msg.targetID,teamId:msg.content.stringExtras.teamId});
-                            }else if(res.groupDescription=="consultation_close"){
-                                $state.go('tab.group-chat', { type:'2',groupId: msg.targetID,teamId:msg.content.stringExtras.teamId});
-                            }else{
-                                $state.go('tab.group-chat', { type:'0',groupId: msg.targetID,teamId:msg.content.stringExtras.teamId});
-                            }
-                            console.log(res);
-                        },function(err){
-                            console.log(err);
-                        })
-                }else{
-                    // window.JMessage.getUserInfo(msg.fromID,msg.fromAppkey,
-                    //     function(response){
-                    //         console.log(response);
-                    //     },function(err){
-                    //         console.log(err);
-                    //     })
-                    if(msg.fromAppkey==CONFIG.appKey){
-                        $state.go('tab.detail', { type:'2',chatId: msg.targetID});
-                    }else{
-                        $state.go('tab.detail', { type:'1',chatId: msg.targetID});
-                    }
-                }
-            }, false);
-            //打开通知栏Notification,属于jpush
-            document.addEventListener("jpush.openNotification", function (msg) {
-                console.info('[jpush.openNotification]:');
-                console.log(msg);
-                // var alertContent
-                if(device.platform == "Android") {
-                    if(msg.extras.targetType=='group'){
-                        //转发团队
-                        var content = JSON.stringify(msg.extras.content);
-                            groupId = content.contentStringMap.consultationId;
-                            teamId = content.contentStringMap.targetId;
-                        if(groupId!=teamId){
-                            $state.go('tab.group-chat', { type:'1',groupId: groupId,teamId:teamId});
-                        }else{
-                            $state.go('tab.group-chat', { type:'0',groupId: groupId,teamId:teamId});
-                        }
-                    }else{
-                        //转发医生
-                        if(msg.extras.fromAppkey==CONFIG.appKey){
-                            $state.go('tab.detail', { type:'2',chatId: msg.extras.fromName});
-                        }else{
-                            $state.go('tab.detail', { type:'1',chatId: msg.extras.fromName});
-                        }
-                    }
-                } else {
-                }
-            }, false)
-
-            //广播'receiveMessage'
-            document.addEventListener('jmessage.onReceiveMessage', function(msg) {
-                console.info('[jmessage.onReceiveMessage]:');
-                console.log(msg);
-                $rootScope.$broadcast('receiveMessage', msg);
-                if (device.platform == "Android") {
-                }
-            }, false);
 
             //显示通知栏消息
             // custom消息内容
@@ -429,38 +349,7 @@ angular.module('kidney',[
             //     targetId:
             // }
             //显示通知栏消息
-            document.addEventListener('jmessage.onReceiveCustomMessage', function(msg) {
-                console.info('[jmessage.onReceiveCustomMessage]:' );
-                console.log(msg);
-                var counsel=JSON.parse(msg.content.contentStringMap.counsel);
-                // $rootScope.$broadcast('receiveMessage',msg);
-                if (msg.targetType == 'single' && msg.fromName != $rootScope.conversation.id) {
-                    if(msg.content.contentStringMap.doctorId==msg.content.contentStringMap.targetId) prefix='[咨询]';
-                    else prefix='[咨询转发]';
-                    if(msg.content.contentStringMap.type=='card'){
-                        if (device.platform == "Android") {
-                            window.plugins.jPushPlugin.addLocalNotification(1, prefix+counsel.help, msg.targetName, msg.serverMessageId, 0, msg);
-                        } else {
-                            window.plugins.jPushPlugin.addLocalNotificationForIOS(0, prefix+counsel.help, 1, msg.serverMessageId, msg);
-                        }
-                    }else if(msg.content.contentStringMap.type=='contact'){
 
-                    }
-                    
-                }
-                if (msg.targetType == 'group' && msg.targetID != $rootScope.conversation.id) {
-                    if(msg.content.contentStringMap.type=='card'){
-                        if (device.platform == "Android") {
-                                window.plugins.jPushPlugin.addLocalNotification(1, '[团队咨询]', msg.fromNickname, msg.serverMessageId, 0, msg);
-                        } else {
-                            window.plugins.jPushPlugin.addLocalNotificationForIOS(0, '[团队咨询]', 1, msg.serverMessageId, msg);
-                        }
-                    }else if(msg.content.contentStringMap.type=='contact'){
-                    }
-                }
-
-            }, false);
-        }
         
         
 
