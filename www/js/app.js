@@ -96,7 +96,7 @@ angular.module('kidney',[
                                 if(data.results==1){
                                     if(data.mesg == "No authority!")
                                     {
-                                        alert("您没有权限登陆肾病守护者联盟，如您是患者，请登录肾事管家");
+                                        // alert("您没有权限登陆肾病守护者联盟，如您是患者，请登录肾事管家");
                                         $state.go('signin')
                                     }
                                     else
