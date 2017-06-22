@@ -858,6 +858,16 @@ angular.module('kidney',[
                 },
             }
         })
+    .state('tab.view-chat', {
+        //'0':团队交流  '1': 未结束病历  '2':已结束病历
+            url: '/viewchat/:doctorId/:patientId',
+            views: {
+                'tab-groups': {
+                    templateUrl: 'partials/group/view-chat.html',
+                    controller: 'viewChatCtrl'
+                }
+            }
+        })    
     .state('tab.group-conclusion', {
             url: '/groups/conclusion/:groupId/:teamId',
             views: {

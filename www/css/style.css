@@ -1089,6 +1089,26 @@ display: inline-block;
 .msgbox-send .avatar {
     float: right;
 }
+.msgbox-send .msg-name {
+  float: right;
+  text-align:right;
+}
+
+.msgbox-receive .msg-name {
+  float: left;
+}
+
+.msgbox .msg-name {
+  position: relative;
+  display: table;
+  margin: 0px 0.7em; 
+  font-size: 0.9em;
+  color: #aaa;
+  width: -webkit-calc(100% - 5em);
+  width:    -moz-calc(100% - 5em);
+  width:         calc(100% - 5em);
+}
+
 /*msg-body：消息气泡*/
 .msg-body {
     position: relative;
