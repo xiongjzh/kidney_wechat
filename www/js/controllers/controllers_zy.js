@@ -2,7 +2,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
 
 /////////////////////////////zhangying///////////////////////
 //登录
-.controller('SignInCtrl', ['User','$scope','$timeout','$state','Storage','loginFactory','$ionicHistory','jmapi', '$location','wechat','$window','$rootScope','Doctor','$sce',function(User,$scope, $timeout,$state,Storage,loginFactory,$ionicHistory,jmapi,$location,wechat,$window,$rootScope,Doctor,$sce) {
+.controller('SignInCtrl', ['User','$scope','$timeout','$state','Storage','loginFactory','$ionicHistory', '$location','wechat','$window','$rootScope','Doctor','$sce',function(User,$scope, $timeout,$state,Storage,loginFactory,$ionicHistory,$location,wechat,$window,$rootScope,Doctor,$sce) {
     $scope.barwidth="width:0%";
     $scope.navigation_login=$sce.trustAsResourceUrl("http://proxy.haihonghospitalmanagement.com/member.php?mod=logging&action=logout&formhash=xxxxxx");
     if(Storage.get('USERNAME')!=null){
@@ -63,7 +63,6 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
                         Storage.set('isSignIn',true);
                         Storage.set('UID',data.results.userId);
 
-                        jmapi.users(data.results.userId);
                         Doctor.getDoctorInfo({userId:data.results.userId})
                         .then(function(response){
                             thisDoctor = response.results;
@@ -457,7 +456,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
 }])
 
 //设置密码
-.controller('setPasswordCtrl', ['$scope','$state','$rootScope' ,'$timeout' ,'Storage','User','jmapi',function($scope,$state,$rootScope,$timeout,Storage,User) {
+.controller('setPasswordCtrl', ['$scope','$state','$rootScope' ,'$timeout' ,'Storage','User',function($scope,$state,$rootScope,$timeout,Storage,User) {
     $scope.barwidth="width:0%";
     var validMode=Storage.get('validMode');//0->set;1->reset
     var phoneNumber=Storage.get('RegisterNO');
@@ -515,7 +514,7 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
 }])
 
 //注册时填写医生个人信息
-.controller('userdetailCtrl',['Dict','Doctor','$scope','$state','$ionicHistory','$timeout' ,'Storage', '$ionicPopup','$ionicLoading','$ionicPopover','User','$http','wechat','$location','$ionicModal','$ionicScrollDelegate','jmapi',function(Dict,Doctor,$scope,$state,$ionicHistory,$timeout,Storage, $ionicPopup,$ionicLoading, $ionicPopover,User,$http,wechat,$location,$ionicModal,$ionicScrollDelegate,jmapi){
+.controller('userdetailCtrl',['Dict','Doctor','$scope','$state','$ionicHistory','$timeout' ,'Storage', '$ionicPopup','$ionicLoading','$ionicPopover','User','$http','wechat','$location','$ionicModal','$ionicScrollDelegate',function(Dict,Doctor,$scope,$state,$ionicHistory,$timeout,Storage, $ionicPopup,$ionicLoading, $ionicPopover,User,$http,wechat,$location,$ionicModal,$ionicScrollDelegate){
     $scope.barwidth="width:0%";
     var phoneNumber=Storage.get('RegisterNO');
     var password=Storage.get('password');
@@ -648,7 +647,6 @@ angular.module('zy.controllers', ['ionic','kidney.services'])
                     .then(
                         function(data)
                         {
-                            jmapi.users(Storage.get('UID'));
                             console.log(data);
                             console.log($scope.doctor)
                             //$scope.doctor = data.newResults;                  
