@@ -16,7 +16,7 @@
                 <img class="avatar-icon" src="{{grouppatient.patientId.photoUrl || 'img/patient.png'}}">
                 <div><span class="patient-title">{{grouppatient.patientId.name}}</span>
                     <span class="mgleft-10 patient-title">{{grouppatient.patientId.gender|filterGender}}</span>
-                    <span class="mgleft-10 patient-title">{{grouppatient.patientId.birthday|filterAge}}岁</span>
+                    <span class="mgleft-10 patient-title">{{grouppatient.patientId.birthday|filterAge}}</span>
                     <!-- <span class="mgleft-10 patient-title">{{grouppatient.time|dateFormat:"YYYY/MM/DD h:m"}}</span> -->
                 </div>
                 <p class=" mg-top5 patient-content">{{grouppatient.time|dateFormat:"YYYY-MM-DD h:m"}}</p>
