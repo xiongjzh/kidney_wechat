@@ -1988,7 +1988,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
     }
 }])
 //病历结论
-.controller('GroupConclusionCtrl',['$state','$scope','$ionicModal','$ionicScrollDelegate','Communication','$ionicLoading','CONFIG','Account','Counsel',function($state,$scope,$ionicModal,$ionicScrollDelegate,Communication,$ionicLoading,CONFIG,Account,Counsel){
+.controller('GroupConclusionCtrl',['$state','$scope','$ionicModal','$ionicScrollDelegate','Communication','$ionicLoading','CONFIG','Account','Counsel','$ionicHistory',function($state,$scope,$ionicModal,$ionicScrollDelegate,Communication,$ionicLoading,CONFIG,Account,Counsel,$ionicHistory){
     $scope.input = {
         text: ''
     }
@@ -2018,59 +2018,20 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
 
             })
     })
-        // $scope.save = function() {
-        //     var confirmPopup = $ionicPopup.confirm({
-        //         title: '确定要结束此次咨询吗?',
-        //         // template: '确定要结束此次咨询吗?'
-        //         okText:'确定',
-        //         cancelText:'取消'
-        //     });
-        //     confirmPopup.then(function(res) {
-        //         if (res) {
-        //             console.log('You are sure');
-        //         } else {
-        //             console.log('You are not sure');
-        //         }
-        //     });
-        // }
-        //view image
-    $scope.zoomMin = 1;
-    $scope.imageUrl = '';
-    $ionicModal.fromTemplateUrl('templates/msg/imageViewer.html', {
-        scope: $scope
-    }).then(function(modal) {
-        $scope.modal = modal;
-        $scope.imageHandle = $ionicScrollDelegate.$getByHandle('imgScrollHandle');
-    });
-    $scope.closeModal = function() {
-        $scope.imageHandle.zoomTo(1, true);
-        $scope.modal.hide();
-        // $scope.modal.remove()
-    };
-    $scope.viewPic = function(src) {
-        $scope.imageUrl = src;
-        $scope.modal.show();
-        // $scope.modal.remove()
-    };
-    $scope.switchZoomLevel = function() {
-        if ($scope.imageHandle.getScrollPosition().zoom != $scope.zoomMin)
-            $scope.imageHandle.zoomTo(1, true);
-        else {
-            $scope.imageHandle.zoomTo(3, true);
-        }
-    }
-    $scope.save = function() {
 
-        Communication.conclusion({ consultationId: $state.params.groupId, conclusion: $scope.input.text, status: 0 })
+    $scope.save = function() {
+        Communication.conclusion({ consultationId: $state.params.groupId, conclusion: $scope.input.text})
             .then(function(data) {
                 console.log(data)
                 Communication.getCounselReport({ counselId: $scope.patient.diseaseInfo.counselId })
                     .then(function(res) {
-                        var DID=res.results.doctorId.userId,PID=res.results.patientId.userId
+                        var DID = res.results.doctorId.userId,
+                            PID = res.results.patientId.userId;
                         var msgJson = {
+                            clientType:'doctor',
                             contentType: 'text',
                             fromID: DID,
-                            fromName:res.results.doctorId.name,
+                            fromName: res.results.doctorId.name,
                             fromUser: {
                                 avatarPath: CONFIG.mediaUrl + 'uploads/photos/resized' + DID + '_myAvatar.jpg'
                             },
@@ -2078,32 +2039,36 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                             targetName: res.results.patientId.name,
                             targetType: 'single',
                             status: 'send_going',
-                            newsType:'11',
+                            newsType: '11',
                             createTimeInMillis: Date.now(),
+                            targetRole:'patient',
                             content: {
                                 text: $scope.input.text
 
                             }
                         }
-                        if(res.results.type!='1' || res.results.status==0){
-                            socket.emit('newUser', { user_name: res.results.doctorId.name, user_id: DID });
+                        if(res.results.type!='1'){
+                            //暂时把socket连接指向DID，用于此条消息的发送。之后call resetUserAsAppUser改回APP使用者
+                            // var resetUserAsAppUser = mySocket.newUserForTempUse(DID,res.results.doctorId.name);
+                            // socket.emit('newUser', { user_name: res.results.doctorId.name, user_id: DID });
                             socket.emit('message', { msg: msgJson, to: PID ,role:'doctor'});
-                            // socket.on('messageRes', function(data) {
-                            // socket.off('messageRes');
-                            socket.emit('disconnect');
-                            $ionicLoading.show({ template: '回复成功', duration: 1500 });
+                            // resetUserAsAppUser();
+
+                            $ionicLoading.show({ template: '回复成功'});
                             setTimeout(function() {
-                                $state.go('tab.groups', { type: '0' });
-                            }, 1500);
+                                $ionicLoading.hide();
+                                $ionicHistory.goBack();
+                                // $state.go('tab.groups', { type: '0' });
+                            }, 1000);
                         }else{
                             Account.modifyCounts({doctorId:DID,patientId:PID,modify:'-1'})
                             .then(function(){
                                 Account.getCounts({doctorId:DID,patientId:PID})
                                 .then(function(response){
-                                    socket.emit('newUser', { user_name: res.results.doctorId.name, user_id: DID });
+                                    // var resetUserAsAppUser = mySocket.newUserForTempUse(DID,res.results.doctorId.name);
+                                    // socket.emit('newUser', { user_name: res.results.doctorId.name, user_id: DID });
                                     socket.emit('message', { msg: msgJson, to: PID ,role:'doctor'});
-                                    // socket.on('messageRes', function(data) {
-                                    // socket.off('messageRes');
+
                                     
                                     if(response.result.count<=0){
                                         var endlMsg={
@@ -2113,6 +2078,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                                             counseltype:1
                                         }
                                         var endJson={
+                                            clientType:'doctor',
                                             contentType:'custom',
                                             fromID:DID,
                                             fromName:res.results.doctorId.name,
@@ -2125,24 +2091,25 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                                             status:'send_going',
                                             createTimeInMillis: Date.now(),
                                             newsType:'11',
+                                            targetRole:'patient',
                                             content:endlMsg
                                         }
                                         socket.emit('message', { msg: endJson, to: PID ,role:'doctor'});
-                                        Counsel.changeCounselStatus({counselId:res.results.counselId,status:0})
+                                        Counsel.changeStatus({doctorId:DID,patientId:PID,type:res.results.type,status:0});
                                     }
-                                    socket.emit('disconnect');
-                                    // $state.go('tab.detail', { type: '2', chatId: doc.userId, counselId: msgdata.counselId });
-                                    // })
-                                    $ionicLoading.show({ template: '回复成功', duration: 1500 });
+                                    // resetUserAsAppUser();
+                                    $ionicLoading.show({ template: '回复成功'});
                                     setTimeout(function() {
-                                        $state.go('tab.groups', { type: '0' });
-                                    }, 1500);
+                                        $ionicLoading.hide();
+                                        $ionicHistory.goBack();
+                                        // $state.go('tab.groups', { type: '0' });
+                                    }, 1000);
 
                                 });
 
                             });
                         }
-                    });
+                    })
 
             }, function(err) {
                 console.log(err);
@@ -2150,10 +2117,6 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
     }
 
 
-
-    $scope.$on('$ionicView.leave', function() {
-        if ($scope.modal) $scope.modal.remove();
-    })
 }])
 .controller('selectDocCtrl', ['$state', '$scope', 'JM', '$ionicPopup','$ionicLoading','$ionicScrollDelegate','Patient', 'Storage','CONFIG','wechat', function($state, $scope, JM, $ionicPopup,$ionicLoading,$ionicScrollDelegate,Patient, Storage,CONFIG,wechat) {
     $scope.params={
