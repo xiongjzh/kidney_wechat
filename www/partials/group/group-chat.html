@@ -1,135 +1,87 @@
 <ion-view hide-tabs view-title="{{params.title}}">
-<!--     <ion-nav-buttons side="left">
-      <button class="button button-icon icon ion-qr-scanner " ng-click="QRscan()"></button>
-    </ion-nav-buttons> -->
     <ion-nav-bar class="bar-positive">
-    <ion-nav-buttons side="left">
-      <button class="button button-icon icon ion-ios-arrow-left fc-ff" ng-click="goChats()"></button>
-    </ion-nav-buttons>
-    <ion-nav-buttons side="right">
-      <button class="button button-icon icon ion-clipboard ng-hide" ng-click="togglePanel()" ng-show="params.isDiscuss"></button>
-      <a class="button button-icon icon ion-android-people ng-hide" ng-click="viewGroup()" ng-hide="params.isDiscuss"></a>
-    </ion-nav-buttons>
+        <ion-nav-buttons side="left">
+            <button class="button button-icon icon ion-ios-arrow-left fc-ff" ng-click="goChats()"></button>
+        </ion-nav-buttons>
+        <ion-nav-buttons side="right">
+            <button class="button button-icon icon ion-android-chat ng-hide" ng-click="viewChat()" ng-show="params.isDiscuss"></button>
+            <button class="button button-icon icon ion-clipboard ng-hide" ng-click="togglePanel()" ng-show="params.isDiscuss"></button>
+            <a class="button button-icon icon ion-android-people ng-hide" ng-click="viewGroup()" ng-hide="params.isDiscuss"></a>
+        </ion-nav-buttons>
     </ion-nav-bar>
 
-<div style="position:absolute;top:44px;width:100%;margin:0;min-height:35vh;max-height:55vh;overflow: scroll;" ng-hide="params.hidePanel" class="list card ng-hide hide-animate">
-      <div class="item item-avatar" style="padding-bottom:10px">
-          <img ng-src="{{patient.patientId.photoUrl || 'img/DefaultAvatar.jpg'}} " ng-click="viewPatient(patient.patientId.userId)">
-          <div>
-              <div style="display:inline-block;margin-right:1.2em;font-size:1.25em">{{patient.patientId.name}} </div>
-              <div style="display:inline-block">{{patient.patientId.gender | filterGender}} {{patient.patientId.birthday | filterAge}}</div>
-              <div style="display:inline-block;float:right">{{patient.time |date : 'yyyy-M-d H:m'}}</div>
-          </div>
-          <!-- <h2>范德萨user006</h2><span> fahdjksfh</span> -->
-          <p style="width:60%;display:inline-block;">主题:{{patient.diseaseInfo.symptom}}</p>
-          <a ng-if="!params.isOver" class="item" style="float:right;background-color:#00E676;border-radius:0.4em;padding:2px;color:#FFF" ng-click="goConclusion()">回复患者</a>
-           <div ng-if="params.isOver" style="float:right;background-color:#888;border-radius:0.4em;padding:2px;color:#FFF">已回复</div>
-      </div>
-      <div ng-if="params.type=='2'" class="item item-body">
+    <div style="position:absolute;top:44px;width:100%;margin:0;min-height:35vh;max-height:55vh;overflow-y: scroll;" ng-hide="params.hidePanel"
+        class="list card ng-hide hide-animate">
+        <div class="item item-avatar" style="padding-bottom:10px">
+            <img ng-src="{{patient.patientId.photoUrl || 'img/DefaultAvatar.jpg'}} " ng-click="viewPatient(patient.patientId.userId)">
+            <div>
+                <div style="display:inline-block;margin-right:1.2em;font-size:1.25em">{{patient.patientId.name}} </div>
+                <div style="display:inline-block">{{patient.patientId.gender | filterGender}} {{patient.patientId.birthday | filterAge}}</div>
+                <div style="display:inline-block;float:right">{{patient.time |date : 'yyyy-M-d H:m'}}</div>
+            </div>
+            <p style="width:60%;display:inline-block;">主题:{{patient.diseaseInfo.symptom}}</p>
+            <a ng-if="!params.isOver" class="item" style="float:right;background-color:#00E676;border-radius:0.4em;padding:2px;color:#FFF"
+                ng-click="goConclusion()">回复患者</a>
+            <div ng-if="params.isOver" style="float:right;background-color:#888;border-radius:0.4em;padding:2px;color:#FFF">已回复</div>
+        </div>
+        <div ng-if="params.type=='2'" class="item item-body">
 
-          <div>
-          <span style="color:#2196F3">结论 </span>
-          {{patient.conclusion}}
-          </div>
-      </div>
-
-      <div class="item item-body card-prefix">
-        <!-- <div class="info"> -->
-            <!-- <p><span>主题</span>{{patient.diseaseInfo.symptom}}</p> -->
+            <div>
+                <span style="color:#2196F3">结论 </span> {{patient.conclusion}}
+            </div>
+        </div>
+        <div class="item item-body card-prefix">
             <p><span>发病时间</span> {{patient.diseaseInfo.sickTime}}</p>
             <p><span>就诊医院</span> {{patient.diseaseInfo.hospital}}</p>
             <p><span>就诊时间</span>{{patient.diseaseInfo.visitDate.substr(0,10)}}</p>
             <p><span>诊断结果</span>{{patient.diseaseInfo.diagnosis}}</p>
             <p><span>期望的帮助</span>{{patient.diseaseInfo.help}}</p>
-            <!-- <p><span>咨询类型</span>{{counsel.counseltype}}</p> -->
+        </div>
+    </div>
 
-        <!-- </div> -->
-          <!-- <div style="display:inline-block;color:#00897b;width:65%">{{patient.diagnosisInfo.name}}</div> -->
-   <!--        <div style="display:inline-block;color:#00897b;width:65%">分期 {{patient.diseaseInfo.class}}</div>
-          <div style="display:inline-block;color:#00897b;width:65%">是否高血压 {{patient.diseaseInfo.hypertension}}</div>
-          <div style="display:inline-block;color:#00897b;width:65%">手术时间 {{patient.diseaseInfo.operationTime}}</div>
-          <div style="display:inline-block;color:#00897b;width:65%">过敏 {{patient.diseaseInfo.allergic}}</div>
-          <div style="display:inline-block;color:#00897b;width:65%">发病时间 {{patient.diseaseInfo.sickTime}}</div>
-          <div style="display:inline-block;color:#00897b;width:65%">就诊医院 {{patient.diseaseInfo.hospital}}</div>
-          <div style="display:inline-block;color:#00897b;width:65%">就诊时间 {{patient.diseaseInfo.visitDate.substr(0,10)}}</div>
-          <div style="display:inline-block;color:#00897b;width:65%">诊断结果 {{patient.diseaseInfo.diagnosis}}</div> -->
+    <ion-content delegate-handle="myContentScroll" class="gray-back">
 
-        <!-- <div style="display:inline-block;float:right;text-align:right;width:30%"><i style="color:#00E676" class="icon ion-android-pin"></i> 杭州</div> -->
-    <!--     <hr/>
-          <div>
-         问题描述 {{patient.diseaseInfo.help}}
-          </div> -->
-         <!--  <img style="height:3.5em;width:3.5em;margin:0.4em 0.8em 0 0" ng-repeat="pic in content.pics" ng-src="{{pic}}" ng-click="viewPic(this.pic)" /> -->
-      </div>
-  </div>
+        <ion-refresher on-refresh="DisplayMore()"></ion-refresher>
+        <div class="text-center padding hide-animate ng-hide" ng-hide="params.moreMsgs">没有更多消息了</div>
+        <!-- <div collection-repeat="msg in msgs track by $index" msg="msg" msgindex='{{$index}}' my-message><div> -->
+        <my-message ng-repeat="msg in msgs track by $index" msg="msg" photourls='photoUrls' msgindex='{{$index}}'></my-message>
+        <div style="float:left;width:100%" ng-style="{'padding-top':'{{params.helpDivHeight}}px'}"></div>
+        <div style="float:left;width:100%;padding-top:70px"></div>
 
-<!--   <div style="position:absolute;top:44px;width:100%;margin:0;min-height:35vh;max-height:55vh;overflow-y: scroll;background-color: #fff !important" ng-hide="params.hidePanel" class="list card ng-hide hide-animate">
-      <div class="item item-avatar" style="padding-bottom:10px">
-          <img ng-src="img/avatar.png">
-          <div>
-              <div style="display:inline-block;margin-right:1.2em;font-size:1.25em">{{patient.patientId.name}} </div>
-              <div style="display:inline-block">{{patient.patientId.gender |filterGender}} {{patient.patientId.age |filterAge}}</div>
-              <div style="display:inline-block;float:right">{{patient.time | msgdate}}</div>
-          </div>
-          <p style="width:60%;display:inline-block;">{{patient.diseaseInfo.symptom}}</p>
-          <a ng-if="!params.isOver" class="item" style="float:right;background-color:#00E676;border-radius:0.4em;padding:2px;color:#FFF" ng-click="goConclusion()">回复患者</a>
-           <div ng-if="params.isOver" style="float:right;background-color:#888;border-radius:0.4em;padding:2px;color:#FFF">已回复</div>
-      </div>
-      <div ng-if="params.type=='2'" class="item item-body">
-
-          <div>
-          <span style="color:#2196F3">结论 </span>
-          {{patient.conclusion}}
-          </div>
-      </div>
-      <div class="item item-body">
-          <div style="display:inline-block;color:#00897b;width:65%">class:{{patient.patientId.class}} hypertension:{{patient.patientId.hypertension}}</div>
-        <div style="display:inline-block;float:right;text-align:right;width:30%">{{patient.operationTime}}</div>
-          <div >
-          {{patient.diseaseInfo.help}}
-          </div> -->
-          <!-- <img style="height:3.5em;width:3.5em;margin:0.4em 0.8em 0 0" ng-repeat="pic in content.pics" ng-src="{{pic}}" ng-click="viewPic(this.pic)" />
-      </div>
-  </div> -->
-
-  <ion-content delegate-handle="myContentScroll" class="gray-back">
-    
-      <ion-refresher on-refresh="DisplayMore()"></ion-refresher>
-      <div class="text-center padding hide-animate ng-hide" ng-hide="params.moreMsgs">没有更多消息了</div>
-      <!-- <div collection-repeat="msg in msgs track by $index" msg="msg" msgindex='{{$index}}' my-message><div> -->
-    <my-message  ng-repeat="msg in msgs track by $index" msg="msg" photourls='photoUrls' msgindex='{{$index}}'></my-message>
-    <div style="float:left;width:100%" ng-style="{'padding-top':'{{params.helpDivHeight}}px'}"></div>
-    <div style="float:left;width:100%;padding-top:70px"></div>
-
-</ion-content>
+    </ion-content>
 
     <form ng-if="!params.isOver" name="sendMessageForm" novalidate>
-      <div class="chat-bar">
-          <div class="chat-top">
-              <!-- <button style="position: absolute;bottom: 2px;z-index: 999" class="button button-icon iconfont  icon-yuyin" ng-init="showVoice=false;" ng-click="showVoice==false?showVoice=true:showVoice=false;showMore=false;" ng-model="showVoice"></button> -->
-              <div class="chat-input" style="position: absolute;bottom: 4px;width: 100%;padding-left:3vw;padding-right:13vw;">
-                  <textarea style="resize:none;width:100%;min-height:1.4em;height:1.6em;font-size:1.2em;line-height:20px;border-bottom:1px #AAA solid" ng-model="input.text" ng-focus="showMore=false;showVoice=false;scrollBottom()" minlength="1" maxlength="500" dynamic-height></textarea>
-              </div>
-              <!-- <button style="width:2.6em;position:absolute;right:50px;padding:0"  class="button button-icon  iconfont icon-biaoqing" type="submit" ></button> -->
-              <button style="width:2.6em;position:absolute;right:4px;bottom: 4px;padding:0" class="button button-icon  iconfont icon-add" type="submit" ng-show="!input.text || input.text === ''" ng-init="showMore=false;" ng-click="showMore==false?showMore=true:showMore=false;showVoice=false;" ng-model="showMore"></button>
-              <button style="width:2.6em;position:absolute;bottom:8px;right:9px;padding:0;font-size: 12px;min-height: 30px;height: 30px" class="button button-positive" type="submit" ng-hide="!input.text || input.text === ''" ng-click="submitMsg()">发送</button>
-          </div>
-          <div class="voice-box" ng-show="showVoice">
-              <span class="chat-close" ng-click="showVoice=false;showMore=false;" ng-model="showVoice">×</span>
-              <p>{{params.recording?'正在录音...':'按住开始说话'}}</p>
-              <img src="img/icon_voice2@2x.png" alt="" on-hold="getVoice()" on-release="stopAndSend()">
-          </div>
-          <div class="chat-more" ng-show="showMore">
-              <span>
+        <div class="chat-bar">
+            <div class="chat-top">
+                <!-- <button style="position: absolute;bottom: 2px;z-index: 999" class="button button-icon iconfont  icon-yuyin" ng-init="showVoice=false;" ng-click="showVoice==false?showVoice=true:showVoice=false;showMore=false;" ng-model="showVoice"></button> -->
+                <div class="chat-input" style="position: absolute;bottom: 4px;width: 100%;padding-left:3vw;padding-right:13vw;">
+                    <textarea style="resize:none;width:100%;min-height:1.4em;height:1.6em;font-size:1.2em;line-height:20px;border-bottom:1px #AAA solid"
+                        ng-model="input.text" ng-focus="showMore=false;showVoice=false;scrollBottom()" minlength="1" maxlength="500"
+                        dynamic-height></textarea>
+                </div>
+                <!-- <button style="width:2.6em;position:absolute;right:50px;padding:0"  class="button button-icon  iconfont icon-biaoqing" type="submit" ></button> -->
+                <button style="width:2.6em;position:absolute;right:4px;bottom: 4px;padding:0" class="button button-icon  iconfont icon-add"
+                    type="submit" ng-show="!input.text || input.text === ''" ng-init="showMore=false;" ng-click="showMore==false?showMore=true:showMore=false;showVoice=false;"
+                    ng-model="showMore"></button>
+                <button style="width:2.6em;position:absolute;bottom:8px;right:9px;padding:0;font-size: 12px;min-height: 30px;height: 30px"
+                    class="button button-positive" type="submit" ng-hide="!input.text || input.text === ''" ng-click="submitMsg()">发送</button>
+            </div>
+            <div class="voice-box" ng-show="showVoice">
+                <span class="chat-close" ng-click="showVoice=false;showMore=false;" ng-model="showVoice">×</span>
+                <p>{{params.recording?'正在录音...':'按住开始说话'}}</p>
+                <img src="img/icon_voice2@2x.png" alt="" on-hold="getVoice()" on-release="stopAndSend()">
+            </div>
+            <div class="chat-more" ng-show="showMore">
+                <span>
               <img src="img/icon_photo@2x.png" ng-click="showMore=false;getImage('gallery')" alt="">
             </span>
-              <span>
+                <span>
               <img src="img/icon_shot@2x.png" ng-click="showMore=false;getImage('cam')" alt="">
             </span>
-              <!--    <span>
+                <!--    <span>
               <img src="../../img/icon_card@2x.png" alt="">
             </span> -->
-          </div>
-      </div>
-  </form>
+            </div>
+        </div>
+    </form>
 </ion-view>

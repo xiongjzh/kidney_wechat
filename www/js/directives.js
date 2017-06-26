@@ -30,9 +30,10 @@ angular.module('kidney.directives', ['kidney.services'])
         },
         restrict:'AE',
         controller:function($scope){
-            var type='';
+            var type='',
+                sender=Storage.get('chatSender') || Storage.get('UID');
             $scope.base=CONFIG.mediaUrl;
-            $scope.msg.direct = $scope.msg.fromID==Storage.get('UID')?'send':'receive';
+            $scope.msg.direct = $scope.msg.fromID==sender?'send':'receive';
             $scope.getTemplateUrl = function(){
                 type=$scope.msg.contentType;
                 if(type=='image'){
