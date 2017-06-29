@@ -1,7 +1,7 @@
 <ion-popover-view class="patient-pop">
 		<ul class="list">
 			<li class="item"">
-		      	筛选
+		      	筛选:
 		    </li>
 		    <li class="item">
 		      <ion-checkbox ng-model="filter.choose.isChecked1" class="check" ng-change="filterShow()">肾移植</ion-checkbox>
@@ -21,19 +21,26 @@
 		    <li class="item">
 		      <ion-checkbox ng-model="filter.choose.isChecked6" class="check" ng-change="filterShow()">ckd5期</ion-checkbox>
 		    </li>
+
+				<li class="item">
+		      	性别:
+		    </li>
 		    <li class="item">
 		      <ion-checkbox ng-model="filter.choose.isChecked7" class="check" ng-change="filterShow()">男</ion-checkbox>
 		    </li>
 		    <li class="item">
 		      <ion-checkbox ng-model="filter.choose.isChecked8" class="check" ng-change="filterShow()">女</ion-checkbox>
 		    </li>
+
+				<li class="item">
+				</li>
 		    <li class="item">
 		      <ion-checkbox ng-model="filter.choose.isChecked9" class="check" ng-change="filterShow()">保险</ion-checkbox>
 		    </li>
 		    <button class="button button-block button-positive button-outline" ng-click="resetFilter()">重置</button>
 
-			<li class="item">
-		      	排序
+				<li class="item">
+		      	排序:
 		    </li>
 		    <ion-radio ng-model="filter.propertyName" ng-value="'patientId.birthday'" class="radio">年龄</ion-radio>
 		    <ion-radio ng-model="filter.propertyName" ng-value="'-patientId.VIP'" class="radio">保险</ion-radio>

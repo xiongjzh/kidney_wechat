@@ -29,7 +29,8 @@
 				<button class="button button-small button-positive pat-ts bg-f7" ng-click="SendInsMsg()">推送保险</button>
 	        <div class="row pd-0">
 	          <div class="col pd-0">				
-				<p class="m-b10 "><span class="f16 fc-33 f-w-5">{{patient.name}}</span><span class="f16 fc-33 f-w-5">&nbsp;&nbsp;&nbsp;{{patient.gender | filterGender}}</span>&nbsp;&nbsp;&nbsp;<span class="f16 fc-33 f-w-5">{{patient.birthday | filterAge}}</span>
+				<p class="m-b10 ">
+				<span class="f16 fc-33 f-w-5">{{patient.name}}</span><span class="f16 fc-33 f-w-5">&nbsp;&nbsp;&nbsp;{{patient.gender | filterGender}}</span>&nbsp;&nbsp;&nbsp;<span class="f16 fc-33 f-w-5" ng-if = "(patient.birthday)">{{patient.birthday | filterAge}}</span><span class="f16 fc-33 f-w-5" ng-if = "!(patient.birthday)">年龄未知</span></p>
 				<p>身份证号：{{patient.IDNo}}</p>
 <!-- 				<p>地区：{{patient.address.province}} {{patient.address.city}}</p> -->
 				<p>是否VIP：{{patient.VIP | filterVIP}}</p>

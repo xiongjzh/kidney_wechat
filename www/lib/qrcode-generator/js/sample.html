@@ -17,20 +17,24 @@
   <body onload="update_qrcode()">
     <form name="qrForm">
       <span>TypeNumber:</span>
-      <select name="t"></select>
-      <span>ErrorCorrectionLevel:</span>
+      <select name="t">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4" selected="selected">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+        <option value="9">9</option>
+        <option value="10">10</option>
+      </select>
+      <span>ErrorCorrectLevel:</span>
       <select name="e">
         <option value="L">L(7%)</option>
         <option value="M" selected="selected">M(15%)</option>
         <option value="Q">Q(25%)</option>
         <option value="H">H(30%)</option>
-      </select>
-      <span>Mode:</span>
-      <select name="m">
-        <option value="Numeric">Numeric</option>
-        <option value="Alphanumeric">Alphanumeric</option>
-        <option value="Byte" selected>Byte</option>
-        <option value="Kanji">Kanji</option>
       </select>
       <br/>
       <textarea name="msg" rows="10" cols="40">here comes qr!</textarea>
@@ -38,17 +42,5 @@
       <input type="button" value="update" onclick="update_qrcode()"/>
       <div id="qr"></div>
     </form>
-    <script type="text/javascript">
-!function() {
-  var t = document.forms['qrForm'].elements['t'];
-  for (var i = 1; i <= 40; i += 1) {
-    var opt = document.createElement('option');
-    opt.appendChild(document.createTextNode(''+ i) );
-    opt.value = '' + i;
-    t.appendChild(opt);
-  }
-  t.value = '4';
-}();
-    </script>
   </body>
 </html>

@@ -13,22 +13,31 @@
             <i class="icon ion-chevron-right mine-msg-right" style="color:#6ac4f8;"></i>
         </ion-item>
         <ion-item>
-        <span class="input-label" >  <img class="icon_charge" src="img/icon_charge.png"><i></i>收费定制</span>
+            <span class="input-label" >  <img class="icon_charge" src="img/icon_charge.png"><i></i>收费定制</span>
+            <!--<button style="margin-top:0; background: #6ac4f8" class="button button-block button-positive login_outbtn" ng-click="savefee()">保存修改</button>-->
+            <!--<i class="icon ion-chevron-right mine-msg-right" style="color:#6ac4f8;" ng-click="savefee()">保存</i>-->
+            <button class="button button-small button-positive mine-msg-right" style="font-size:15px;margin-top:5px;background-color:#6ac4f8;" ng-click="savefee()">保存</button>
         </ion-item>
         <ion-item>
             <span class="msg">咨询收费</span>
             <p class="myinfo-msg-right"><input type=text ng-model="doctor.charge1"></p>
-            <i class="icon ion-ios-close-outline mine-msg-right"></i>
         </ion-item>
         <ion-item>
             <span class="msg">问诊收费</span>
             <p class="myinfo-msg-right"><input type=text ng-model="doctor.charge2"></p>
-            <i class="icon ion-ios-close-outline mine-msg-right"></i>
-            
+        </ion-item>
+
+        <ion-item style="text-align:center">
+            <span class="input-label" >  <img class="icon_charge" ng-src="{{wechatIcon}}"/><span ng-show=wechat!="">已</span>绑定微信账号</span>
+            <p ng-if=wechat=="">使用微信登录即可自动绑定</p>
+        </ion-item>
+
+        <ion-item style="text-align:center" ng-click="bindAliPay()">
+            <span class="input-label" >  <img class="icon_charge" ng-src="{{alipayIcon}}" /><span ng-show=alipay!="">已</span>绑定支付宝账号</span>
+            <p>{{alipay}}</p>
         </ion-item>
         <span style="margin-left:15px;">{{SaveStatus}}</span>
         <div class="blank-h12"></div>
-        <button style="margin-top:0; background: #6ac4f8" class="button button-block button-positive login_outbtn" ng-click="savefee()">保存修改</button>
 
       
     </ion-content>

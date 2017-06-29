@@ -1,5 +1,5 @@
-<div class="msgbox no-bubble-color {{'msgbox-'+msg.direct}}"">
-    <div ng-if="msg.diff" class="msg-time"><span>{{msg.createTimeInMillis | msgdate}}</span></div>
+<div class="msgbox no-bubble-color {{'msgbox-'+msg.direct}}">
+    <div ng-if="msg.diff" class="msg-time"><span>{{msg.time | msgdate}}</span></div>
     <!-- avatar -->
     <img class="avatar" ng-src="{{photourls[msg.fromID] || 'img/DefaultAvatar.jpg'}}" ng-click="emitEvent('profile',msg)"/>
     <div class="media-card msg-body" on-hold="emitEvent('holdmsg',msg.createTimeInMillis,$event)" ng-click="emitEvent('viewcard',msg,$event)">
@@ -12,13 +12,8 @@
             <p><span>就诊时间</span>{{counsel.visitDate.substr(0,10)}}</p>
             <p><span>诊断结果</span>{{counsel.diagnosis}}</p>
             <p><span>期望的帮助</span>{{counsel.help}}</p>
-            <!-- <p><span>咨询类型</span>{{counsel.counseltype}}</p> -->
-
+            <p class="small-text" ng-if="msg.newsType=='11'">长按转发</p>
         </div>
-        <!-- <hr/> -->
-        <!-- <div class="img-info">{{counsel.counseltype}}</div> -->
-        <!-- <img ng-repeat="url in picurl" hiRes="{{url.hiRes}}" ng-src="{{url.src}}"/> -->
-
     </div>
     <div ng-if="msg.status=='send_fail'" class="msg-fail"><span><i class="icon ion-android-warning"></i>发送失败</span></div>
 </div>

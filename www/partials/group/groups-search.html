@@ -22,7 +22,7 @@
         <ion-content style="padding-top:44px" class="has-subheader gray-back" >
         <div class="list ng-hide" ng-hide="noteam">
             <a ng-repeat="team in teamresult" class="item item-avatar context-pading" href="#tab/groups/add/{{team.teamId}}">
-                <img class="avatar-icon" ng-src="img/avatar.png">
+                <img class="avatar-icon" ng-src="{{team.photoUrl ||'img/doctor_group.png'}}">
                 <h3>{{team.name}}</h3><p>{{team.teamId}}</p>
                 <span class="mg-top10 defa-bg  padding-5"><i class="iconfont icon-ren">{{team.number}}</i></span>
                 

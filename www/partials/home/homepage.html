@@ -7,7 +7,7 @@
 			<a class="button button-icon icon ion-android-mail" href="#/messages" head-red-point='hasUnreadMessages'></a>
 	    </ion-nav-buttons>
     </ion-nav-bar>
-	<ion-slides  options="options" slider="data.slider" style="margin-top: 45px;height: 165px;" ng-show="!isfullScreen">
+	<ion-slides  options="options" slider="data.slider" style="margin-top: 45px;height: 170px;" ng-show="!isfullScreen">
 		<ion-slide-page>
 			<div class="box"><img src="img/banner02@2x.png" style="width: 100%;"></div>
 		</ion-slide-page>
@@ -31,7 +31,11 @@
 	</div> -->
 	<!-- <a class="button" style="z-index: 20;" ng-click="importDocs()">import user 2 forum</a> -->
 	<ion-content style="padding:0px;" ng-style="isWriting" overflow-scroll="true" scroll="true">
-
+		<div style="text-align:center" ng-if="!forumPermission">
+			<p style="margin-top: 20px;">您需要先填写个人信息才能访问论坛!</p>
+			<button ng-click="goToPersonalInfo()">去完善个人信息</button>
+		</div>
+		
 	    <iframe id="bbsframe" ng-src ='{{navigation}}' height="100%" width="100%">
 			<p>Your browser does not support iframes.</p>
 	    </iframe>

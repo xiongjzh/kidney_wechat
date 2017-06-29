@@ -50,17 +50,15 @@
         </ion-item>
         <ion-item class="item item-input">
             <span class="input-label" style="margin-left:8px ">擅长</span>
-                <p class="myinfo-msg-right"><input type=text ng-model="doctor.major" style="width:100%;text-align: right;"></p>
-                <i class="icon ion-edit mine-msg-right"></i>
+            <textarea ng-model="doctor.major" ng-attr-rows="{{row || '1'}}" ng-focus="row=2" ng-blur="row=1" cols="1" style = "width: 60%"></textarea>
         </ion-item>
         <ion-item class="item item-input">
             <span class="input-label" style="margin-left:8px ">简介</span>
-                <p class="myinfo-msg-right"><input type=text ng-model="doctor.description" style="width:100%;text-align: right;"></p>
-                <i class="icon ion-edit mine-msg-right"></i>
-        </ion-item>
+            <textarea ng-model="doctor.description" ng-attr-rows="{{row || '1'}}" ng-focus="row=2" ng-blur="row=1" cols="1" style = "width: 60%"></textarea>
+        </ion-item> 
         <!-- </div> -->
 
-        <button  style="margin-top:20px" class="button button-block button-positive" ng-click ="infoSetup()">
+        <button  style="margin-top:0 ;background: #6ac4f8;width: 80%;margin: 0 auto" class="button button-block button-positive" ng-click ="infoSetup()">
         保存信息
         </button>
 

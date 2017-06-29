@@ -16,7 +16,7 @@
     <a class="button" href="#/tab/TaskSet">
       <span class="br-e9" style="vertical-align: sub">治疗方案</span>
     </a>
-    <a class="button" href="#/tab/TestRecord" >
+    <a class="button" ng-click="gototestrecord()" >
       <span class="br-e9" style="vertical-align: sub">测量记录</span>
     </a>
     <a class="button" href="#/tab/HealthInfo">
@@ -32,7 +32,7 @@
         <div class="health-img-box clearfix">
           <div class="health-img" ng-repeat = "img in item.url"><img ng-src="{{img}}"></div>
         </div>
-        <div class="text-right "> <i class="iconfont icon-del f-24"></i> <i class="iconfont icon-bianji f-32 ml-10"></i></div>
+        <div class="text-right "> <i class="iconfont icon-del f-24"></i></div>
       </div>
 
     </div>

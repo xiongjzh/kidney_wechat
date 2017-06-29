@@ -24,7 +24,7 @@
 		    <div class="myinfo-cont">
 		        <ion-item>
 		            <span class="msg">姓名</span>
-					<p class="myinfo-msg-right top16">{{doctor.name}}</p>   
+					<p class="myinfo-msg-right top16 right15">{{doctor.name}}</p>   
 		        </ion-item>
 		<!--         <ion-item>
 		            <span class="msg">头像</span>
@@ -32,33 +32,39 @@
 		        </ion-item> -->
 		        <ion-item>
 		            <span class="msg">职称</span>
-					<p class="myinfo-msg-right top16">{{doctor.title}}</p>
+					<p class="myinfo-msg-right top16 right15">{{doctor.title}}</p>
 		        </ion-item>
 		        <ion-item>
 		            <span class="msg">省份</span>
-					<p class="myinfo-msg-right">{{doctor.province}}</p>	            
+					<p class="myinfo-msg-right top16 right15">{{doctor.province}}</p>	            
 			        </select>
 		        </ion-item>
 		        <ion-item>
 		            <span class="msg">城市</span>
-					<p class="myinfo-msg-right top16">{{doctor.city}}</p>
+					<p class="myinfo-msg-right top16 right15">{{doctor.city}}</p>
 		        </ion-item>        
-		        <ion-item>
+		        <ion-item class="item-text-wrap">
 		            <span class="msg">医院</span>
-					<p class="myinfo-msg-right top16">{{doctor.workUnit}}</p>
+					<p class="myinfo-msg-right top16 right15" style = "padding-left: 25%">{{doctor.workUnit}}</p>
 		        </ion-item>
 				<ion-item>
 		            <span class="msg">科室</span>
-					<p class="myinfo-msg-right top16">{{doctor.department}}</p>
+					<p class="myinfo-msg-right top16 right15">{{doctor.department}}</p>
 		        </ion-item>
-				<ion-item>
-		            <span class="msg">擅长</span>
-					<p class="myinfo-msg-right top16">{{doctor.major}}</p>
+				<ion-item class="item-text-wrap">
+		            <span class="msg" style="position: absolute;">擅长</span>
+					<p class="myinfo-msg-right top16 right15" style="position: absolute;">
+						<div contenteditable="false" ng-model="doctor.major" style="font-size: 15px; position: relative; left: 60px; width:80%; max-height:120px;overflow-y:auto;overflow-x:hidden;">
+	            		</div>
+            		</p>		            		            
 		        </ion-item>
-		         <ion-item>
-		            <span class="msg">简介</span>
-					<p class="myinfo-msg-right top16">{{doctor.description}}</p>
-		        </ion-item>
+		        <ion-item class="item-text-wrap">
+		            <span class="msg" style="position: absolute;">简介</span>
+					<p class="myinfo-msg-right top16 right15" style="position: absolute;">
+						<div contenteditable="false" ng-model="doctor.description" style="font-size: 15px; position: relative; left: 60px; width:80%; max-height:120px;overflow-y:auto;overflow-x:hidden;">
+	            		</div>
+            		</p>
+            	</ion-item>
 		        <ion-item>
 		            <span class="msg">医师资格证书</span>
 					<img ng-src="{{doctor.certificatePhotoUrl}}"  name="Photo1" ng-click="showoriginal(doctor.certificatePhotoUrl)"  style="height:30%; width:30%"  />
@@ -133,14 +139,24 @@
 				<span class="input-label">科室</span>
 				<input type=text ng-model="doctor.department" style="width:100%;text-align: right;">
 			</ion-item>
+			<!-- 			<ion-item class="item item-input">
+				<span style="position: absolute;top:15px;">擅长</span>
+				<div contenteditable="true" ng-model="doctor.major" style="font-size: 15px;position: relative;left:55px;padding: 9px;width:80%; max-height:120px;overflow-y:auto;overflow-x:hidden;">
+            	</div>
+			</ion-item>
+ 			<ion-item class="item item-input item-text-wrap">
+				<span style="position: absolute;top:15px;">简介</span>
+				<div contenteditable="true" ng-model="doctor.description" style="font-size: 15px;position: relative;left:55px;padding: 9px;width:80%; max-height:120px;overflow-y:auto;overflow-x:hidden;">
+            	</div>
+			</ion-item> -->
 			<ion-item class="item item-input">
 				<span class="input-label">擅长</span>
-				<input type=text ng-model="doctor.major" style="width:100%;text-align: right;">
+				<textarea ng-model="doctor.major" ng-attr-rows="{{row || '1'}}" ng-focus="row=2" ng-blur="row=1" cols="1" style = "width: 60%"></textarea>
 			</ion-item>
- 			<ion-item class="item item-input">
+			<ion-item class="item item-input">
 				<span class="input-label">简介</span>
-				<input type=text ng-model="doctor.description" style="width:100%;text-align: right;">
-			</ion-item>
+				<textarea ng-model="doctor.description" ng-attr-rows="{{row || '1'}}" ng-focus="row=2" ng-blur="row=1" cols="1" style = "width: 60%"></textarea>
+			</ion-item>	
 		<!-- </div> -->
 			<ion-item>
 	            <!-- <span class="msg">医师资格证书</span> -->
