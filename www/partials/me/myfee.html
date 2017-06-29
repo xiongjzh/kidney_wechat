@@ -7,6 +7,7 @@
     <ion-content>
         <ion-refresher pulling-text="下拉刷新..." on-refresh="doRefresh()"></ion-refresher>
         <div class="blank-h12"></div>
+        <p style="color: #6ac4f8;margin-left: 10px;margin-top:5px">目前为试运行期间，患者均为免费，该费用仅供参考</p>
         <ion-item ng-click="getBill()">
             <span class="iconfont icon-yue01 icon-yue011"></span>
             <span >我的余额<span style="padding-left:10px;">{{account.money | numberPrecision}}</span></span>
