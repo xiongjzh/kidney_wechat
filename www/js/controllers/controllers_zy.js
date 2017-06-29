@@ -2394,11 +2394,11 @@ angular.module('zy.controllers', ['ionic', 'kidney.services'])
           console.log(err)
         })
         // 获取用户的微信unionId
-    User.One({username: Storage.get('UID')})
+    User.getUserId({username: Storage.get('UID')})
         .then(function (data) {
             // console.log(data);
             // console.log(Storage.get('UID'))
-          if (data.results.hasOwnProperty('openId')) {
+          if (data.hasOwnProperty('openId')) {
             $scope.wechat = 'ok'
             $scope.wechatIcon = 'img/wechat_2.png'
           }
