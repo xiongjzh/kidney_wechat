@@ -1736,7 +1736,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
   }
 }])
 // 病历结论
-.controller('GroupConclusionCtrl', ['$state', '$scope', '$ionicModal', '$ionicScrollDelegate', 'Communication', '$ionicLoading', 'CONFIG', 'Account', 'Counsel','Mywechat', function ($state, $scope, $ionicModal, $ionicScrollDelegate, Communication, $ionicLoading, CONFIG, Account, Counsel,Mywechat) {
+.controller('GroupConclusionCtrl', ['$state', '$scope', '$ionicModal', '$ionicScrollDelegate', 'Communication', '$ionicLoading', 'CONFIG', 'Account', 'Counsel','wechat', function ($state, $scope, $ionicModal, $ionicScrollDelegate, Communication, $ionicLoading, CONFIG, Account, Counsel,wechat) {
   $scope.input = {
     text: ''
   }
@@ -1784,7 +1784,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
 
                         }
                       }
-                      var actionUrl = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxab9c316b3076535d&redirect_uri=http://proxy.haihonghospitalmanagement.com/go&response_type=code&scope=snsapi_userinfo&state=patient_11_1_' + DID + '_' +res.results.counselId+ '&#wechat_redirect'
+                      var actionUrl = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxb830b12dc0fa74e5&redirect_uri=http://proxy.haihonghospitalmanagement.com/go&response_type=code&scope=snsapi_userinfo&state=patient_11_1_' + DID + '_' +res.results.counselId+ '&#wechat_redirect'
                       var template = {
                           'userId': PID, // 患者的UID
                           'role': 'patient',
@@ -1815,7 +1815,7 @@ angular.module('xjz.controllers', ['ionic', 'kidney.services'])
                             }
                           }
                         }
-                        Mywechat.messageTemplate(template)
+                        wechat.messageTemplate(template)
                       if (res.results.type != '1') {
                         socket.emit('newUser', { user_name: res.results.doctorId.name, user_id: DID, client: 'wechatdoctor'})
                         socket.emit('message', { msg: msgJson, to: PID, role: 'doctor'})
