@@ -221,6 +221,8 @@ angular.module('kidney.filters', [])
       if (url.indexOf('https' !== -1)) {
         url = url.replace(/https/, 'http')
       }
+    } else {
+      url = 'img/DefaultAvatar.jpg'
     }
 
     return url

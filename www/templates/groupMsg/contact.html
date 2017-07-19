@@ -2,14 +2,14 @@
 	<!-- display time -->
 	<div ng-if="msg.diff" class="msg-time"><span>{{msg.time | msgdate}}</span></div>
 	<!-- avatar -->
-	<img class="avatar" ng-src="{{(photourls[msg.fromID]|changeimgip) || 'img/DefaultAvatar.jpg'}}" ng-click="emitEvent('profile',msg)"/>
+	<img class="avatar" ng-src="{{photourls[msg.fromID]|changeimgip}}" ng-click="emitEvent('profile',msg)"/>
 	<!-- chat bubble -->
 	<div>
         <div ng-if="msg.fromID!=me" class="msg-name">{{msg.fromName}}</div>
 		<div class="msg-body" on-hold="emitEvent('holdmsg',msg.createTimeInMillis,$event)">
 			<!-- text content -->
 			<div class="media-contact">
-				<img ng-src="{{(msg.fromUser.avatarPath|changeimgip) || 'img/DefaultAvatar.jpg'}}"/>
+				<img ng-src="{{msg.fromUser.avatarPath|changeimgip}}"/>
 				<div >
 					<p class="name">{{msg.content.contentStringMap.name}}</p>
 					<p class="info">{{msg.content.contentStringMap.description}}</p>
