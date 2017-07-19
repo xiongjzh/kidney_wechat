@@ -193,7 +193,7 @@ angular.module('kidney.filters', [])
   return function (url) {
     if (url) {
       if (url.indexOf('https' !== -1)) {
-        url.replace(/https/, 'http')
+        url = url.replace(/https/, 'http')
       }
     } else {
       url = 'img/patient.png'
@@ -206,7 +206,7 @@ angular.module('kidney.filters', [])
   return function (url) {
     if (url) {
       if (url.indexOf('https' !== -1)) {
-        url.replace(/https/, 'http')
+        url = url.replace(/https/, 'http')
       }
     } else {
       url = 'img/doctor.png'
