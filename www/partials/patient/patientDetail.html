@@ -23,7 +23,7 @@
             <ion-item class="item item-avatar pati-message">
 	        <div class="patient-active img-cen">
 	          <div>            
-				<img ng-src="{{patient.photoUrl||'img/patient.png'}}">
+				<img ng-src="{{patient.photoUrl|changepatientimgip}}">
 			  </div>
 			</div>
 				<button class="button button-small button-positive pat-ts bg-f7" ng-click="SendInsMsg()">推送保险</button>

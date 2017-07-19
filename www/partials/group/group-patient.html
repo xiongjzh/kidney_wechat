@@ -13,7 +13,7 @@
                 </div>
             </div>
             <a class="item item-avatar context-pading" ng-repeat="grouppatient in grouppatients0" ng-click="enterChat(1,grouppatient)">
-                <img class="avatar-icon" src="{{grouppatient.patientId.photoUrl || 'img/patient.png'}}">
+                <img class="avatar-icon" src="{{grouppatient.patientId.photoUrl|changepatientimgip}}">
                 <div><span class="patient-title">{{grouppatient.patientId.name}}</span>
                     <span class="mgleft-10 patient-title">{{grouppatient.patientId.gender|filterGender}}</span>
                     <span class="mgleft-10 patient-title">{{grouppatient.patientId.birthday|filterAge}}</span>
@@ -29,7 +29,7 @@
                 </div>
             </div>
             <a class="item item-avatar context-pading" ng-repeat="grouppatient in grouppatients1" ng-click="enterChat(2,grouppatient)">
-                <img class="avatar-icon" src="{{grouppatient.patientId.photoUrl || 'img/patient.png'}}">
+                <img class="avatar-icon" src="{{grouppatient.patientId.photoUrl|changepatientimgip}}">
                 <div><span class=" patient-title">{{grouppatient.patientId.name}}</span>
                     <span class="mgleft-10 patient-title">{{grouppatient.patientId.gender|filterGender}}</span>
                     <span class="mgleft-10 patient-title">{{grouppatient.patientId.birthday|filterAge}}</span>

@@ -35,7 +35,7 @@
         <!-- 医生 -->
         <div ng-if="!params.showSearch && !params.isTeam">
             <div class="item item-avatar context-pading" ng-repeat="d in doctors | orderBy:'-lastMsgDate'" ng-click="doctorClick($event,d.doctorId)">
-                <img class="avatar-icon" ng-src="{{d.doctorId.photoUrl || 'img/doctor.png'}}">
+                <img class="avatar-icon" ng-src="{{d.doctorId.photoUrl|changedoctorimgip}}">
                 <div> <span class="groud-d">{{d.doctorId.name}}</span> <span class="groud-d mgleft-10">{{d.doctorId.title}}</span></div>
                 <h3 class="mg-top5"><span>{{d.doctorId.workUnit}}</span></h3>
                 <h3 class="mg-top5"><span>{{d.doctorId.department}}</span></h3>

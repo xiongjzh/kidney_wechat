@@ -7,7 +7,7 @@
     <ion-content style="padding-top:10px" class="gray-back">
         <div class="list">
             <div class="item item-avatar" ng-repeat="d in doctors">
-                <img src="{{d.photoUrl || 'img/DefaultAvatar.jpg'}}">
+                <img src="{{d.photoUrl|changedoctorimgip}}">
                 <div class="doctor-msg-left balanced balanced-border">{{teamname}}</div>
                 <div style="display:inline-block;width:70%">
                     <span>{{d.name}}</span> {{d.title}}

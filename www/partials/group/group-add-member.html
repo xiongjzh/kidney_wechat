@@ -24,7 +24,7 @@
   </div>
   <div style="padding:3px 16px;position:absolute;top:88px;height:50px;width:100%;margin:0;max-height:30vh;overflow-y: scroll;" ng-hide="params.hidePanel" class="item">
     <!-- <div style="display:block-inline;width:2em;height:2em;position:relative;margin:2px 4px 2px 0" ng-repeat="member in group.members"> -->
-      <img style="object-fit:cover;width:38px;height:38px;margin:2px" ng-repeat="member in group.members" src="{{member.photoUrl|| 'img/doctor.png'}}" />
+      <img style="object-fit:cover;width:38px;height:38px;margin:2px" ng-repeat="member in group.members" src="{{member.photoUrl|changedoctorimgip}}" />
     <!-- </div> -->
   </div>
 
@@ -38,7 +38,7 @@
     </div>  -->
     <div class="list">
       <div class="item item-avatar doctor-list" ng-repeat="d in doctors">
-        <img src="{{d.photoUrl || 'img/doctor.png'}}">
+        <img src="{{d.photoUrl|changedoctorimgip">
         <div class="doctor-msg-left balanced balanced-border">专家团队</div>
         <div style="display:inline-block;width:70%">
           <span>{{d.name}}</span> {{d.title}}

@@ -34,7 +34,7 @@
         <div class="list margin-list" style="padding-top:0">
             <div class="item my-photo-item" href="#" style="padding-top:0 !important;line-height:60px">
                 <span>团队成员</span>
-                <img ng-repeat="member in group.members |limitTo:3" ng-src="{{member.photoUrl || 'img/DefaultAvatar.jpg'}}" />
+                <img ng-repeat="member in group.members |limitTo:3" ng-src="{{member.photoUrl|changedoctorimgip}}" />
             </div>
         </div>
         <a style="width:120px;text-align:center;box-shadow: 1px 1.5px 3px #aaa;font-size:1.1em;padding:10px 16px;margin:20px auto" class="item ng-hide" ng-click="request()" ng-show="imnotin">
