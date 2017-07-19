@@ -9,7 +9,7 @@
 		<div class="msg-body" on-hold="emitEvent('holdmsg',msg.createTimeInMillis,$event)">
 			<!-- text content -->
 			<div class="media-contact">
-				<img ng-src="{{(msg.fromUser.avatarPath|changeimgip) || 'img/DefaultAvatar.png'}}"/>
+				<img ng-src="{{(msg.fromUser.avatarPath|changeimgip) || 'img/DefaultAvatar.jpg'}}"/>
 				<div >
 					<p class="name">{{msg.content.contentStringMap.name}}</p>
 					<p class="info">{{msg.content.contentStringMap.description}}</p>
