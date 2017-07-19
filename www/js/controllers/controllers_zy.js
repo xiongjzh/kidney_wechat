@@ -328,55 +328,52 @@ angular.module('zy.controllers', ['ionic', 'kidney.services'])
           mobile: Verify.Phone,
           smsType: 2,
           smsCode: Verify.Code
-        })
-                .then(function (succ) {
-                  console.log(succ)
-                  if (succ.results == 0)// 验证成功
-                    {
-                    $scope.logStatus = '验证成功！'
-                    Storage.set('phoneNumber', Verify.Phone)
-                    if (isregisted) {
-                      User.setOpenId({phoneNo: Verify.Phone, openId: Storage.get('openid')}).then(function (data) {
-                        if (data.results == 'success!') {
-                          User.setMessageOpenId({type: 1, userId: tempuserId, openId: Storage.get('messageopenid')}).then(function (res) {
-                            console.log('setopenid')
-                          }, function () {
-                            console.log('连接超时！')
-                          })
-                          $ionicPopup.show({
-                            title: '微信账号绑定手机账号成功，是否重置密码？',
-                            buttons: [
-                              {
-                                text: '取消',
-                                type: 'button',
-                                onTap: function (e) {
-                                  $state.go('signin')
-                                }
-                              },
-                              {
-                                text: '確定',
-                                type: 'button-positive',
-                                onTap: function (e) {
-                                  Storage.set('validMode', 1)
-                                  $state.go('setpassword')
-                                }
-                              }
-                            ]
-                          })
+        }).then(function (succ) {
+          console.log(succ)
+          if (succ.results == 0) { // 验证成功
+            $scope.logStatus = '验证成功！'
+            Storage.set('phoneNumber', Verify.Phone)
+            if (isregisted && Storage.get('openid')) {
+              User.setOpenId({phoneNo: Verify.Phone, openId: Storage.get('openid')}).then(function (data) {
+                if (data.results == 'success!') {
+                  User.setMessageOpenId({type: 1, userId: tempuserId, openId: Storage.get('messageopenid')}).then(function (res) {
+                    console.log('setopenid')
+                  }, function () {
+                    console.log('连接超时！')
+                  })
+                  $ionicPopup.show({
+                    title: '微信账号绑定手机账号成功，是否重置密码？',
+                    buttons: [
+                      {
+                        text: '取消',
+                        type: 'button',
+                        onTap: function (e) {
+                          $state.go('signin')
                         }
-                      }, function () {
-                        $scope.logStatus = '连接超时！'
-                      })
-                    } else if (validMode == 0) {
-                      $state.go('agreement', {last: 'register'})
-                    } else {
-                      $state.go('setpassword')
-                    }
-                  } else // 验证码错误
-                    {
-                    $scope.logStatus = '请输入正确的验证码！'
-                  }
-                },
+                      },
+                      {
+                        text: '確定',
+                        type: 'button-positive',
+                        onTap: function (e) {
+                          Storage.set('validMode', 1)
+                          $state.go('setpassword')
+                        }
+                      }
+                    ]
+                  })
+                }
+              }, function () {
+                $scope.logStatus = '连接超时！'
+              })
+            } else if (validMode == 0) {
+              $state.go('agreement', {last: 'register'})
+            } else {
+              $state.go('setpassword')
+            }
+          } else { // 验证码错误
+            $scope.logStatus = '请输入正确的验证码！'
+          }
+        },
                 function (err) {
                   console.log(err)
                   $scope.logStatus = '网络错误！'
