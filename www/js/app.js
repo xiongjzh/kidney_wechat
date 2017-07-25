@@ -298,7 +298,7 @@ angular.module('kidney', [
     .state('welcome', {
       cache: false,
       url: '/welcome',
-      templateUrl: 'partials/login/welcome.html',
+      templateUrl: 'partials/others/welcome.html',
       controller: 'welcomeCtrl'
     })
     // 登陆
