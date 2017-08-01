@@ -2,7 +2,7 @@ angular.module('zy.controllers', ['ionic', 'kidney.services'])
 
 /// //////////////////////////zhangying///////////////////////
 // 登录
-.controller('SignInCtrl', ['User', '$scope', '$timeout', '$state', 'Storage', 'loginFactory', '$ionicHistory', '$location', 'wechat', '$window', '$rootScope', 'Doctor', '$sce', '$ionicPopup', function (User, $scope, $timeout, $state, Storage, loginFactory, $ionicHistory, $location, wechat, $window, $rootScope, Doctor, $sce, $ionicPopup) {
+.controller('SignInCtrl', ['User', '$scope', '$timeout', '$state', 'Storage', 'loginFactory', '$ionicHistory', '$location', 'wechat', '$window', '$rootScope', 'Doctor', '$sce', '$ionicPopup', 'CONFIG', function (User, $scope, $timeout, $state, Storage, loginFactory, $ionicHistory, $location, wechat, $window, $rootScope, Doctor, $sce, $ionicPopup, CONFIG) {
   $scope.barwidth = 'width:0%'
   $scope.navigation_login = $sce.trustAsResourceUrl('http://proxy.haihonghospitalmanagement.com/member.php?mod=logging&action=logout&formhash=xxxxxx')
   if (Storage.get('USERNAME') != null) {
@@ -57,7 +57,7 @@ angular.module('zy.controllers', ['ionic', 'kidney.services'])
                         }, function (err) {
                           thisDoctor = null
                         })
-                        // socket = io.connect('ws://121.43.107.106:4050/chat');
+            socket = io.connect(CONFIG.socketUrl)
                         // socket.emit('newUser',{user_name:response.results.name,user_id:data.results.userId});
                         // socket.on('err',function(data){
                         //     console.log(data)
