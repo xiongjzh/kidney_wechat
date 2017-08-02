@@ -30,9 +30,6 @@ angular.module('kidney.directives', ['kidney.services'])
       },
       restrict: 'AE',
       controller: function ($scope) {
-        for (var i = 0; i < $scope.photourls.length; i++) {
-          $scope.photourls[i] = $scope.photourls[i].replace(/https/, 'http')
-        }
         var type = '',
           sender = Storage.get('UID')
         $scope.base = CONFIG.mediaUrl
